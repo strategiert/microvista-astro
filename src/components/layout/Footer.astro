@@ -1,44 +1,284 @@
 ---
-const year = new Date().getFullYear();
+/**
+ * Globaler Footer
+ */
+const locale = Astro.currentLocale || 'de';
+const localePath = (path: string) => locale === 'de' ? path : `/${locale}${path}`;
+const currentYear = new Date().getFullYear();
+
+const content = {
+  de: {
+    tagline: 'Industrielle Computertomographie. Anywhere. Anytime. Fast.',
+    labor: {
+      title: 'Labor',
+      links: [
+        { label: 'Erstmusterprüfung', href: '/labor/erstmusterpruefung' },
+        { label: 'Schadensanalyse', href: '/labor/schadensanalyse' },
+        { label: 'Reverse Engineering', href: '/labor/reverse-engineering' },
+        { label: 'Kontakt Labor', href: '/labor/kontakt' }
+      ]
+    },
+    serie: {
+      title: 'Serie',
+      links: [
+        { label: 'Inline-CT', href: '/serie/inline-ct' },
+        { label: '100% Prüfung', href: '/serie/100-prozent-pruefung' },
+        { label: 'KI-Automatisierung', href: '/serie/ki-automatisierung' },
+        { label: 'Kontakt Serie', href: '/serie/kontakt' }
+      ]
+    },
+    ressourcen: {
+      title: 'Ressourcen',
+      links: [
+        { label: 'Magazin', href: '/magazin' },
+        { label: 'Wiki', href: '/wiki' },
+        { label: 'Branchen', href: '/branchen' },
+        { label: 'Downloads', href: '/ressourcen' }
+      ]
+    },
+    unternehmen: {
+      title: 'Unternehmen',
+      links: [
+        { label: 'Über uns', href: '/unternehmen' },
+        { label: 'Karriere', href: '/unternehmen/karriere' },
+        { label: 'Impressum', href: '/impressum' },
+        { label: 'Datenschutz', href: '/datenschutz' }
+      ]
+    },
+    copyright: `© ${currentYear} Microvista GmbH. Alle Rechte vorbehalten.`
+  },
+  en: {
+    tagline: 'Industrial Computed Tomography. Anywhere. Anytime. Fast.',
+    labor: {
+      title: 'Lab',
+      links: [
+        { label: 'First Article Inspection', href: '/labor/erstmusterpruefung' },
+        { label: 'Failure Analysis', href: '/labor/schadensanalyse' },
+        { label: 'Reverse Engineering', href: '/labor/reverse-engineering' },
+        { label: 'Contact Lab', href: '/labor/kontakt' }
+      ]
+    },
+    serie: {
+      title: 'Series',
+      links: [
+        { label: 'Inline CT', href: '/serie/inline-ct' },
+        { label: '100% Inspection', href: '/serie/100-prozent-pruefung' },
+        { label: 'AI Automation', href: '/serie/ki-automatisierung' },
+        { label: 'Contact Series', href: '/serie/kontakt' }
+      ]
+    },
+    ressourcen: {
+      title: 'Resources',
+      links: [
+        { label: 'Magazine', href: '/magazin' },
+        { label: 'Wiki', href: '/wiki' },
+        { label: 'Industries', href: '/branchen' },
+        { label: 'Downloads', href: '/ressourcen' }
+      ]
+    },
+    unternehmen: {
+      title: 'Company',
+      links: [
+        { label: 'About Us', href: '/unternehmen' },
+        { label: 'Careers', href: '/unternehmen/karriere' },
+        { label: 'Imprint', href: '/impressum' },
+        { label: 'Privacy', href: '/datenschutz' }
+      ]
+    },
+    copyright: `© ${currentYear} Microvista GmbH. All rights reserved.`
+  }
+};
+
+const t = content[locale as keyof typeof content] || content.de;
 ---
 
-<footer class="footer">
+<footer class="site-footer">
   <div class="container">
-    <div class="footer-content">
-      <p>&copy; {year} Microvista GmbH</p>
-      <nav>
-        <a href="/impressum/">Impressum</a>
-        <a href="/datenschutz/">Datenschutz</a>
-      </nav>
+    <div class="footer-grid">
+      <!-- Brand -->
+      <div class="footer-brand">
+        <a href={localePath('/')} class="logo">
+          <div class="logo-mark">M</div>
+          <span class="logo-text">Microvista</span>
+        </a>
+        <p class="tagline">{t.tagline}</p>
+      </div>
+
+      <!-- Links -->
+      <div class="footer-links">
+        <div class="link-group">
+          <h4>{t.labor.title}</h4>
+          <ul>
+            {t.labor.links.map(link => (
+              <li><a href={localePath(link.href)}>{link.label}</a></li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="link-group">
+          <h4>{t.serie.title}</h4>
+          <ul>
+            {t.serie.links.map(link => (
+              <li><a href={localePath(link.href)}>{link.label}</a></li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="link-group">
+          <h4>{t.ressourcen.title}</h4>
+          <ul>
+            {t.ressourcen.links.map(link => (
+              <li><a href={localePath(link.href)}>{link.label}</a></li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="link-group">
+          <h4>{t.unternehmen.title}</h4>
+          <ul>
+            {t.unternehmen.links.map(link => (
+              <li><a href={localePath(link.href)}>{link.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="copyright">{t.copyright}</p>
+      <div class="social-links">
+        <a href="https://linkedin.com/company/microvista" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+        </a>
+      </div>
     </div>
   </div>
 </footer>
 
 <style>
-  .footer {
-    background: var(--mv-gray-100);
-    padding: var(--space-8) 0;
-    margin-top: auto;
+  .site-footer {
+    background: var(--primary);
+    color: white;
+    padding: var(--space-16) 0 var(--space-8);
   }
-  
-  .footer-content {
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+
+  @media (min-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1fr 2fr;
+    }
+  }
+
+  .footer-brand .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: white;
+    text-decoration: none;
+    margin-bottom: var(--space-4);
+  }
+
+  .logo-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, #7C3AED, #00B4D8);
     display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-xl);
+  }
+
+  .logo-text {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+  }
+
+  .tagline {
+    color: rgba(255,255,255,0.6);
+    max-width: 280px;
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+  }
+
+  @media (min-width: 768px) {
+    .footer-links {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .link-group h4 {
+    color: white;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-4);
+  }
+
+  .link-group ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .link-group li {
+    margin-bottom: var(--space-2);
+  }
+
+  .link-group a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+  }
+
+  .link-group a:hover {
+    color: white;
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    gap: var(--space-4);
+    padding-top: var(--space-8);
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .copyright {
+    color: rgba(255,255,255,0.4);
     font-size: var(--text-sm);
-    color: var(--mv-gray-500);
+    margin: 0;
   }
-  
-  .footer nav {
+
+  .social-links {
     display: flex;
-    gap: var(--space-6);
+    gap: var(--space-4);
   }
-  
-  .footer a {
-    color: var(--mv-gray-500);
+
+  .social-links a {
+    color: rgba(255,255,255,0.6);
+    transition: color var(--transition-fast);
   }
-  
-  .footer a:hover {
-    color: var(--mv-violet);
+
+  .social-links a:hover {
+    color: white;
   }
 </style>

@@ -1,0 +1,256 @@
+---
+/**
+ * Wiki Eintrag - Dynamic Route
+ */
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import Tag from '../../components/ui/Tag.astro';
+import SchemaOrg from '../../components/seo/SchemaOrg.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('wiki');
+  return entries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry }
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const locale = Astro.currentLocale || 'de';
+
+const categoryLabels: Record<string, string> = {
+  'verfahren': locale === 'en' ? 'Methods' : 'Verfahren',
+  'materialien': locale === 'en' ? 'Materials' : 'Materialien',
+  'normen': locale === 'en' ? 'Standards' : 'Normen & Standards',
+  'software': 'Software',
+  'hardware': 'Hardware',
+  'allgemein': locale === 'en' ? 'General' : 'Allgemein'
+};
+
+// Definition Schema für SEO
+const definitionSchema = {
+  "@context": "https://schema.org",
+  "@type": "DefinedTerm",
+  "name": entry.data.term,
+  "description": entry.data.definition,
+  "inDefinedTermSet": {
+    "@type": "DefinedTermSet",
+    "name": "Microvista CT-Lexikon"
+  }
+};
+---
+
+<BaseLayout
+  title={entry.data.seoTitle || entry.data.term}
+  description={entry.data.seoDescription || entry.data.definition}
+  schema={definitionSchema}
+>
+  <Header slot="header" />
+
+  <article class="wiki-article">
+    <div class="container container-narrow">
+      <Breadcrumbs items={[
+        { label: 'Wiki', href: '/wiki' },
+        { label: entry.data.term }
+      ]} />
+
+      <!-- Article Header -->
+      <header class="article-header">
+        <Tag variant="default">
+          {categoryLabels[entry.data.category] || entry.data.category}
+        </Tag>
+
+        <h1>{entry.data.term}</h1>
+
+        <p class="definition">{entry.data.definition}</p>
+
+        {entry.data.synonyms && entry.data.synonyms.length > 0 && (
+          <div class="synonyms">
+            <span class="label">{locale === 'en' ? 'Also known as:' : 'Auch bekannt als:'}</span>
+            {entry.data.synonyms.join(', ')}
+          </div>
+        )}
+      </header>
+
+      <!-- Content -->
+      <div class="article-content prose">
+        <Content />
+      </div>
+
+      <!-- Related Terms -->
+      {entry.data.relatedTerms && entry.data.relatedTerms.length > 0 && (
+        <aside class="related-terms">
+          <h2>{locale === 'en' ? 'Related Terms' : 'Verwandte Begriffe'}</h2>
+          <div class="related-list">
+            {entry.data.relatedTerms.map(term => (
+              <a href={`/wiki/${term.toLowerCase().replace(/\s+/g, '-')}`} class="related-link">
+                {term}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+            ))}
+          </div>
+        </aside>
+      )}
+
+      <!-- Back to Wiki -->
+      <nav class="back-nav">
+        <a href="/wiki">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          {locale === 'en' ? 'Back to Glossary' : 'Zurück zum Lexikon'}
+        </a>
+      </nav>
+    </div>
+  </article>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .container-narrow {
+    max-width: 800px;
+  }
+
+  .article-header {
+    padding: var(--space-8) 0;
+  }
+
+  .article-header h1 {
+    font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
+    margin: var(--space-4) 0;
+  }
+
+  .definition {
+    font-size: var(--text-xl);
+    color: var(--text-muted);
+    line-height: 1.6;
+    padding: var(--space-6);
+    background: var(--surface);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    margin: var(--space-6) 0;
+  }
+
+  .synonyms {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  .synonyms .label {
+    font-weight: 600;
+    margin-right: var(--space-2);
+  }
+
+  /* Prose Styles */
+  .prose {
+    font-size: var(--text-lg);
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .prose :global(h2) {
+    font-size: var(--text-2xl);
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-4);
+  }
+
+  .prose :global(h3) {
+    font-size: var(--text-xl);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+  }
+
+  .prose :global(p) {
+    margin-bottom: var(--space-6);
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-bottom: var(--space-6);
+    padding-left: var(--space-6);
+  }
+
+  .prose :global(li) {
+    margin-bottom: var(--space-2);
+  }
+
+  .prose :global(a) {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  .related-terms {
+    margin-top: var(--space-12);
+    padding: var(--space-6);
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+  }
+
+  .related-terms h2 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-4);
+  }
+
+  .related-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .related-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-4);
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    color: var(--text);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: all var(--transition-fast);
+  }
+
+  .related-link:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .related-link svg {
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all var(--transition-fast);
+  }
+
+  .related-link:hover svg {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .back-nav {
+    margin-top: var(--space-12);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--border);
+  }
+
+  .back-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .back-nav a:hover {
+    color: var(--primary);
+  }
+</style>

@@ -1,81 +1,329 @@
 ---
+/**
+ * Globaler Header - Wird auf allen Seiten angezeigt
+ * Responsive Navigation mit Mobile Menu
+ */
+interface Props {
+  theme?: 'light' | 'dark' | 'transparent';
+}
+
+const { theme = 'light' } = Astro.props;
 const locale = Astro.currentLocale || 'de';
+
+const localePath = (path: string) => locale === 'de' ? path : `/${locale}${path}`;
+
+const navigation = {
+  de: {
+    labor: { label: 'Labor', href: '/labor' },
+    serie: { label: 'Serie', href: '/serie' },
+    magazin: { label: 'Magazin', href: '/magazin' },
+    wiki: { label: 'Wiki', href: '/wiki' },
+    branchen: { label: 'Branchen', href: '/branchen' },
+    unternehmen: { label: 'Unternehmen', href: '/unternehmen' },
+    kontakt: { label: 'Kontakt', href: '/kontakt' }
+  },
+  en: {
+    labor: { label: 'Lab', href: '/labor' },
+    serie: { label: 'Series', href: '/serie' },
+    magazin: { label: 'Magazine', href: '/magazin' },
+    wiki: { label: 'Wiki', href: '/wiki' },
+    branchen: { label: 'Industries', href: '/branchen' },
+    unternehmen: { label: 'Company', href: '/unternehmen' },
+    kontakt: { label: 'Contact', href: '/kontakt' }
+  }
+};
+
+const nav = navigation[locale as keyof typeof navigation] || navigation.de;
 ---
 
-<header class="header">
+<header class:list={['site-header', `theme-${theme}`]}>
   <div class="container">
-    <div class="header-inner">
-      <a href="/" class="logo">
-        <div class="logo-mark">M</div>
-        <span class="logo-text">Microvista</span>
-      </a>
-      
-      <nav class="main-nav">
-        <a href="/magazin/">Magazin</a>
-        <a href="/wiki/">Wiki</a>
-        <a href="/labor/">Labor</a>
-        <a href="/serie/">Serie</a>
-        <a href="/kontakt/">Kontakt</a>
+    <a href={localePath('/')} class="logo">
+      <div class="logo-mark">M</div>
+      <span class="logo-text">Microvista</span>
+    </a>
+
+    <nav class="main-nav" id="main-nav">
+      <ul class="nav-list">
+        <li class="nav-item has-dropdown">
+          <a href={localePath(nav.labor.href)}>{nav.labor.label}</a>
+          <ul class="dropdown">
+            <li><a href={localePath('/labor/erstmusterpruefung')}>Erstmusterprüfung</a></li>
+            <li><a href={localePath('/labor/schadensanalyse')}>Schadensanalyse</a></li>
+            <li><a href={localePath('/labor/reverse-engineering')}>Reverse Engineering</a></li>
+          </ul>
+        </li>
+        <li class="nav-item has-dropdown">
+          <a href={localePath(nav.serie.href)}>{nav.serie.label}</a>
+          <ul class="dropdown">
+            <li><a href={localePath('/serie/inline-ct')}>Inline-CT</a></li>
+            <li><a href={localePath('/serie/100-prozent-pruefung')}>100% Prüfung</a></li>
+            <li><a href={localePath('/serie/ki-automatisierung')}>KI-Automatisierung</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a href={localePath(nav.branchen.href)}>{nav.branchen.label}</a></li>
+        <li class="nav-item"><a href={localePath(nav.magazin.href)}>{nav.magazin.label}</a></li>
+        <li class="nav-item"><a href={localePath(nav.wiki.href)}>{nav.wiki.label}</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <nav class="lang-switch">
+        <a href="/" class:list={[{ active: locale === 'de' }]}>DE</a>
+        <span class="divider">/</span>
+        <a href="/en" class:list={[{ active: locale === 'en' }]}>EN</a>
       </nav>
+      <a href={localePath(nav.kontakt.href)} class="btn btn-primary btn-sm">{nav.kontakt.label}</a>
+      <button class="mobile-menu-toggle" aria-label="Menü öffnen" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
     </div>
   </div>
 </header>
 
 <style>
-  .header {
+  .site-header {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: var(--mv-white);
-    border-bottom: 1px solid var(--mv-gray-200);
+    background: var(--background);
+    border-bottom: 1px solid var(--border);
     padding: var(--space-4) 0;
   }
-  
-  .header-inner {
+
+  .site-header.theme-transparent {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: transparent;
+    border-bottom: none;
+  }
+
+  .site-header.theme-dark {
+    background: var(--primary);
+    border-bottom-color: rgba(255,255,255,0.1);
+  }
+
+  .site-header .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: var(--space-8);
   }
-  
+
   .logo {
     display: flex;
     align-items: center;
     gap: var(--space-3);
     text-decoration: none;
+    color: var(--text);
   }
-  
+
+  .theme-dark .logo,
+  .theme-transparent .logo {
+    color: white;
+  }
+
   .logo-mark {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, var(--mv-violet), var(--mv-blue));
+    background: linear-gradient(135deg, #7C3AED, #00B4D8);
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: var(--font-heading);
     font-weight: 700;
-    font-size: var(--text-xl);
+    font-size: var(--text-lg);
     color: white;
   }
-  
+
   .logo-text {
     font-family: var(--font-heading);
     font-size: var(--text-xl);
     font-weight: 700;
-    color: var(--mv-violet);
   }
-  
+
   .main-nav {
+    flex: 1;
     display: flex;
-    gap: var(--space-6);
+    justify-content: center;
   }
-  
-  .main-nav a {
-    color: var(--mv-gray-600);
+
+  .nav-list {
+    display: flex;
+    gap: var(--space-1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-item > a {
+    display: block;
+    padding: var(--space-2) var(--space-4);
+    color: var(--text-muted);
+    text-decoration: none;
     font-weight: 500;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
   }
-  
-  .main-nav a:hover {
-    color: var(--mv-violet);
+
+  .theme-dark .nav-item > a,
+  .theme-transparent .nav-item > a {
+    color: rgba(255,255,255,0.7);
+  }
+
+  .nav-item > a:hover {
+    color: var(--text);
+    background: var(--surface);
+  }
+
+  .theme-dark .nav-item > a:hover,
+  .theme-transparent .nav-item > a:hover {
+    color: white;
+    background: rgba(255,255,255,0.1);
+  }
+
+  /* Dropdown */
+  .has-dropdown {
+    position: relative;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-2);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: all var(--transition-fast);
+    list-style: none;
+    margin: 0;
+  }
+
+  .has-dropdown:hover .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .dropdown a {
+    display: block;
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+  }
+
+  .dropdown a:hover {
+    color: var(--text);
+    background: var(--surface);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+  }
+
+  .lang-switch a {
+    color: var(--text-muted);
+    padding: var(--space-1) var(--space-2);
+    text-decoration: none;
+  }
+
+  .lang-switch a:hover,
+  .lang-switch a.active {
+    color: var(--text);
+  }
+
+  .theme-dark .lang-switch a,
+  .theme-transparent .lang-switch a {
+    color: rgba(255,255,255,0.6);
+  }
+
+  .theme-dark .lang-switch a:hover,
+  .theme-dark .lang-switch a.active,
+  .theme-transparent .lang-switch a:hover,
+  .theme-transparent .lang-switch a.active {
+    color: white;
+  }
+
+  .lang-switch .divider {
+    color: var(--border);
+  }
+
+  .mobile-menu-toggle {
+    display: none;
+    padding: var(--space-2);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .hamburger {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    position: relative;
+  }
+
+  .hamburger::before,
+  .hamburger::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    left: 0;
+  }
+
+  .hamburger::before { top: -7px; }
+  .hamburger::after { top: 7px; }
+
+  .theme-dark .hamburger,
+  .theme-transparent .hamburger {
+    background: white;
+  }
+
+  /* Mobile */
+  @media (max-width: 1024px) {
+    .main-nav {
+      display: none;
+    }
+
+    .mobile-menu-toggle {
+      display: block;
+    }
+
+    .header-actions .btn {
+      display: none;
+    }
   }
 </style>
+
+<script>
+  // Mobile menu toggle
+  const toggle = document.querySelector('.mobile-menu-toggle');
+  const nav = document.getElementById('main-nav');
+
+  toggle?.addEventListener('click', () => {
+    const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', (!isExpanded).toString());
+    nav?.classList.toggle('is-open');
+  });
+</script>

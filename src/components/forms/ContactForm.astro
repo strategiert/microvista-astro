@@ -1,0 +1,344 @@
+---
+/**
+ * Kontaktformular Komponente
+ * Arbeitet mit Cloudflare Worker API
+ */
+interface Props {
+  variant?: 'default' | 'labor' | 'serie';
+  subject?: string;
+}
+
+const { variant = 'default', subject = '' } = Astro.props;
+const locale = Astro.currentLocale || 'de';
+
+const content = {
+  de: {
+    name: 'Name',
+    namePlaceholder: 'Ihr Name',
+    email: 'E-Mail',
+    emailPlaceholder: 'ihre@email.de',
+    company: 'Unternehmen',
+    companyPlaceholder: 'Ihre Firma (optional)',
+    phone: 'Telefon',
+    phonePlaceholder: '+49 123 456789 (optional)',
+    subject: 'Betreff',
+    subjectPlaceholder: 'Worum geht es?',
+    message: 'Nachricht',
+    messagePlaceholder: 'Wie können wir Ihnen helfen?',
+    privacy: 'Ich stimme der Verarbeitung meiner Daten gemäß der',
+    privacyLink: 'Datenschutzerklärung',
+    privacyEnd: 'zu.',
+    submit: 'Nachricht senden',
+    sending: 'Wird gesendet...',
+    success: 'Vielen Dank! Wir melden uns zeitnah bei Ihnen.',
+    error: 'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.'
+  },
+  en: {
+    name: 'Name',
+    namePlaceholder: 'Your name',
+    email: 'Email',
+    emailPlaceholder: 'your@email.com',
+    company: 'Company',
+    companyPlaceholder: 'Your company (optional)',
+    phone: 'Phone',
+    phonePlaceholder: '+49 123 456789 (optional)',
+    subject: 'Subject',
+    subjectPlaceholder: 'What is this about?',
+    message: 'Message',
+    messagePlaceholder: 'How can we help you?',
+    privacy: 'I agree to the processing of my data according to the',
+    privacyLink: 'Privacy Policy',
+    privacyEnd: '.',
+    submit: 'Send message',
+    sending: 'Sending...',
+    success: 'Thank you! We will get back to you shortly.',
+    error: 'Something went wrong. Please try again.'
+  }
+};
+
+const t = content[locale as keyof typeof content] || content.de;
+---
+
+<form
+  class:list={['contact-form', `form-${variant}`]}
+  id="contact-form"
+  data-success={t.success}
+  data-error={t.error}
+>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="name">{t.name} *</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder={t.namePlaceholder}
+        required
+        autocomplete="name"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="email">{t.email} *</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder={t.emailPlaceholder}
+        required
+        autocomplete="email"
+      />
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label for="company">{t.company}</label>
+      <input
+        type="text"
+        id="company"
+        name="company"
+        placeholder={t.companyPlaceholder}
+        autocomplete="organization"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="phone">{t.phone}</label>
+      <input
+        type="tel"
+        id="phone"
+        name="phone"
+        placeholder={t.phonePlaceholder}
+        autocomplete="tel"
+      />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="subject">{t.subject} *</label>
+    <input
+      type="text"
+      id="subject"
+      name="subject"
+      placeholder={t.subjectPlaceholder}
+      value={subject}
+      required
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="message">{t.message} *</label>
+    <textarea
+      id="message"
+      name="message"
+      rows="5"
+      placeholder={t.messagePlaceholder}
+      required
+    ></textarea>
+  </div>
+
+  <div class="form-group checkbox-group">
+    <label class="checkbox-label">
+      <input type="checkbox" name="privacy" required />
+      <span>
+        {t.privacy} <a href="/datenschutz" target="_blank">{t.privacyLink}</a>{t.privacyEnd}
+      </span>
+    </label>
+  </div>
+
+  <!-- Honeypot for spam protection -->
+  <div class="form-group" style="display: none;" aria-hidden="true">
+    <input type="text" name="website" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary btn-lg">
+      <span class="btn-text">{t.submit}</span>
+      <span class="btn-loading" style="display: none;">{t.sending}</span>
+    </button>
+  </div>
+
+  <div class="form-message" role="alert" style="display: none;"></div>
+</form>
+
+<style>
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 640px) {
+    .form-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  label {
+    font-weight: 500;
+    font-size: var(--text-sm);
+    color: var(--text);
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+    background: var(--background);
+    color: var(--text);
+    transition: all var(--transition-fast);
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  .checkbox-group {
+    flex-direction: row;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    font-weight: 400;
+    cursor: pointer;
+  }
+
+  .checkbox-label input {
+    width: auto;
+    margin-top: 2px;
+  }
+
+  .checkbox-label a {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  .form-actions {
+    margin-top: var(--space-4);
+  }
+
+  .form-message {
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    font-weight: 500;
+  }
+
+  .form-message.success {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22C55E;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+  }
+
+  .form-message.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  }
+
+  /* Variant: Labor */
+  .form-labor input:focus,
+  .form-labor textarea:focus {
+    border-color: #00B4D8;
+    box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.1);
+  }
+
+  .form-labor .btn-primary {
+    background: #00B4D8;
+  }
+
+  /* Variant: Serie */
+  .form-serie input:focus,
+  .form-serie textarea:focus {
+    border-color: #F97316;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+  }
+
+  .form-serie .btn-primary {
+    background: #F97316;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const submitBtn = form?.querySelector('button[type="submit"]');
+  const btnText = submitBtn?.querySelector('.btn-text');
+  const btnLoading = submitBtn?.querySelector('.btn-loading');
+  const messageEl = form?.querySelector('.form-message') as HTMLElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Check honeypot
+    const honeypot = form.querySelector('input[name="website"]') as HTMLInputElement;
+    if (honeypot?.value) {
+      return; // Bot detected
+    }
+
+    // Show loading state
+    if (btnText) (btnText as HTMLElement).style.display = 'none';
+    if (btnLoading) (btnLoading as HTMLElement).style.display = 'inline';
+    if (submitBtn) (submitBtn as HTMLButtonElement).disabled = true;
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        messageEl.textContent = form.dataset.success || 'Success!';
+        messageEl.className = 'form-message success';
+        messageEl.style.display = 'block';
+        form.reset();
+      } else {
+        throw new Error('Failed to send');
+      }
+    } catch (error) {
+      messageEl.textContent = form.dataset.error || 'Error';
+      messageEl.className = 'form-message error';
+      messageEl.style.display = 'block';
+    } finally {
+      // Reset button
+      if (btnText) (btnText as HTMLElement).style.display = 'inline';
+      if (btnLoading) (btnLoading as HTMLElement).style.display = 'none';
+      if (submitBtn) (submitBtn as HTMLButtonElement).disabled = false;
+    }
+  });
+</script>

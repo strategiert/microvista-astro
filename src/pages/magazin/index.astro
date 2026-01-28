@@ -1,0 +1,250 @@
+---
+/**
+ * Magazin Index - Blog-Übersicht mit Filterung
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import Card from '../../components/ui/Card.astro';
+import Tag from '../../components/ui/Tag.astro';
+import { getCollection } from 'astro:content';
+
+const locale = Astro.currentLocale || 'de';
+
+// Alle Magazin-Artikel laden
+const allPosts = await getCollection('magazin', ({ data }) => {
+  return !data.draft;
+});
+
+// Nach Datum sortieren (neueste zuerst)
+const posts = allPosts.sort((a, b) =>
+  new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
+);
+
+// Kategorien extrahieren
+const categories = [...new Set(posts.map(post => post.data.category))];
+
+// Featured Posts
+const featuredPosts = posts.filter(post => post.data.featured).slice(0, 3);
+const regularPosts = posts.filter(post => !post.data.featured);
+
+const content = {
+  de: {
+    title: 'Magazin',
+    subtitle: 'Fachwissen, Trends und Einblicke aus der Welt der industriellen Computertomographie',
+    featured: 'Empfohlen',
+    latest: 'Neueste Artikel',
+    categories: 'Kategorien',
+    allCategories: 'Alle',
+    readMore: 'Weiterlesen',
+    noArticles: 'Noch keine Artikel vorhanden.',
+    categoryLabels: {
+      'technologie': 'Technologie',
+      'branchen': 'Branchen',
+      'case-studies': 'Case Studies',
+      'news': 'News',
+      'tipps': 'Tipps & Tricks'
+    }
+  },
+  en: {
+    title: 'Magazine',
+    subtitle: 'Expert knowledge, trends and insights from the world of industrial computed tomography',
+    featured: 'Featured',
+    latest: 'Latest Articles',
+    categories: 'Categories',
+    allCategories: 'All',
+    readMore: 'Read more',
+    noArticles: 'No articles yet.',
+    categoryLabels: {
+      'technologie': 'Technology',
+      'branchen': 'Industries',
+      'case-studies': 'Case Studies',
+      'news': 'News',
+      'tipps': 'Tips & Tricks'
+    }
+  }
+};
+
+const t = content[locale as keyof typeof content] || content.de;
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat(locale === 'en' ? 'en-US' : 'de-DE', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date);
+};
+---
+
+<BaseLayout
+  title={t.title}
+  description={t.subtitle}
+>
+  <Header slot="header" />
+
+  <div class="container">
+    <Breadcrumbs items={[
+      { label: t.title }
+    ]} />
+
+    <!-- Hero -->
+    <section class="page-hero">
+      <h1>{t.title}</h1>
+      <p class="subtitle">{t.subtitle}</p>
+    </section>
+
+    <!-- Category Filter -->
+    <nav class="category-filter">
+      <Tag href="/magazin" variant="primary">{t.allCategories}</Tag>
+      {categories.map(cat => (
+        <Tag href={`/magazin/kategorie/${cat}`} variant="default">
+          {t.categoryLabels[cat as keyof typeof t.categoryLabels] || cat}
+        </Tag>
+      ))}
+    </nav>
+
+    {posts.length === 0 ? (
+      <div class="empty-state">
+        <p>{t.noArticles}</p>
+      </div>
+    ) : (
+      <>
+        <!-- Featured Posts -->
+        {featuredPosts.length > 0 && (
+          <section class="featured-section">
+            <h2>{t.featured}</h2>
+            <div class="featured-grid">
+              {featuredPosts.map((post, index) => (
+                <Card
+                  href={`/magazin/${post.slug}`}
+                  variant={index === 0 ? 'featured' : 'default'}
+                  class={index === 0 ? 'featured-main' : ''}
+                >
+                  {post.data.image && (
+                    <img
+                      slot="image"
+                      src={post.data.image.src}
+                      alt={post.data.image.alt}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                    />
+                  )}
+                  <div slot="meta">
+                    <Tag variant={post.data.category === 'case-studies' ? 'serie' : 'labor'} size="sm">
+                      {t.categoryLabels[post.data.category as keyof typeof t.categoryLabels]}
+                    </Tag>
+                    <span>{formatDate(post.data.publishDate)}</span>
+                  </div>
+                  <h3 slot="title">{post.data.title}</h3>
+                  <p slot="description">{post.data.description}</p>
+                </Card>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <!-- Regular Posts -->
+        <section class="posts-section">
+          <h2>{t.latest}</h2>
+          <div class="posts-grid">
+            {regularPosts.map(post => (
+              <Card href={`/magazin/${post.slug}`}>
+                {post.data.image && (
+                  <img
+                    slot="image"
+                    src={post.data.image.src}
+                    alt={post.data.image.alt}
+                    loading="lazy"
+                  />
+                )}
+                <div slot="meta">
+                  <Tag variant="default" size="sm">
+                    {t.categoryLabels[post.data.category as keyof typeof t.categoryLabels]}
+                  </Tag>
+                  <span>{formatDate(post.data.publishDate)}</span>
+                </div>
+                <h3 slot="title">{post.data.title}</h3>
+                <p slot="description">{post.data.description}</p>
+              </Card>
+            ))}
+          </div>
+        </section>
+      </>
+    )}
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .page-hero {
+    text-align: center;
+    padding: var(--space-12) 0;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .page-hero h1 {
+    font-size: var(--text-5xl);
+    margin-bottom: var(--space-4);
+  }
+
+  .subtitle {
+    font-size: var(--text-xl);
+    color: var(--text-muted);
+  }
+
+  .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: center;
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--space-12);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--space-20) 0;
+    color: var(--text-muted);
+  }
+
+  .featured-section,
+  .posts-section {
+    margin-bottom: var(--space-16);
+  }
+
+  .featured-section h2,
+  .posts-section h2 {
+    margin-bottom: var(--space-8);
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .featured-grid {
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: repeat(2, 1fr);
+    }
+
+    .featured-main {
+      grid-row: span 2;
+    }
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-6);
+  }
+
+  /* Card title sizing */
+  .featured-main :global([slot="title"]) {
+    font-size: var(--text-2xl);
+  }
+</style>
