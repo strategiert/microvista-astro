@@ -32,10 +32,15 @@ const canonical = canonicalUrl || new URL(Astro.url.pathname, siteUrl).toString(
 const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 const locale = Astro.currentLocale || 'de';
 
-// Hreflang URLs
-const currentPath = Astro.url.pathname.replace(/^\/(de|en)/, '').replace(/^\//, '/');
-const deUrl = `${siteUrl}${currentPath}`;
-const enUrl = `${siteUrl}/en${currentPath}`;
+// Hreflang URLs für alle 5 Sprachen
+const currentPath = Astro.url.pathname.replace(/^\/(de|en|fr|es|it)/, '').replace(/^\//, '/');
+const locales = {
+  de: `${siteUrl}${currentPath}`,           // Default ohne Prefix
+  en: `${siteUrl}/en${currentPath}`,
+  fr: `${siteUrl}/fr${currentPath}`,
+  es: `${siteUrl}/es${currentPath}`,
+  it: `${siteUrl}/it${currentPath}`
+};
 ---
 
 <!-- Primary Meta Tags -->
@@ -45,10 +50,13 @@ const enUrl = `${siteUrl}/en${currentPath}`;
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 <link rel="canonical" href={canonical} />
 
-<!-- Hreflang für i18n -->
-<link rel="alternate" hreflang="de" href={deUrl} />
-<link rel="alternate" hreflang="en" href={enUrl} />
-<link rel="alternate" hreflang="x-default" href={deUrl} />
+<!-- Hreflang für i18n (5 Sprachen) -->
+<link rel="alternate" hreflang="de" href={locales.de} />
+<link rel="alternate" hreflang="en" href={locales.en} />
+<link rel="alternate" hreflang="fr" href={locales.fr} />
+<link rel="alternate" hreflang="es" href={locales.es} />
+<link rel="alternate" hreflang="it" href={locales.it} />
+<link rel="alternate" hreflang="x-default" href={locales.de} />
 
 <!-- Open Graph -->
 <meta property="og:type" content={type} />
@@ -56,7 +64,13 @@ const enUrl = `${siteUrl}/en${currentPath}`;
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={ogImage} />
-<meta property="og:locale" content={locale === 'en' ? 'en_US' : 'de_DE'} />
+<meta property="og:locale" content={{
+  de: 'de_DE',
+  en: 'en_US',
+  fr: 'fr_FR',
+  es: 'es_ES',
+  it: 'it_IT'
+}[locale] || 'de_DE'} />
 <meta property="og:site_name" content="Microvista" />
 
 {type === 'article' && publishDate && (

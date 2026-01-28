@@ -1,95 +1,17 @@
 ---
 /**
- * Globaler Footer
+ * Globaler Footer - 5 Sprachen
  */
-const locale = Astro.currentLocale || 'de';
-const localePath = (path: string) => locale === 'de' ? path : `/${locale}${path}`;
+import { translations, type Locale, localePath } from '../../i18n/translations';
+
+const locale = (Astro.currentLocale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
 const currentYear = new Date().getFullYear();
 
-const content = {
-  de: {
-    tagline: 'Industrielle Computertomographie. Anywhere. Anytime. Fast.',
-    labor: {
-      title: 'Labor',
-      links: [
-        { label: 'Erstmusterprüfung', href: '/labor/erstmusterpruefung' },
-        { label: 'Schadensanalyse', href: '/labor/schadensanalyse' },
-        { label: 'Reverse Engineering', href: '/labor/reverse-engineering' },
-        { label: 'Kontakt Labor', href: '/labor/kontakt' }
-      ]
-    },
-    serie: {
-      title: 'Serie',
-      links: [
-        { label: 'Inline-CT', href: '/serie/inline-ct' },
-        { label: '100% Prüfung', href: '/serie/100-prozent-pruefung' },
-        { label: 'KI-Automatisierung', href: '/serie/ki-automatisierung' },
-        { label: 'Kontakt Serie', href: '/serie/kontakt' }
-      ]
-    },
-    ressourcen: {
-      title: 'Ressourcen',
-      links: [
-        { label: 'Magazin', href: '/magazin' },
-        { label: 'Wiki', href: '/wiki' },
-        { label: 'Branchen', href: '/branchen' },
-        { label: 'Downloads', href: '/ressourcen' }
-      ]
-    },
-    unternehmen: {
-      title: 'Unternehmen',
-      links: [
-        { label: 'Über uns', href: '/unternehmen' },
-        { label: 'Karriere', href: '/unternehmen/karriere' },
-        { label: 'Impressum', href: '/impressum' },
-        { label: 'Datenschutz', href: '/datenschutz' }
-      ]
-    },
-    copyright: `© ${currentYear} Microvista GmbH. Alle Rechte vorbehalten.`
-  },
-  en: {
-    tagline: 'Industrial Computed Tomography. Anywhere. Anytime. Fast.',
-    labor: {
-      title: 'Lab',
-      links: [
-        { label: 'First Article Inspection', href: '/labor/erstmusterpruefung' },
-        { label: 'Failure Analysis', href: '/labor/schadensanalyse' },
-        { label: 'Reverse Engineering', href: '/labor/reverse-engineering' },
-        { label: 'Contact Lab', href: '/labor/kontakt' }
-      ]
-    },
-    serie: {
-      title: 'Series',
-      links: [
-        { label: 'Inline CT', href: '/serie/inline-ct' },
-        { label: '100% Inspection', href: '/serie/100-prozent-pruefung' },
-        { label: 'AI Automation', href: '/serie/ki-automatisierung' },
-        { label: 'Contact Series', href: '/serie/kontakt' }
-      ]
-    },
-    ressourcen: {
-      title: 'Resources',
-      links: [
-        { label: 'Magazine', href: '/magazin' },
-        { label: 'Wiki', href: '/wiki' },
-        { label: 'Industries', href: '/branchen' },
-        { label: 'Downloads', href: '/ressourcen' }
-      ]
-    },
-    unternehmen: {
-      title: 'Company',
-      links: [
-        { label: 'About Us', href: '/unternehmen' },
-        { label: 'Careers', href: '/unternehmen/karriere' },
-        { label: 'Imprint', href: '/impressum' },
-        { label: 'Privacy', href: '/datenschutz' }
-      ]
-    },
-    copyright: `© ${currentYear} Microvista GmbH. All rights reserved.`
-  }
-};
-
-const t = content[locale as keyof typeof content] || content.de;
+const nav = translations.nav;
+const laborNav = translations.laborNav;
+const serieNav = translations.serieNav;
+const footer = translations.footer;
 ---
 
 <footer class="site-footer">
@@ -97,55 +19,59 @@ const t = content[locale as keyof typeof content] || content.de;
     <div class="footer-grid">
       <!-- Brand -->
       <div class="footer-brand">
-        <a href={localePath('/')} class="logo">
+        <a href={lp('/')} class="logo">
           <div class="logo-mark">M</div>
           <span class="logo-text">Microvista</span>
         </a>
-        <p class="tagline">{t.tagline}</p>
+        <p class="tagline">{footer.tagline[locale]}</p>
       </div>
 
       <!-- Links -->
       <div class="footer-links">
         <div class="link-group">
-          <h4>{t.labor.title}</h4>
+          <h4>{nav.labor[locale]}</h4>
           <ul>
-            {t.labor.links.map(link => (
-              <li><a href={localePath(link.href)}>{link.label}</a></li>
-            ))}
+            <li><a href={lp('/labor/erstmusterpruefung')}>{laborNav.erstmusterpruefung[locale]}</a></li>
+            <li><a href={lp('/labor/schadensanalyse')}>{laborNav.schadensanalyse[locale]}</a></li>
+            <li><a href={lp('/labor/reverse-engineering')}>{laborNav.reverseEngineering[locale]}</a></li>
+            <li><a href={lp('/labor/kontakt')}>{nav.kontakt[locale]}</a></li>
           </ul>
         </div>
 
         <div class="link-group">
-          <h4>{t.serie.title}</h4>
+          <h4>{nav.serie[locale]}</h4>
           <ul>
-            {t.serie.links.map(link => (
-              <li><a href={localePath(link.href)}>{link.label}</a></li>
-            ))}
+            <li><a href={lp('/serie/inline-ct')}>{serieNav.inlineCt[locale]}</a></li>
+            <li><a href={lp('/serie/100-prozent-pruefung')}>{serieNav.hundertProzent[locale]}</a></li>
+            <li><a href={lp('/serie/ki-automatisierung')}>{serieNav.kiAutomatisierung[locale]}</a></li>
+            <li><a href={lp('/serie/kontakt')}>{nav.kontakt[locale]}</a></li>
           </ul>
         </div>
 
         <div class="link-group">
-          <h4>{t.ressourcen.title}</h4>
+          <h4>{footer.ressourcen[locale]}</h4>
           <ul>
-            {t.ressourcen.links.map(link => (
-              <li><a href={localePath(link.href)}>{link.label}</a></li>
-            ))}
+            <li><a href={lp('/magazin')}>{nav.magazin[locale]}</a></li>
+            <li><a href={lp('/wiki')}>{nav.wiki[locale]}</a></li>
+            <li><a href={lp('/branchen')}>{nav.branchen[locale]}</a></li>
+            <li><a href={lp('/ressourcen')}>{footer.downloads[locale]}</a></li>
           </ul>
         </div>
 
         <div class="link-group">
-          <h4>{t.unternehmen.title}</h4>
+          <h4>{nav.unternehmen[locale]}</h4>
           <ul>
-            {t.unternehmen.links.map(link => (
-              <li><a href={localePath(link.href)}>{link.label}</a></li>
-            ))}
+            <li><a href={lp('/unternehmen')}>{footer.ueberUns[locale]}</a></li>
+            <li><a href={lp('/unternehmen/karriere')}>{footer.karriere[locale]}</a></li>
+            <li><a href={lp('/impressum')}>{footer.impressum[locale]}</a></li>
+            <li><a href={lp('/datenschutz')}>{footer.datenschutz[locale]}</a></li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p class="copyright">{t.copyright}</p>
+      <p class="copyright">© {currentYear} Microvista GmbH. {footer.copyright[locale]}</p>
       <div class="social-links">
         <a href="https://linkedin.com/company/microvista" target="_blank" rel="noopener" aria-label="LinkedIn">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">

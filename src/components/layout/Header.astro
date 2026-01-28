@@ -1,44 +1,30 @@
 ---
 /**
  * Globaler Header - Wird auf allen Seiten angezeigt
- * Responsive Navigation mit Mobile Menu
+ * Responsive Navigation mit Mobile Menu - 5 Sprachen
  */
+import { translations, localeNames, type Locale, localePath } from '../../i18n/translations';
+
 interface Props {
   theme?: 'light' | 'dark' | 'transparent';
 }
 
 const { theme = 'light' } = Astro.props;
-const locale = Astro.currentLocale || 'de';
+const locale = (Astro.currentLocale || 'de') as Locale;
 
-const localePath = (path: string) => locale === 'de' ? path : `/${locale}${path}`;
+const lp = (path: string) => localePath(path, locale);
 
-const navigation = {
-  de: {
-    labor: { label: 'Labor', href: '/labor' },
-    serie: { label: 'Serie', href: '/serie' },
-    magazin: { label: 'Magazin', href: '/magazin' },
-    wiki: { label: 'Wiki', href: '/wiki' },
-    branchen: { label: 'Branchen', href: '/branchen' },
-    unternehmen: { label: 'Unternehmen', href: '/unternehmen' },
-    kontakt: { label: 'Kontakt', href: '/kontakt' }
-  },
-  en: {
-    labor: { label: 'Lab', href: '/labor' },
-    serie: { label: 'Series', href: '/serie' },
-    magazin: { label: 'Magazine', href: '/magazin' },
-    wiki: { label: 'Wiki', href: '/wiki' },
-    branchen: { label: 'Industries', href: '/branchen' },
-    unternehmen: { label: 'Company', href: '/unternehmen' },
-    kontakt: { label: 'Contact', href: '/kontakt' }
-  }
-};
+const nav = translations.nav;
+const laborNav = translations.laborNav;
+const serieNav = translations.serieNav;
 
-const nav = navigation[locale as keyof typeof navigation] || navigation.de;
+// Alle verfügbaren Sprachen
+const locales: Locale[] = ['de', 'en', 'fr', 'es', 'it'];
 ---
 
 <header class:list={['site-header', `theme-${theme}`]}>
   <div class="container">
-    <a href={localePath('/')} class="logo">
+    <a href={lp('/')} class="logo">
       <div class="logo-mark">M</div>
       <span class="logo-text">Microvista</span>
     </a>
@@ -46,34 +32,53 @@ const nav = navigation[locale as keyof typeof navigation] || navigation.de;
     <nav class="main-nav" id="main-nav">
       <ul class="nav-list">
         <li class="nav-item has-dropdown">
-          <a href={localePath(nav.labor.href)}>{nav.labor.label}</a>
+          <a href={lp('/labor')}>{nav.labor[locale]}</a>
           <ul class="dropdown">
-            <li><a href={localePath('/labor/erstmusterpruefung')}>Erstmusterprüfung</a></li>
-            <li><a href={localePath('/labor/schadensanalyse')}>Schadensanalyse</a></li>
-            <li><a href={localePath('/labor/reverse-engineering')}>Reverse Engineering</a></li>
+            <li><a href={lp('/labor/erstmusterpruefung')}>{laborNav.erstmusterpruefung[locale]}</a></li>
+            <li><a href={lp('/labor/schadensanalyse')}>{laborNav.schadensanalyse[locale]}</a></li>
+            <li><a href={lp('/labor/reverse-engineering')}>{laborNav.reverseEngineering[locale]}</a></li>
           </ul>
         </li>
         <li class="nav-item has-dropdown">
-          <a href={localePath(nav.serie.href)}>{nav.serie.label}</a>
+          <a href={lp('/serie')}>{nav.serie[locale]}</a>
           <ul class="dropdown">
-            <li><a href={localePath('/serie/inline-ct')}>Inline-CT</a></li>
-            <li><a href={localePath('/serie/100-prozent-pruefung')}>100% Prüfung</a></li>
-            <li><a href={localePath('/serie/ki-automatisierung')}>KI-Automatisierung</a></li>
+            <li><a href={lp('/serie/inline-ct')}>{serieNav.inlineCt[locale]}</a></li>
+            <li><a href={lp('/serie/100-prozent-pruefung')}>{serieNav.hundertProzent[locale]}</a></li>
+            <li><a href={lp('/serie/ki-automatisierung')}>{serieNav.kiAutomatisierung[locale]}</a></li>
           </ul>
         </li>
-        <li class="nav-item"><a href={localePath(nav.branchen.href)}>{nav.branchen.label}</a></li>
-        <li class="nav-item"><a href={localePath(nav.magazin.href)}>{nav.magazin.label}</a></li>
-        <li class="nav-item"><a href={localePath(nav.wiki.href)}>{nav.wiki.label}</a></li>
+        <li class="nav-item"><a href={lp('/branchen')}>{nav.branchen[locale]}</a></li>
+        <li class="nav-item"><a href={lp('/magazin')}>{nav.magazin[locale]}</a></li>
+        <li class="nav-item"><a href={lp('/wiki')}>{nav.wiki[locale]}</a></li>
       </ul>
     </nav>
 
     <div class="header-actions">
-      <nav class="lang-switch">
-        <a href="/" class:list={[{ active: locale === 'de' }]}>DE</a>
-        <span class="divider">/</span>
-        <a href="/en" class:list={[{ active: locale === 'en' }]}>EN</a>
-      </nav>
-      <a href={localePath(nav.kontakt.href)} class="btn btn-primary btn-sm">{nav.kontakt.label}</a>
+      <!-- Language Switcher -->
+      <div class="lang-switch-wrapper">
+        <button class="lang-current" aria-expanded="false" aria-haspopup="true">
+          {locale.toUpperCase()}
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+        <ul class="lang-dropdown">
+          {locales.map(l => (
+            <li>
+              <a
+                href={l === 'de' ? '/' : `/${l}/`}
+                class:list={[{ active: l === locale }]}
+              >
+                <span class="lang-code">{l.toUpperCase()}</span>
+                <span class="lang-name">{localeNames[l]}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <a href={lp('/kontakt')} class="btn btn-primary btn-sm">{nav.kontakt[locale]}</a>
+
       <button class="mobile-menu-toggle" aria-label="Menü öffnen" aria-expanded="false">
         <span class="hamburger"></span>
       </button>
@@ -193,7 +198,7 @@ const nav = navigation[locale as keyof typeof navigation] || navigation.de;
     position: absolute;
     top: 100%;
     left: 0;
-    min-width: 200px;
+    min-width: 220px;
     background: var(--background);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -219,6 +224,7 @@ const nav = navigation[locale as keyof typeof navigation] || navigation.de;
     color: var(--text-muted);
     text-decoration: none;
     border-radius: var(--radius-md);
+    font-size: var(--text-sm);
   }
 
   .dropdown a:hover {
@@ -232,38 +238,90 @@ const nav = navigation[locale as keyof typeof navigation] || navigation.de;
     gap: var(--space-4);
   }
 
-  .lang-switch {
+  /* Language Switcher */
+  .lang-switch-wrapper {
+    position: relative;
+  }
+
+  .lang-current {
     display: flex;
     align-items: center;
     gap: var(--space-1);
-    font-size: var(--text-sm);
-  }
-
-  .lang-switch a {
-    color: var(--text-muted);
-    padding: var(--space-1) var(--space-2);
-    text-decoration: none;
-  }
-
-  .lang-switch a:hover,
-  .lang-switch a.active {
+    padding: var(--space-2) var(--space-3);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
     color: var(--text);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
   }
 
-  .theme-dark .lang-switch a,
-  .theme-transparent .lang-switch a {
-    color: rgba(255,255,255,0.6);
+  .lang-current:hover {
+    border-color: var(--primary);
   }
 
-  .theme-dark .lang-switch a:hover,
-  .theme-dark .lang-switch a.active,
-  .theme-transparent .lang-switch a:hover,
-  .theme-transparent .lang-switch a.active {
+  .theme-dark .lang-current,
+  .theme-transparent .lang-current {
+    border-color: rgba(255,255,255,0.2);
     color: white;
   }
 
-  .lang-switch .divider {
-    color: var(--border);
+  .lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: var(--space-2);
+    min-width: 160px;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-2);
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: all var(--transition-fast);
+  }
+
+  .lang-switch-wrapper:hover .lang-dropdown,
+  .lang-current[aria-expanded="true"] + .lang-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .lang-dropdown a {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+  }
+
+  .lang-dropdown a:hover,
+  .lang-dropdown a.active {
+    color: var(--text);
+    background: var(--surface);
+  }
+
+  .lang-dropdown a.active {
+    font-weight: 600;
+  }
+
+  .lang-code {
+    font-weight: 600;
+    font-size: var(--text-sm);
+  }
+
+  .lang-name {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
   }
 
   .mobile-menu-toggle {
@@ -325,5 +383,12 @@ const nav = navigation[locale as keyof typeof navigation] || navigation.de;
     const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
     toggle.setAttribute('aria-expanded', (!isExpanded).toString());
     nav?.classList.toggle('is-open');
+  });
+
+  // Language dropdown
+  const langBtn = document.querySelector('.lang-current');
+  langBtn?.addEventListener('click', () => {
+    const isExpanded = langBtn.getAttribute('aria-expanded') === 'true';
+    langBtn.setAttribute('aria-expanded', (!isExpanded).toString());
   });
 </script>
