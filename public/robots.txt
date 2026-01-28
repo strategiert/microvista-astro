@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://microvista.de/sitemap-index.xml
+
+# Crawl-Delay für höfliches Crawling
+Crawl-delay: 1
+
+# Blockiere Admin/API Pfade
+Disallow: /api/

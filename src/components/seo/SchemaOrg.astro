@@ -1,0 +1,18 @@
+---
+/**
+ * SchemaOrg Component - JSON-LD Strukturierte Daten
+ * Für bessere Suchmaschinen-Darstellung (Rich Snippets)
+ */
+interface Props {
+  schema: object | object[];
+}
+
+const { schema } = Astro.props;
+
+// Unterstützt einzelnes Schema oder Array von Schemas
+const schemas = Array.isArray(schema) ? schema : [schema];
+---
+
+{schemas.map((s) => (
+  <script type="application/ld+json" set:html={JSON.stringify(s, null, 0)} />
+))}

@@ -1,5 +1,8 @@
 ---
 import '../styles/global.css';
+import SEO from '../components/seo/SEO.astro';
+import SchemaOrg from '../components/seo/SchemaOrg.astro';
+import { organizationSchema, websiteSchema } from '../components/seo/schemas';
 
 interface Props {
   title: string;
@@ -7,17 +10,23 @@ interface Props {
   theme?: 'labor' | 'serie' | 'neutral';
   ogImage?: string;
   noIndex?: boolean;
+  schema?: object | object[];
 }
 
-const { 
-  title, 
+const {
+  title,
   description = 'Microvista - Industrielle Computertomographie. Anywhere. Anytime. Fast.',
   theme = 'neutral',
   ogImage = '/images/og-default.jpg',
-  noIndex = false
+  noIndex = false,
+  schema
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// Standard-Schemas für jede Seite
+const defaultSchemas = [organizationSchema, websiteSchema];
+const pageSchemas = schema
+  ? [...defaultSchemas, ...(Array.isArray(schema) ? schema : [schema])]
+  : defaultSchemas;
 ---
 
 <!DOCTYPE html>
@@ -26,46 +35,41 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="generator" content={Astro.generator} />
-  
-  <!-- SEO -->
-  <title>{title} | Microvista</title>
-  <meta name="description" content={description} />
-  <link rel="canonical" href={canonicalURL} />
-  {noIndex && <meta name="robots" content="noindex, nofollow" />}
-  
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content={canonicalURL} />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:image" content={new URL(ogImage, Astro.site)} />
-  <meta property="og:locale" content={Astro.currentLocale === 'en' ? 'en_US' : 'de_DE'} />
-  
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
-  
+
+  <!-- SEO Meta Tags -->
+  <SEO
+    title={`${title} | Microvista`}
+    description={description}
+    image={ogImage}
+    noindex={noIndex}
+  />
+
+  <!-- Strukturierte Daten -->
+  <SchemaOrg schema={pageSchemas} />
+
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  
-  <!-- Preconnect -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Preconnect für Performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  
+
+  <!-- Zusätzliche Head-Elemente von Seiten -->
   <slot name="head" />
 </head>
 <body>
   <slot name="header" />
-  
+
   <main id="content">
     <slot />
   </main>
-  
+
   <slot name="footer" />
-  
+
   <slot name="scripts" />
 </body>
 </html>

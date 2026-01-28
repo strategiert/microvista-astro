@@ -45,6 +45,9 @@ const content = {
 };
 
 const t = content[locale as keyof typeof content] || content.de;
+
+// Helper für URLs - kein Prefix für Default-Locale (de)
+const localePath = (path: string) => locale === 'de' ? path : `/${locale}${path}`;
 ---
 
 <BaseLayout 
@@ -64,7 +67,7 @@ const t = content[locale as keyof typeof content] || content.de;
         </a>
         
         <nav class="lang-switch">
-          <a href="/de/" class:list={[{ active: locale === 'de' }]}>DE</a>
+          <a href="/" class:list={[{ active: locale === 'de' }]}>DE</a>
           <span class="divider">/</span>
           <a href="/en/" class:list={[{ active: locale === 'en' }]}>EN</a>
         </nav>
@@ -81,7 +84,7 @@ const t = content[locale as keyof typeof content] || content.de;
         
         <div class="worlds-grid">
           <!-- Welt 1: Labor -->
-          <a href={`/${locale}/labor/`} class="world-card labor">
+          <a href={localePath('/labor/')} class="world-card labor">
             <div class="world-card-bg"></div>
             <div class="world-card-content">
               <div class="world-icon">
@@ -112,7 +115,7 @@ const t = content[locale as keyof typeof content] || content.de;
           </a>
           
           <!-- Welt 2: Serie -->
-          <a href={`/${locale}/serie/`} class="world-card serie">
+          <a href={localePath('/serie/')} class="world-card serie">
             <div class="world-card-bg"></div>
             <div class="world-card-content">
               <div class="world-icon">
