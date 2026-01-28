@@ -1,0 +1,199 @@
+---
+const locale = Astro.currentLocale || 'de';
+
+const nav = {
+  de: [
+    { label: 'Inline-CT', href: '/serie/inline-ct/' },
+    { label: '100% Prüfung', href: '/serie/100-prozent-pruefung/' },
+    { label: 'KI-Automatisierung', href: '/serie/ki-automatisierung/' },
+    { label: 'Kontakt', href: '/serie/kontakt/' },
+  ],
+  en: [
+    { label: 'Inline CT', href: '/en/serie/inline-ct/' },
+    { label: '100% Inspection', href: '/en/serie/100-percent-inspection/' },
+    { label: 'AI Automation', href: '/en/serie/ai-automation/' },
+    { label: 'Contact', href: '/en/serie/contact/' },
+  ]
+};
+
+const items = nav[locale as keyof typeof nav] || nav.de;
+---
+
+<header class="header-serie">
+  <div class="container">
+    <div class="header-inner">
+      <a href={`/${locale === 'de' ? '' : locale + '/'}`} class="logo">
+        <div class="logo-mark">M</div>
+        <div class="logo-content">
+          <span class="logo-text">Microvista</span>
+          <span class="logo-sub">Serienprüfung</span>
+        </div>
+      </a>
+      
+      <nav class="main-nav">
+        {items.map(item => (
+          <a href={item.href} class="nav-link">{item.label}</a>
+        ))}
+      </nav>
+      
+      <div class="header-actions">
+        <a href={`/${locale === 'de' ? '' : locale + '/'}labor/`} class="switch-world">
+          <span>→ Labor & Erstmuster</span>
+        </a>
+        <a href={`/${locale === 'de' ? '' : locale + '/'}serie/kontakt/`} class="btn btn-primary">
+          {locale === 'de' ? 'ROI berechnen' : 'Calculate ROI'}
+        </a>
+      </div>
+      
+      <button class="mobile-menu-btn" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header-serie {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--background);
+    border-bottom: 1px solid var(--border);
+    padding: var(--space-4) 0;
+  }
+  
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+  }
+  
+  .logo-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-xl);
+    color: white;
+  }
+  
+  .logo-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .logo-text {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  
+  .logo-sub {
+    font-size: var(--text-xs);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .main-nav {
+    display: none;
+    align-items: center;
+    gap: var(--space-1);
+  }
+  
+  @media (min-width: 1024px) {
+    .main-nav {
+      display: flex;
+    }
+  }
+  
+  .nav-link {
+    padding: var(--space-2) var(--space-4);
+    color: var(--text);
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+  }
+  
+  .nav-link:hover {
+    background: var(--surface);
+    color: var(--accent);
+  }
+  
+  .header-actions {
+    display: none;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  
+  @media (min-width: 1024px) {
+    .header-actions {
+      display: flex;
+    }
+  }
+  
+  .switch-world {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    transition: all var(--transition-fast);
+  }
+  
+  .switch-world:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-weight: 600;
+  }
+  
+  .btn-primary:hover {
+    background: var(--accent-light);
+  }
+  
+  .mobile-menu-btn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: var(--space-2);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .mobile-menu-btn span {
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: all var(--transition-fast);
+  }
+  
+  @media (min-width: 1024px) {
+    .mobile-menu-btn {
+      display: none;
+    }
+  }
+</style>

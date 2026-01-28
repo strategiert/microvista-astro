@@ -1,0 +1,329 @@
+/* =========================================
+   MICROVISTA DESIGN SYSTEM
+   ========================================= */
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Antonio:wght@400;500;600;700&family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* =========================================
+   CSS CUSTOM PROPERTIES
+   ========================================= */
+
+:root {
+  /* Microvista Brand Colors */
+  --mv-violet: #32285b;
+  --mv-blue: #8ebfd6;
+  --mv-orange: #ee7711;
+  --mv-orange-hover: #ff8822;
+  --mv-cyan: #00a0d2;
+  
+  /* Neutrals */
+  --mv-white: #ffffff;
+  --mv-gray-50: #f9fafb;
+  --mv-gray-100: #f3f4f6;
+  --mv-gray-200: #e5e7eb;
+  --mv-gray-300: #d1d5db;
+  --mv-gray-400: #9ca3af;
+  --mv-gray-500: #6b7280;
+  --mv-gray-600: #4b5563;
+  --mv-gray-700: #374151;
+  --mv-gray-800: #1f2937;
+  --mv-gray-900: #111827;
+  
+  /* Typography */
+  --font-heading: 'Antonio', sans-serif;
+  --font-body: 'PT Sans', sans-serif;
+  
+  /* Font Sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+  
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+  
+  /* Container */
+  --container-max: 1280px;
+  --container-padding: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --container-padding: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --container-padding: var(--space-8);
+  }
+}
+
+/* =========================================
+   THEME: LABOR (Welt 1)
+   ========================================= */
+
+[data-theme="labor"] {
+  --primary: #0A2463;
+  --primary-light: #1E3A8A;
+  --accent: #00B4D8;
+  --accent-light: #48CAE4;
+  --background: #ffffff;
+  --surface: #f8fafc;
+  --surface-hover: #f1f5f9;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+}
+
+/* =========================================
+   THEME: SERIE (Welt 2)
+   ========================================= */
+
+[data-theme="serie"] {
+  --primary: #1A365D;
+  --primary-light: #2D4A7C;
+  --accent: #F97316;
+  --accent-light: #FB923C;
+  --background: #0F172A;
+  --surface: #1E293B;
+  --surface-hover: #334155;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: #334155;
+}
+
+/* =========================================
+   RESET & BASE STYLES
+   ========================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--text, var(--mv-gray-800));
+  background-color: var(--background, var(--mv-white));
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* =========================================
+   TYPOGRAPHY
+   ========================================= */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text, var(--mv-violet));
+}
+
+h1 { font-size: var(--text-5xl); }
+h2 { font-size: var(--text-4xl); }
+h3 { font-size: var(--text-3xl); }
+h4 { font-size: var(--text-2xl); }
+h5 { font-size: var(--text-xl); }
+h6 { font-size: var(--text-lg); }
+
+@media (max-width: 768px) {
+  h1 { font-size: var(--text-4xl); }
+  h2 { font-size: var(--text-3xl); }
+  h3 { font-size: var(--text-2xl); }
+}
+
+a {
+  color: var(--accent, var(--mv-blue));
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--accent-light, var(--mv-cyan));
+}
+
+/* =========================================
+   UTILITY CLASSES
+   ========================================= */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+}
+
+.section {
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-top: var(--space-24);
+    padding-bottom: var(--space-24);
+  }
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-base);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--mv-orange);
+  color: var(--mv-white);
+}
+
+.btn-primary:hover {
+  background-color: var(--mv-orange-hover);
+  color: var(--mv-white);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--primary, var(--mv-violet));
+  border: 2px solid var(--accent, var(--mv-blue));
+}
+
+.btn-secondary:hover {
+  background-color: var(--accent, var(--mv-blue));
+  color: var(--mv-white);
+}
+
+.btn-lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--text-lg);
+}
+
+/* Cards */
+.card {
+  background-color: var(--surface, var(--mv-white));
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border, var(--mv-gray-200));
+  padding: var(--space-6);
+  transition: all var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent, var(--mv-blue));
+}
+
+/* Text utilities */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-muted { color: var(--text-muted, var(--mv-gray-500)); }
+.text-accent { color: var(--accent, var(--mv-blue)); }
+.text-primary { color: var(--primary, var(--mv-violet)); }
+
+/* Flex utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: var(--space-2); }
+.gap-4 { gap: var(--space-4); }
+.gap-6 { gap: var(--space-6); }
+.gap-8 { gap: var(--space-8); }
+
+/* Grid utilities */
+.grid { display: grid; }
+.grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Visually hidden (for accessibility) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}

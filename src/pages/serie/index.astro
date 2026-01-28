@@ -1,0 +1,401 @@
+---
+import SerieLayout from '../../layouts/SerieLayout.astro';
+
+const locale = Astro.currentLocale || 'de';
+
+const content = {
+  de: {
+    badge: 'Serienprüfung',
+    headline: '100% Qualität.',
+    headlineAccent: '0% Stillstand.',
+    subline: 'Automatisierte CT-Prüfung für Ihre Serienproduktion. Maximaler Durchsatz, höchste Erkennungsrate, nahtlose Integration in Ihre bestehenden Prozesse.',
+    cta1: 'ROI berechnen',
+    cta2: 'Lösungen ansehen',
+    stats: [
+      { value: '100%', label: 'Prüfabdeckung' },
+      { value: '<3s', label: 'pro Bauteil' },
+      { value: '99.9%', label: 'Erkennungsrate' }
+    ],
+    services: [
+      {
+        title: 'Inline-CT',
+        description: 'CT-Prüfung direkt in Ihrer Produktionslinie – vollautomatisch.',
+        href: '/serie/inline-ct/'
+      },
+      {
+        title: '100% Prüfung',
+        description: 'Lückenlose Qualitätskontrolle für jeden einzelnen Artikel.',
+        href: '/serie/100-prozent-pruefung/'
+      },
+      {
+        title: 'KI-Automatisierung',
+        description: 'Intelligente Auswertung ohne manuelle Eingriffe.',
+        href: '/serie/ki-automatisierung/'
+      }
+    ],
+    servicesTitle: 'Unsere Lösungen',
+    servicesSubline: 'Maßgeschneiderte Prüfsysteme für Ihre Produktionsanforderungen',
+    ctaTitle: 'Bereit für 100% Qualität?',
+    ctaSubline: 'Lassen Sie uns gemeinsam Ihre Prüfprozesse optimieren. Unverbindliche Beratung und ROI-Berechnung.',
+    ctaButton: 'Jetzt Beratung anfragen'
+  },
+  en: {
+    badge: 'Serial Inspection',
+    headline: '100% Quality.',
+    headlineAccent: '0% Downtime.',
+    subline: 'Automated CT inspection for your serial production. Maximum throughput, highest detection rate, seamless integration into your existing processes.',
+    cta1: 'Calculate ROI',
+    cta2: 'View Solutions',
+    stats: [
+      { value: '100%', label: 'Coverage' },
+      { value: '<3s', label: 'per part' },
+      { value: '99.9%', label: 'Detection rate' }
+    ],
+    services: [
+      {
+        title: 'Inline CT',
+        description: 'CT inspection directly in your production line – fully automated.',
+        href: '/en/serie/inline-ct/'
+      },
+      {
+        title: '100% Inspection',
+        description: 'Complete quality control for every single article.',
+        href: '/en/serie/100-percent-inspection/'
+      },
+      {
+        title: 'AI Automation',
+        description: 'Intelligent evaluation without manual intervention.',
+        href: '/en/serie/ai-automation/'
+      }
+    ],
+    servicesTitle: 'Our Solutions',
+    servicesSubline: 'Tailored inspection systems for your production requirements',
+    ctaTitle: 'Ready for 100% quality?',
+    ctaSubline: 'Let us optimize your inspection processes together. Non-binding consultation and ROI calculation.',
+    ctaButton: 'Request Consultation Now'
+  }
+};
+
+const t = content[locale as keyof typeof content] || content.de;
+---
+
+<SerieLayout 
+  title={locale === 'de' ? 'Inline-CT für Serienprüfung' : 'Inline CT for Serial Inspection'}
+  description={t.subline}
+>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <span class="badge">{t.badge}</span>
+        <h1>
+          {t.headline}
+          <span class="accent">{t.headlineAccent}</span>
+        </h1>
+        <p class="subline">{t.subline}</p>
+        <div class="hero-cta">
+          <a href="/serie/kontakt/" class="btn btn-primary btn-lg">{t.cta1}</a>
+          <a href="/serie/inline-ct/" class="btn btn-secondary btn-lg">{t.cta2}</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-bg"></div>
+  </section>
+  
+  <!-- Stats Bar -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-list">
+        {t.stats.map((s: any) => (
+          <div class="stat-item">
+            <span class="stat-value">{s.value}</span>
+            <span class="stat-label">{s.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Services Section -->
+  <section class="services section">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>{t.servicesTitle}</h2>
+        <p class="text-muted">{t.servicesSubline}</p>
+      </div>
+      
+      <div class="services-grid">
+        {t.services.map((service: any) => (
+          <a href={service.href} class="service-card card">
+            <h3>{service.title}</h3>
+            <p>{service.description}</p>
+            <span class="card-link">
+              Mehr erfahren
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Cross-Sell Hint -->
+  <section class="cross-sell">
+    <div class="container">
+      <div class="cross-sell-box">
+        <span class="cross-sell-icon">💡</span>
+        <div class="cross-sell-content">
+          <strong>Noch in der Entwicklung?</strong>
+          <p>Für Prototypen und Erstmuster bieten wir schnelle Laboranalysen mit höchster Präzision.</p>
+        </div>
+        <a href="/labor/" class="btn btn-secondary">Labor entdecken</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content text-center">
+        <h2>{t.ctaTitle}</h2>
+        <p>{t.ctaSubline}</p>
+        <a href="/serie/kontakt/" class="btn btn-primary btn-lg">{t.ctaButton}</a>
+      </div>
+    </div>
+  </section>
+</SerieLayout>
+
+<style>
+  .hero {
+    position: relative;
+    padding: var(--space-24) 0;
+    background: linear-gradient(135deg, var(--background) 0%, var(--primary) 50%, rgba(249, 115, 22, 0.2) 100%);
+    color: white;
+    overflow: hidden;
+  }
+  
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.2;
+    background-image: 
+      linear-gradient(rgba(249, 115, 22, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(249, 115, 22, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  
+  .hero-content {
+    position: relative;
+    max-width: 700px;
+  }
+  
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: rgba(249, 115, 22, 0.2);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    color: var(--accent);
+    margin-bottom: var(--space-6);
+  }
+  
+  .hero h1 {
+    font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
+    color: white;
+    margin-bottom: var(--space-6);
+  }
+  
+  .hero h1 .accent {
+    display: block;
+    color: var(--accent);
+  }
+  
+  .subline {
+    font-size: var(--text-xl);
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: var(--space-8);
+    line-height: 1.6;
+  }
+  
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+  
+  .hero .btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-weight: 600;
+  }
+  
+  .hero .btn-secondary {
+    border-color: var(--border);
+    color: white;
+  }
+  
+  .hero .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .stats-bar {
+    background: var(--primary);
+    border-top: 1px solid rgba(249, 115, 22, 0.2);
+    border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+    padding: var(--space-8) 0;
+  }
+  
+  .stats-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-12);
+  }
+  
+  .stat-item {
+    text-align: center;
+  }
+  
+  .stat-value {
+    display: block;
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    font-family: var(--font-heading);
+    color: var(--accent);
+  }
+  
+  .stat-label {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .services {
+    background: var(--background);
+  }
+  
+  .section-header {
+    margin-bottom: var(--space-12);
+  }
+  
+  .section-header h2 {
+    color: var(--text);
+    margin-bottom: var(--space-4);
+  }
+  
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-8);
+  }
+  
+  .service-card {
+    text-decoration: none;
+    color: inherit;
+    background: var(--surface);
+    border-color: var(--border);
+  }
+  
+  .service-card:hover {
+    border-color: var(--accent);
+  }
+  
+  .service-card h3 {
+    color: var(--text);
+    margin-bottom: var(--space-3);
+    transition: color var(--transition-fast);
+  }
+  
+  .service-card:hover h3 {
+    color: var(--accent);
+  }
+  
+  .service-card p {
+    color: var(--text-muted);
+    margin-bottom: var(--space-4);
+  }
+  
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  
+  .service-card:hover .card-link svg {
+    transform: translateX(4px);
+  }
+  
+  .card-link svg {
+    transition: transform var(--transition-fast);
+  }
+  
+  .cross-sell {
+    padding: var(--space-8) 0;
+    background: var(--surface);
+  }
+  
+  .cross-sell-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-6);
+    padding: var(--space-6);
+    background: var(--background);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border);
+  }
+  
+  .cross-sell-icon {
+    font-size: var(--text-2xl);
+  }
+  
+  .cross-sell-content {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .cross-sell-content strong {
+    color: var(--text);
+  }
+  
+  .cross-sell-content p {
+    color: var(--text-muted);
+    margin: 0;
+  }
+  
+  .cross-sell .btn-secondary {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  
+  .cta-section {
+    padding: var(--space-20) 0;
+    background: linear-gradient(135deg, var(--primary) 0%, rgba(249, 115, 22, 0.3) 100%);
+    color: white;
+  }
+  
+  .cta-content {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .cta-content h2 {
+    color: white;
+    margin-bottom: var(--space-4);
+  }
+  
+  .cta-content p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: var(--space-8);
+  }
+  
+  .cta-content .btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-weight: 600;
+  }
+</style>

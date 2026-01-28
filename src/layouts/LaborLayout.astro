@@ -1,0 +1,24 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import LaborHeader from '../components/layout/LaborHeader.astro';
+import LaborFooter from '../components/layout/LaborFooter.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description, ogImage } = Astro.props;
+---
+
+<BaseLayout 
+  title={title} 
+  description={description} 
+  theme="labor"
+  ogImage={ogImage}
+>
+  <LaborHeader slot="header" />
+  <slot />
+  <LaborFooter slot="footer" />
+</BaseLayout>

@@ -1,0 +1,81 @@
+---
+const locale = Astro.currentLocale || 'de';
+---
+
+<header class="header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <div class="logo-mark">M</div>
+        <span class="logo-text">Microvista</span>
+      </a>
+      
+      <nav class="main-nav">
+        <a href="/magazin/">Magazin</a>
+        <a href="/wiki/">Wiki</a>
+        <a href="/labor/">Labor</a>
+        <a href="/serie/">Serie</a>
+        <a href="/kontakt/">Kontakt</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--mv-white);
+    border-bottom: 1px solid var(--mv-gray-200);
+    padding: var(--space-4) 0;
+  }
+  
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+  }
+  
+  .logo-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--mv-violet), var(--mv-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-xl);
+    color: white;
+  }
+  
+  .logo-text {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--mv-violet);
+  }
+  
+  .main-nav {
+    display: flex;
+    gap: var(--space-6);
+  }
+  
+  .main-nav a {
+    color: var(--mv-gray-600);
+    font-weight: 500;
+  }
+  
+  .main-nav a:hover {
+    color: var(--mv-violet);
+  }
+</style>

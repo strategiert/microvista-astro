@@ -1,0 +1,44 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; {year} Microvista GmbH</p>
+      <nav>
+        <a href="/impressum/">Impressum</a>
+        <a href="/datenschutz/">Datenschutz</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--mv-gray-100);
+    padding: var(--space-8) 0;
+    margin-top: auto;
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--text-sm);
+    color: var(--mv-gray-500);
+  }
+  
+  .footer nav {
+    display: flex;
+    gap: var(--space-6);
+  }
+  
+  .footer a {
+    color: var(--mv-gray-500);
+  }
+  
+  .footer a:hover {
+    color: var(--mv-violet);
+  }
+</style>

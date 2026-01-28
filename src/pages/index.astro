@@ -1,0 +1,411 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const locale = Astro.currentLocale || 'de';
+
+const content = {
+  de: {
+    headline: 'Welche Prüfung suchen Sie?',
+    subline: 'Wählen Sie Ihren Bereich für ein maßgeschneidertes Erlebnis',
+    hint: 'Nicht sicher? Beide Bereiche sind miteinander verbunden – Sie können jederzeit wechseln.',
+    labor: {
+      title: 'Labor & Erstmuster',
+      subtitle: 'Präzision für Ihre Prototypen',
+      description: 'Erstmusterprüfung, Schadensanalyse, Reverse Engineering. Für Ingenieure und QM-Verantwortliche, die schnelle und präzise Ergebnisse benötigen.',
+      features: ['Erstmusterprüfung', 'Prototypen-Analyse', 'Schadensanalyse', 'Reverse Engineering'],
+      cta: 'Labor entdecken'
+    },
+    serie: {
+      title: 'Serienprüfung',
+      subtitle: '100% Qualität in der Produktion',
+      description: 'Inline-CT, automatisierte Prüfung, KI-Auswertung. Für Produktionsleiter und Einkäufer, die maximalen Durchsatz bei höchster Qualität suchen.',
+      features: ['Inline-CT', '100% Prüfung', 'KI-Automatisierung', 'Prozessintegration'],
+      cta: 'Serie entdecken'
+    }
+  },
+  en: {
+    headline: 'What inspection do you need?',
+    subline: 'Choose your area for a tailored experience',
+    hint: 'Not sure? Both areas are connected – you can switch at any time.',
+    labor: {
+      title: 'Lab & First Article',
+      subtitle: 'Precision for your prototypes',
+      description: 'First article inspection, failure analysis, reverse engineering. For engineers and QM managers who need fast and precise results.',
+      features: ['First Article Inspection', 'Prototype Analysis', 'Failure Analysis', 'Reverse Engineering'],
+      cta: 'Explore Lab'
+    },
+    serie: {
+      title: 'Serial Inspection',
+      subtitle: '100% Quality in Production',
+      description: 'Inline CT, automated inspection, AI evaluation. For production managers and buyers seeking maximum throughput with highest quality.',
+      features: ['Inline CT', '100% Inspection', 'AI Automation', 'Process Integration'],
+      cta: 'Explore Series'
+    }
+  }
+};
+
+const t = content[locale as keyof typeof content] || content.de;
+---
+
+<BaseLayout 
+  title={locale === 'de' ? 'Industrielle CT Prüfung' : 'Industrial CT Inspection'}
+  description={locale === 'de' 
+    ? 'Microvista - Industrielle Computertomographie für Labor und Serie. Anywhere. Anytime. Fast.' 
+    : 'Microvista - Industrial Computed Tomography for Lab and Production. Anywhere. Anytime. Fast.'}
+  theme="neutral"
+>
+  <div class="gateway">
+    <!-- Minimal Header -->
+    <header class="gateway-header">
+      <div class="container">
+        <a href="/" class="logo">
+          <div class="logo-mark">M</div>
+          <span class="logo-text">Microvista</span>
+        </a>
+        
+        <nav class="lang-switch">
+          <a href="/de/" class:list={[{ active: locale === 'de' }]}>DE</a>
+          <span class="divider">/</span>
+          <a href="/en/" class:list={[{ active: locale === 'en' }]}>EN</a>
+        </nav>
+      </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="gateway-main">
+      <div class="container">
+        <div class="gateway-intro">
+          <h1>{t.headline}</h1>
+          <p class="subline">{t.subline}</p>
+        </div>
+        
+        <div class="worlds-grid">
+          <!-- Welt 1: Labor -->
+          <a href={`/${locale}/labor/`} class="world-card labor">
+            <div class="world-card-bg"></div>
+            <div class="world-card-content">
+              <div class="world-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <line x1="21.17" y1="8" x2="12" y2="8"/>
+                  <line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
+                  <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
+                </svg>
+              </div>
+              <h2>{t.labor.title}</h2>
+              <p class="subtitle">{t.labor.subtitle}</p>
+              <p class="description">{t.labor.description}</p>
+              <div class="features">
+                {t.labor.features.map((f: string) => (
+                  <span class="feature-tag">{f}</span>
+                ))}
+              </div>
+              <span class="cta">
+                {t.labor.cta}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </span>
+            </div>
+            <div class="world-glow"></div>
+          </a>
+          
+          <!-- Welt 2: Serie -->
+          <a href={`/${locale}/serie/`} class="world-card serie">
+            <div class="world-card-bg"></div>
+            <div class="world-card-content">
+              <div class="world-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
+                  <path d="M17 18h1"/>
+                  <path d="M12 18h1"/>
+                  <path d="M7 18h1"/>
+                </svg>
+              </div>
+              <h2>{t.serie.title}</h2>
+              <p class="subtitle">{t.serie.subtitle}</p>
+              <p class="description">{t.serie.description}</p>
+              <div class="features">
+                {t.serie.features.map((f: string) => (
+                  <span class="feature-tag">{f}</span>
+                ))}
+              </div>
+              <span class="cta">
+                {t.serie.cta}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </span>
+            </div>
+            <div class="world-glow"></div>
+          </a>
+        </div>
+        
+        <p class="hint">{t.hint}</p>
+      </div>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .gateway {
+    min-height: 100vh;
+    background: #0a0a0f;
+    color: #fff;
+  }
+  
+  .gateway-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    padding: var(--space-6) 0;
+  }
+  
+  .gateway-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .logo-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--mv-violet), var(--mv-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-xl);
+  }
+  
+  .logo-text {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+  }
+  
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+  }
+  
+  .lang-switch a {
+    color: rgba(255, 255, 255, 0.6);
+    padding: var(--space-1) var(--space-2);
+  }
+  
+  .lang-switch a:hover,
+  .lang-switch a.active {
+    color: #fff;
+  }
+  
+  .lang-switch .divider {
+    color: rgba(255, 255, 255, 0.3);
+  }
+  
+  .gateway-main {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: var(--space-24) 0;
+  }
+  
+  .gateway-intro {
+    text-align: center;
+    margin-bottom: var(--space-16);
+  }
+  
+  .gateway-intro h1 {
+    font-size: clamp(var(--text-3xl), 5vw, var(--text-6xl));
+    background: linear-gradient(90deg, #fff 0%, var(--mv-blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--space-4);
+  }
+  
+  .subline {
+    font-size: var(--text-xl);
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .worlds-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  @media (min-width: 1024px) {
+    .worlds-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  .world-card {
+    position: relative;
+    border-radius: var(--radius-2xl);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.5s ease;
+  }
+  
+  .world-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-4px) scale(1.01);
+  }
+  
+  .world-card-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+    transition: opacity 0.5s ease;
+  }
+  
+  .world-card:hover .world-card-bg {
+    opacity: 0.2;
+  }
+  
+  .world-card.labor .world-card-bg {
+    background: radial-gradient(circle at 20% 80%, rgba(0, 180, 216, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, #0A2463, #00B4D8);
+  }
+  
+  .world-card.serie .world-card-bg {
+    background: radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, #1A365D, #F97316);
+  }
+  
+  .world-card-content {
+    position: relative;
+    padding: var(--space-8) var(--space-10);
+  }
+  
+  .world-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-6);
+    transition: transform 0.3s ease;
+  }
+  
+  .world-card:hover .world-icon {
+    transform: scale(1.1);
+  }
+  
+  .world-card.labor .world-icon {
+    background: rgba(0, 180, 216, 0.2);
+    color: #00B4D8;
+  }
+  
+  .world-card.serie .world-icon {
+    background: rgba(249, 115, 22, 0.2);
+    color: #F97316;
+  }
+  
+  .world-card h2 {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-2);
+    color: #fff;
+  }
+  
+  .world-card .subtitle {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-4);
+  }
+  
+  .world-card.labor .subtitle { color: #00B4D8; }
+  .world-card.serie .subtitle { color: #F97316; }
+  
+  .world-card .description {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
+  }
+  
+  .features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-8);
+  }
+  
+  .feature-tag {
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: 600;
+    transition: gap 0.3s ease;
+  }
+  
+  .world-card:hover .cta {
+    gap: var(--space-4);
+  }
+  
+  .world-card.labor .cta { color: #00B4D8; }
+  .world-card.serie .cta { color: #F97316; }
+  
+  .world-glow {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75%;
+    height: 4px;
+    border-radius: var(--radius-full);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  
+  .world-card:hover .world-glow {
+    opacity: 1;
+  }
+  
+  .world-card.labor .world-glow {
+    background: #00B4D8;
+    box-shadow: 0 0 40px #00B4D8;
+  }
+  
+  .world-card.serie .world-glow {
+    background: #F97316;
+    box-shadow: 0 0 40px #F97316;
+  }
+  
+  .hint {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: var(--text-sm);
+    margin-top: var(--space-12);
+  }
+</style>

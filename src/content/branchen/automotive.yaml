@@ -1,0 +1,43 @@
+name: "Automotive"
+slug: "automotive"
+description: "Industrielle CT für die Automobilindustrie – von der Prototypenprüfung bis zur Serienqualitätssicherung."
+heroImage: "/images/branchen/automotive-hero.jpg"
+
+challenges:
+  - title: "Leichtbau-Anforderungen"
+    description: "Komplexe Geometrien und dünnwandige Strukturen erfordern präzise Prüfverfahren."
+  - title: "Zero-Defect-Strategie"
+    description: "OEMs fordern lückenlose Qualitätsdokumentation von Zulieferern."
+  - title: "Elektromobilität"
+    description: "Neue Komponenten wie Batterien und E-Motoren stellen besondere Prüfanforderungen."
+
+solutions:
+  - title: "Inline-CT für 100% Prüfung"
+    description: "Automatisierte Inspektion jedes Bauteils in Taktzeit."
+  - title: "KI-gestützte Defekterkennung"
+    description: "Automatische Klassifizierung nach OEM-Vorgaben."
+  - title: "Hairpin-Stator-Prüfung"
+    description: "Spezialisierte Lösung für E-Motoren-Komponenten."
+
+useCases:
+  - "Porositätsprüfung Aluminium-Druckguss"
+  - "Qualitätssicherung Hairpin-Statoren"
+  - "Batterie-Zell-Inspektion"
+  - "Schweißnahtprüfung Karosserie"
+  - "Erstmusterprüfung Kunststoffteile"
+
+stats:
+  - value: "<3s"
+    label: "Zykluszeit pro Bauteil"
+  - value: "99.9%"
+    label: "Erkennungsrate"
+  - value: "100%"
+    label: "Prüfabdeckung"
+
+cta:
+  title: "Optimieren Sie Ihre Automotive-Qualitätssicherung"
+  description: "Erfahren Sie, wie führende OEMs und Zulieferer von unserer CT-Technologie profitieren."
+
+seo:
+  title: "Industrielle CT für die Automobilindustrie | Microvista"
+  description: "Zerstörungsfreie Prüfung für Automotive: Inline-CT, Porositätsanalyse, Hairpin-Prüfung. Erfahren Sie mehr über unsere Lösungen für OEMs und Zulieferer."

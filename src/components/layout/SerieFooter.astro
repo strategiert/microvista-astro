@@ -1,0 +1,186 @@
+---
+const locale = Astro.currentLocale || 'de';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer-serie">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo">
+          <div class="logo-mark">M</div>
+          <span class="logo-text">Microvista</span>
+        </a>
+        <p class="tagline">100% Qualität. 0% Stillstand.</p>
+        <div class="contact-info">
+          <p>Microvista GmbH</p>
+          <p>Am Mönchenfelde 12</p>
+          <p>38889 Blankenburg</p>
+          <p><a href="tel:+49394495050">+49 3944 950-50</a></p>
+          <p><a href="mailto:vertrieb@microvista.de">vertrieb@microvista.de</a></p>
+        </div>
+      </div>
+      
+      <div class="footer-links">
+        <h4>{locale === 'de' ? 'Serie Services' : 'Series Services'}</h4>
+        <ul>
+          <li><a href="/serie/inline-ct/">Inline-CT</a></li>
+          <li><a href="/serie/100-prozent-pruefung/">100% Prüfung</a></li>
+          <li><a href="/serie/ki-automatisierung/">KI-Automatisierung</a></li>
+          <li><a href="/serie/integration/">Integration</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-links">
+        <h4>{locale === 'de' ? 'Branchen' : 'Industries'}</h4>
+        <ul>
+          <li><a href="/branchen/automotive/">Automotive</a></li>
+          <li><a href="/branchen/luftfahrt/">Luftfahrt</a></li>
+          <li><a href="/branchen/batteriesysteme/">Batteriesysteme</a></li>
+          <li><a href="/branchen/additive-fertigung/">Additive Fertigung</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-links">
+        <h4>{locale === 'de' ? 'Unternehmen' : 'Company'}</h4>
+        <ul>
+          <li><a href="/unternehmen/team/">Team</a></li>
+          <li><a href="/unternehmen/karriere/">Karriere</a></li>
+          <li><a href="/unternehmen/news/">News</a></li>
+          <li><a href="/kontakt/">Kontakt</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; {year} Microvista GmbH. Alle Rechte vorbehalten.</p>
+      <nav class="legal-nav">
+        <a href="/impressum/">Impressum</a>
+        <a href="/datenschutz/">Datenschutz</a>
+        <a href="/agb/">AGB</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-serie {
+    background: #0a0a0f;
+    color: white;
+    padding: var(--space-16) 0 var(--space-8);
+  }
+  
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+    margin-bottom: var(--space-12);
+  }
+  
+  @media (min-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+    }
+  }
+  
+  .footer-brand .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+    color: white;
+    margin-bottom: var(--space-4);
+  }
+  
+  .footer-brand .logo-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: 700;
+  }
+  
+  .footer-brand .logo-text {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+  }
+  
+  .tagline {
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: var(--space-6);
+  }
+  
+  .contact-info {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .contact-info a {
+    color: var(--accent);
+  }
+  
+  .footer-links h4 {
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-4);
+    color: var(--accent);
+  }
+  
+  .footer-links ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-links li {
+    margin-bottom: var(--space-2);
+  }
+  
+  .footer-links a {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+  }
+  
+  .footer-links a:hover {
+    color: white;
+  }
+  
+  .footer-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding-top: var(--space-8);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.4);
+  }
+  
+  @media (min-width: 768px) {
+    .footer-bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  
+  .legal-nav {
+    display: flex;
+    gap: var(--space-6);
+  }
+  
+  .legal-nav a {
+    color: rgba(255, 255, 255, 0.4);
+  }
+  
+  .legal-nav a:hover {
+    color: white;
+  }
+</style>

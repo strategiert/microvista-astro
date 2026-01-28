@@ -1,0 +1,78 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  theme?: 'labor' | 'serie' | 'neutral';
+  ogImage?: string;
+  noIndex?: boolean;
+}
+
+const { 
+  title, 
+  description = 'Microvista - Industrielle Computertomographie. Anywhere. Anytime. Fast.',
+  theme = 'neutral',
+  ogImage = '/images/og-default.jpg',
+  noIndex = false
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang={Astro.currentLocale || 'de'} data-theme={theme}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="generator" content={Astro.generator} />
+  
+  <!-- SEO -->
+  <title>{title} | Microvista</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+  {noIndex && <meta name="robots" content="noindex, nofollow" />}
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+  <meta property="og:locale" content={Astro.currentLocale === 'en' ? 'en_US' : 'de_DE'} />
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+  <slot name="head" />
+</head>
+<body>
+  <slot name="header" />
+  
+  <main id="content">
+    <slot />
+  </main>
+  
+  <slot name="footer" />
+  
+  <slot name="scripts" />
+</body>
+</html>
+
+<style is:global>
+  /* Page transition */
+  @view-transition {
+    navigation: auto;
+  }
+</style>
