@@ -6,7 +6,7 @@ import preact from '@astrojs/preact';
 
 export default defineConfig({
   site: 'https://microvista.de',
-  output: 'static',
+  output: 'server',
   trailingSlash: 'never',
   adapter: cloudflare({
     platformProxy: {

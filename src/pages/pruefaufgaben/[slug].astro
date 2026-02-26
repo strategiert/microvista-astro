@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import { getCollection } from 'astro:content';
+import { faqSchema, serviceSchema } from '../../components/seo/schemas';
+
+const { slug } = Astro.params;
+const pruefaufgaben = await getCollection('pruefaufgaben');
+const entry = pruefaufgaben.find(p => p.data.slug === slug);
+if (!entry) return Astro.redirect('/pruefaufgaben/');
+const task = entry.data;
+const locale = Astro.currentLocale || 'de';
+
+const schemas = [];
+if (task.faq?.length) {
+  schemas.push(faqSchema(task.faq));
+}
+schemas.push(serviceSchema({
+  name: task.name,
+  description: task.description,
+  url: `https://microvista.de/pruefaufgaben/${task.slug}/`
+}));
+---
+
+<BaseLayout
+  title={task.seo.title}
+  description={task.seo.description}
+  schema={schemas}
+>
+  <Header slot="header" />
+
+  <div class="pruefaufgabe-page">
+    <div class="container">
+      <Breadcrumbs items={[
+        { label: locale === 'en' ? 'Inspection Tasks' : 'Prüfaufgaben', href: '/pruefaufgaben/' },
+        { label: task.name }
+      ]} />
+
+      <!-- Hero -->
+      <section class="page-hero">
+        <h1>{task.name}</h1>
+        <p class="hero-desc">{task.description}</p>
+      </section>
+
+      <!-- Was ist das? -->
+      <section class="content-section">
+        <h2>{locale === 'en' ? 'What is it?' : 'Was ist das?'}</h2>
+        <div class="prose" set:html={task.whatIs} />
+      </section>
+
+      <!-- Wie funktioniert es? -->
+      <section class="content-section">
+        <h2>{locale === 'en' ? 'How does it work?' : 'Wie funktioniert es?'}</h2>
+        <div class="prose" set:html={task.howItWorks} />
+      </section>
+
+      <!-- Vorteile -->
+      <section class="content-section">
+        <h2>{locale === 'en' ? 'Benefits' : 'Vorteile'}</h2>
+        <ul class="benefits-list">
+          {task.benefits.map((b: string) => <li>{b}</li>)}
+        </ul>
+      </section>
+
+      <!-- Anwendungen -->
+      <section class="content-section">
+        <h2>{locale === 'en' ? 'Applications' : 'Anwendungsgebiete'}</h2>
+        <ul class="applications-list">
+          {task.applications.map((a: string) => <li>{a}</li>)}
+        </ul>
+      </section>
+
+      <!-- FAQ -->
+      {task.faq?.length > 0 && (
+        <section class="content-section faq-section">
+          <h2>FAQ</h2>
+          {task.faq.map((item: { question: string; answer: string }) => (
+            <details class="faq-item">
+              <summary>{item.question}</summary>
+              <div class="faq-answer" set:html={item.answer} />
+            </details>
+          ))}
+        </section>
+      )}
+
+      <!-- CTA -->
+      <section class="cta-section">
+        <h2>{locale === 'en' ? 'Need help with' : 'Unterstützung bei'} {task.name}?</h2>
+        <p>{locale === 'en' ? 'Our CT experts are here to help.' : 'Unsere CT-Experten helfen Ihnen gerne weiter.'}</p>
+        <a href="/kontakt/" class="btn btn-primary">
+          {locale === 'en' ? 'Contact us' : 'Jetzt anfragen'}
+        </a>
+      </section>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .pruefaufgabe-page { padding-bottom: var(--space-16); }
+  .page-hero { text-align: center; padding: var(--space-12) 0; max-width: 700px; margin: 0 auto; }
+  .page-hero h1 { font-size: var(--text-4xl); margin-bottom: var(--space-4); }
+  .hero-desc { font-size: var(--text-xl); color: var(--text-muted); }
+  .content-section { max-width: 800px; margin: var(--space-12) auto 0; }
+  .content-section h2 { margin-bottom: var(--space-6); }
+  .prose { line-height: 1.8; }
+  .benefits-list, .applications-list { padding-left: var(--space-6); }
+  .benefits-list li, .applications-list li { margin-bottom: var(--space-3); line-height: 1.6; }
+  .benefits-list li::marker { content: '✓ '; color: var(--accent, #ee7711); }
+  .faq-item { border: 1px solid var(--border, #eef2f5); border-radius: var(--radius-lg); margin-bottom: var(--space-3); }
+  .faq-item summary { padding: var(--space-4) var(--space-5); cursor: pointer; font-weight: 600; }
+  .faq-item summary:hover { color: var(--primary); }
+  .faq-answer { padding: 0 var(--space-5) var(--space-4); line-height: 1.8; }
+  .cta-section {
+    text-align: center;
+    background: var(--surface, #f8fafc);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12);
+    margin-top: var(--space-16);
+  }
+  .cta-section h2 { margin-bottom: var(--space-3); }
+  .cta-section p { color: var(--text-muted); margin-bottom: var(--space-6); }
+</style>

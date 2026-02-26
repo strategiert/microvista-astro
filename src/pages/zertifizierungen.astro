@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import { loadStaticPage } from '../lib/load-static-page';
+
+const locale = Astro.currentLocale || 'de';
+const content = await loadStaticPage(locale === 'en' ? 'zertifizierungen-en.md' : 'zertifizierungen-de.md');
+
+const title = locale === 'en' ? 'Certifications' : 'Zertifizierungen';
+const description = locale === 'en'
+  ? 'Microvista certifications — ISO 9001, ISO 17025, EN 9100.'
+  : 'Microvista Zertifizierungen — ISO 9001, ISO 17025, EN 9100.';
+---
+
+<BaseLayout title={title} description={description}>
+  <Header slot="header" />
+
+  <div class="certs-page">
+    <div class="container">
+      <Breadcrumbs items={[{ label: title }]} />
+      <article class="certs-content" set:html={content} />
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .certs-page { padding-bottom: var(--space-16); }
+  .certs-content { max-width: 800px; margin: 0 auto; padding: var(--space-8) 0; }
+  .certs-content :global(h1) { font-size: var(--text-4xl); margin-bottom: var(--space-8); }
+  .certs-content :global(h2) { margin-top: var(--space-8); margin-bottom: var(--space-4); }
+  .certs-content :global(p) { line-height: 1.8; margin-bottom: var(--space-4); }
+  .certs-content :global(img) { max-width: 200px; margin: var(--space-4) var(--space-4) var(--space-4) 0; }
+</style>

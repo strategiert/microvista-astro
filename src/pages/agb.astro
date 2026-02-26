@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import { loadStaticPage } from '../lib/load-static-page';
+
+const locale = Astro.currentLocale || 'de';
+const content = await loadStaticPage(locale === 'en' ? 'agb-en.md' : 'agb.md');
+---
+
+<BaseLayout title="AGB" description="Allgemeine Geschäftsbedingungen der Microvista GmbH">
+  <Header slot="header" />
+
+  <div class="legal-page">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'AGB' }]} />
+      <article class="legal-content" set:html={content} />
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .legal-page { padding-bottom: var(--space-16); }
+  .legal-content { max-width: 800px; margin: 0 auto; padding: var(--space-8) 0; }
+  .legal-content :global(h1) { margin-bottom: var(--space-8); }
+  .legal-content :global(h2) { margin-top: var(--space-8); margin-bottom: var(--space-4); }
+  .legal-content :global(p), .legal-content :global(li) { line-height: 1.8; margin-bottom: var(--space-4); }
+  .legal-content :global(ol), .legal-content :global(ul) { padding-left: var(--space-6); }
+</style>

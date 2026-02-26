@@ -1,0 +1,30 @@
+name: "Leichtmetallguss"
+slug: "leichtmetallguss"
+description: "Schnelle, automatisierte & zerstörungsfreie Prüfung von Leichtmetallguss durch industrielle CT Dienstleistungen."
+heroImage: "/images/wp/2022/08/Porositaetsanalyse-eines-Zylinderkopfs-Zerstoerungsfreie-Pruefung-von-Leichtmetallguss.webp"
+challenges:
+  - title: "Qualitätssicherung"
+    description: "Zuverlässige Fehlererkennung in der Produktion"
+  - title: "Kosten & Effizienz"
+    description: "Wirtschaftliche Prüflösungen für hohe Stückzahlen"
+solutions:
+  - title: "CT-Labor"
+    description: "Hochauflösende 3D-Scans für detaillierte Analysen"
+  - title: "Mobiles CT"
+    description: "SCANEXPRESS direkt an Ihrer Produktionslinie"
+useCases:
+  - "Porositätsanalyse"
+  - "Erstmusterprüfung"
+  - "Wanddickenmessung"
+  - "CAD Soll-Ist-Vergleich"
+stats:
+  - value: "<0.1mm"
+    label: "Auflösung"
+  - value: "24h"
+    label: "Express-Service"
+cta:
+  title: "CT-Prüfung für Leichtmetallguss"
+  description: "Kontaktieren Sie uns für eine individuelle Beratung."
+seo:
+  title: "Zerstörungsfreie Prüfung von Leichtmetallguss mit CT| Microvista"
+  description: "Schnelle, automatisierte & zerstörungsfreie Prüfung von Leichtmetallguss durch industrielle CT Dienstleistungen."

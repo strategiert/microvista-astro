@@ -3,16 +3,16 @@ const locale = Astro.currentLocale || 'de';
 
 const nav = {
   de: [
-    { label: 'Inline-CT', href: '/serie/inline-ct/' },
-    { label: '100% Prüfung', href: '/serie/100-prozent-pruefung/' },
-    { label: 'KI-Automatisierung', href: '/serie/ki-automatisierung/' },
-    { label: 'Kontakt', href: '/serie/kontakt/' },
+    { label: 'Inline-CT', href: '/serie/inline-ct' },
+    { label: '100% Prüfung', href: '/serie/100-prozent-pruefung' },
+    { label: 'KI-Automatisierung', href: '/serie/ki-automatisierung' },
+    { label: 'Kontakt', href: '/serie/kontakt' },
   ],
   en: [
-    { label: 'Inline CT', href: '/en/serie/inline-ct/' },
-    { label: '100% Inspection', href: '/en/serie/100-percent-inspection/' },
-    { label: 'AI Automation', href: '/en/serie/ai-automation/' },
-    { label: 'Contact', href: '/en/serie/contact/' },
+    { label: 'Inline CT', href: '/en/serie/inline-ct' },
+    { label: '100% Inspection', href: '/en/serie/100-percent-inspection' },
+    { label: 'AI Automation', href: '/en/serie/ai-automation' },
+    { label: 'Contact', href: '/en/serie/contact' },
   ]
 };
 
@@ -22,7 +22,7 @@ const items = nav[locale as keyof typeof nav] || nav.de;
 <header class="header-serie">
   <div class="container">
     <div class="header-inner">
-      <a href={`/${locale === 'de' ? '' : locale + '/'}`} class="logo">
+      <a href={locale === 'de' ? '/' : `/${locale}`} class="logo">
         <div class="logo-mark">M</div>
         <div class="logo-content">
           <span class="logo-text">Microvista</span>
@@ -37,10 +37,10 @@ const items = nav[locale as keyof typeof nav] || nav.de;
       </nav>
       
       <div class="header-actions">
-        <a href={`/${locale === 'de' ? '' : locale + '/'}labor/`} class="switch-world">
+        <a href={locale === 'de' ? '/labor' : `/${locale}/labor`} class="switch-world">
           <span>→ Labor & Erstmuster</span>
         </a>
-        <a href={`/${locale === 'de' ? '' : locale + '/'}serie/kontakt/`} class="btn btn-primary">
+        <a href={locale === 'de' ? '/serie/kontakt' : `/${locale}/serie/kontakt`} class="btn btn-primary">
           {locale === 'de' ? 'ROI berechnen' : 'Calculate ROI'}
         </a>
       </div>

@@ -3,16 +3,16 @@ const locale = Astro.currentLocale || 'de';
 
 const nav = {
   de: [
-    { label: 'Erstmusterprüfung', href: '/labor/erstmusterpruefung/' },
-    { label: 'Schadensanalyse', href: '/labor/schadensanalyse/' },
-    { label: 'Reverse Engineering', href: '/labor/reverse-engineering/' },
-    { label: 'Kontakt', href: '/labor/kontakt/' },
+    { label: 'Erstmusterprüfung', href: '/labor/erstmusterpruefung' },
+    { label: 'Schadensanalyse', href: '/labor/schadensanalyse' },
+    { label: 'Reverse Engineering', href: '/labor/reverse-engineering' },
+    { label: 'Kontakt', href: '/labor/kontakt' },
   ],
   en: [
-    { label: 'First Article', href: '/en/labor/first-article/' },
-    { label: 'Failure Analysis', href: '/en/labor/failure-analysis/' },
-    { label: 'Reverse Engineering', href: '/en/labor/reverse-engineering/' },
-    { label: 'Contact', href: '/en/labor/contact/' },
+    { label: 'First Article', href: '/en/labor/first-article' },
+    { label: 'Failure Analysis', href: '/en/labor/failure-analysis' },
+    { label: 'Reverse Engineering', href: '/en/labor/reverse-engineering' },
+    { label: 'Contact', href: '/en/labor/contact' },
   ]
 };
 
@@ -22,7 +22,7 @@ const items = nav[locale as keyof typeof nav] || nav.de;
 <header class="header-labor">
   <div class="container">
     <div class="header-inner">
-      <a href={`/${locale === 'de' ? '' : locale + '/'}`} class="logo">
+      <a href={locale === 'de' ? '/' : `/${locale}`} class="logo">
         <div class="logo-mark">M</div>
         <div class="logo-content">
           <span class="logo-text">Microvista</span>
@@ -37,10 +37,10 @@ const items = nav[locale as keyof typeof nav] || nav.de;
       </nav>
       
       <div class="header-actions">
-        <a href={`/${locale === 'de' ? '' : locale + '/'}serie/`} class="switch-world">
+        <a href={locale === 'de' ? '/serie' : `/${locale}/serie`} class="switch-world">
           <span>→ Serienprüfung</span>
         </a>
-        <a href={`/${locale === 'de' ? '' : locale + '/'}labor/kontakt/`} class="btn btn-primary">
+        <a href={locale === 'de' ? '/labor/kontakt' : `/${locale}/labor/kontakt`} class="btn btn-primary">
           {locale === 'de' ? 'Anfrage stellen' : 'Request Quote'}
         </a>
       </div>

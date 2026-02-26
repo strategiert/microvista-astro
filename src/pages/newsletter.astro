@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+
+const locale = Astro.currentLocale || 'de';
+
+const t = {
+  de: {
+    title: 'Newsletter',
+    subtitle: 'Bleiben Sie informiert',
+    description: 'Erhalten Sie regelmäßig News zu industrieller CT, Qualitätssicherung und unseren Services.',
+    emailLabel: 'E-Mail-Adresse',
+    emailPlaceholder: 'ihre.email@unternehmen.de',
+    nameLabel: 'Name (optional)',
+    namePlaceholder: 'Ihr Name',
+    companyLabel: 'Unternehmen (optional)',
+    companyPlaceholder: 'Ihr Unternehmen',
+    submit: 'Newsletter abonnieren',
+    privacy: 'Mit der Anmeldung stimmen Sie unserer',
+    privacyLink: 'Datenschutzerklärung',
+    privacyEnd: 'zu. Abmeldung jederzeit möglich.',
+  },
+  en: {
+    title: 'Newsletter',
+    subtitle: 'Stay Informed',
+    description: 'Receive regular news about industrial CT, quality assurance and our services.',
+    emailLabel: 'Email Address',
+    emailPlaceholder: 'your.email@company.com',
+    nameLabel: 'Name (optional)',
+    namePlaceholder: 'Your Name',
+    companyLabel: 'Company (optional)',
+    companyPlaceholder: 'Your Company',
+    submit: 'Subscribe to Newsletter',
+    privacy: 'By subscribing you agree to our',
+    privacyLink: 'Privacy Policy',
+    privacyEnd: '. You can unsubscribe at any time.',
+  }
+}[locale] || {
+  title: 'Newsletter',
+  subtitle: 'Bleiben Sie informiert',
+  description: 'Erhalten Sie regelmäßig News zu industrieller CT, Qualitätssicherung und unseren Services.',
+  emailLabel: 'E-Mail-Adresse',
+  emailPlaceholder: 'ihre.email@unternehmen.de',
+  nameLabel: 'Name (optional)',
+  namePlaceholder: 'Ihr Name',
+  companyLabel: 'Unternehmen (optional)',
+  companyPlaceholder: 'Ihr Unternehmen',
+  submit: 'Newsletter abonnieren',
+  privacy: 'Mit der Anmeldung stimmen Sie unserer',
+  privacyLink: 'Datenschutzerklärung',
+  privacyEnd: 'zu. Abmeldung jederzeit möglich.',
+};
+
+const privacyHref = locale === 'en' ? '/en/datenschutz/' : '/datenschutz/';
+---
+
+<BaseLayout title={t.title} description={t.description}>
+  <Header slot="header" />
+
+  <div class="newsletter-page">
+    <div class="container">
+      <Breadcrumbs items={[{ label: t.title }]} />
+
+      <section class="page-hero">
+        <h1>{t.subtitle}</h1>
+        <p>{t.description}</p>
+      </section>
+
+      <div class="newsletter-form-wrapper">
+        <form class="newsletter-form" method="POST" action="/api/contact">
+          <input type="hidden" name="type" value="newsletter" />
+          <div class="form-group">
+            <label for="email">{t.emailLabel} *</label>
+            <input type="email" id="email" name="email" placeholder={t.emailPlaceholder} required />
+          </div>
+          <div class="form-group">
+            <label for="name">{t.nameLabel}</label>
+            <input type="text" id="name" name="name" placeholder={t.namePlaceholder} />
+          </div>
+          <div class="form-group">
+            <label for="company">{t.companyLabel}</label>
+            <input type="text" id="company" name="company" placeholder={t.companyPlaceholder} />
+          </div>
+          <button type="submit" class="btn btn-primary">{t.submit}</button>
+          <p class="privacy-note">
+            {t.privacy} <a href={privacyHref}>{t.privacyLink}</a> {t.privacyEnd}
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .newsletter-page { padding-bottom: var(--space-16); }
+  .page-hero { text-align: center; padding: var(--space-12) 0; max-width: 600px; margin: 0 auto; }
+  .page-hero h1 { font-size: var(--text-4xl); margin-bottom: var(--space-4); }
+  .page-hero p { font-size: var(--text-xl); color: var(--text-muted); }
+  .newsletter-form-wrapper {
+    max-width: 480px;
+    margin: var(--space-8) auto 0;
+    background: var(--surface, #f8fafc);
+    border: 1px solid var(--border, #eef2f5);
+    border-radius: var(--radius-xl, 12px);
+    padding: var(--space-8);
+  }
+  .form-group { margin-bottom: var(--space-4); }
+  .form-group label { display: block; font-weight: 600; margin-bottom: var(--space-1); font-size: var(--text-sm); }
+  .form-group input {
+    width: 100%;
+    padding: var(--space-3);
+    border: 1px solid var(--border, #ddd);
+    border-radius: var(--radius-md, 8px);
+    font-size: var(--text-base);
+    font-family: inherit;
+  }
+  .form-group input:focus { outline: 2px solid var(--primary, #32285b); border-color: transparent; }
+  .btn-primary {
+    display: block;
+    width: 100%;
+    padding: var(--space-3) var(--space-6);
+    background: var(--primary, #32285b);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md, 8px);
+    font-size: var(--text-base);
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    margin-top: var(--space-6);
+  }
+  .btn-primary:hover { opacity: 0.9; }
+  .privacy-note { font-size: var(--text-xs); color: var(--text-muted); margin-top: var(--space-4); text-align: center; }
+  .privacy-note a { color: var(--primary, #32285b); text-decoration: underline; }
+</style>

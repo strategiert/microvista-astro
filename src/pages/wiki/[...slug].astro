@@ -10,21 +10,18 @@ import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import Tag from '../../components/ui/Tag.astro';
 import SchemaOrg from '../../components/seo/SchemaOrg.astro';
 
-export async function getStaticPaths() {
-  const entries = await getCollection('wiki');
-  return entries.map(entry => ({
-    params: { slug: entry.slug },
-    props: { entry }
-  }));
-}
-
-const { entry } = Astro.props;
+const { slug } = Astro.params;
+const entries = await getCollection('wiki');
+const entry = entries.find(e => e.slug === slug || e.id === slug);
+if (!entry) return Astro.redirect('/wiki');
 const { Content } = await render(entry);
 
 const locale = Astro.currentLocale || 'de';
 
 const categoryLabels: Record<string, string> = {
+  'grundlagen': locale === 'en' ? 'CT Basics' : 'CT-Grundlagen',
   'verfahren': locale === 'en' ? 'Methods' : 'Verfahren',
+  'qm': locale === 'en' ? 'Quality Management' : 'Qualitätsmanagement',
   'materialien': locale === 'en' ? 'Materials' : 'Materialien',
   'normen': locale === 'en' ? 'Standards' : 'Normen & Standards',
   'software': 'Software',

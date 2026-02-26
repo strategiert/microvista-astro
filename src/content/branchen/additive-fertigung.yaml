@@ -1,0 +1,30 @@
+name: "Additive Fertigung"
+slug: "additive-fertigung"
+description: "Schnelle, automatisierte & zerstörungsfreie Prüfung additiv gefertigter Bauteile durch industrielle CT Dienstleistungen."
+heroImage: "/images/wp/2022/08/Stuetztstrukturreste-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png.webp"
+challenges:
+  - title: "Qualitätssicherung"
+    description: "Zuverlässige Fehlererkennung in der Produktion"
+  - title: "Kosten & Effizienz"
+    description: "Wirtschaftliche Prüflösungen für hohe Stückzahlen"
+solutions:
+  - title: "CT-Labor"
+    description: "Hochauflösende 3D-Scans für detaillierte Analysen"
+  - title: "Mobiles CT"
+    description: "SCANEXPRESS direkt an Ihrer Produktionslinie"
+useCases:
+  - "Porositätsanalyse"
+  - "Erstmusterprüfung"
+  - "Wanddickenmessung"
+  - "CAD Soll-Ist-Vergleich"
+stats:
+  - value: "<0.1mm"
+    label: "Auflösung"
+  - value: "24h"
+    label: "Express-Service"
+cta:
+  title: "CT-Prüfung für Additive Fertigung"
+  description: "Kontaktieren Sie uns für eine individuelle Beratung."
+seo:
+  title: "Prüfung additiv gefertigter Bauteile mit industrieller CT"
+  description: "Schnelle, automatisierte & zerstörungsfreie Prüfung additiv gefertigter Bauteile durch industrielle CT Dienstleistungen."

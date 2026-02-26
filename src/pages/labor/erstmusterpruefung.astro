@@ -1,0 +1,40 @@
+---
+import LaborLayout from '../../layouts/LaborLayout.astro';
+const locale = Astro.currentLocale || 'de';
+---
+
+<LaborLayout
+  title="Erstmusterprüfung | Microvista"
+  description="CT-basierte Erstmusterprüfung für Ihre Prototypen und Serienanläufe."
+>
+  <section class="hero">
+    <div class="container">
+      <h1>Erstmusterprüfung</h1>
+      <p class="lead">Validierung Ihrer Prototypen und Erstmuster mit höchster CT-Präzision.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="placeholder-notice">Diese Seite befindet sich im Aufbau. Kontaktieren Sie uns für weitere Informationen.</p>
+      <a href="/labor/kontakt" class="btn btn-primary">Anfrage stellen</a>
+    </div>
+  </section>
+</LaborLayout>
+
+<style>
+  .hero {
+    padding: var(--space-20) 0;
+    background: linear-gradient(135deg, var(--primary) 0%, #1E3A8A 100%);
+    color: white;
+  }
+  .hero h1 { color: white; margin-bottom: var(--space-4); }
+  .lead { font-size: var(--text-xl); opacity: 0.8; }
+  .section { padding: var(--space-16) 0; text-align: center; }
+  .placeholder-notice {
+    padding: var(--space-8);
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-6);
+  }
+</style>

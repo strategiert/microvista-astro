@@ -26,7 +26,16 @@ const wiki = defineCollection({
   schema: z.object({
     term: z.string(),
     definition: z.string(),
-    category: z.enum(['verfahren', 'materialien', 'normen', 'software', 'hardware', 'allgemein']),
+    category: z.enum([
+      'grundlagen',
+      'verfahren',
+      'qm',
+      'materialien',
+      'normen',
+      'software',
+      'hardware',
+      'allgemein'
+    ]),
     synonyms: z.array(z.string()).optional(),
     relatedTerms: z.array(z.string()).optional(),
     seoTitle: z.string().optional(),

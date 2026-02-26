@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import { loadStaticPage } from '../lib/load-static-page';
+
+const locale = Astro.currentLocale || 'de';
+const content = await loadStaticPage(locale === 'en' ? 'team-en.md' : 'team-de.md');
+
+const title = locale === 'en' ? 'Our Team' : 'Unser Team';
+const description = locale === 'en'
+  ? 'Meet the Microvista team — CT experts, engineers and quality specialists.'
+  : 'Lernen Sie das Microvista-Team kennen — CT-Experten, Ingenieure und Qualitätsspezialisten.';
+---
+
+<BaseLayout title={title} description={description}>
+  <Header slot="header" />
+
+  <div class="team-page">
+    <div class="container">
+      <Breadcrumbs items={[{ label: title }]} />
+      <article class="team-content" set:html={content} />
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .team-page { padding-bottom: var(--space-16); }
+  .team-content { max-width: 1000px; margin: 0 auto; padding: var(--space-8) 0; }
+  .team-content :global(h1) { font-size: var(--text-4xl); margin-bottom: var(--space-8); text-align: center; }
+  .team-content :global(h2) { margin-top: var(--space-8); margin-bottom: var(--space-4); }
+  .team-content :global(p) { line-height: 1.8; margin-bottom: var(--space-4); }
+  .team-content :global(img) { border-radius: var(--radius-xl); max-width: 100%; height: auto; }
+</style>

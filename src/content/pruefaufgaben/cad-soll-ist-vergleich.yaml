@@ -1,0 +1,34 @@
+name: "CAD Soll-Ist-Vergleich"
+slug: "cad-soll-ist-vergleich"
+description: "Express-Inspektion für einen CAD Soll-Ist-Vergleich buchbar - priorisierte Prüfung durch die CT-Experten von Microvista."
+heroImage: "/images/wp/2022/08/CAD-Soll-Ist-Vergleich-eines-Bauteils.webp"
+whatIs: |
+  # CAD SOLL-IST-VERGLEICH MIT INDUSTRIELLER CT
+  
+  GET YOUR INSPECTION DONE – Anywhere. Anytime. Fast.
+  
+  [Express-Inspektion  
+  buchen](https://www.microvista.de/kontakt/)
+  
+  [Gratis-Beratung  
+  sichern](https://www.microvista.de/kontakt/)
+howItWorks: |
+  
+benefits:
+  - "Zerstörungsfreie Prüfung"
+  - "Hochauflösende 3D-Daten"
+  - "Schnelle Ergebnisse"
+  - "ISO-konforme Auswertung"
+applications:
+  - "Automotive"
+  - "Luftfahrt"
+  - "Medizintechnik"
+  - "Elektronik"
+relatedBranchen:
+  - "automotive"
+relatedMaterialien:
+  - "aluminium"
+faq: []
+seo:
+  title: "Highspeed CAD Soll-Ist-Vergleich mit industrieller CT"
+  description: "Express-Inspektion für einen CAD Soll-Ist-Vergleich buchbar - priorisierte Prüfung durch die CT-Experten von Microvista."

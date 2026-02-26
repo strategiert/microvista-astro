@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import { getCollection } from 'astro:content';
+
+const locale = Astro.currentLocale || 'de';
+const lang = locale === 'en' ? 'en' : 'de';
+
+const t = {
+  de: {
+    title: 'Newsroom',
+    subtitle: 'Presse & News',
+    description: 'Aktuelle Nachrichten, Pressemitteilungen und Medienmaterial der Microvista GmbH.',
+    press: 'Pressemitteilungen',
+    media: 'Mediathek',
+    mediaText: 'Hier finden Sie unser Logo und eine Auswahl an Bildern aus unserem CT-Dienstleistungsbereich sowie Videos über den Einsatz von industrieller CT.',
+    readMore: 'Weiterlesen',
+    contact: 'Medienanfragen',
+    contactText: 'Für Medienanfragen kontaktieren Sie uns gerne.',
+    contactBtn: 'Kontakt aufnehmen',
+  },
+  en: {
+    title: 'Newsroom',
+    subtitle: 'Press & News',
+    description: 'Latest news, press releases and media material from Microvista GmbH.',
+    press: 'Press Releases',
+    media: 'Media Library',
+    mediaText: 'Here you will find our logo and a selection of images from our CT services area as well as videos about the use of industrial CT.',
+    readMore: 'Read more',
+    contact: 'Media Inquiries',
+    contactText: 'For media inquiries please contact us.',
+    contactBtn: 'Get in touch',
+  }
+}[locale] || {
+  title: 'Newsroom',
+  subtitle: 'Presse & News',
+  description: 'Aktuelle Nachrichten, Pressemitteilungen und Medienmaterial der Microvista GmbH.',
+  press: 'Pressemitteilungen',
+  media: 'Mediathek',
+  mediaText: 'Hier finden Sie unser Logo und eine Auswahl an Bildern aus unserem CT-Dienstleistungsbereich sowie Videos über den Einsatz von industrieller CT.',
+  readMore: 'Weiterlesen',
+  contact: 'Medienanfragen',
+  contactText: 'Für Medienanfragen kontaktieren Sie uns gerne.',
+  contactBtn: 'Kontakt aufnehmen',
+};
+
+// Get news/press articles from the magazin collection
+const allPosts = await getCollection('magazin');
+const newsPosts = allPosts
+  .filter(post => {
+    const postLang = post.id.startsWith('en/') ? 'en' : 'de';
+    return postLang === lang && post.data.category === 'news' && !post.data.draft;
+  })
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .slice(0, 10);
+---
+
+<BaseLayout title={t.title} description={t.description}>
+  <Header slot="header" />
+
+  <div class="newsroom-page">
+    <div class="container">
+      <Breadcrumbs items={[{ label: t.title }]} />
+
+      <section class="page-hero">
+        <h1>{t.subtitle}</h1>
+        <p>{t.description}</p>
+      </section>
+
+      <section class="press-section">
+        <h2>{t.press}</h2>
+        {newsPosts.length > 0 ? (
+          <div class="news-list">
+            {newsPosts.map(post => {
+              const slug = post.id.replace(/^(de|en)\//, '');
+              const href = lang === 'en' ? `/en/magazin/${slug}/` : `/magazin/${slug}/`;
+              return (
+                <a href={href} class="news-card">
+                  {post.data.image && (
+                    <img src={post.data.image.src} alt={post.data.image.alt} loading="lazy" />
+                  )}
+                  <div class="news-card-body">
+                    <time datetime={post.data.publishDate.toISOString().split('T')[0]}>
+                      {post.data.publishDate.toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </time>
+                    <h3>{post.data.title}</h3>
+                    <p>{post.data.description}</p>
+                    <span class="read-more">{t.readMore} →</span>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        ) : (
+          <p class="empty-notice">{locale === 'en' ? 'No press releases yet.' : 'Noch keine Pressemitteilungen.'}</p>
+        )}
+      </section>
+
+      <section class="media-section">
+        <h2>{t.media}</h2>
+        <p>{t.mediaText}</p>
+      </section>
+
+      <section class="contact-section">
+        <h2>{t.contact}</h2>
+        <p>{t.contactText}</p>
+        <a href="/kontakt/" class="btn btn-primary">{t.contactBtn}</a>
+      </section>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .newsroom-page { padding-bottom: var(--space-16); }
+  .page-hero { text-align: center; padding: var(--space-12) 0; max-width: 600px; margin: 0 auto; }
+  .page-hero h1 { font-size: var(--text-4xl); margin-bottom: var(--space-4); }
+  .page-hero p { font-size: var(--text-xl); color: var(--text-muted); }
+  .press-section, .media-section, .contact-section { margin-top: var(--space-12); max-width: 800px; margin-left: auto; margin-right: auto; }
+  .press-section h2, .media-section h2, .contact-section h2 { margin-bottom: var(--space-6); }
+  .media-section p, .contact-section p { line-height: 1.8; color: var(--text-muted); margin-bottom: var(--space-4); }
+
+  .news-list { display: flex; flex-direction: column; gap: var(--space-6); }
+  .news-card {
+    display: flex;
+    gap: var(--space-6);
+    background: var(--surface, #f8fafc);
+    border: 1px solid var(--border, #eef2f5);
+    border-radius: var(--radius-xl, 12px);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--transition-fast, 150ms);
+  }
+  .news-card:hover { border-color: var(--primary, #32285b); box-shadow: var(--shadow-md); }
+  .news-card img { width: 200px; min-height: 150px; object-fit: cover; flex-shrink: 0; }
+  .news-card-body { padding: var(--space-4) var(--space-5); }
+  .news-card-body time { font-size: var(--text-sm); color: var(--text-muted); }
+  .news-card-body h3 { margin: var(--space-2) 0; font-size: var(--text-lg); }
+  .news-card-body p { color: var(--text-muted); font-size: var(--text-sm); line-height: 1.6; margin-bottom: var(--space-2); }
+  .read-more { color: var(--accent, #ee7711); font-weight: 600; font-size: var(--text-sm); }
+  .empty-notice { color: var(--text-muted); font-style: italic; }
+
+  .contact-section {
+    text-align: center;
+    background: var(--surface, #f8fafc);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12);
+    margin-top: var(--space-16) !important;
+  }
+
+  @media (max-width: 640px) {
+    .news-card { flex-direction: column; }
+    .news-card img { width: 100%; min-height: 180px; }
+  }
+</style>

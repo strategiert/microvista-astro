@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import { loadStaticPage } from '../../lib/load-static-page';
+
+const locale = Astro.currentLocale || 'de';
+
+const services: Record<string, { name: Record<string, string>; seoDesc: Record<string, string>; file: string }> = {
+  'ct-labor': {
+    name: { de: 'CT-Labor', en: 'CT Laboratory' },
+    seoDesc: { de: 'CT-Labor der Microvista GmbH — akkreditiert nach ISO 17025. Hochauflösende industrielle CT-Scans.', en: 'CT Laboratory of Microvista GmbH — accredited to ISO 17025. High-resolution industrial CT scans.' },
+    file: 'dienstleistung-ct-labor.md',
+  },
+  'ct-datenauswertung': {
+    name: { de: 'CT-Datenauswertung', en: 'CT Data Analysis' },
+    seoDesc: { de: 'CT-Datenauswertung bei Microvista — Porositätsanalyse, CAD-Vergleich, Wanddickenmessung und mehr.', en: 'CT data analysis at Microvista — porosity analysis, CAD comparison, wall thickness measurement and more.' },
+    file: 'dienstleistung-ct-datenauswertung.md',
+  },
+  'scanexpress': {
+    name: { de: 'SCANEXPRESS — Mobiles industrielles CT', en: 'SCANEXPRESS — Mobile Industrial CT' },
+    seoDesc: { de: 'SCANEXPRESS — mobiles industrielles CT von Microvista. CT-Prüfung direkt vor Ort, flexibel mietbar.', en: 'SCANEXPRESS — mobile industrial CT by Microvista. CT inspection on-site, flexibly rentable.' },
+    file: 'dienstleistung-scanexpress.md',
+  },
+};
+
+const { slug } = Astro.params;
+const service = services[slug!];
+if (!service) return Astro.redirect('/dienstleistungen/');
+
+const name = service.name[locale] || service.name.de;
+const seoDesc = service.seoDesc[locale] || service.seoDesc.de;
+const content = await loadStaticPage(service.file);
+---
+
+<BaseLayout title={name} description={seoDesc}>
+  <Header slot="header" />
+
+  <div class="service-page">
+    <div class="container">
+      <Breadcrumbs items={[
+        { label: locale === 'en' ? 'Services' : 'Dienstleistungen', href: '/dienstleistungen/' },
+        { label: name }
+      ]} />
+
+      <article class="service-content" set:html={content} />
+
+      <section class="cta-section">
+        <h2>{locale === 'en' ? 'Interested?' : 'Interessiert?'}</h2>
+        <p>{locale === 'en' ? 'Contact us for a non-binding consultation.' : 'Kontaktieren Sie uns für eine unverbindliche Beratung.'}</p>
+        <a href="/kontakt/" class="btn btn-primary">
+          {locale === 'en' ? 'Get in touch' : 'Jetzt anfragen'}
+        </a>
+      </section>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .service-page { padding-bottom: var(--space-16); }
+  .service-content { max-width: 800px; margin: 0 auto; padding: var(--space-8) 0; line-height: 1.8; }
+  .service-content :global(h1) { font-size: var(--text-4xl); margin-bottom: var(--space-8); }
+  .service-content :global(h2) { margin-top: var(--space-8); margin-bottom: var(--space-4); }
+  .service-content :global(h3) { margin-top: var(--space-6); margin-bottom: var(--space-3); }
+  .service-content :global(p) { margin-bottom: var(--space-4); }
+  .service-content :global(img) { max-width: 100%; height: auto; border-radius: var(--radius-lg); margin: var(--space-4) 0; }
+  .service-content :global(ul), .service-content :global(ol) { padding-left: var(--space-6); margin-bottom: var(--space-4); }
+  .service-content :global(li) { margin-bottom: var(--space-2); }
+  .cta-section {
+    text-align: center;
+    background: var(--surface, #f8fafc);
+    border-radius: var(--radius-xl);
+    padding: var(--space-12);
+    margin-top: var(--space-16);
+  }
+  .cta-section h2 { margin-bottom: var(--space-3); }
+  .cta-section p { color: var(--text-muted); margin-bottom: var(--space-6); }
+</style>

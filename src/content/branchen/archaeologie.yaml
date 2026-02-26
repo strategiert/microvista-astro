@@ -1,0 +1,30 @@
+name: "Archäologie & Paläontologie"
+slug: "archaeologie"
+description: "Erfahre wie Microvista durch zerstörungsfreie Prüfung verschiedenste Prüfaufgaben für die Archäologie vollautomatisch löst."
+heroImage: "/images/wp/2025/07/2D_Front.webp"
+challenges:
+  - title: "Qualitätssicherung"
+    description: "Zuverlässige Fehlererkennung in der Produktion"
+  - title: "Kosten & Effizienz"
+    description: "Wirtschaftliche Prüflösungen für hohe Stückzahlen"
+solutions:
+  - title: "CT-Labor"
+    description: "Hochauflösende 3D-Scans für detaillierte Analysen"
+  - title: "Mobiles CT"
+    description: "SCANEXPRESS direkt an Ihrer Produktionslinie"
+useCases:
+  - "Porositätsanalyse"
+  - "Erstmusterprüfung"
+  - "Wanddickenmessung"
+  - "CAD Soll-Ist-Vergleich"
+stats:
+  - value: "<0.1mm"
+    label: "Auflösung"
+  - value: "24h"
+    label: "Express-Service"
+cta:
+  title: "CT-Prüfung für Archäologie & Paläontologie"
+  description: "Kontaktieren Sie uns für eine individuelle Beratung."
+seo:
+  title: "Zerstörungsfreie Prüfung in der Archäologie"
+  description: "Erfahre wie Microvista durch zerstörungsfreie Prüfung verschiedenste Prüfaufgaben für die Archäologie vollautomatisch löst."

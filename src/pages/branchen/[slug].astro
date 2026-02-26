@@ -9,29 +9,9 @@ import Footer from '../../components/layout/Footer.astro';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import { serviceSchema, faqSchema } from '../../components/seo/schemas';
 
-export async function getStaticPaths() {
-  const branchen = await getCollection('branchen');
-
-  // Falls Collection leer, Fallback-Daten
-  if (branchen.length === 0) {
-    return [
-      { params: { slug: 'automotive' }, props: { branche: null } },
-      { params: { slug: 'elektronik' }, props: { branche: null } },
-      { params: { slug: 'medizintechnik' }, props: { branche: null } },
-      { params: { slug: 'luftfahrt' }, props: { branche: null } },
-      { params: { slug: 'kunststoff' }, props: { branche: null } },
-      { params: { slug: 'energie' }, props: { branche: null } }
-    ];
-  }
-
-  return branchen.map(branche => ({
-    params: { slug: branche.data.slug || branche.id },
-    props: { branche }
-  }));
-}
-
-const { branche } = Astro.props;
 const { slug } = Astro.params;
+const branchen = await getCollection('branchen');
+const branche = branchen.find(b => (b.data.slug || b.id) === slug) || null;
 const locale = Astro.currentLocale || 'de';
 
 // Fallback-Daten falls keine Collection-Daten
@@ -62,6 +42,202 @@ const fallbackData: Record<string, any> = {
     cta: {
       title: 'Optimieren Sie Ihre Qualitätsprüfung',
       description: 'Erfahren Sie, wie CT-Technologie Ihre Automotive-Produktion verbessern kann.'
+    }
+  },
+  luftfahrt: {
+    name: 'Luftfahrt',
+    description: 'Zertifizierte CT-Prüfung für Aerospace-Komponenten',
+    seo: {
+      title: 'CT für Luftfahrt | Microvista',
+      description: 'Zertifizierte CT-Prüfung für Turbinenschaufeln, Strukturbauteile und Verbundwerkstoffe in der Luftfahrtindustrie.'
+    },
+    challenges: [
+      { title: 'Strenge Zertifizierung', description: 'NADCAP und EN/AS 9100 Anforderungen' },
+      { title: 'Sicherheitskritische Bauteile', description: 'Null-Toleranz bei Defekten in Triebwerkskomponenten' },
+      { title: 'Komplexe Materialien', description: 'CFK, Titan und Hochtemperaturlegierungen' }
+    ],
+    solutions: [
+      { title: 'Zertifizierte Prüfung', description: 'NADCAP-akkreditierte CT-Analysen' },
+      { title: 'Hochauflösung', description: 'Sub-Mikrometer Auflösung für kleinste Defekte' },
+      { title: 'Dokumentation', description: 'Lückenlose Rückverfolgbarkeit und Reporting' }
+    ],
+    useCases: ['Turbinenschaufeln', 'Strukturbauteile', 'CFK-Komponenten', 'Triebwerksteile', 'Fahrwerke'],
+    stats: [
+      { value: 'NADCAP', label: 'zertifiziert' },
+      { value: '<1µm', label: 'Auflösung' },
+      { value: '100%', label: 'Rückverfolgung' }
+    ],
+    cta: {
+      title: 'Zertifizierte Qualitätsprüfung',
+      description: 'Erfahren Sie mehr über unsere NADCAP-akkreditierten Prüfleistungen für die Luftfahrt.'
+    }
+  },
+  elektronik: {
+    name: 'Elektronik',
+    description: 'Präzise CT-Analyse für elektronische Baugruppen',
+    seo: {
+      title: 'CT für Elektronik | Microvista',
+      description: 'CT-Prüfung von Leiterplatten, BGA-Lötverbindungen und Halbleitergehäusen.'
+    },
+    challenges: [
+      { title: 'Miniaturisierung', description: 'Immer kleinere Strukturen und dichtere Packaging' },
+      { title: 'Versteckte Defekte', description: 'Lötfehler unter BGAs und in Vias' },
+      { value: 'Hohe Taktung', description: 'Schnelle Prüfung in der SMT-Linie' }
+    ],
+    solutions: [
+      { title: 'Nano-CT', description: 'Höchste Auflösung für Mikroelektronik' },
+      { title: 'BGA-Inspektion', description: 'Automatische Lötstellenanalyse' },
+      { title: 'Inline-Integration', description: 'Direkte Anbindung an SMT-Linien' }
+    ],
+    useCases: ['Leiterplatten', 'BGA/CSP', 'Bonddrähte', 'Halbleiter', 'Steckverbinder'],
+    stats: [
+      { value: '500nm', label: 'Auflösung' },
+      { value: '<10s', label: 'pro Board' },
+      { value: '99.5%', label: 'Erkennungsrate' }
+    ],
+    cta: {
+      title: 'Elektronik-Qualität sichern',
+      description: 'Entdecken Sie unsere CT-Lösungen für die Elektronikfertigung.'
+    }
+  },
+  medizintechnik: {
+    name: 'Medizintechnik',
+    description: 'Validierte CT-Prüfung für Medizinprodukte',
+    seo: {
+      title: 'CT für Medizintechnik | Microvista',
+      description: 'FDA- und MDR-konforme CT-Prüfung für Implantate, Instrumente und medizinische Geräte.'
+    },
+    challenges: [
+      { title: 'Regulatorische Anforderungen', description: 'FDA 21 CFR Part 11, MDR, ISO 13485' },
+      { title: 'Biokompatibilität', description: 'Keine Kontamination der Prüfteile' },
+      { title: 'Validierung', description: 'Dokumentierte und validierte Prüfprozesse' }
+    ],
+    solutions: [
+      { title: 'Validierte Prozesse', description: 'IQ/OQ/PQ-dokumentierte Prüfabläufe' },
+      { title: 'Reinraum-fähig', description: 'Saubere Probenhandhabung' },
+      { title: 'Compliance-Reporting', description: 'Regulatorisch konforme Dokumentation' }
+    ],
+    useCases: ['Implantate', 'Instrumente', 'Spritzen', 'Katheter', 'Dentaltechnik'],
+    stats: [
+      { value: 'ISO 13485', label: 'konform' },
+      { value: '100%', label: 'Dokumentation' },
+      { value: 'FDA', label: 'ready' }
+    ],
+    cta: {
+      title: 'Regulatorisch konforme Prüfung',
+      description: 'Sprechen Sie mit uns über validierte CT-Prüfung für Ihre Medizinprodukte.'
+    }
+  },
+  kunststoff: {
+    name: 'Kunststoff',
+    description: 'CT-Analyse für Spritzguss und Kunststoffverarbeitung',
+    seo: {
+      title: 'CT für Kunststoff | Microvista',
+      description: 'CT-Prüfung von Spritzgussteilen, Faserorientierung und Wandstärkenanalyse.'
+    },
+    challenges: [
+      { title: 'Innere Strukturen', description: 'Lunker, Einfallstellen und Bindenähte' },
+      { title: 'Faserorientierung', description: 'Analyse von GFK/CFK Füllung' },
+      { title: 'Maßhaltigkeit', description: 'Verzug und Schwindung messen' }
+    ],
+    solutions: [
+      { title: 'Defektanalyse', description: 'Automatische Erkennung typischer Spritzgussfehler' },
+      { title: 'Faseranalyse', description: 'Orientierung und Verteilung von Fasern' },
+      { title: 'Soll-Ist-Vergleich', description: 'CAD-Vergleich für Maßhaltigkeit' }
+    ],
+    useCases: ['Spritzguss', 'Blasformen', 'Extrusionsteile', 'Verbundwerkstoffe', 'Schäume'],
+    stats: [
+      { value: '3D', label: 'Analyse' },
+      { value: 'µm', label: 'Genauigkeit' },
+      { value: '100%', label: 'zerstörungsfrei' }
+    ],
+    cta: {
+      title: 'Kunststoffqualität optimieren',
+      description: 'Erfahren Sie, wie CT Ihre Spritzguss-Entwicklung beschleunigt.'
+    }
+  },
+  energie: {
+    name: 'Energie',
+    description: 'CT-Prüfung für Batterien und Energiespeicher',
+    seo: {
+      title: 'CT für Energie & Batterien | Microvista',
+      description: 'CT-Analyse von Batteriezellen, Brennstoffzellen und Energiespeichersystemen.'
+    },
+    challenges: [
+      { title: 'Sicherheit', description: 'Defekte können zu thermischen Events führen' },
+      { title: 'Elektrodenqualität', description: 'Beschichtung, Falten und Kontamination' },
+      { title: 'Serienprüfung', description: '100% Prüfung jeder Zelle' }
+    ],
+    solutions: [
+      { title: 'Inline-CT', description: 'Vollautomatische Zellenprüfung' },
+      { title: 'Defekterkennung', description: 'Partikel, Falten, Delaminierung' },
+      { title: 'Alterungsanalyse', description: 'CT vor und nach Zyklisierung' }
+    ],
+    useCases: ['Lithium-Ionen-Zellen', 'Festkörperbatterien', 'Brennstoffzellen', 'Kondensatoren', 'Windkraftkomponenten'],
+    stats: [
+      { value: '<5s', label: 'pro Zelle' },
+      { value: '100%', label: 'Prüfung' },
+      { value: '24/7', label: 'Betrieb' }
+    ],
+    cta: {
+      title: 'Batteriesicherheit gewährleisten',
+      description: 'Kontaktieren Sie uns für CT-Lösungen in der Batterieproduktion.'
+    }
+  },
+  'additive-fertigung': {
+    name: 'Additive Fertigung',
+    description: 'CT-Qualitätssicherung für 3D-gedruckte Bauteile',
+    seo: {
+      title: 'CT für Additive Fertigung | Microvista',
+      description: 'CT-Prüfung von 3D-Druck Bauteilen: Porosität, Pulvereinschlüsse und Maßhaltigkeit.'
+    },
+    challenges: [
+      { title: 'Prozessbedingte Defekte', description: 'Poren, Einschlüsse, Risse' },
+      { title: 'Komplexe Geometrien', description: 'Interne Kanäle und Gitterstrukturen' },
+      { title: 'Qualifizierung', description: 'Nachweis der Bauteilintegrität' }
+    ],
+    solutions: [
+      { title: 'Porositätsanalyse', description: 'Vollständige 3D-Porenverteilung' },
+      { title: 'Pulveranalyse', description: 'Ungeschmolzenes Pulver erkennen' },
+      { title: 'Geometrievergleich', description: 'Soll-Ist-Abgleich zum CAD' }
+    ],
+    useCases: ['SLM/LPBF', 'EBM', 'Binder Jetting', 'DED', 'Polymer 3D-Druck'],
+    stats: [
+      { value: '3D', label: 'Porenanalyse' },
+      { value: 'CAD', label: 'Vergleich' },
+      { value: '100%', label: 'zerstörungsfrei' }
+    ],
+    cta: {
+      title: 'AM-Qualität sichern',
+      description: 'Sprechen Sie mit uns über CT für Ihre additive Fertigung.'
+    }
+  },
+  batteriesysteme: {
+    name: 'Batteriesysteme',
+    description: 'Spezialisierte CT-Prüfung für Batteriezellen und -module',
+    seo: {
+      title: 'CT für Batteriesysteme | Microvista',
+      description: 'CT-Analyse von Lithium-Ionen-Zellen, Batteriemodulen und Elektrodenqualität.'
+    },
+    challenges: [
+      { title: 'Zellsicherheit', description: 'Interne Kurzschlüsse verhindern' },
+      { title: 'Elektrodenqualität', description: 'Beschichtungsfehler und Kontamination' },
+      { title: 'Serienproduktion', description: 'Hoher Durchsatz bei 100% Prüfung' }
+    ],
+    solutions: [
+      { title: 'Inline-Zellenprüfung', description: 'Vollautomatische CT jeder Zelle' },
+      { title: 'Partikel-Detektion', description: 'Metallische Kontaminationen finden' },
+      { title: 'Elektroden-Analyse', description: 'Beschichtung und Ausrichtung prüfen' }
+    ],
+    useCases: ['Pouchzellen', 'Rundzellen', 'Prismatische Zellen', 'Batteriemodule', 'Elektrodenfolien'],
+    stats: [
+      { value: '<3s', label: 'pro Zelle' },
+      { value: '20µm', label: 'Partikel' },
+      { value: '100%', label: 'Prüfung' }
+    ],
+    cta: {
+      title: 'Batteriequalität maximieren',
+      description: 'Erfahren Sie mehr über unsere Inline-CT für die Batterieproduktion.'
     }
   }
 };

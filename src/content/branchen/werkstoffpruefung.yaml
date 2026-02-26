@@ -1,0 +1,30 @@
+name: "Werkstoffprüfung"
+slug: "werkstoffpruefung"
+description: "Wie geht zerstörungsfreie Werkstoffprüfung normkonform und automatisiert in unter 60 Sekunden? Jetzt erfahren, wie CT das ermöglicht."
+heroImage: "/images/wp/2025/12/C-Bild-Ultraschallpruefung-einer-Schweissnaht.webp"
+challenges:
+  - title: "Qualitätssicherung"
+    description: "Zuverlässige Fehlererkennung in der Produktion"
+  - title: "Kosten & Effizienz"
+    description: "Wirtschaftliche Prüflösungen für hohe Stückzahlen"
+solutions:
+  - title: "CT-Labor"
+    description: "Hochauflösende 3D-Scans für detaillierte Analysen"
+  - title: "Mobiles CT"
+    description: "SCANEXPRESS direkt an Ihrer Produktionslinie"
+useCases:
+  - "Porositätsanalyse"
+  - "Erstmusterprüfung"
+  - "Wanddickenmessung"
+  - "CAD Soll-Ist-Vergleich"
+stats:
+  - value: "<0.1mm"
+    label: "Auflösung"
+  - value: "24h"
+    label: "Express-Service"
+cta:
+  title: "CT-Prüfung für Werkstoffprüfung"
+  description: "Kontaktieren Sie uns für eine individuelle Beratung."
+seo:
+  title: "Zerstörungsfreie Werkstoffprüfung: Verfahren, Normen & CT"
+  description: "Wie geht zerstörungsfreie Werkstoffprüfung normkonform und automatisiert in unter 60 Sekunden? Jetzt erfahren, wie CT das ermöglicht."

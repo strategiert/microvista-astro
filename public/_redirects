@@ -1,0 +1,106 @@
+# Microvista WordPress → Astro Redirects
+# Format: /old-path /new-path 301
+
+# Blog-Posts DE: /beitraege/[slug] → /magazin/[slug]
+/beitraege/* /magazin/:splat 301
+
+# Blog-Posts EN: /en/posts/[slug] → /en/magazin/[slug]
+/en/posts/* /en/magazin/:splat 301
+
+# Presse → Newsroom
+/presse/* /newsroom/ 301
+/en/presse-en/* /en/newsroom/ 301
+/pressemitteilungen/ /newsroom/ 301
+/en/press-releases/ /en/newsroom/ 301
+/mediathek/ /newsroom/ 301
+/en/media-library/ /en/newsroom/ 301
+/en/news-center/ /en/newsroom/ 301
+
+# Prüfaufgaben: alte verschachtelte URLs → flache Struktur
+/industrielle-computertomographie/prufaufgaben/ /pruefaufgaben/ 301
+/industrielle-computertomographie/prufaufgaben/porositatsanalyse/ /pruefaufgaben/porositaetsanalyse/ 301
+/industrielle-computertomographie/prufaufgaben/messung-wandstaerken/ /pruefaufgaben/wanddickenmessung/ 301
+/industrielle-computertomographie/prufaufgaben/cad-soll-ist-vergleich/ /pruefaufgaben/cad-soll-ist-vergleich/ 301
+/industrielle-computertomographie/prufaufgaben/reverse-engineering/ /pruefaufgaben/reverse-engineering/ 301
+/industrielle-computertomographie/prufaufgaben/grat-kernreste-spaene/ /pruefaufgaben/grat-kernreste-spaene/ 301
+/industrielle-computertomographie/prufaufgaben/qualitatssicherung-bei-hairpin-statoren/ /pruefaufgaben/hairpin-stator-pruefung/ 301
+/industrielle-computertomographie/prufaufgaben/montage-fugekontrolle/ /pruefaufgaben/montage-fuegekontrolle/ 301
+/industrielle-computertomographie/prufaufgaben/erstmusterpruefbericht/ /pruefaufgaben/erstmusterpruefbericht/ 301
+/industrielle-computertomographie/prufaufgaben/laminographie/ /pruefaufgaben/laminographie/ 301
+/industrielle-computertomographie/prufaufgaben/schweissnahtpruefung/ /pruefaufgaben/schweissnahtpruefung/ 301
+/industrielle-computertomographie/prufaufgaben/form-und-lagetoleranzen/ /pruefaufgaben/form-und-lagetoleranzen/ 301
+/industrielle-computertomographie/prufaufgaben/3d-vermessung/ /pruefaufgaben/3d-vermessung/ 301
+
+# EN Prüfaufgaben
+/en/industrial-computed-tomography/inspection-tasks/ /en/pruefaufgaben/ 301
+/en/industrial-computed-tomography/inspection-tasks/porosity-analysis/ /en/pruefaufgaben/porositaetsanalyse/ 301
+/en/industrial-computed-tomography/inspection-tasks/wall-thickness-measurement/ /en/pruefaufgaben/wanddickenmessung/ 301
+/en/industrial-computed-tomography/inspection-tasks/assembly-and-joining-inspection/ /en/pruefaufgaben/montage-fuegekontrolle/ 301
+/en/industrial-computed-tomography/inspection-tasks/burr-core-residues-and-chips/ /en/pruefaufgaben/grat-kernreste-spaene/ 301
+/en/industrial-computed-tomography/inspection-tasks/quality-assurance-for-hairpin-stators/ /en/pruefaufgaben/hairpin-stator-pruefung/ 301
+/en/industrial-computed-tomography/inspection-tasks/reverse-engineerin/ /en/pruefaufgaben/reverse-engineering/ 301
+/en/industrial-computed-tomography/inspection-tasks/initial-sample-inspection-report/ /en/pruefaufgaben/erstmusterpruefbericht/ 301
+/en/cad-target-actual-comparison/ /en/pruefaufgaben/cad-soll-ist-vergleich/ 301
+
+# Dienstleistungen: alte verschachtelte URLs → flache Struktur
+/industrielle-computertomographie/dienstleistungen/ /dienstleistungen/ 301
+/industrielle-computertomographie/dienstleistungen/ct-labor/ /dienstleistungen/ct-labor/ 301
+/industrielle-computertomographie/dienstleistungen/ct-datenauswertung/ /dienstleistungen/ct-datenauswertung/ 301
+/industrielle-computertomographie/dienstleistungen/scanexpress-mobiles-industrielles-ct/ /dienstleistungen/scanexpress/ 301
+
+# EN Dienstleistungen
+/en/industrial-computed-tomography/services/ /en/dienstleistungen/ 301
+/en/industrial-computed-tomography/services/ct-laboratory/ /en/dienstleistungen/ct-labor/ 301
+/en/industrial-computed-tomography/services/ct-data-analysis/ /en/dienstleistungen/ct-datenauswertung/ 301
+/en/industrial-computed-tomography/services/scanexpress-mobile-industrial-ct/ /en/dienstleistungen/scanexpress/ 301
+
+# FAQ
+/industrielle-computertomographie/faq/ /faq/ 301
+/en/industrial-computed-tomography/faq-2/ /en/faq/ 301
+
+# Branchen: alte URLs → neue Struktur
+/zerstoerungsfreie-pruefung-automobilindustrie/ /branchen/automotive/ 301
+/zerstoerungsfreie-pruefung-leichtmetallguss/ /branchen/leichtmetallguss/ 301
+/zerstorungsfreie-prufung-von-eisenguss/ /branchen/eisenguss/ 301
+/zerstoerungsfreie-pruefung-batteriesystemen/ /branchen/e-mobilitaet/ 301
+/pruefung-additiv-gefertigter-bauteile/ /branchen/additive-fertigung/ 301
+/zfp-archaeologie/ /branchen/archaeologie/ 301
+/zerstoerungsfreie-werkstoffpruefung/ /branchen/werkstoffpruefung/ 301
+/zerstoerungsfreie-serienpruefung/ /serie/ 301
+/en/serial-testing/ /en/serie/ 301
+
+# Sonstige Seiten
+/datenschutzerklaerung/ /datenschutz/ 301
+/en/data-privacy/ /en/datenschutz/ 301
+/cookie-richtlinie-eu/ /datenschutz/ 301
+/en/cookie-policy/ /en/datenschutz/ 301
+/en/imprint/ /en/impressum/ 301
+/en/general-terms-and-conditions/ /en/agb/ 301
+/en/contact/ /en/kontakt/ 301
+/en/employees/ /en/team/ 301
+/en/certificates/ /en/zertifizierungen/ 301
+/en/reward-program/ /en/bonusprogramm/ 301
+/en/newsletter-registration/ /en/newsletter/ 301
+/en/questionnaire/ /en/kontakt/ 301
+/fragebogen/ /kontakt/ 301
+/en/research-development/ /en/zertifizierungen/ 301
+/forschung-entwicklung/ /zertifizierungen/ 301
+/umweltallianz-sachen-anhalt/ /zertifizierungen/ 301
+/en/environmental-alliance-saxony-anhalt/ /en/zertifizierungen/ 301
+/en/drive-efficiency-eliminate-scrap-see-the-power-of-mobile-industrial-ct/ /en/dienstleistungen/scanexpress/ 301
+/end-of-line-test/ /serie/ 301
+/live-demo-scanexpress/ /dienstleistungen/scanexpress/ 301
+/en/registration-live-demo-scanexpress/ /en/dienstleistungen/scanexpress/ 301
+/bonusprogramm/ /kontakt/ 301
+/test/ / 301
+
+# FR Legal pages
+/fr/impression/ /impressum/ 301
+/fr/declaration-de-confidentialite-ue/ /datenschutz/ 301
+/fr/clause-de-non-responsabilite/ /datenschutz/ 301
+/fr/politique-en-matiere-de-cookies/ /datenschutz/ 301
+/fr/scanexpress-ct-industriel-mobile/ /dienstleistungen/scanexpress/ 301
+
+# EN Weld/GDT pages
+/en/non-destructive-weld-testing-methods-procedures-and-techniques/ /en/pruefaufgaben/schweissnahtpruefung/ 301
+/en/measuring-geometric-tolerances-gdt-methods-and-procedures/ /en/pruefaufgaben/form-und-lagetoleranzen/ 301

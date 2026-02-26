@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import Card from '../../components/ui/Card.astro';
+import { getCollection } from 'astro:content';
+
+const locale = Astro.currentLocale || 'de';
+const pruefaufgaben = await getCollection('pruefaufgaben');
+
+const t = {
+  de: {
+    title: 'Prüfaufgaben',
+    subtitle: 'Unsere CT-Prüfaufgaben im Überblick',
+    description: 'Von Porositätsanalyse bis Reverse Engineering — entdecken Sie unsere industriellen CT-Prüfverfahren.',
+    learnMore: 'Mehr erfahren',
+  },
+  en: {
+    title: 'Inspection Tasks',
+    subtitle: 'Our CT Inspection Tasks at a Glance',
+    description: 'From porosity analysis to reverse engineering — discover our industrial CT inspection methods.',
+    learnMore: 'Learn more',
+  }
+}[locale] || {
+  title: 'Prüfaufgaben',
+  subtitle: 'Unsere CT-Prüfaufgaben im Überblick',
+  description: 'Von Porositätsanalyse bis Reverse Engineering — entdecken Sie unsere industriellen CT-Prüfverfahren.',
+  learnMore: 'Mehr erfahren',
+};
+---
+
+<BaseLayout title={t.title} description={t.description}>
+  <Header slot="header" />
+
+  <div class="pruefaufgaben-page">
+    <div class="container">
+      <Breadcrumbs items={[{ label: t.title }]} />
+
+      <section class="page-hero">
+        <h1>{t.subtitle}</h1>
+        <p>{t.description}</p>
+      </section>
+
+      <div class="tasks-grid">
+        {pruefaufgaben.map(task => (
+          <a href={`/pruefaufgaben/${task.data.slug}/`} class="task-card">
+            <h3>{task.data.name}</h3>
+            <p>{task.data.description}</p>
+            <span class="learn-more">{t.learnMore} →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .pruefaufgaben-page { padding-bottom: var(--space-16); }
+  .page-hero { text-align: center; padding: var(--space-12) 0; max-width: 700px; margin: 0 auto; }
+  .page-hero h1 { font-size: var(--text-4xl); margin-bottom: var(--space-4); }
+  .page-hero p { font-size: var(--text-xl); color: var(--text-muted); }
+  .tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+  }
+  .task-card {
+    background: var(--surface, #f8fafc);
+    border: 1px solid var(--border, #eef2f5);
+    border-radius: var(--radius-xl, 12px);
+    padding: var(--space-6);
+    text-decoration: none;
+    color: inherit;
+    transition: all var(--transition-fast, 150ms);
+  }
+  .task-card:hover {
+    border-color: var(--primary, #32285b);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  .task-card h3 { margin-bottom: var(--space-3); color: var(--primary, #32285b); }
+  .task-card p { color: var(--text-muted); margin-bottom: var(--space-4); line-height: 1.6; }
+  .learn-more { color: var(--accent, #ee7711); font-weight: 600; font-size: var(--text-sm); }
+</style>

@@ -20,6 +20,17 @@ const serieNav = translations.serieNav;
 
 // Alle verfügbaren Sprachen
 const locales: Locale[] = ['de', 'en', 'fr', 'es', 'it'];
+
+// Get current path without locale prefix for language switching
+const currentPath = Astro.url.pathname;
+const pathWithoutLocale = locale === 'de'
+  ? currentPath
+  : currentPath.replace(new RegExp(`^/${locale}`), '') || '/';
+
+// Helper to build language-specific URL preserving current path
+const getLangUrl = (targetLocale: Locale) => {
+  return targetLocale === 'de' ? pathWithoutLocale : `/${targetLocale}${pathWithoutLocale}`;
+};
 ---
 
 <header class:list={['site-header', `theme-${theme}`]}>
@@ -66,7 +77,7 @@ const locales: Locale[] = ['de', 'en', 'fr', 'es', 'it'];
           {locales.map(l => (
             <li>
               <a
-                href={l === 'de' ? '/' : `/${l}/`}
+                href={getLangUrl(l)}
                 class:list={[{ active: l === locale }]}
               >
                 <span class="lang-code">{l.toUpperCase()}</span>
