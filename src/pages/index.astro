@@ -1,45 +1,1238 @@
 ---
+/**
+ * Microvista Homepage — neu designt
+ * Sektionen: Hero, Bekannt aus, Pain Points, Labor/Serie Gateway, Prüfaufgaben, USPs, CTA
+ */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import { loadStaticPage } from '../lib/load-static-page';
-import { type Locale } from '../i18n/translations';
+import { localePath, type Locale } from '../i18n/translations';
+import { getCollection } from 'astro:content';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
-const content = await loadStaticPage('index-homepage', locale);
+const lp = (path: string) => localePath(path, locale);
+
+// Neueste Blog-Posts für die Magazin-Vorschau (max 3)
+const allPosts = await getCollection('magazin', ({ data }) => !data.draft);
+const localePosts = allPosts
+  .filter(p => locale === 'de' ? !p.id.startsWith('en/') : p.id.startsWith('en/'))
+  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+  .slice(0, 3);
+
+const content = {
+  de: {
+    heroBadge: 'Anywhere. Anytime. Fast.',
+    heroTitle: 'Industrielle',
+    heroTitleAccent: 'Computertomographie',
+    heroSub: 'Lösen Sie Ihre Prüfaufgabe — Defektanalyse, Dimensionsmessung, Montage- & Fügekontrolle mit höchster Präzision.',
+    cta1: 'Express-Inspektion buchen',
+    cta2: 'Gratis-Beratung sichern',
+    pressTitle: 'Bekannt aus',
+    painTitle: 'Ungewissheit bei der Qualität kostet',
+    painTitleAccent: 'Zeit, Geld & Nerven',
+    painItems: [
+      { icon: '⏸', label: 'Stockende Entwicklung' },
+      { icon: '🚨', label: 'Kein beherrschter Prozess trotz SOP' },
+      { icon: '📦', label: 'Hohe Ausschussrate im Produktionsablauf' },
+      { icon: '🔒', label: 'Gesperrte Chargen' },
+    ],
+    painCta: 'CT-Prüfung klingt kostspielig? Wir machen sie wirtschaftlich.',
+    painCtaBtn: 'Jetzt informieren',
+    worldsTitle: 'Für jeden Bedarf die passende Welt',
+    laborTitle: 'Labor & Erstmuster',
+    laborSub: 'Hochpräzise CT-Analysen im zertifizierten Prüflabor — Prototypen, Erstmuster, Schadensuntersuchungen.',
+    laborBenefits: ['Ergebnisse in 24–48 h', 'ISO 9001 & 17025', 'Sub-µm Auflösung'],
+    laborCta: 'Zur Labor-Welt',
+    serieTitle: 'Serienprüfung',
+    serieSub: 'Vollautomatische CT-Inspektion großer Stückzahlen — direkt in Ihrer Produktionslinie.',
+    serieBenefits: ['Bis zu 798 mm Hüllkreis', 'In-Line & At-Line', 'KI-gestützte Auswertung'],
+    serieCta: 'Zur Serien-Welt',
+    aufgabenTitle: 'Was löst industrielle Computertomographie?',
+    aufgaben: [
+      {
+        title: 'Defektanalyse',
+        desc: 'Poren, Lunker & Einschlüsse sichtbar machen — in 2D & 3D, normenkonform (P202, VW50093).',
+        icon: '🔬',
+      },
+      {
+        title: 'Dimensionsmessung',
+        desc: 'Wanddicken, CAD Soll/Ist-Vergleich, Erstmusterprüfbericht, Reverse Engineering.',
+        icon: '📐',
+      },
+      {
+        title: 'Montage- & Fügekontrolle',
+        desc: 'Vollständigkeit prüfen, Sitz kontrollieren, Schweißungen & Vernietungen inspizieren.',
+        icon: '🔧',
+      },
+      {
+        title: 'Grat, Kernreste & Späne',
+        desc: 'Kavitäten auf Rückstände prüfen — für sichere, saubere Bauteile ohne Nacharbeit.',
+        icon: '🧹',
+      },
+      {
+        title: 'Hairpin-Stator-Prüfung',
+        desc: 'Spezielle Qualitätssicherung für elektrische Antriebskomponenten der Zukunft.',
+        icon: '⚡',
+      },
+      {
+        title: 'Laminographie & Großteile',
+        desc: 'Auch schwer durchstrahlbare Materialien und komplexe Geometrien kein Problem.',
+        icon: '🏗',
+      },
+    ],
+    aufgabenCta: 'Alle Prüfaufgaben ansehen',
+    uspTitle: 'Warum Microvista?',
+    usps: [
+      { icon: '⚡', title: 'Expressinspektion', desc: 'In dringenden Fällen wird Ihre Bestellung unverzüglich bearbeitet.' },
+      { icon: '📏', title: 'Großteile bis 1802 mm', desc: 'Maximaler Hüllkreis 798 mm, Länge bis zu 1802 mm möglich.' },
+      { icon: '🏆', title: 'Zertifiziert', desc: 'ISO 9001 & ISO 17025 zertifiziert — Ergebnisse die Bestand haben.' },
+      { icon: '🤖', title: 'KI-gestützt', desc: 'Automatisierte Auswertung für höchste Reproduzierbarkeit und Geschwindigkeit.' },
+    ],
+    magazinTitle: 'Aus dem Magazin',
+    magazinCta: 'Alle Artikel ansehen',
+    ctaTitle: 'Bereit für die nächste Prüfaufgabe?',
+    ctaSub: 'Kontaktieren Sie uns für ein unverbindliches Angebot. Wir melden uns innerhalb von 24 Stunden.',
+    ctaBtn1: 'Jetzt anfragen',
+    ctaBtn2: 'Fragebogen ausfüllen',
+    readMore: 'Weiterlesen',
+  },
+  en: {
+    heroBadge: 'Anywhere. Anytime. Fast.',
+    heroTitle: 'Industrial',
+    heroTitleAccent: 'Computed Tomography',
+    heroSub: 'Solve your inspection task — defect analysis, dimensional measurement, assembly & joint inspection with highest precision.',
+    cta1: 'Book Express Inspection',
+    cta2: 'Get Free Consultation',
+    pressTitle: 'As featured in',
+    painTitle: 'Quality uncertainty costs',
+    painTitleAccent: 'time, money & nerves',
+    painItems: [
+      { icon: '⏸', label: 'Stalled development' },
+      { icon: '🚨', label: 'No capable process despite SOP' },
+      { icon: '📦', label: 'High scrap rate in production' },
+      { icon: '🔒', label: 'Locked batches' },
+    ],
+    painCta: 'CT inspection sounds expensive? We make it economical.',
+    painCtaBtn: 'Learn more',
+    worldsTitle: 'The right world for every need',
+    laborTitle: 'Lab & First Article',
+    laborSub: 'High-precision CT analyses in a certified laboratory — prototypes, first articles, failure investigations.',
+    laborBenefits: ['Results in 24–48 h', 'ISO 9001 & 17025', 'Sub-µm resolution'],
+    laborCta: 'Enter Lab World',
+    serieTitle: 'Series Inspection',
+    serieSub: 'Fully automated CT inspection of large volumes — directly in your production line.',
+    serieBenefits: ['Up to 798 mm envelope', 'In-Line & At-Line', 'AI-powered analysis'],
+    serieCta: 'Enter Series World',
+    aufgabenTitle: 'What does industrial CT solve?',
+    aufgaben: [
+      { title: 'Defect Analysis', desc: 'Visualize pores, shrinkage & inclusions in 2D & 3D, standards-compliant.', icon: '🔬' },
+      { title: 'Dimensional Measurement', desc: 'Wall thickness, CAD nominal/actual comparison, FAIR, reverse engineering.', icon: '📐' },
+      { title: 'Assembly & Joint Inspection', desc: 'Verify completeness, check seat position, inspect welds & rivets.', icon: '🔧' },
+      { title: 'Burrs, Core Residues & Chips', desc: 'Check cavities for residues — for safe, clean components without rework.', icon: '🧹' },
+      { title: 'Hairpin Stator Inspection', desc: 'Specialized QA for electric drive components of the future.', icon: '⚡' },
+      { title: 'Laminography & Large Parts', desc: 'Even difficult-to-penetrate materials and complex geometries are no problem.', icon: '🏗' },
+    ],
+    aufgabenCta: 'View all inspection tasks',
+    uspTitle: 'Why Microvista?',
+    usps: [
+      { icon: '⚡', title: 'Express Inspection', desc: 'In urgent cases your order is processed immediately.' },
+      { icon: '📏', title: 'Large parts up to 1802 mm', desc: 'Maximum envelope 798 mm, length up to 1802 mm possible.' },
+      { icon: '🏆', title: 'Certified', desc: 'ISO 9001 & ISO 17025 certified — results that stand up to scrutiny.' },
+      { icon: '🤖', title: 'AI-powered', desc: 'Automated analysis for highest reproducibility and speed.' },
+    ],
+    magazinTitle: 'From the Magazine',
+    magazinCta: 'View all articles',
+    ctaTitle: 'Ready for your next inspection task?',
+    ctaSub: 'Contact us for a non-binding offer. We will get back to you within 24 hours.',
+    ctaBtn1: 'Request now',
+    ctaBtn2: 'Fill out questionnaire',
+    readMore: 'Read more',
+  },
+  fr: {
+    heroBadge: 'N\'importe où. N\'importe quand. Vite.',
+    heroTitle: 'Tomographie',
+    heroTitleAccent: 'Industrielle',
+    heroSub: 'Résolvez vos tâches de contrôle — analyse des défauts, mesure dimensionnelle, contrôle d\'assemblage.',
+    cta1: 'Réserver une inspection express',
+    cta2: 'Consultation gratuite',
+    pressTitle: 'Reconnu dans',
+    painTitle: 'L\'incertitude qualité coûte',
+    painTitleAccent: 'temps, argent & nerfs',
+    painItems: [
+      { icon: '⏸', label: 'Développement bloqué' },
+      { icon: '🚨', label: 'Pas de processus maîtrisé malgré le SOP' },
+      { icon: '📦', label: 'Taux de rebut élevé' },
+      { icon: '🔒', label: 'Lots bloqués' },
+    ],
+    painCta: 'La CT semble coûteuse ? Nous la rendons économique.',
+    painCtaBtn: 'En savoir plus',
+    worldsTitle: 'La bonne solution pour chaque besoin',
+    laborTitle: 'Laboratoire & Premier article',
+    laborSub: 'Analyses CT haute précision en laboratoire certifié — prototypes, premiers articles, analyses de défaillances.',
+    laborBenefits: ['Résultats en 24–48 h', 'ISO 9001 & 17025', 'Résolution sub-µm'],
+    laborCta: 'Vers le monde Labo',
+    serieTitle: 'Inspection en série',
+    serieSub: 'Inspection CT entièrement automatisée de grands volumes — directement dans votre ligne de production.',
+    serieBenefits: ['Jusqu\'à 798 mm', 'En ligne & hors ligne', 'Analyse IA'],
+    serieCta: 'Vers le monde Série',
+    aufgabenTitle: 'Que résout la CT industrielle ?',
+    aufgaben: [
+      { title: 'Analyse des défauts', desc: 'Visualiser pores, retassures et inclusions en 2D et 3D.', icon: '🔬' },
+      { title: 'Mesure dimensionnelle', desc: 'Épaisseur de paroi, comparaison CAD nominal/réel, PFMEA.', icon: '📐' },
+      { title: 'Contrôle d\'assemblage', desc: 'Vérifier l\'exhaustivité, contrôler les soudures et les rivets.', icon: '🔧' },
+      { title: 'Bavures, résidus & copeaux', desc: 'Vérifier les cavités pour les résidus.', icon: '🧹' },
+      { title: 'Contrôle stator Hairpin', desc: 'QA spécialisée pour les composants de la mobilité électrique.', icon: '⚡' },
+      { title: 'Laminographie & grandes pièces', desc: 'Les matériaux difficiles ne posent aucun problème.', icon: '🏗' },
+    ],
+    aufgabenCta: 'Voir toutes les tâches',
+    uspTitle: 'Pourquoi Microvista ?',
+    usps: [
+      { icon: '⚡', title: 'Inspection express', desc: 'En cas d\'urgence, votre commande est traitée immédiatement.' },
+      { icon: '📏', title: 'Grandes pièces jusqu\'à 1802 mm', desc: 'Enveloppe max 798 mm, longueur jusqu\'à 1802 mm.' },
+      { icon: '🏆', title: 'Certifié', desc: 'ISO 9001 & ISO 17025 certifié.' },
+      { icon: '🤖', title: 'IA intégrée', desc: 'Analyse automatisée pour une reproductibilité maximale.' },
+    ],
+    magazinTitle: 'Du magazine',
+    magazinCta: 'Voir tous les articles',
+    ctaTitle: 'Prêt pour votre prochaine tâche de contrôle ?',
+    ctaSub: 'Contactez-nous pour un devis sans engagement. Nous répondons sous 24 heures.',
+    ctaBtn1: 'Demander maintenant',
+    ctaBtn2: 'Remplir le questionnaire',
+    readMore: 'Lire la suite',
+  },
+  es: {
+    heroBadge: 'En cualquier lugar. En cualquier momento. Rápido.',
+    heroTitle: 'Tomografía',
+    heroTitleAccent: 'Industrial',
+    heroSub: 'Resuelva sus tareas de inspección — análisis de defectos, medición dimensional, control de montaje con la mayor precisión.',
+    cta1: 'Reservar inspección exprés',
+    cta2: 'Consulta gratuita',
+    pressTitle: 'Reconocido en',
+    painTitle: 'La incertidumbre de calidad cuesta',
+    painTitleAccent: 'tiempo, dinero y nervios',
+    painItems: [
+      { icon: '⏸', label: 'Desarrollo estancado' },
+      { icon: '🚨', label: 'Sin proceso controlado' },
+      { icon: '📦', label: 'Alta tasa de desechos' },
+      { icon: '🔒', label: 'Lotes bloqueados' },
+    ],
+    painCta: '¿La TC parece costosa? La hacemos económica.',
+    painCtaBtn: 'Más información',
+    worldsTitle: 'La solución adecuada para cada necesidad',
+    laborTitle: 'Laboratorio & Primera muestra',
+    laborSub: 'Análisis CT de alta precisión en laboratorio certificado — prototipos, primeras muestras, análisis de fallos.',
+    laborBenefits: ['Resultados en 24–48 h', 'ISO 9001 & 17025', 'Resolución sub-µm'],
+    laborCta: 'Al mundo Laboratorio',
+    serieTitle: 'Inspección en serie',
+    serieSub: 'Inspección CT completamente automatizada de grandes volúmenes — directamente en su línea de producción.',
+    serieBenefits: ['Hasta 798 mm', 'En línea & fuera de línea', 'Análisis IA'],
+    serieCta: 'Al mundo Serie',
+    aufgabenTitle: '¿Qué resuelve la TC industrial?',
+    aufgaben: [
+      { title: 'Análisis de defectos', desc: 'Visualizar poros, rechupados e inclusiones en 2D y 3D.', icon: '🔬' },
+      { title: 'Medición dimensional', desc: 'Espesor de pared, comparación CAD nominal/real, PPAP.', icon: '📐' },
+      { title: 'Control de montaje', desc: 'Verificar completitud, controlar soldaduras y remaches.', icon: '🔧' },
+      { title: 'Rebabas, restos y virutas', desc: 'Verificar cavidades en busca de residuos.', icon: '🧹' },
+      { title: 'Inspección estátor Hairpin', desc: 'QA especializada para componentes de movilidad eléctrica.', icon: '⚡' },
+      { title: 'Laminografía & piezas grandes', desc: 'Los materiales difíciles no suponen ningún problema.', icon: '🏗' },
+    ],
+    aufgabenCta: 'Ver todas las tareas',
+    uspTitle: '¿Por qué Microvista?',
+    usps: [
+      { icon: '⚡', title: 'Inspección exprés', desc: 'En casos urgentes su pedido se procesa de inmediato.' },
+      { icon: '📏', title: 'Piezas grandes hasta 1802 mm', desc: 'Envolvente máx 798 mm, longitud hasta 1802 mm.' },
+      { icon: '🏆', title: 'Certificado', desc: 'ISO 9001 & ISO 17025 certificado.' },
+      { icon: '🤖', title: 'Impulsado por IA', desc: 'Análisis automatizado para la máxima reproducibilidad.' },
+    ],
+    magazinTitle: 'De la revista',
+    magazinCta: 'Ver todos los artículos',
+    ctaTitle: '¿Listo para su próxima tarea de inspección?',
+    ctaSub: 'Contáctenos para una oferta sin compromiso. Le respondemos en 24 horas.',
+    ctaBtn1: 'Solicitar ahora',
+    ctaBtn2: 'Rellenar cuestionario',
+    readMore: 'Leer más',
+  },
+  it: {
+    heroBadge: 'Ovunque. In qualsiasi momento. Veloce.',
+    heroTitle: 'Tomografia',
+    heroTitleAccent: 'Industriale',
+    heroSub: 'Risolvi i tuoi compiti di ispezione — analisi dei difetti, misurazione dimensionale, controllo assemblaggio.',
+    cta1: 'Prenota ispezione express',
+    cta2: 'Consulenza gratuita',
+    pressTitle: 'Riconosciuto in',
+    painTitle: 'L\'incertezza sulla qualità costa',
+    painTitleAccent: 'tempo, denaro e nervi',
+    painItems: [
+      { icon: '⏸', label: 'Sviluppo bloccato' },
+      { icon: '🚨', label: 'Nessun processo controllato' },
+      { icon: '📦', label: 'Alto tasso di scarto' },
+      { icon: '🔒', label: 'Lotti bloccati' },
+    ],
+    painCta: 'La TC sembra costosa? Noi la rendiamo economica.',
+    painCtaBtn: 'Scopri di più',
+    worldsTitle: 'La soluzione giusta per ogni esigenza',
+    laborTitle: 'Laboratorio & Primo campione',
+    laborSub: 'Analisi CT ad alta precisione in laboratorio certificato — prototipi, primi campioni, analisi dei guasti.',
+    laborBenefits: ['Risultati in 24–48 h', 'ISO 9001 & 17025', 'Risoluzione sub-µm'],
+    laborCta: 'Al mondo Laboratorio',
+    serieTitle: 'Ispezione in serie',
+    serieSub: 'Ispezione CT completamente automatizzata di grandi volumi — direttamente nella tua linea di produzione.',
+    serieBenefits: ['Fino a 798 mm', 'In linea & fuori linea', 'Analisi AI'],
+    serieCta: 'Al mondo Serie',
+    aufgabenTitle: 'Cosa risolve la TC industriale?',
+    aufgaben: [
+      { title: 'Analisi dei difetti', desc: 'Visualizzare pori, ritiri e inclusioni in 2D e 3D.', icon: '🔬' },
+      { title: 'Misurazione dimensionale', desc: 'Spessore parete, confronto CAD nominale/reale.', icon: '📐' },
+      { title: 'Controllo assemblaggio', desc: 'Verificare la completezza, controllare saldature e rivetti.', icon: '🔧' },
+      { title: 'Bave, residui e trucioli', desc: 'Verificare le cavità alla ricerca di residui.', icon: '🧹' },
+      { title: 'Ispezione statore Hairpin', desc: 'QA specializzata per componenti di mobilità elettrica.', icon: '⚡' },
+      { title: 'Laminografia & pezzi grandi', desc: 'Anche materiali difficili non sono un problema.', icon: '🏗' },
+    ],
+    aufgabenCta: 'Vedi tutti i compiti',
+    uspTitle: 'Perché Microvista?',
+    usps: [
+      { icon: '⚡', title: 'Ispezione express', desc: 'In casi urgenti il tuo ordine viene elaborato immediatamente.' },
+      { icon: '📏', title: 'Pezzi grandi fino a 1802 mm', desc: 'Involucro max 798 mm, lunghezza fino a 1802 mm.' },
+      { icon: '🏆', title: 'Certificato', desc: 'ISO 9001 & ISO 17025 certificato.' },
+      { icon: '🤖', title: 'Alimentato da AI', desc: 'Analisi automatizzata per la massima riproducibilità.' },
+    ],
+    magazinTitle: 'Dal magazine',
+    magazinCta: 'Vedi tutti gli articoli',
+    ctaTitle: 'Pronto per il tuo prossimo compito di ispezione?',
+    ctaSub: 'Contattaci per un\'offerta senza impegno. Rispondiamo entro 24 ore.',
+    ctaBtn1: 'Richiedi ora',
+    ctaBtn2: 'Compila il questionario',
+    readMore: 'Leggi di più',
+  },
+};
+
+const t = content[locale as keyof typeof content] || content.de;
+
+const pressLogos = [
+  { name: 'Business Insider', src: 'https://www.microvista.de/wp-content/uploads/2025/10/business-insider.webp' },
+  { name: 'Yahoo Finance', src: 'https://www.microvista.de/wp-content/uploads/2025/10/yahoo-finance.webp' },
+  { name: 'MarketWatch', src: 'https://www.microvista.de/wp-content/uploads/2025/10/market-watch.webp' },
+  { name: 'Apple News', src: 'https://www.microvista.de/wp-content/uploads/2025/10/apple-news.webp' },
+  { name: 'Street Insider', src: 'https://www.microvista.de/wp-content/uploads/2025/10/street-insider.webp' },
+  { name: 'Hugo Junkers Preis Finalist', src: 'https://www.microvista.de/wp-content/uploads/2025/12/HJP25_label_finalist_300dpi_on.webp' },
+];
+
+const formatDate = (date: Date) => new Intl.DateTimeFormat(
+  { de: 'de-DE', en: 'en-US', fr: 'fr-FR', es: 'es-ES', it: 'it-IT' }[locale] || 'de-DE',
+  { year: 'numeric', month: 'long', day: 'numeric' }
+).format(date);
 ---
 
 <BaseLayout
   title="Industrielle Computertomographie Dienstleister für Exzellenz"
   description="Defektanalyse, Dimensionsmessung, Montage- & Fügekontrolle durch industrielle Computertomographie: Anywhere. Anytime. Fast."
 >
-  <Header slot="header" />
+  <Header slot="header" theme="dark" />
 
-  <div class="static-page">
-    <div class="container">
-      <article class="static-content">
-        {content ? <div set:html={content} /> : <p>Inhalt folgt in Kürze.</p>}
-      </article>
+  <!-- ═══════════════════════════════════════════
+       HERO
+  ════════════════════════════════════════════ -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img
+        src="/images/ct/CT-Techniker-am-industriellen-CT-Dustin-Klein-scaled-e1761285791426.jpg"
+        alt="CT-Techniker am industriellen CT"
+        class="hero-img"
+        loading="eager"
+      />
+      <div class="hero-overlay"></div>
     </div>
-  </div>
+    <div class="container hero-content">
+      <span class="hero-badge">{t.heroBadge}</span>
+      <h1 class="hero-title">
+        {t.heroTitle}<br />
+        <span class="hero-title-accent">{t.heroTitleAccent}</span>
+      </h1>
+      <p class="hero-sub">{t.heroSub}</p>
+      <div class="hero-ctas">
+        <a href={lp('/labor/kontakt')} class="btn btn-primary">{t.cta1}</a>
+        <a href={lp('/kontakt')} class="btn btn-outline">{t.cta2}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       BEKANNT AUS
+  ════════════════════════════════════════════ -->
+  <section class="press-section">
+    <div class="container">
+      <p class="press-label">{t.pressTitle}</p>
+      <div class="press-logos">
+        {pressLogos.map(logo => (
+          <img src={logo.src} alt={logo.name} class="press-logo" loading="lazy" />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       PAIN POINTS
+  ════════════════════════════════════════════ -->
+  <section class="pain-section">
+    <div class="container">
+      <div class="pain-grid">
+        <div class="pain-left">
+          <h2 class="pain-title">
+            {t.painTitle}<br />
+            <span class="pain-accent">{t.painTitleAccent}</span>
+          </h2>
+          <div class="pain-items">
+            {t.painItems.map(item => (
+              <div class="pain-item">
+                <span class="pain-icon">{item.icon}</span>
+                <span>{item.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="pain-right">
+          <div class="pain-cta-card">
+            <p class="pain-cta-text">{t.painCta}</p>
+            <a href={lp('/kontakt')} class="btn btn-primary">{t.painCtaBtn}</a>
+          </div>
+          <img
+            src="/images/ct/Bauteil-im-CT-platziert-scaled.jpg"
+            alt="Bauteil im CT platziert"
+            class="pain-image"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       LABOR / SERIE GATEWAY
+  ════════════════════════════════════════════ -->
+  <section class="worlds-section">
+    <div class="container">
+      <h2 class="section-title">{t.worldsTitle}</h2>
+      <div class="worlds-grid">
+        <!-- Labor -->
+        <a href={lp('/labor')} class="world-card world-labor">
+          <div class="world-img-wrap">
+            <img
+              src="/images/ct/Auswertung-CT-Scan-vom-CT-Techniker-Dustin-Klein-e1761286147918.jpg"
+              alt="CT-Labor"
+              loading="lazy"
+            />
+            <div class="world-img-overlay"></div>
+          </div>
+          <div class="world-content">
+            <span class="world-badge world-badge-labor">Labor</span>
+            <h3>{t.laborTitle}</h3>
+            <p>{t.laborSub}</p>
+            <ul class="world-benefits">
+              {t.laborBenefits.map(b => (
+                <li>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <circle cx="8" cy="8" r="8" fill="rgba(142,191,214,0.2)"/>
+                    <path d="M5 8l2 2 4-4" stroke="#8ebfd6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  {b}
+                </li>
+              ))}
+            </ul>
+            <span class="world-cta">{t.laborCta} →</span>
+          </div>
+        </a>
+
+        <!-- Serie -->
+        <a href={lp('/serie')} class="world-card world-serie">
+          <div class="world-img-wrap">
+            <img
+              src="/images/ct/Microvista-Industrieller-CT-Container-Truck-ScanExpress-4K-scaled.jpg"
+              alt="ScanExpress Serienprüfung"
+              loading="lazy"
+            />
+            <div class="world-img-overlay"></div>
+          </div>
+          <div class="world-content">
+            <span class="world-badge world-badge-serie">Serie</span>
+            <h3>{t.serieTitle}</h3>
+            <p>{t.serieSub}</p>
+            <ul class="world-benefits">
+              {t.serieBenefits.map(b => (
+                <li>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <circle cx="8" cy="8" r="8" fill="rgba(238,119,17,0.2)"/>
+                    <path d="M5 8l2 2 4-4" stroke="#ee7711" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  {b}
+                </li>
+              ))}
+            </ul>
+            <span class="world-cta">{t.serieCta} →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       PRÜFAUFGABEN
+  ════════════════════════════════════════════ -->
+  <section class="aufgaben-section">
+    <div class="container">
+      <h2 class="section-title">{t.aufgabenTitle}</h2>
+      <div class="aufgaben-grid">
+        {t.aufgaben.map(a => (
+          <div class="aufgabe-card">
+            <span class="aufgabe-icon">{a.icon}</span>
+            <h3>{a.title}</h3>
+            <p>{a.desc}</p>
+          </div>
+        ))}
+      </div>
+      <div class="aufgaben-footer">
+        <a href={lp('/industrielle-computertomographie/prufaufgaben')} class="btn btn-outline-dark">
+          {t.aufgabenCta}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       USPs
+  ════════════════════════════════════════════ -->
+  <section class="usp-section">
+    <div class="container">
+      <h2 class="section-title">{t.uspTitle}</h2>
+      <div class="usp-grid">
+        {t.usps.map(u => (
+          <div class="usp-card">
+            <span class="usp-icon">{u.icon}</span>
+            <h3>{u.title}</h3>
+            <p>{u.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       MAGAZIN VORSCHAU
+  ════════════════════════════════════════════ -->
+  {localePosts.length > 0 && (
+    <section class="magazin-section">
+      <div class="container">
+        <div class="section-header-row">
+          <h2 class="section-title">{t.magazinTitle}</h2>
+          <a href={lp('/magazin')} class="see-all-link">{t.magazinCta} →</a>
+        </div>
+        <div class="magazin-grid">
+          {localePosts.map((post, i) => {
+            const slug = post.id.replace(/^(de|en)\//, '').replace(/\.mdx?$/, '');
+            return (
+              <a href={lp(`/magazin/${slug}`)} class:list={['magazin-card', i === 0 ? 'magazin-card-featured' : '']}>
+                {post.data.image && (
+                  <div class="magazin-img-wrap">
+                    <img
+                      src={post.data.image.src}
+                      alt={post.data.image.alt}
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+                <div class="magazin-card-body">
+                  <span class="magazin-cat">{post.data.category}</span>
+                  <h3>{post.data.title}</h3>
+                  <p>{post.data.description?.substring(0, 120)}…</p>
+                  <span class="magazin-read-more">{t.readMore} →</span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ═══════════════════════════════════════════
+       FINAL CTA
+  ════════════════════════════════════════════ -->
+  <section class="final-cta">
+    <div class="container">
+      <div class="final-cta-inner">
+        <h2>{t.ctaTitle}</h2>
+        <p>{t.ctaSub}</p>
+        <div class="final-cta-btns">
+          <a href={lp('/kontakt')} class="btn btn-primary">{t.ctaBtn1}</a>
+          <a href={lp('/fragebogen')} class="btn btn-outline">{t.ctaBtn2}</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <Footer slot="footer" />
 </BaseLayout>
 
 <style>
-  .static-page { padding-bottom: var(--space-16); }
-  .static-content { max-width: 900px; margin: 0 auto; padding: var(--space-8) 0; }
-  .static-content :global(h1) { font-size: var(--text-4xl); margin-bottom: var(--space-8); }
-  .static-content :global(h2) { margin-top: var(--space-8); margin-bottom: var(--space-4); }
-  .static-content :global(h3) { margin-top: var(--space-6); margin-bottom: var(--space-3); }
-  .static-content :global(h4) { margin-top: var(--space-4); margin-bottom: var(--space-2); }
-  .static-content :global(p) { line-height: 1.8; margin-bottom: var(--space-4); }
-  .static-content :global(ul), .static-content :global(ol) { padding-left: var(--space-6); margin-bottom: var(--space-4); }
-  .static-content :global(li) { line-height: 1.7; margin-bottom: var(--space-2); }
-  .static-content :global(table) { width: 100%; border-collapse: collapse; margin-bottom: var(--space-6); }
-  .static-content :global(th), .static-content :global(td) { padding: var(--space-3); border: 1px solid var(--border, #eef2f5); }
-  .static-content :global(th) { background: var(--surface, #f8fafc); font-weight: 600; }
-  .static-content :global(img) { max-width: 100%; height: auto; border-radius: var(--radius-xl); margin: var(--space-4) 0; }
-  .static-content :global(a) { color: var(--accent, #ee7711); }
-  .static-content :global(strong) { font-weight: 700; }
+/* ══════════════════════════════
+   SHARED UTILITIES
+══════════════════════════════ */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+  color: var(--mv-violet);
+  text-align: center;
+  margin-bottom: var(--space-12);
+  font-weight: 700;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--mv-orange);
+  color: var(--mv-white);
+  border: 2px solid var(--mv-orange);
+}
+.btn-primary:hover {
+  background: var(--mv-orange-hover);
+  border-color: var(--mv-orange-hover);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--mv-white);
+  border: 2px solid var(--mv-white);
+}
+.btn-outline:hover {
+  background: var(--mv-white);
+  color: var(--mv-violet);
+}
+
+.btn-outline-dark {
+  background: transparent;
+  color: var(--mv-violet);
+  border: 2px solid var(--mv-violet);
+}
+.btn-outline-dark:hover {
+  background: var(--mv-violet);
+  color: var(--mv-white);
+}
+
+/* ══════════════════════════════
+   HERO
+══════════════════════════════ */
+.hero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--mv-violet);
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(50, 40, 91, 0.88) 0%,
+    rgba(50, 40, 91, 0.65) 50%,
+    rgba(50, 40, 91, 0.40) 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding-top: var(--space-24);
+  padding-bottom: var(--space-24);
+  max-width: 760px;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(142, 191, 214, 0.25);
+  border: 1px solid rgba(142, 191, 214, 0.5);
+  color: var(--mv-blue);
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-6);
+}
+
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(var(--text-4xl), 7vw, var(--text-6xl));
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--mv-white);
+  margin-bottom: var(--space-6);
+}
+
+.hero-title-accent {
+  color: var(--mv-blue);
+}
+
+.hero-sub {
+  font-size: clamp(var(--text-lg), 2vw, var(--text-xl));
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.65;
+  max-width: 600px;
+  margin-bottom: var(--space-10);
+}
+
+.hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+/* ══════════════════════════════
+   PRESS
+══════════════════════════════ */
+.press-section {
+  background: var(--mv-gray-50);
+  padding: var(--space-10) 0;
+  border-bottom: 1px solid var(--mv-gray-200);
+}
+
+.press-label {
+  text-align: center;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mv-gray-400);
+  margin-bottom: var(--space-6);
+}
+
+.press-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+}
+
+.press-logo {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(100%) opacity(0.6);
+  transition: filter var(--transition-base);
+}
+
+.press-logo:hover {
+  filter: grayscale(0%) opacity(1);
+}
+
+/* ══════════════════════════════
+   PAIN POINTS
+══════════════════════════════ */
+.pain-section {
+  padding: var(--space-24) 0;
+}
+
+.pain-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-12);
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .pain-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pain-title {
+  font-family: var(--font-heading);
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+  font-weight: 700;
+  color: var(--mv-violet);
+  line-height: 1.2;
+  margin-bottom: var(--space-8);
+}
+
+.pain-accent {
+  color: var(--mv-orange);
+}
+
+.pain-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.pain-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-lg);
+  color: var(--mv-gray-700);
+}
+
+.pain-icon {
+  font-size: var(--text-2xl);
+  flex-shrink: 0;
+}
+
+.pain-right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.pain-cta-card {
+  background: var(--mv-violet);
+  color: var(--mv-white);
+  padding: var(--space-8);
+  border-radius: var(--radius-xl);
+}
+
+.pain-cta-text {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-6);
+  line-height: 1.6;
+}
+
+.pain-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius-xl);
+}
+
+/* ══════════════════════════════
+   LABOR / SERIE WORLDS
+══════════════════════════════ */
+.worlds-section {
+  background: var(--mv-gray-50);
+  padding: var(--space-24) 0;
+}
+
+.worlds-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .worlds-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.world-card {
+  display: block;
+  text-decoration: none;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  background: var(--mv-white);
+  border: 1px solid var(--mv-gray-200);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  box-shadow: var(--shadow-md);
+}
+
+.world-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+.world-img-wrap {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.world-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.world-card:hover .world-img-wrap img {
+  transform: scale(1.04);
+}
+
+.world-img-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.world-labor .world-img-overlay {
+  background: linear-gradient(to top, rgba(50, 40, 91, 0.7) 0%, transparent 60%);
+}
+
+.world-serie .world-img-overlay {
+  background: linear-gradient(to top, rgba(238, 119, 17, 0.6) 0%, transparent 60%);
+}
+
+.world-content {
+  padding: var(--space-8);
+}
+
+.world-badge {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-4);
+}
+
+.world-badge-labor {
+  background: rgba(50, 40, 91, 0.1);
+  color: var(--mv-violet);
+}
+
+.world-badge-serie {
+  background: rgba(238, 119, 17, 0.1);
+  color: var(--mv-orange);
+}
+
+.world-content h3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--mv-gray-900);
+  margin-bottom: var(--space-3);
+}
+
+.world-content p {
+  color: var(--mv-gray-600);
+  line-height: 1.65;
+  margin-bottom: var(--space-5);
+}
+
+.world-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.world-benefits li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--mv-gray-700);
+}
+
+.world-cta {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  font-weight: 600;
+  transition: color var(--transition-base);
+}
+
+.world-labor .world-cta { color: var(--mv-violet); }
+.world-serie .world-cta { color: var(--mv-orange); }
+
+.world-card:hover .world-cta {
+  text-decoration: underline;
+}
+
+/* ══════════════════════════════
+   PRÜFAUFGABEN
+══════════════════════════════ */
+.aufgaben-section {
+  padding: var(--space-24) 0;
+}
+
+.aufgaben-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-12);
+}
+
+.aufgabe-card {
+  background: var(--mv-white);
+  border: 1px solid var(--mv-gray-200);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.aufgabe-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.aufgabe-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: var(--space-4);
+}
+
+.aufgabe-card h3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--mv-violet);
+  margin-bottom: var(--space-3);
+}
+
+.aufgabe-card p {
+  font-size: var(--text-sm);
+  color: var(--mv-gray-600);
+  line-height: 1.65;
+}
+
+.aufgaben-footer {
+  text-align: center;
+}
+
+/* ══════════════════════════════
+   USPs
+══════════════════════════════ */
+.usp-section {
+  background: var(--mv-violet);
+  padding: var(--space-24) 0;
+}
+
+.usp-section .section-title {
+  color: var(--mv-white);
+}
+
+.usp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-6);
+}
+
+.usp-card {
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: background var(--transition-base);
+}
+
+.usp-card:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.usp-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: var(--space-4);
+}
+
+.usp-card h3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--mv-white);
+  margin-bottom: var(--space-2);
+}
+
+.usp-card p {
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.65;
+}
+
+/* ══════════════════════════════
+   MAGAZIN VORSCHAU
+══════════════════════════════ */
+.magazin-section {
+  padding: var(--space-24) 0;
+}
+
+.section-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-12);
+}
+
+.section-header-row .section-title {
+  margin-bottom: 0;
+}
+
+.see-all-link {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--mv-orange);
+  text-decoration: none;
+  font-size: var(--text-base);
+  transition: color var(--transition-fast);
+}
+.see-all-link:hover {
+  color: var(--mv-orange-hover);
+}
+
+.magazin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-6);
+}
+
+.magazin-card {
+  display: block;
+  text-decoration: none;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--mv-gray-200);
+  background: var(--mv-white);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.magazin-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.magazin-img-wrap {
+  height: 200px;
+  overflow: hidden;
+}
+
+.magazin-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.magazin-card:hover .magazin-img-wrap img {
+  transform: scale(1.04);
+}
+
+.magazin-card-body {
+  padding: var(--space-5);
+}
+
+.magazin-cat {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mv-orange);
+  margin-bottom: var(--space-2);
+}
+
+.magazin-card-body h3 {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--mv-gray-900);
+  margin-bottom: var(--space-2);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.magazin-card-body p {
+  font-size: var(--text-sm);
+  color: var(--mv-gray-600);
+  line-height: 1.6;
+  margin-bottom: var(--space-4);
+}
+
+.magazin-read-more {
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--mv-violet);
+}
+
+/* ══════════════════════════════
+   FINAL CTA
+══════════════════════════════ */
+.final-cta {
+  background: linear-gradient(135deg, var(--mv-orange) 0%, #d4600a 100%);
+  padding: var(--space-24) 0;
+}
+
+.final-cta-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.final-cta h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+  font-weight: 700;
+  color: var(--mv-white);
+  margin-bottom: var(--space-4);
+}
+
+.final-cta p {
+  font-size: var(--text-lg);
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.65;
+  margin-bottom: var(--space-10);
+}
+
+.final-cta-btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.final-cta .btn-primary {
+  background: var(--mv-white);
+  color: var(--mv-orange);
+  border-color: var(--mv-white);
+}
+.final-cta .btn-primary:hover {
+  background: var(--mv-gray-100);
+  border-color: var(--mv-gray-100);
+}
 </style>
