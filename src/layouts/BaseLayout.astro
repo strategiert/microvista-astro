@@ -30,7 +30,7 @@ const pageSchemas = schema
 ---
 
 <!DOCTYPE html>
-<html lang={Astro.currentLocale || 'de'} data-theme={theme}>
+<html lang={Astro.locals.locale || 'de'} data-theme={theme}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />

@@ -4,17 +4,26 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
 import { loadStaticPage } from '../lib/load-static-page';
+import { type Locale } from '../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
-const content = await loadStaticPage(locale === 'en' ? 'impressum-en.md' : 'impressum.md');
+const locale = (Astro.locals.locale || 'de') as Locale;
+const content = await loadStaticPage('impressum', locale);
+
+const labels = {
+  de: { title: 'Impressum', description: 'Impressum der Microvista GmbH' },
+  en: { title: 'Imprint', description: 'Imprint of Microvista GmbH' },
+  fr: { title: 'Mentions légales', description: 'Mentions légales de Microvista GmbH' },
+  es: { title: 'Aviso legal', description: 'Aviso legal de Microvista GmbH' },
+  it: { title: 'Note legali', description: 'Note legali di Microvista GmbH' }
+}[locale] || { title: 'Impressum', description: 'Impressum der Microvista GmbH' };
 ---
 
-<BaseLayout title="Impressum" description="Impressum der Microvista GmbH">
+<BaseLayout title={labels.title} description={labels.description}>
   <Header slot="header" />
 
   <div class="legal-page">
     <div class="container">
-      <Breadcrumbs items={[{ label: 'Impressum' }]} />
+      <Breadcrumbs items={[{ label: labels.title }]} />
       <article class="legal-content" set:html={content} />
     </div>
   </div>

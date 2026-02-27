@@ -1,7 +1,9 @@
 ---
 import LaborLayout from '../../layouts/LaborLayout.astro';
+import { localePath, type Locale } from '../../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
 
 const content = {
   de: {
@@ -20,17 +22,14 @@ const content = {
       {
         title: 'Erstmusterprüfung',
         description: 'Validierung Ihrer Prototypen und Erstmuster mit höchster Präzision.',
-        href: '/labor/erstmusterpruefung'
       },
       {
         title: 'Schadensanalyse',
         description: 'Detaillierte Untersuchung von Bauteilversagen und Defekten.',
-        href: '/labor/schadensanalyse'
       },
       {
         title: 'Reverse Engineering',
         description: 'Digitalisierung und Analyse bestehender Bauteile.',
-        href: '/labor/reverse-engineering'
       }
     ],
     servicesTitle: 'Unsere Leistungen',
@@ -55,17 +54,14 @@ const content = {
       {
         title: 'First Article Inspection',
         description: 'Validation of your prototypes and first articles with highest precision.',
-        href: '/en/labor/first-article'
       },
       {
         title: 'Failure Analysis',
         description: 'Detailed investigation of component failures and defects.',
-        href: '/en/labor/failure-analysis'
       },
       {
         title: 'Reverse Engineering',
         description: 'Digitization and analysis of existing components.',
-        href: '/en/labor/reverse-engineering'
       }
     ],
     servicesTitle: 'Our Services',
@@ -76,11 +72,61 @@ const content = {
   }
 };
 
-const t = content[locale as keyof typeof content] || content.de;
+const t = content[locale as keyof typeof content] || content.en || content.de;
+
+const ui = {
+  de: {
+    learnMore: 'Mehr erfahren',
+    crossTitle: 'Serienreif?',
+    crossText: 'Nach erfolgreicher Erstmusterfreigabe unterstützen wir Sie auch bei der automatisierten Serienprüfung.',
+    crossBtn: 'Serienprüfung entdecken',
+    seoTitle: 'CT-Labor für Erstmusterprüfung'
+  },
+  en: {
+    learnMore: 'Learn more',
+    crossTitle: 'Ready for production?',
+    crossText: 'After successful first article approval, we also support you with automated serial inspection.',
+    crossBtn: 'Discover Serial Inspection',
+    seoTitle: 'CT Lab for First Article Inspection'
+  },
+  fr: {
+    learnMore: 'En savoir plus',
+    crossTitle: 'Prêt pour la production ?',
+    crossText: 'Après la validation du premier article, nous vous accompagnons aussi sur l’inspection automatisée en série.',
+    crossBtn: 'Découvrir l’inspection en série',
+    seoTitle: 'Laboratoire CT pour inspection premier article'
+  },
+  es: {
+    learnMore: 'Más información',
+    crossTitle: '¿Listo para producción?',
+    crossText: 'Tras la validación de la primera muestra, también le apoyamos con inspección automatizada en serie.',
+    crossBtn: 'Descubrir inspección en serie',
+    seoTitle: 'Laboratorio CT para inspección de primera muestra'
+  },
+  it: {
+    learnMore: 'Scopri di più',
+    crossTitle: 'Pronto per la produzione?',
+    crossText: 'Dopo l’approvazione del primo articolo, ti supportiamo anche con l’ispezione automatizzata in serie.',
+    crossBtn: 'Scopri il controllo in serie',
+    seoTitle: 'Laboratorio CT per ispezione primo articolo'
+  }
+}[locale] || {
+  learnMore: 'Mehr erfahren',
+  crossTitle: 'Serienreif?',
+  crossText: 'Nach erfolgreicher Erstmusterfreigabe unterstützen wir Sie auch bei der automatisierten Serienprüfung.',
+  crossBtn: 'Serienprüfung entdecken',
+  seoTitle: 'CT-Labor für Erstmusterprüfung'
+};
+
+const serviceHrefs = [
+  lp('/labor/erstmusterpruefung'),
+  lp('/labor/schadensanalyse'),
+  lp('/labor/reverse-engineering'),
+];
 ---
 
 <LaborLayout 
-  title={locale === 'de' ? 'CT-Labor für Erstmusterprüfung' : 'CT Lab for First Article Inspection'}
+  title={ui.seoTitle}
   description={t.subline}
 >
   <!-- Hero Section -->
@@ -94,8 +140,8 @@ const t = content[locale as keyof typeof content] || content.de;
         </h1>
         <p class="subline">{t.subline}</p>
         <div class="hero-cta">
-          <a href="/labor/kontakt" class="btn btn-primary btn-lg">{t.cta1}</a>
-          <a href="/labor/erstmusterpruefung" class="btn btn-secondary btn-lg">{t.cta2}</a>
+          <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.cta1}</a>
+          <a href={lp('/labor/erstmusterpruefung')} class="btn btn-secondary btn-lg">{t.cta2}</a>
         </div>
       </div>
     </div>
@@ -125,12 +171,12 @@ const t = content[locale as keyof typeof content] || content.de;
       </div>
       
       <div class="services-grid">
-        {t.services.map((service: any) => (
-          <a href={service.href} class="service-card card">
+        {t.services.map((service: any, index: number) => (
+          <a href={serviceHrefs[index]} class="service-card card">
             <h3>{service.title}</h3>
             <p>{service.description}</p>
             <span class="card-link">
-              Mehr erfahren
+              {ui.learnMore}
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </span>
           </a>
@@ -145,10 +191,10 @@ const t = content[locale as keyof typeof content] || content.de;
       <div class="cross-sell-box">
         <span class="cross-sell-icon">💡</span>
         <div class="cross-sell-content">
-          <strong>Serienreif?</strong>
-          <p>Nach erfolgreicher Erstmusterfreigabe unterstützen wir Sie auch bei der automatisierten Serienprüfung.</p>
+          <strong>{ui.crossTitle}</strong>
+          <p>{ui.crossText}</p>
         </div>
-        <a href="/serie" class="btn btn-secondary">Serienprüfung entdecken</a>
+        <a href={lp('/serie')} class="btn btn-secondary">{ui.crossBtn}</a>
       </div>
     </div>
   </section>
@@ -159,7 +205,7 @@ const t = content[locale as keyof typeof content] || content.de;
       <div class="cta-content text-center">
         <h2>{t.ctaTitle}</h2>
         <p>{t.ctaSubline}</p>
-        <a href="/labor/kontakt" class="btn btn-primary btn-lg">{t.ctaButton}</a>
+        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.ctaButton}</a>
       </div>
     </div>
   </section>

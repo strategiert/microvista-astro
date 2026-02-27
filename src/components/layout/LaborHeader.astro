@@ -1,47 +1,80 @@
 ---
-const locale = Astro.currentLocale || 'de';
+import { localePath, type Locale } from '../../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
 
 const nav = {
   de: [
     { label: 'Erstmusterprüfung', href: '/labor/erstmusterpruefung' },
     { label: 'Schadensanalyse', href: '/labor/schadensanalyse' },
     { label: 'Reverse Engineering', href: '/labor/reverse-engineering' },
-    { label: 'Kontakt', href: '/labor/kontakt' },
+    { label: 'Kontakt', href: '/kontakt' },
   ],
   en: [
-    { label: 'First Article', href: '/en/labor/first-article' },
-    { label: 'Failure Analysis', href: '/en/labor/failure-analysis' },
-    { label: 'Reverse Engineering', href: '/en/labor/reverse-engineering' },
-    { label: 'Contact', href: '/en/labor/contact' },
+    { label: 'First Article Inspection', href: '/labor/erstmusterpruefung' },
+    { label: 'Failure Analysis', href: '/labor/schadensanalyse' },
+    { label: 'Reverse Engineering', href: '/labor/reverse-engineering' },
+    { label: 'Contact', href: '/kontakt' },
+  ],
+  fr: [
+    { label: 'Inspection premier article', href: '/labor/erstmusterpruefung' },
+    { label: 'Analyse de défaillance', href: '/labor/schadensanalyse' },
+    { label: 'Rétro-ingénierie', href: '/labor/reverse-engineering' },
+    { label: 'Contact', href: '/kontakt' },
+  ],
+  es: [
+    { label: 'Inspección de primera muestra', href: '/labor/erstmusterpruefung' },
+    { label: 'Análisis de fallas', href: '/labor/schadensanalyse' },
+    { label: 'Ingeniería inversa', href: '/labor/reverse-engineering' },
+    { label: 'Contacto', href: '/kontakt' },
+  ],
+  it: [
+    { label: 'Ispezione primo articolo', href: '/labor/erstmusterpruefung' },
+    { label: 'Analisi dei guasti', href: '/labor/schadensanalyse' },
+    { label: 'Reverse engineering', href: '/labor/reverse-engineering' },
+    { label: 'Contatto', href: '/kontakt' },
   ]
 };
 
-const items = nav[locale as keyof typeof nav] || nav.de;
+const items = nav[locale] || nav.en;
+
+const labels = {
+  de: { sub: 'Labor & Erstmuster', switch: '→ Serienprüfung', cta: 'Anfrage stellen' },
+  en: { sub: 'Lab & First Article', switch: '→ Serial Inspection', cta: 'Request Quote' },
+  fr: { sub: 'Laboratoire & Premier article', switch: '→ Inspection en série', cta: 'Demander un devis' },
+  es: { sub: 'Laboratorio y primera muestra', switch: '→ Inspección en serie', cta: 'Solicitar cotización' },
+  it: { sub: 'Laboratorio e primo articolo', switch: '→ Controllo in serie', cta: 'Richiedi preventivo' }
+}[locale] || { sub: 'Lab & First Article', switch: '→ Serial Inspection', cta: 'Request Quote' };
 ---
 
 <header class="header-labor">
   <div class="container">
     <div class="header-inner">
-      <a href={locale === 'de' ? '/' : `/${locale}`} class="logo">
-        <div class="logo-mark">M</div>
-        <div class="logo-content">
-          <span class="logo-text">Microvista</span>
-          <span class="logo-sub">Labor & Erstmuster</span>
-        </div>
+      <a href={lp('/')} class="logo" aria-label="Microvista">
+        <img
+          class="logo-image"
+          src="/images/logos/2013-08-microvista_Logo_RGB-7.png"
+          alt="Microvista"
+          width="705"
+          height="399"
+          loading="eager"
+        />
+        <span class="logo-sub">{labels.sub}</span>
       </a>
       
       <nav class="main-nav">
         {items.map(item => (
-          <a href={item.href} class="nav-link">{item.label}</a>
+          <a href={lp(item.href)} class="nav-link">{item.label}</a>
         ))}
       </nav>
       
       <div class="header-actions">
-        <a href={locale === 'de' ? '/serie' : `/${locale}/serie`} class="switch-world">
-          <span>→ Serienprüfung</span>
+        <a href={lp('/serie')} class="switch-world">
+          <span>{labels.switch}</span>
         </a>
-        <a href={locale === 'de' ? '/labor/kontakt' : `/${locale}/labor/kontakt`} class="btn btn-primary">
-          {locale === 'de' ? 'Anfrage stellen' : 'Request Quote'}
+        <a href={lp('/kontakt')} class="btn btn-primary">
+          {labels.cta}
         </a>
       </div>
       
@@ -72,38 +105,16 @@ const items = nav[locale as keyof typeof nav] || nav.de;
   }
   
   .logo {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
     text-decoration: none;
-    color: var(--primary);
   }
-  
-  .logo-mark {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-xl);
-    color: white;
-  }
-  
-  .logo-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .logo-text {
-    font-family: var(--font-heading);
-    font-size: var(--text-xl);
-    font-weight: 700;
-    color: var(--primary);
-    line-height: 1.1;
+
+  .logo-image {
+    display: block;
+    width: auto;
+    height: 42px;
   }
   
   .logo-sub {
@@ -111,6 +122,12 @@ const items = nav[locale as keyof typeof nav] || nav.de;
     color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 640px) {
+    .logo-sub {
+      display: none;
+    }
   }
   
   .main-nav {

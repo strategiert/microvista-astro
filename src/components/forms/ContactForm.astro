@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { variant = 'default', subject = '' } = Astro.props;
-const locale = Astro.currentLocale || 'de';
+const locale = Astro.locals.locale || 'de';
 
 const content = {
   de: {

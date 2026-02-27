@@ -1,23 +1,75 @@
 ---
 import LaborLayout from '../../layouts/LaborLayout.astro';
-const locale = Astro.currentLocale || 'de';
+import { localePath, type Locale } from '../../i18n/translations';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const t = {
+  de: {
+    title: 'Erstmusterprüfung | Microvista',
+    description: 'CT-basierte Erstmusterprüfung für Ihre Prototypen und Serienanläufe.',
+    h1: 'Erstmusterprüfung',
+    lead: 'Validierung Ihrer Prototypen und Erstmuster mit höchster CT-Präzision.',
+    notice: 'Diese Seite befindet sich im Aufbau. Kontaktieren Sie uns für weitere Informationen.',
+    cta: 'Anfrage stellen'
+  },
+  en: {
+    title: 'First Article Inspection | Microvista',
+    description: 'CT-based first article inspection for your prototypes and production ramps.',
+    h1: 'First Article Inspection',
+    lead: 'Validation of your prototypes and first articles with maximum CT precision.',
+    notice: 'This page is currently under construction. Contact us for more information.',
+    cta: 'Request Quote'
+  },
+  fr: {
+    title: 'Inspection premier article | Microvista',
+    description: 'Inspection premier article basée CT pour vos prototypes et lancements série.',
+    h1: 'Inspection premier article',
+    lead: 'Validation de vos prototypes et premiers articles avec une précision CT maximale.',
+    notice: 'Cette page est en cours de construction. Contactez-nous pour plus d’informations.',
+    cta: 'Demander un devis'
+  },
+  es: {
+    title: 'Inspección de primera muestra | Microvista',
+    description: 'Inspección de primera muestra basada en CT para prototipos y lanzamientos de serie.',
+    h1: 'Inspección de primera muestra',
+    lead: 'Validación de prototipos y primeras muestras con máxima precisión CT.',
+    notice: 'Esta página está en desarrollo. Contáctenos para más información.',
+    cta: 'Solicitar cotización'
+  },
+  it: {
+    title: 'Ispezione primo articolo | Microvista',
+    description: 'Ispezione primo articolo basata su CT per prototipi e avviamenti di serie.',
+    h1: 'Ispezione primo articolo',
+    lead: 'Validazione di prototipi e primi articoli con massima precisione CT.',
+    notice: 'Questa pagina è in costruzione. Contattaci per maggiori informazioni.',
+    cta: 'Richiedi preventivo'
+  }
+}[locale] || {
+  title: 'First Article Inspection | Microvista',
+  description: 'CT-based first article inspection for your prototypes and production ramps.',
+  h1: 'First Article Inspection',
+  lead: 'Validation of your prototypes and first articles with maximum CT precision.',
+  notice: 'This page is currently under construction. Contact us for more information.',
+  cta: 'Request Quote'
+};
 ---
 
 <LaborLayout
-  title="Erstmusterprüfung | Microvista"
-  description="CT-basierte Erstmusterprüfung für Ihre Prototypen und Serienanläufe."
+  title={t.title}
+  description={t.description}
 >
   <section class="hero">
     <div class="container">
-      <h1>Erstmusterprüfung</h1>
-      <p class="lead">Validierung Ihrer Prototypen und Erstmuster mit höchster CT-Präzision.</p>
+      <h1>{t.h1}</h1>
+      <p class="lead">{t.lead}</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <p class="placeholder-notice">Diese Seite befindet sich im Aufbau. Kontaktieren Sie uns für weitere Informationen.</p>
-      <a href="/labor/kontakt" class="btn btn-primary">Anfrage stellen</a>
+      <p class="placeholder-notice">{t.notice}</p>
+      <a href={lp('/kontakt')} class="btn btn-primary">{t.cta}</a>
     </div>
   </section>
 </LaborLayout>

@@ -3,7 +3,37 @@
  * DE (default), EN, FR, ES, IT
  */
 
-export type Locale = 'de' | 'en' | 'fr' | 'es' | 'it';
+export const allLocales = ['de', 'en', 'fr', 'es', 'it'] as const;
+export type Locale = (typeof allLocales)[number];
+
+export const defaultLocale: Locale = 'de';
+const localeSet = new Set<string>(allLocales);
+
+function parseEnabledLocales(raw: string | undefined): Locale[] {
+  if (!raw?.trim()) {
+    return ['de', 'en'];
+  }
+
+  const parsed = raw
+    .split(',')
+    .map((value) => value.trim().toLowerCase())
+    .filter((value): value is Locale => localeSet.has(value));
+
+  if (parsed.length === 0) {
+    return ['de', 'en'];
+  }
+
+  if (!parsed.includes(defaultLocale)) {
+    parsed.unshift(defaultLocale);
+  }
+
+  return Array.from(new Set(parsed));
+}
+
+export const enabledLocales = parseEnabledLocales(import.meta.env.PUBLIC_ENABLED_LOCALES);
+
+const prefixedLocales = allLocales.filter((locale) => locale !== defaultLocale);
+const localePrefixPattern = new RegExp(`^/(${prefixedLocales.join('|')})(?=/|$)`);
 
 export const localeNames: Record<Locale, string> = {
   de: 'Deutsch',
@@ -153,6 +183,13 @@ export const translations = {
       fr: 'Carrières',
       es: 'Carreras',
       it: 'Carriere'
+    },
+    zertifizierungen: {
+      de: 'Zertifizierungen',
+      en: 'Certifications',
+      fr: 'Certifications',
+      es: 'Certificaciones',
+      it: 'Certificazioni'
     },
     impressum: {
       de: 'Impressum',
@@ -594,15 +631,48 @@ export function t(key: string, locale: Locale = 'de'): string {
   return key;
 }
 
+export function isLocale(value: string | undefined | null): value is Locale {
+  if (!value) return false;
+  return localeSet.has(value);
+}
+
+export function resolveLocale(value: string | undefined | null): Locale {
+  if (isLocale(value)) return value;
+  return defaultLocale;
+}
+
+export function stripLocalePrefix(pathname: string): string {
+  const normalizedPath = pathname.startsWith('/') ? pathname : `/${pathname}`;
+  const stripped = normalizedPath.replace(localePrefixPattern, '');
+  return stripped === '' ? '/' : stripped;
+}
+
 // Helper to get locale from URL or default
 export function getLocale(url: URL): Locale {
   const path = url.pathname;
-  const match = path.match(/^\/(en|fr|es|it)\//);
-  return (match ? match[1] : 'de') as Locale;
+  const match = path.match(localePrefixPattern);
+  return resolveLocale(match?.[1]);
 }
 
 // Helper to build localized path
 export function localePath(path: string, locale: Locale): string {
-  if (locale === 'de') return path;
-  return `/${locale}${path}`;
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  if (locale === defaultLocale) return normalizedPath;
+  return `/${locale}${normalizedPath}`;
+}
+
+export function languageSwitchPath(currentPath: string, targetLocale: Locale): string {
+  const pathWithoutLocale = stripLocalePrefix(currentPath);
+  return localePath(pathWithoutLocale, targetLocale);
+}
+
+export function enabledLocaleRecords(path: string, siteUrl: string): Record<Locale, string> {
+  const normalizedSiteUrl = siteUrl.replace(/\/$/, '');
+  const records = {} as Record<Locale, string>;
+
+  for (const locale of allLocales) {
+    records[locale] = `${normalizedSiteUrl}${localePath(path, locale)}`;
+  }
+
+  return records;
 }

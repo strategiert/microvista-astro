@@ -1,0 +1,81 @@
+---
+import SerieLayout from '../../layouts/SerieLayout.astro';
+import { localePath, type Locale } from '../../i18n/translations';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const t = {
+  de: {
+    title: 'KI-Automatisierung',
+    seoTitle: 'KI-gestützte CT-Auswertung | Microvista',
+    description: 'Intelligente KI-Auswertung für automatisierte CT-Prüfung ohne manuelle Eingriffe.',
+    lead: 'Intelligente Auswertung ohne manuelle Eingriffe — KI-gestützte Defekterkennung in Echtzeit.',
+    sections: [
+      { title: 'KI in der CT-Prüfung', content: 'Unsere KI-Algorithmen analysieren CT-Volumendaten in Echtzeit und erkennen Defekte automatisch. Deep-Learning-Modelle werden auf Ihre spezifischen Bauteile und Fehlerbilder trainiert — für maximale Erkennungsrate bei minimaler Fehlalarmquote.' },
+      { title: 'Technologie', content: 'Proprietäre Deep-Learning-Algorithmen speziell für CT-Daten entwickelt. Transfer Learning ermöglicht schnelles Training auf neue Bauteiltypen. Anomalie-Erkennung auch für unbekannte Fehlertypen. Kontinuierliches Lernen durch Feedback-Loop mit Expertenwissen.' },
+      { title: 'Ihre Vorteile', content: 'Erkennungsrate >99,9% bei trainierten Fehlerbildern. Auswertung in Echtzeit — kein Flaschenhals durch manuelle Inspektion. Konsistente Ergebnisse unabhängig von Schicht und Bediener. Skalierbar von Einzelanlage bis Multi-Line-Deployment.' }
+    ],
+    cta: 'KI-Lösung anfragen',
+  },
+  en: {
+    title: 'AI Automation',
+    seoTitle: 'AI-Powered CT Analysis | Microvista',
+    description: 'Intelligent AI analysis for automated CT inspection without manual intervention.',
+    lead: 'Intelligent evaluation without manual intervention — AI-powered defect detection in real time.',
+    sections: [
+      { title: 'AI in CT Inspection', content: 'Our AI algorithms analyze CT volume data in real time and detect defects automatically. Deep learning models are trained on your specific components and defect patterns — for maximum detection rate with minimal false alarm rate.' },
+      { title: 'Technology', content: 'Proprietary deep learning algorithms specifically developed for CT data. Transfer learning enables fast training on new component types. Anomaly detection even for unknown defect types. Continuous learning through feedback loop with expert knowledge.' },
+      { title: 'Your Benefits', content: 'Detection rate >99.9% for trained defect patterns. Real-time evaluation — no bottleneck from manual inspection. Consistent results regardless of shift and operator. Scalable from single system to multi-line deployment.' }
+    ],
+    cta: 'Request AI Solution',
+  }
+}[locale] || {
+  title: 'AI Automation',
+  seoTitle: 'AI-Powered CT Analysis | Microvista',
+  description: 'Intelligent AI analysis for automated CT inspection without manual intervention.',
+  lead: 'Intelligent evaluation without manual intervention.',
+  sections: [],
+  cta: 'Request AI Solution',
+};
+---
+
+<SerieLayout title={t.seoTitle} description={t.description}>
+  <section class="hero">
+    <div class="container">
+      <h1>{t.title}</h1>
+      <p class="lead">{t.lead}</p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container container-narrow">
+      {t.sections.map((section: any) => (
+        <div class="content-block">
+          <h2>{section.title}</h2>
+          <p>{section.content}</p>
+        </div>
+      ))}
+
+      <div class="cta-box">
+        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.cta}</a>
+      </div>
+    </div>
+  </section>
+</SerieLayout>
+
+<style>
+  .hero {
+    padding: var(--space-20) 0;
+    background: linear-gradient(135deg, var(--background, #0f172a) 0%, var(--primary, #1e293b) 50%, rgba(249, 115, 22, 0.2) 100%);
+    color: white;
+  }
+  .hero h1 { color: white; margin-bottom: var(--space-4); }
+  .lead { font-size: var(--text-xl); color: rgba(255,255,255,0.7); max-width: 700px; }
+  .container-narrow { max-width: 800px; }
+  .content-section { padding: var(--space-16) 0; }
+  .content-block { margin-bottom: var(--space-12); }
+  .content-block h2 { margin-bottom: var(--space-4); }
+  .content-block p { line-height: 1.8; color: var(--text-muted); }
+  .cta-box { text-align: center; margin-top: var(--space-12); }
+  .cta-box .btn-primary { background: var(--accent, #f97316); color: #000; font-weight: 600; }
+</style>

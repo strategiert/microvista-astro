@@ -1,0 +1,4 @@
+image_url,status,is_internal,ref_count,first_ref_page,error
+https://microvista.de/images/og-default.jpg,404,yes,346,http://127.0.0.1:4321/,
+http://127.0.0.1:4321/images/blog/markttrends-2026.jpg,404,yes,36,http://127.0.0.1:4321/magazin,
+https://microvista.de/images/blog/markttrends-2026.jpg,404,yes,2,http://127.0.0.1:4321/magazin/de/markttrends-2026,

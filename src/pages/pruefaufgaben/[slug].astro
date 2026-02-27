@@ -5,13 +5,77 @@ import Footer from '../../components/layout/Footer.astro';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
 import { faqSchema, serviceSchema } from '../../components/seo/schemas';
+import { localePath, type Locale } from '../../i18n/translations';
 
 const { slug } = Astro.params;
 const pruefaufgaben = await getCollection('pruefaufgaben');
 const entry = pruefaufgaben.find(p => p.data.slug === slug);
 if (!entry) return Astro.redirect('/pruefaufgaben/');
 const task = entry.data;
-const locale = Astro.currentLocale || 'de';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const t = {
+  de: {
+    title: 'Prüfaufgaben',
+    whatIs: 'Was ist das?',
+    howItWorks: 'Wie funktioniert es?',
+    benefits: 'Vorteile',
+    applications: 'Anwendungsgebiete',
+    ctaTitlePrefix: 'Unterstützung bei',
+    ctaText: 'Unsere CT-Experten helfen Ihnen gerne weiter.',
+    ctaButton: 'Jetzt anfragen'
+  },
+  en: {
+    title: 'Inspection Tasks',
+    whatIs: 'What is it?',
+    howItWorks: 'How does it work?',
+    benefits: 'Benefits',
+    applications: 'Applications',
+    ctaTitlePrefix: 'Need help with',
+    ctaText: 'Our CT experts are here to help.',
+    ctaButton: 'Contact us'
+  },
+  fr: {
+    title: 'Tâches de contrôle',
+    whatIs: 'De quoi s’agit-il ?',
+    howItWorks: 'Comment ça fonctionne ?',
+    benefits: 'Avantages',
+    applications: 'Applications',
+    ctaTitlePrefix: 'Besoin d’aide pour',
+    ctaText: 'Nos experts CT sont là pour vous aider.',
+    ctaButton: 'Nous contacter'
+  },
+  es: {
+    title: 'Tareas de inspección',
+    whatIs: '¿Qué es?',
+    howItWorks: '¿Cómo funciona?',
+    benefits: 'Ventajas',
+    applications: 'Aplicaciones',
+    ctaTitlePrefix: '¿Necesita ayuda con',
+    ctaText: 'Nuestros expertos CT están para ayudarle.',
+    ctaButton: 'Contactar'
+  },
+  it: {
+    title: 'Attività di ispezione',
+    whatIs: 'Di cosa si tratta?',
+    howItWorks: 'Come funziona?',
+    benefits: 'Vantaggi',
+    applications: 'Applicazioni',
+    ctaTitlePrefix: 'Hai bisogno di supporto per',
+    ctaText: 'I nostri esperti CT sono a tua disposizione.',
+    ctaButton: 'Contattaci'
+  }
+}[locale] || {
+  title: 'Inspection Tasks',
+  whatIs: 'What is it?',
+  howItWorks: 'How does it work?',
+  benefits: 'Benefits',
+  applications: 'Applications',
+  ctaTitlePrefix: 'Need help with',
+  ctaText: 'Our CT experts are here to help.',
+  ctaButton: 'Contact us'
+};
 
 const schemas = [];
 if (task.faq?.length) {
@@ -34,7 +98,7 @@ schemas.push(serviceSchema({
   <div class="pruefaufgabe-page">
     <div class="container">
       <Breadcrumbs items={[
-        { label: locale === 'en' ? 'Inspection Tasks' : 'Prüfaufgaben', href: '/pruefaufgaben/' },
+        { label: t.title, href: lp('/pruefaufgaben') },
         { label: task.name }
       ]} />
 
@@ -46,19 +110,19 @@ schemas.push(serviceSchema({
 
       <!-- Was ist das? -->
       <section class="content-section">
-        <h2>{locale === 'en' ? 'What is it?' : 'Was ist das?'}</h2>
+        <h2>{t.whatIs}</h2>
         <div class="prose" set:html={task.whatIs} />
       </section>
 
       <!-- Wie funktioniert es? -->
       <section class="content-section">
-        <h2>{locale === 'en' ? 'How does it work?' : 'Wie funktioniert es?'}</h2>
+        <h2>{t.howItWorks}</h2>
         <div class="prose" set:html={task.howItWorks} />
       </section>
 
       <!-- Vorteile -->
       <section class="content-section">
-        <h2>{locale === 'en' ? 'Benefits' : 'Vorteile'}</h2>
+        <h2>{t.benefits}</h2>
         <ul class="benefits-list">
           {task.benefits.map((b: string) => <li>{b}</li>)}
         </ul>
@@ -66,7 +130,7 @@ schemas.push(serviceSchema({
 
       <!-- Anwendungen -->
       <section class="content-section">
-        <h2>{locale === 'en' ? 'Applications' : 'Anwendungsgebiete'}</h2>
+        <h2>{t.applications}</h2>
         <ul class="applications-list">
           {task.applications.map((a: string) => <li>{a}</li>)}
         </ul>
@@ -87,10 +151,10 @@ schemas.push(serviceSchema({
 
       <!-- CTA -->
       <section class="cta-section">
-        <h2>{locale === 'en' ? 'Need help with' : 'Unterstützung bei'} {task.name}?</h2>
-        <p>{locale === 'en' ? 'Our CT experts are here to help.' : 'Unsere CT-Experten helfen Ihnen gerne weiter.'}</p>
-        <a href="/kontakt/" class="btn btn-primary">
-          {locale === 'en' ? 'Contact us' : 'Jetzt anfragen'}
+        <h2>{t.ctaTitlePrefix} {task.name}?</h2>
+        <p>{t.ctaText}</p>
+        <a href={lp('/kontakt')} class="btn btn-primary">
+          {t.ctaButton}
         </a>
       </section>
     </div>

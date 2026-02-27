@@ -6,7 +6,9 @@ import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import Card from '../../components/ui/Card.astro';
 import { getCollection } from 'astro:content';
 
-const locale = Astro.currentLocale || 'de';
+import { localePath, type Locale } from '../../i18n/translations';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
 const pruefaufgaben = await getCollection('pruefaufgaben');
 
 const t = {
@@ -21,12 +23,30 @@ const t = {
     subtitle: 'Our CT Inspection Tasks at a Glance',
     description: 'From porosity analysis to reverse engineering — discover our industrial CT inspection methods.',
     learnMore: 'Learn more',
+  },
+  fr: {
+    title: 'Tâches de contrôle',
+    subtitle: 'Aperçu de nos tâches de contrôle CT',
+    description: 'De l’analyse de porosité à la rétro-ingénierie — découvrez nos méthodes de contrôle CT industrielles.',
+    learnMore: 'En savoir plus',
+  },
+  es: {
+    title: 'Tareas de inspección',
+    subtitle: 'Nuestras tareas de inspección CT de un vistazo',
+    description: 'Desde análisis de porosidad hasta ingeniería inversa: descubra nuestros métodos industriales de inspección CT.',
+    learnMore: 'Más información',
+  },
+  it: {
+    title: 'Attività di ispezione',
+    subtitle: 'Le nostre attività di ispezione CT in sintesi',
+    description: 'Dall’analisi di porosità al reverse engineering: scopri i nostri metodi industriali di ispezione CT.',
+    learnMore: 'Scopri di più',
   }
 }[locale] || {
-  title: 'Prüfaufgaben',
-  subtitle: 'Unsere CT-Prüfaufgaben im Überblick',
-  description: 'Von Porositätsanalyse bis Reverse Engineering — entdecken Sie unsere industriellen CT-Prüfverfahren.',
-  learnMore: 'Mehr erfahren',
+  title: 'Inspection Tasks',
+  subtitle: 'Our CT Inspection Tasks at a Glance',
+  description: 'From porosity analysis to reverse engineering — discover our industrial CT inspection methods.',
+  learnMore: 'Learn more',
 };
 ---
 
@@ -44,7 +64,7 @@ const t = {
 
       <div class="tasks-grid">
         {pruefaufgaben.map(task => (
-          <a href={`/pruefaufgaben/${task.data.slug}/`} class="task-card">
+          <a href={lp(`/pruefaufgaben/${task.data.slug}`)} class="task-card">
             <h3>{task.data.name}</h3>
             <p>{task.data.description}</p>
             <span class="learn-more">{t.learnMore} →</span>

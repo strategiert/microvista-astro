@@ -7,3 +7,97 @@ buchen](/kontakt/)
 
 [Gratis-Beratung  
 sichern](/kontakt/)
+
+**1\. Allgemeines, Geltungsbereich**
+
+1.1 Die vorliegenden Allgemeinen Geschäftsbedingungen gelten für alle gegenwärtigen und zukünftigen Geschäftsbeziehungen der Microvista GmbH, nachfolgend MICROVISTA, mit Kunden (nachfolgend AUFTRAGGEBER), die Unternehmer im Sinne des § 14 BGB oder juristische Personen des öffentlichen Rechts oder öffentlich-rechtlichen Sondervermögens sind.
+
+1.2 Mit Erteilung des Auftrags, spätestens jedoch mit Abnahme der Leistung bzw. Annahme der Lieferung, erklärt der AUFTRAGGEBER sein verbindliches Einverständnis zu diesen Geschäftsbedingungen.
+
+1.3 Abweichende oder ergänzende Allgemeine Geschäftsbedingungen des AUFTRAGGEBERS werden nicht Vertragsbestandteil, auch wenn Ihnen nicht ausdrücklich widersprochen wurde. 1.4 Änderungen, Ergänzungen oder sonstige Nebenabreden von Verträgen bedürfen in jedem Fall der schriftlichen Bestätigung.
+
+**2\. Vertragsabschluss, Auftragsdurchführung, Preise**
+
+2.1 Angebote der MICROVISTA sind freibleibend, sofern die Bindung an das Angebot nicht schriftlich vermerkt ist.
+
+2.2 Der Vertrag kommt durch eine schriftliche Auftragsbestätigung der MICROVISTA zustande. Für den Umfang der vertraglich geschuldeten Leistungen ist ausschließlich die schriftliche Auftragsbestätigung maßgeblich. Die schriftliche Auftragsbestätigung wird durch die Rechnung ersetzt, wenn der Auftrag durch MICROVISTA sofort ausgeführt wird.
+
+2.3 Der AUFTRAGGEBER hat MICROVISTA rechtzeitig alle erforderlichen Unterlagen, wie Zeichnungen, Pläne, Berechnungen oder Bescheinigungen vorzulegen, für etwaige benötigte Genehmigungen und Freigaben zu sorgen, jederzeit auftragsbezogenen Auskünfte zu erteilen und vor Beginn der Prüfung die notwendigen Prüfungsvorbereitungen zu treffen, d. h. vor allem die Prüfobjekte zugänglich zu machen. Kommt der AUFTRAGGEBER diesen Pflichten trotz Fristsetzung durch MICROVISTA nicht nach, so ist der Vertrag mit Fristablauf aufgehoben. In diesem Fall ist MICROVISTA berechtigt, eine Entschädigung nach § 642 BGB zu fordern.
+
+2.4 Die Preise verstehen sich in Euro, zuzüglich der gesetzlichen Umsatzsteuer ab Werk ohne Verpackung.
+
+**3\. Termine, Fristen, Verzug**
+
+3.1 Von MICROVISTA genannte Liefertermine oder ‑fristen sind grundsätzlich unverbindlich, soweit nicht im Einzelfalle ausdrücklich verbindliche Liefertermine (Fixtermine) vereinbart worden sind. Ist ein ausdrücklicher Fixtermin nicht vereinbart, tritt Leistungsverzug erst nach Leistungsaufforderung mit Fristsetzung (Mahnung) ein. Der AUFTRAGGEBER kann in diesem Fall erst nach Ablauf einer angemessenen Frist vom Vertrag zurücktreten oder Schadensersatz wegen Nichterfüllung verlangen.
+
+3.2 Wenn MICROVISTA, ihre gesetzlichen Vertreter oder Erfüllungsgehilfen hinsichtlich des Verzugseintritts Vorsatz oder grobe Fahrlässigkeit zu vertreten haben, oder ein Fixtermin vereinbart wurde oder das Interesse des AUFTRAGGEBERS nachweislich aufgrund des Verzugseintritts entfallen ist, haftete MICROVISTA nach den gesetzlichen Vorschriften. Soweit der Verzug auf der schuldhaften Verletzung einer wesentlichen Vertragspflicht beruht, ist die Haftung auf den vorhersehbaren, typischerweise eintretenden Schaden gegrenzt. Im Übrigen ist die Haftung ausgeschlossen.
+
+3.3 Jede Frist beginnt erst nach Eingang aller für die Ausführung der Leistung erforderlichen Unterlagen und nach Zahlungseingang, soweit Vorauszahlung vereinbart wurde.
+
+3.4 Wird die Leistung oder die Herstellung oder die Auslieferung des Werkes aus Gründen, die MICROVISTA nicht zu vertreten hat verhindert oder verzögert, so verlängert sich die Leistungszeit entsprechend um die nachweisbare Dauer des Hindernisses. Bei der Berechnung der Fristverlängerung ist eine angemessene Anlaufzeit zur Wiederaufnahme der Leistungshandlungen zu berücksichtigen. Leistungs- und Sekundäransprüche des AUFTRAGGEBERS während des Zeitraums sind ausgeschlossen.
+
+3.5 Bei wesentlicher Verschlechterung der Vermögensverhältnisse des AUFTRAGGEBERS, insbesondere bei Einstellung der Zahlungen oder Beantragung eines Insolvenzverfahrens, entfällt die Lieferverpflichtung der MICROVISTA. Diese entfällt im Übrigen bei grundlegenden Betriebsstörungen, insbesondere solchen in Folge von durch MICROVISTA nicht zu vertretenden Streiks und Aussperrungen bei MICROVISTA oder einem ihrer Lieferanten, Naturkatastrophen, Kriegszuständen oder anderen Fällen höherer Gewalt, welche die vertragsgemäße Leistung verhindern oder beeinträchtigen, für die Dauer und für den Umfang der entstandenen Behinderungen auch hinsichtlich der Nacherfüllung.
+
+3.6 MICROVISTA ist zu Teilleistungen oder ‑lieferungen berechtigt.
+
+3.7 Sofern eine Lieferung erforderlich ist, erfolgt sie auf Rechnung des AUFTRAGGEBERS. In diesem Fall geht die Gefahr des zufälligen Untergangs und der Verschlechterung der Ware mit der Übergabe der Lieferung an den Transporteur auf den AUFTRAGGEBER über.
+
+**4\. Abnahme, Datenverarbeitung, Zahlungsbedingungen**
+
+4.1 Die Abnahme erfolgt durch vorbehaltlose Ingebrauchnahme des Werkes oder durch vorbehaltlose Zahlung des vereinbarten Werklohnes. Es ist vereinbarungsgemäß von einer vorbehaltlosen Ingebrauchnahme auszugehen, wenn nach Übermittlung des unkörperlichen Werkes (Prüfbericht) per Datenfernübertragung oder Lieferung eines Datenträgers, in dem das Werk verkörpert ist, 8 Tage vergangen sind ohne dass der AUFTRAGGEBER MICROVISTA einen wesentlichen Mangel angezeigt hat.
+
+4.2 Rechnungen sind ohne Abzug innerhalb von 14 Kalendertagen nach Rechnungsdatum zu bezahlen, sofern nicht schriftlich ein anderes Zahlungsziel vereinbart wurde. Die Rechnung wird unter dem Tag der Lieferung, Ausführung, Teillieferung, Teilausführung oder der Anzeiger der Lieferbereitschaft (bei Annahmeverzug des AUFTRAGGEBERS) ausgestellt.
+
+4.3 MICROVISTA weist den AUFTRAGGEBER darauf hin, dass innerhalb des Unternehmens und der mit ihr verbundenen Unternehmen Daten über Geschäftsvorfälle verarbeitet werden und behält sich das Recht vor, die zur Erlangung einer Kreditsicherung erforderlichen Daten dem Versicherungsgeber zu übermitteln. Wird eine Versicherung der Forderung abgelehnt behält sich MICROVISTA eine Ausführung gegen Vorkasse vor.
+
+4.4 Bei Zahlungsverzug behält sich MICROVISTA die Geltendmachung eines über den gesetzlichen Verzugszins hinausgehenden Schaden vor. In diesem Fall ist dem AUFTRAGGEBER der Nachweis gestattet, dass MICROVISTA kein oder nur ein geringerer Schaden entstanden ist.
+
+4.5 Der AUFTRAGGEBER kann Zahlungsansprüche der MICROVISTA nur mit solchen Gegenansprüchen aufrechnen, die rechtskräftig festgestellt, unbestritten und von MICROVISTA anerkannt sind.
+
+4.6 Die Ausübung des Zurückbehaltungsrechts durch den AUFTRAGGEBER gegenüber vertraglich begründeten Zahlungsansprüchen der MICROVISTA aufgrund von Ansprüchen, die nicht in rechtlichem Zusammenhang mit diesem Vertrag stehen, ist ausgeschlossen.
+
+**5\. Gewährleistung, Haftung**
+
+5.1 Gewährleistungsansprüche verjähren in einem Jahr ab Annahme oder Ablieferung. Die Gewährleistungsfrist von einem Jahr gilt auch für sogenannte unkörperliche Werke (z. B. für die Erstellung eines Prüfberichtes oder die Entwicklung einer Individualsoftware). Die Gewährleistungsfrist von einem Jahr gilt nicht bei Bauwerken und bei beweglichen Sachen, die für Bauwerke verwendet werden; hier gilt die gesetzliche Regelung.
+
+5.2 Erkennt der AUFTRAGGEBER bei Erhalt der Lieferung Schäden an der Verpackung, hat er bei Annahme derselben von dem Transportunternehmen die Beschädigung detailliert schriftlich bestätigen zu lassen. Transportschäden, die erst nach Öffnen der Verpackung festgestellt werden, müssen MICROVISTA innerhalb von 5 Kalendertagen nach Erhalt der Lieferung schriftlich gemeldet werden. Zur Fristwahrung genügt die rechtzeitige Absendung der Mitteilung, die Beweislast hierfür trifft den AUFTRAGGEBER.
+
+5.3 Der AUFTRAGGEBER hat MICROVISTA, soweit erforderlich, bei der Beseitigung von Mängeln zu unterstützen, insbesondere auf Wunsch von MICROVISTA einen Datenträger mit den betreffenden Anpassungen oder Angaben zu übersenden.
+
+5.4 Veranlasst der AUFTRAGGEBER eine Überprüfung wegen behaupteter Fehler, so hat er die entstandenen Kosten zu tragen, wenn sich herausstellt, dass kein Mangel vorhanden ist.
+
+5.5 Die Gewährleistung erlischt für solche Anpassungen oder Leistungen, die der AUFTRAGGEBER ändert oder in die er sonst wie eingreift, es sei denn, dass der AUFTRAGGEBER im Zusammenhang mit der Mängelanzeige nachweist, dass der Eingriff für den Mangel nicht ursächlich ist.
+
+5.6 Weitergehende Gewährleistungsansprüche des AUFTRAGGEBERS, insbesondere wegen Mangelfolgeschäden – soweit diese nicht aus dem Fehlen von zugesicherten Eigenschaften resultieren – sind ausgeschlossen. Dies gilt nicht, soweit MICROVISTA Vorsatz oder grobe Fahrlässigkeit zur Last fällt.
+
+5.7 Eine Gewähr für die Eignung oder Brauchbarkeit des Werkes oder der sonstigen Leistung für den vom AUFTRAGGEBER vorgesehenen Zweck wird von MICROVISTA nicht übernommen, es sei denn, dass eine ausdrückliche schriftliche Bestätigung von Seiten der MICROVISTA aus besteht.
+
+**6\. Ausschluss von Schadensersatz**
+
+6.1 Vorbehaltlich der nachfolgenden Regelungen sind Schadenersatzansprüche des AUFTRAGGEBERS – egal aus welchem Rechtsgrund, auch für solche aus unerlaubter Handlung – für die einfach fahrlässige Verletzung von Pflichten durch MICROVISTA, ihre gesetzlichen Vertreter oder Erfüllungsgehilfen ausgeschlossen. Bei der einfach fahrlässigen Verletzung von Kardinalspflichten beschränkt sich die Haftung der MICROVISTA der Höhe nach auf den Auftragswert.
+
+6.2 Die vorstehenden Haftungsausschlüsse und Haftungsbegrenzungen gelten nicht in den Fällen verschuldensunabhängiger Haftung, insbesondere nach dem Produkthaftungsgesetz, bei Körper- und Gesundheitsschäden oder des Verlustes des Lebens oder des Fehlens von zugesicherten Eigenschaften, bei Vorsatz und grober Fahrlässigkeit.
+
+6.3 Im Falle des Verlustes oder Untergangs von bereitgestellten Mustern, Modellen oder Erzeugnissen des AUFTRAGGEBERS infolge höherer Gewalt beschränkt sich die Haftung der MICROVISTA auf den Materialwert.
+
+6.4 Die Haftung der MICROVISTA bei Datenverlust infolge der Verwendung der Werke oder Leistungen der MICROVISTA ist auf den Aufwand beschränkt, der notwendig ist, um anhand vorhandener Sicherungskopien die verlorenen Daten auf der Anlage des AUFTRAGGEBERS wiederherzustellen. Der AUFTRAGGEBER wird dahingehend zu einer eigenständigen regelmäßigen Datensicherung verpflichtet.
+
+**7\. Lizenz- und Urheberrechte**
+
+7.1 Etwaige Urheberrechte sowie Verwendungs- und Verwertungsrechte an von MICROVISTA hergestellten Werken bzw. erbrachten Dienstleistungen verbleiben unabhängig von der Lieferung an den AUFTRAGGEBER bei MICROVISTA, soweit nicht etwas anderes vereinbart ist. Der Nachbau einzelner Werke oder Teilen von Werken der MICROVISTA bedarf der schriftlichen Zustimmung von MICROVISTA. Die Vervielfältigung von Software der MICROVISTA ist dem AUFTRAGGEBER nur für den hausinternen Gebrauch bzw. zu Zwecken der Datensicherung gestattet.
+
+7.2 Für nicht von MICROVISTA hergestellte Software gelten die Vorschriften des jeweiligen Herstellers.
+
+**8\. Gerichtsstand**
+
+8.1 Gerichtsstand für alle aus dem Vertragsverhältnis entstehenden Ansprüche ist der für den Firmensitz der MICROVISTA zuständige Gerichtsort. MICROVISTA ist auch berechtigt, vor dem Gericht zu klagen, welches für den Sitz oder die beauftragende Niederlassung des AUFTRAGGEBERS zuständig ist.
+
+**9\. Schlussbestimmungen**
+
+9.1 Erfüllungsort für alle sich unmittelbar oder mittelbar aus dem Vertragsverhältnis ergebenden Verpflichtungen, einschließlich der Zahlungspflicht, ist mangels besonderer schriftlicher Vereinbarung der Firmensitz der MICROVISTA in 38889 Blankenburg.
+
+9.2 Die Unwirksamkeit einzelner Bestimmungen dieser Allgemeinen Geschäftsbedingungen oder ihrer Bestandteile lässt die Wirksamkeit der übrigen Regelungen unberührt. Die Vertragspartner sind im Rahmen des Zumutbaren verpflichtet, eine unwirksame Bestimmung durch eine ihrem wirtschaftlichen Erfolgt gleichkommende wirksame Regelung zu ersetzen, sofern dadurch keine wesentliche Änderung des Vertragsinhalts herbeigeführt wird. Das Gleiche gilt, falls ein regelungsbedürftiger Sachverhalt nicht ausdrücklich geregelt ist.
+
+9.3 Die Einbeziehung und Auslegung dieser allgemeinen Geschäftsbedingungen regelt sich ebenso wie Abschluss und Auslegung der Rechtsgeschäfte mit dem AUFTRAGGEBER ausschließlich nach dem Recht der Bundesrepublik Deutschland unter Ausschluss des UN- und internationalen Kaufrechts.
+
+9.4 Der AUFTRAGGEBER ermächtigt MICROVISTA unter Verzicht auf eine Mitteilung, personenbezogenen Daten im Rahmen der Zulässigkeit des BDSG und soweit zur Durchführung des Vertragsverhältnisses notwendig, zu verarbeiten und den mit der Durchführung des Vertragsverhältnisses innerhalb der MICROVISTA und innerhalb der mit ihr verbunden Unternehmen befassten Stellen zu übermitteln.

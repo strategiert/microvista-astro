@@ -1,15 +1,32 @@
 ---
-const locale = Astro.currentLocale || 'de';
+import { localePath, type Locale } from '../../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
 const year = new Date().getFullYear();
+
+const labels = {
+  de: { labor: 'Labor Services', resources: 'Ressourcen', company: 'Unternehmen', rights: 'Alle Rechte vorbehalten.' },
+  en: { labor: 'Lab Services', resources: 'Resources', company: 'Company', rights: 'All rights reserved.' },
+  fr: { labor: 'Services labo', resources: 'Ressources', company: 'Entreprise', rights: 'Tous droits réservés.' },
+  es: { labor: 'Servicios de laboratorio', resources: 'Recursos', company: 'Empresa', rights: 'Todos los derechos reservados.' },
+  it: { labor: 'Servizi laboratorio', resources: 'Risorse', company: 'Azienda', rights: 'Tutti i diritti riservati.' }
+}[locale] || { labor: 'Lab Services', resources: 'Resources', company: 'Company', rights: 'All rights reserved.' };
 ---
 
 <footer class="footer-labor">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="/" class="logo">
-          <div class="logo-mark">M</div>
-          <span class="logo-text">Microvista</span>
+        <a href={lp('/')} class="logo" aria-label="Microvista">
+          <img
+            class="logo-image"
+            src="/images/logos/2024_08-MV-Logo_weiss.png"
+            alt="Microvista"
+            width="705"
+            height="399"
+            loading="lazy"
+          />
         </a>
         <p class="tagline">Industrielle Computertomographie.<br/>Anywhere. Anytime. Fast.</p>
         <div class="contact-info">
@@ -22,42 +39,42 @@ const year = new Date().getFullYear();
       </div>
       
       <div class="footer-links">
-        <h4>{locale === 'de' ? 'Labor Services' : 'Lab Services'}</h4>
+        <h4>{labels.labor}</h4>
         <ul>
-          <li><a href="/labor/erstmusterpruefung">Erstmusterprüfung</a></li>
-          <li><a href="/labor/schadensanalyse">Schadensanalyse</a></li>
-          <li><a href="/labor/reverse-engineering">Reverse Engineering</a></li>
-          <li><a href="/labor/prototypen">Prototypen</a></li>
+          <li><a href={lp('/labor/erstmusterpruefung')}>Erstmusterprüfung</a></li>
+          <li><a href={lp('/labor/schadensanalyse')}>Schadensanalyse</a></li>
+          <li><a href={lp('/labor/reverse-engineering')}>Reverse Engineering</a></li>
+          <li><a href={lp('/kontakt')}>Kontakt</a></li>
         </ul>
       </div>
       
       <div class="footer-links">
-        <h4>{locale === 'de' ? 'Ressourcen' : 'Resources'}</h4>
+        <h4>{labels.resources}</h4>
         <ul>
-          <li><a href="/magazin">{locale === 'de' ? 'Magazin' : 'Magazine'}</a></li>
-          <li><a href="/wiki">{locale === 'de' ? 'Wiki' : 'Wiki'}</a></li>
-          <li><a href="/ressourcen/case-studies">Case Studies</a></li>
-          <li><a href="/ressourcen/whitepaper">Whitepaper</a></li>
+          <li><a href={lp('/magazin')}>Magazin</a></li>
+          <li><a href={lp('/wiki')}>Wiki</a></li>
+          <li><a href={lp('/dienstleistungen')}>Dienstleistungen</a></li>
+          <li><a href={lp('/faq')}>FAQ</a></li>
         </ul>
       </div>
       
       <div class="footer-links">
-        <h4>{locale === 'de' ? 'Unternehmen' : 'Company'}</h4>
+        <h4>{labels.company}</h4>
         <ul>
-          <li><a href="/unternehmen/team">Team</a></li>
-          <li><a href="/unternehmen/karriere">Karriere</a></li>
-          <li><a href="/unternehmen/news">News</a></li>
-          <li><a href="/kontakt">Kontakt</a></li>
+          <li><a href={lp('/team')}>Team</a></li>
+          <li><a href={lp('/zertifizierungen')}>Zertifizierungen</a></li>
+          <li><a href={lp('/newsroom')}>Newsroom</a></li>
+          <li><a href={lp('/kontakt')}>Kontakt</a></li>
         </ul>
       </div>
     </div>
     
     <div class="footer-bottom">
-      <p>&copy; {year} Microvista GmbH. Alle Rechte vorbehalten.</p>
+      <p>&copy; {year} Microvista GmbH. {labels.rights}</p>
       <nav class="legal-nav">
-        <a href="/impressum">Impressum</a>
-        <a href="/datenschutz">Datenschutz</a>
-        <a href="/agb">AGB</a>
+        <a href={lp('/impressum')}>Impressum</a>
+        <a href={lp('/datenschutz')}>Datenschutz</a>
+        <a href={lp('/agb')}>AGB</a>
       </nav>
     </div>
   </div>
@@ -86,29 +103,14 @@ const year = new Date().getFullYear();
   .footer-brand .logo {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
     text-decoration: none;
-    color: white;
     margin-bottom: var(--space-4);
   }
   
-  .footer-brand .logo-mark {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-lg);
-    background: white;
-    color: var(--primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-heading);
-    font-weight: 700;
-  }
-  
-  .footer-brand .logo-text {
-    font-family: var(--font-heading);
-    font-size: var(--text-xl);
-    font-weight: 700;
+  .footer-brand .logo-image {
+    display: block;
+    width: auto;
+    height: 46px;
   }
   
   .tagline {

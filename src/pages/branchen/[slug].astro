@@ -8,11 +8,69 @@ import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import { serviceSchema, faqSchema } from '../../components/seo/schemas';
+import { localePath, type Locale } from '../../i18n/translations';
 
 const { slug } = Astro.params;
 const branchen = await getCollection('branchen');
 const branche = branchen.find(b => (b.data.slug || b.id) === slug) || null;
-const locale = Astro.currentLocale || 'de';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const ui = {
+  de: {
+    industries: 'Branchen',
+    heroPrefix: 'CT-Prüfung für',
+    challenges: 'Ihre Herausforderungen',
+    solutions: 'Unsere Lösungen',
+    applications: 'Anwendungen',
+    contactBtn: 'Beratung anfragen',
+    labBtn: 'Labor-Services kennenlernen'
+  },
+  en: {
+    industries: 'Industries',
+    heroPrefix: 'CT inspection for',
+    challenges: 'Your Challenges',
+    solutions: 'Our Solutions',
+    applications: 'Applications',
+    contactBtn: 'Request Consultation',
+    labBtn: 'Learn about Lab Services'
+  },
+  fr: {
+    industries: 'Secteurs',
+    heroPrefix: 'Inspection CT pour',
+    challenges: 'Vos défis',
+    solutions: 'Nos solutions',
+    applications: 'Applications',
+    contactBtn: 'Demander une consultation',
+    labBtn: 'Découvrir les services labo'
+  },
+  es: {
+    industries: 'Sectores',
+    heroPrefix: 'Inspección CT para',
+    challenges: 'Sus desafíos',
+    solutions: 'Nuestras soluciones',
+    applications: 'Aplicaciones',
+    contactBtn: 'Solicitar consulta',
+    labBtn: 'Conocer servicios de laboratorio'
+  },
+  it: {
+    industries: 'Settori',
+    heroPrefix: 'Ispezione CT per',
+    challenges: 'Le tue sfide',
+    solutions: 'Le nostre soluzioni',
+    applications: 'Applicazioni',
+    contactBtn: 'Richiedi consulenza',
+    labBtn: 'Scopri i servizi di laboratorio'
+  }
+}[locale] || {
+  industries: 'Industries',
+  heroPrefix: 'CT inspection for',
+  challenges: 'Your Challenges',
+  solutions: 'Our Solutions',
+  applications: 'Applications',
+  contactBtn: 'Request Consultation',
+  labBtn: 'Learn about Lab Services'
+};
 
 // Fallback-Daten falls keine Collection-Daten
 const fallbackData: Record<string, any> = {
@@ -279,12 +337,12 @@ if (data.faq && data.faq.length > 0) {
     <section class="hero">
       <div class="container">
         <Breadcrumbs items={[
-          { label: 'Branchen', href: '/branchen' },
+          { label: ui.industries, href: lp('/branchen') },
           { label: data.name }
         ]} />
 
         <div class="hero-content">
-          <h1>CT-Prüfung für {data.name}</h1>
+          <h1>{ui.heroPrefix} {data.name}</h1>
           <p class="lead">{data.description}</p>
         </div>
       </div>
@@ -311,7 +369,7 @@ if (data.faq && data.faq.length > 0) {
     {data.challenges && data.challenges.length > 0 && (
       <section class="section">
         <div class="container">
-          <h2>{locale === 'en' ? 'Your Challenges' : 'Ihre Herausforderungen'}</h2>
+          <h2>{ui.challenges}</h2>
           <div class="challenges-grid">
             {data.challenges.map((challenge: any) => (
               <div class="challenge-card">
@@ -328,7 +386,7 @@ if (data.faq && data.faq.length > 0) {
     {data.solutions && data.solutions.length > 0 && (
       <section class="section bg-surface">
         <div class="container">
-          <h2>{locale === 'en' ? 'Our Solutions' : 'Unsere Lösungen'}</h2>
+          <h2>{ui.solutions}</h2>
           <div class="solutions-grid">
             {data.solutions.map((solution: any) => (
               <div class="solution-card">
@@ -351,7 +409,7 @@ if (data.faq && data.faq.length > 0) {
     {data.useCases && data.useCases.length > 0 && (
       <section class="section">
         <div class="container">
-          <h2>{locale === 'en' ? 'Applications' : 'Anwendungen'}</h2>
+          <h2>{ui.applications}</h2>
           <div class="usecases-list">
             {data.useCases.map((useCase: string) => (
               <span class="usecase-tag">{useCase}</span>
@@ -368,11 +426,11 @@ if (data.faq && data.faq.length > 0) {
           <h2>{data.cta?.title}</h2>
           <p>{data.cta?.description}</p>
           <div class="cta-buttons">
-            <a href="/kontakt" class="btn btn-primary btn-lg">
-              {locale === 'en' ? 'Request Consultation' : 'Beratung anfragen'}
+            <a href={lp('/kontakt')} class="btn btn-primary btn-lg">
+              {ui.contactBtn}
             </a>
-            <a href="/labor" class="btn btn-secondary btn-lg">
-              {locale === 'en' ? 'Learn about Lab Services' : 'Labor-Services kennenlernen'}
+            <a href={lp('/labor')} class="btn btn-secondary btn-lg">
+              {ui.labBtn}
             </a>
           </div>
         </div>

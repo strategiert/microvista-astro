@@ -4,23 +4,49 @@ import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 
-const locale = Astro.currentLocale || 'de';
+import { localePath, type Locale } from '../../i18n/translations';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
 
 const services = [
   {
     slug: 'ct-labor',
-    name: { de: 'CT-Labor', en: 'CT Laboratory' },
-    desc: { de: 'Hochauflösende CT-Scans in unserem zertifizierten Labor.', en: 'High-resolution CT scans in our certified laboratory.' },
+    name: { de: 'CT-Labor', en: 'CT Laboratory', fr: 'Laboratoire CT', es: 'Laboratorio CT', it: 'Laboratorio CT' },
+    desc: {
+      de: 'Hochauflösende CT-Scans in unserem zertifizierten Labor.',
+      en: 'High-resolution CT scans in our certified laboratory.',
+      fr: 'Scans CT haute résolution dans notre laboratoire certifié.',
+      es: 'Escaneos CT de alta resolución en nuestro laboratorio certificado.',
+      it: 'Scansioni CT ad alta risoluzione nel nostro laboratorio certificato.'
+    },
   },
   {
     slug: 'ct-datenauswertung',
-    name: { de: 'CT-Datenauswertung', en: 'CT Data Analysis' },
-    desc: { de: 'Professionelle Auswertung Ihrer CT-Scandaten.', en: 'Professional analysis of your CT scan data.' },
+    name: { de: 'CT-Datenauswertung', en: 'CT Data Analysis', fr: 'Analyse des données CT', es: 'Análisis de datos CT', it: 'Analisi dati CT' },
+    desc: {
+      de: 'Professionelle Auswertung Ihrer CT-Scandaten.',
+      en: 'Professional analysis of your CT scan data.',
+      fr: 'Analyse professionnelle de vos données de scan CT.',
+      es: 'Análisis profesional de sus datos de escaneo CT.',
+      it: 'Analisi professionale dei vostri dati di scansione CT.'
+    },
   },
   {
     slug: 'scanexpress',
-    name: { de: 'SCANEXPRESS — Mobiles CT', en: 'SCANEXPRESS — Mobile CT' },
-    desc: { de: 'Mobiles industrielles CT direkt bei Ihnen vor Ort.', en: 'Mobile industrial CT directly at your location.' },
+    name: {
+      de: 'SCANEXPRESS — Mobiles CT',
+      en: 'SCANEXPRESS — Mobile CT',
+      fr: 'SCANEXPRESS — CT mobile',
+      es: 'SCANEXPRESS — CT móvil',
+      it: 'SCANEXPRESS — CT mobile'
+    },
+    desc: {
+      de: 'Mobiles industrielles CT direkt bei Ihnen vor Ort.',
+      en: 'Mobile industrial CT directly at your location.',
+      fr: 'CT industriel mobile directement sur votre site.',
+      es: 'CT industrial móvil directamente en sus instalaciones.',
+      it: 'CT industriale mobile direttamente presso la vostra sede.'
+    },
   },
 ];
 
@@ -36,12 +62,30 @@ const t = {
     subtitle: 'Our CT Services',
     description: 'CT laboratory, mobile CT solutions and data analysis — all from one source.',
     learnMore: 'Learn more',
+  },
+  fr: {
+    title: 'Services',
+    subtitle: 'Nos services CT',
+    description: 'Laboratoire CT, solutions CT mobiles et analyse de données — tout auprès d’un seul partenaire.',
+    learnMore: 'En savoir plus',
+  },
+  es: {
+    title: 'Servicios',
+    subtitle: 'Nuestros servicios CT',
+    description: 'Laboratorio CT, soluciones CT móviles y análisis de datos — todo de una sola fuente.',
+    learnMore: 'Más información',
+  },
+  it: {
+    title: 'Servizi',
+    subtitle: 'I nostri servizi CT',
+    description: 'Laboratorio CT, soluzioni CT mobili e analisi dati — tutto da un unico partner.',
+    learnMore: 'Scopri di più',
   }
 }[locale] || {
-  title: 'Dienstleistungen',
-  subtitle: 'Unsere CT-Dienstleistungen',
-  description: 'CT-Labor, mobile CT-Lösungen und Datenauswertung — alles aus einer Hand.',
-  learnMore: 'Mehr erfahren',
+  title: 'Services',
+  subtitle: 'Our CT Services',
+  description: 'CT laboratory, mobile CT solutions and data analysis — all from one source.',
+  learnMore: 'Learn more',
 };
 ---
 
@@ -59,9 +103,9 @@ const t = {
 
       <div class="services-grid">
         {services.map(service => (
-          <a href={`/dienstleistungen/${service.slug}/`} class="service-card">
-            <h3>{service.name[locale as 'de' | 'en'] || service.name.de}</h3>
-            <p>{service.desc[locale as 'de' | 'en'] || service.desc.de}</p>
+          <a href={lp(`/dienstleistungen/${service.slug}`)} class="service-card">
+            <h3>{service.name[locale] || service.name.en || service.name.de}</h3>
+            <p>{service.desc[locale] || service.desc.en || service.desc.de}</p>
             <span class="learn-more">{t.learnMore} →</span>
           </a>
         ))}

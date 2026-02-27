@@ -3,7 +3,7 @@
 GET THE INSPECTION CAPACITY AS YOU NEED IT – Anywhere. Anytime. Fast.
 
 [Express-Inspection  
-booking](/en/kontakt/)
+booking](/kontakt)
 
 [Schedule free consultation  
-here!](/en/kontakt/)
+here!](/kontakt)

@@ -4,22 +4,44 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
 import { loadStaticPage } from '../lib/load-static-page';
+import { type Locale } from '../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
-const content = await loadStaticPage(locale === 'en' ? 'zertifizierungen-en.md' : 'zertifizierungen-de.md');
+const locale = (Astro.locals.locale || 'de') as Locale;
+const content = await loadStaticPage('zertifizierungen', locale);
 
-const title = locale === 'en' ? 'Certifications' : 'Zertifizierungen';
-const description = locale === 'en'
-  ? 'Microvista certifications — ISO 9001, ISO 17025, EN 9100.'
-  : 'Microvista Zertifizierungen — ISO 9001, ISO 17025, EN 9100.';
+const labels = {
+  de: {
+    title: 'Zertifizierungen',
+    description: 'Microvista Zertifizierungen — ISO 9001, ISO 17025, EN 9100.'
+  },
+  en: {
+    title: 'Certifications',
+    description: 'Microvista certifications — ISO 9001, ISO 17025, EN 9100.'
+  },
+  fr: {
+    title: 'Certifications',
+    description: 'Certifications Microvista — ISO 9001, ISO 17025, EN 9100.'
+  },
+  es: {
+    title: 'Certificaciones',
+    description: 'Certificaciones de Microvista — ISO 9001, ISO 17025, EN 9100.'
+  },
+  it: {
+    title: 'Certificazioni',
+    description: 'Certificazioni Microvista — ISO 9001, ISO 17025, EN 9100.'
+  }
+}[locale] || {
+  title: 'Zertifizierungen',
+  description: 'Microvista Zertifizierungen — ISO 9001, ISO 17025, EN 9100.'
+};
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={labels.title} description={labels.description}>
   <Header slot="header" />
 
   <div class="certs-page">
     <div class="container">
-      <Breadcrumbs items={[{ label: title }]} />
+      <Breadcrumbs items={[{ label: labels.title }]} />
       <article class="certs-content" set:html={content} />
     </div>
   </div>

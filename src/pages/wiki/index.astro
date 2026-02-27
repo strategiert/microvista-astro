@@ -8,14 +8,24 @@ import Footer from '../../components/layout/Footer.astro';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import Tag from '../../components/ui/Tag.astro';
 import { getCollection } from 'astro:content';
+import { localePath, type Locale } from '../../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+const contentLocale = locale === 'de' ? 'de' : 'en';
 
 // Alle Wiki-Einträge laden
 const allEntries = await getCollection('wiki');
 
+const localizedEntries = allEntries.filter((entry) => {
+  if (contentLocale === 'de') {
+    return !entry.id.startsWith('en/');
+  }
+  return entry.id.startsWith('en/');
+});
+
 // Alphabetisch sortieren
-const entries = allEntries.sort((a, b) =>
+const entries = localizedEntries.sort((a, b) =>
   a.data.term.localeCompare(b.data.term, locale)
 );
 
@@ -72,10 +82,67 @@ const content = {
       'hardware': 'Hardware',
       'allgemein': 'General'
     }
+  },
+  fr: {
+    title: 'Glossaire CT',
+    subtitle: 'Termes de la tomographie industrielle expliqués clairement',
+    search: 'Rechercher un terme...',
+    categories: 'Catégories',
+    allCategories: 'Tous',
+    noEntries: 'Aucune entrée pour le moment.',
+    entries: 'entrées',
+    categoryLabels: {
+      'grundlagen': 'Bases CT',
+      'verfahren': 'Méthodes',
+      'qm': 'Management qualité',
+      'materialien': 'Matériaux',
+      'normen': 'Normes',
+      'software': 'Logiciel',
+      'hardware': 'Matériel',
+      'allgemein': 'Général'
+    }
+  },
+  es: {
+    title: 'Glosario CT',
+    subtitle: 'Términos de tomografía industrial explicados claramente',
+    search: 'Buscar término...',
+    categories: 'Categorías',
+    allCategories: 'Todos',
+    noEntries: 'Aún no hay entradas.',
+    entries: 'entradas',
+    categoryLabels: {
+      'grundlagen': 'Fundamentos CT',
+      'verfahren': 'Métodos',
+      'qm': 'Gestión de calidad',
+      'materialien': 'Materiales',
+      'normen': 'Normas',
+      'software': 'Software',
+      'hardware': 'Hardware',
+      'allgemein': 'General'
+    }
+  },
+  it: {
+    title: 'Glossario CT',
+    subtitle: 'Termini della tomografia industriale spiegati chiaramente',
+    search: 'Cerca termine...',
+    categories: 'Categorie',
+    allCategories: 'Tutti',
+    noEntries: 'Nessuna voce per ora.',
+    entries: 'voci',
+    categoryLabels: {
+      'grundlagen': 'Fondamenti CT',
+      'verfahren': 'Metodi',
+      'qm': 'Gestione qualità',
+      'materialien': 'Materiali',
+      'normen': 'Norme',
+      'software': 'Software',
+      'hardware': 'Hardware',
+      'allgemein': 'Generale'
+    }
   }
 };
 
-const t = content[locale as keyof typeof content] || content.de;
+const t = content[locale as keyof typeof content] || content.en || content.de;
 ---
 
 <BaseLayout
@@ -111,9 +178,9 @@ const t = content[locale as keyof typeof content] || content.de;
 
     <!-- Category Filter -->
     <nav class="category-filter">
-      <Tag href="/wiki" variant="primary">{t.allCategories}</Tag>
+      <Tag href={lp('/wiki')} variant="primary">{t.allCategories}</Tag>
       {categories.map(cat => (
-        <Tag href={`/wiki/kategorie/${cat}`} variant="default">
+        <Tag href={lp(`/wiki/kategorie/${cat}`)} variant="default">
           {t.categoryLabels[cat as keyof typeof t.categoryLabels] || cat}
         </Tag>
       ))}
@@ -146,7 +213,7 @@ const t = content[locale as keyof typeof content] || content.de;
             <h2 class="letter-heading">{letter}</h2>
             <div class="entries-list">
               {letterEntries.map(entry => (
-                <a href={`/wiki/${entry.slug}`} class="wiki-entry">
+                <a href={lp(`/wiki/${entry.slug}`)} class="wiki-entry">
                   <div class="entry-main">
                     <h3>{entry.data.term}</h3>
                     <p>{entry.data.definition}</p>

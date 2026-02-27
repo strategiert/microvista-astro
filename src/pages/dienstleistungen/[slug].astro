@@ -4,23 +4,61 @@ import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import { loadStaticPage } from '../../lib/load-static-page';
+import { localePath, type Locale } from '../../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
 
 const services: Record<string, { name: Record<string, string>; seoDesc: Record<string, string>; file: string }> = {
   'ct-labor': {
-    name: { de: 'CT-Labor', en: 'CT Laboratory' },
-    seoDesc: { de: 'CT-Labor der Microvista GmbH — akkreditiert nach ISO 17025. Hochauflösende industrielle CT-Scans.', en: 'CT Laboratory of Microvista GmbH — accredited to ISO 17025. High-resolution industrial CT scans.' },
+    name: {
+      de: 'CT-Labor',
+      en: 'CT Laboratory',
+      fr: 'Laboratoire CT',
+      es: 'Laboratorio CT',
+      it: 'Laboratorio CT'
+    },
+    seoDesc: {
+      de: 'CT-Labor der Microvista GmbH — akkreditiert nach ISO 17025. Hochauflösende industrielle CT-Scans.',
+      en: 'CT Laboratory of Microvista GmbH — accredited to ISO 17025. High-resolution industrial CT scans.',
+      fr: 'Laboratoire CT de Microvista GmbH — accrédité ISO 17025. Scans CT industriels haute résolution.',
+      es: 'Laboratorio CT de Microvista GmbH — acreditado según ISO 17025. Escaneos CT industriales de alta resolución.',
+      it: 'Laboratorio CT di Microvista GmbH — accreditato ISO 17025. Scansioni CT industriali ad alta risoluzione.'
+    },
     file: 'dienstleistung-ct-labor.md',
   },
   'ct-datenauswertung': {
-    name: { de: 'CT-Datenauswertung', en: 'CT Data Analysis' },
-    seoDesc: { de: 'CT-Datenauswertung bei Microvista — Porositätsanalyse, CAD-Vergleich, Wanddickenmessung und mehr.', en: 'CT data analysis at Microvista — porosity analysis, CAD comparison, wall thickness measurement and more.' },
+    name: {
+      de: 'CT-Datenauswertung',
+      en: 'CT Data Analysis',
+      fr: 'Analyse des données CT',
+      es: 'Análisis de datos CT',
+      it: 'Analisi dati CT'
+    },
+    seoDesc: {
+      de: 'CT-Datenauswertung bei Microvista — Porositätsanalyse, CAD-Vergleich, Wanddickenmessung und mehr.',
+      en: 'CT data analysis at Microvista — porosity analysis, CAD comparison, wall thickness measurement and more.',
+      fr: 'Analyse de données CT chez Microvista — porosité, comparaison CAO, mesure d’épaisseur et plus.',
+      es: 'Análisis de datos CT en Microvista: porosidad, comparación CAD, medición de espesor y más.',
+      it: 'Analisi dati CT in Microvista — porosità, confronto CAD, misura spessori e altro.'
+    },
     file: 'dienstleistung-ct-datenauswertung.md',
   },
   'scanexpress': {
-    name: { de: 'SCANEXPRESS — Mobiles industrielles CT', en: 'SCANEXPRESS — Mobile Industrial CT' },
-    seoDesc: { de: 'SCANEXPRESS — mobiles industrielles CT von Microvista. CT-Prüfung direkt vor Ort, flexibel mietbar.', en: 'SCANEXPRESS — mobile industrial CT by Microvista. CT inspection on-site, flexibly rentable.' },
+    name: {
+      de: 'SCANEXPRESS — Mobiles industrielles CT',
+      en: 'SCANEXPRESS — Mobile Industrial CT',
+      fr: 'SCANEXPRESS — CT industriel mobile',
+      es: 'SCANEXPRESS — CT industrial móvil',
+      it: 'SCANEXPRESS — CT industriale mobile'
+    },
+    seoDesc: {
+      de: 'SCANEXPRESS — mobiles industrielles CT von Microvista. CT-Prüfung direkt vor Ort, flexibel mietbar.',
+      en: 'SCANEXPRESS — mobile industrial CT by Microvista. CT inspection on-site, flexibly rentable.',
+      fr: 'SCANEXPRESS — CT industriel mobile de Microvista. Contrôle CT sur site, location flexible.',
+      es: 'SCANEXPRESS — CT industrial móvil de Microvista. Inspección CT in situ con alquiler flexible.',
+      it: 'SCANEXPRESS — CT industriale mobile di Microvista. Ispezione CT in loco, noleggio flessibile.'
+    },
     file: 'dienstleistung-scanexpress.md',
   },
 };
@@ -29,9 +67,47 @@ const { slug } = Astro.params;
 const service = services[slug!];
 if (!service) return Astro.redirect('/dienstleistungen/');
 
-const name = service.name[locale] || service.name.de;
-const seoDesc = service.seoDesc[locale] || service.seoDesc.de;
+const name = service.name[locale] || service.name.en || service.name.de;
+const seoDesc = service.seoDesc[locale] || service.seoDesc.en || service.seoDesc.de;
 const content = await loadStaticPage(service.file);
+
+const ui = {
+  de: {
+    services: 'Dienstleistungen',
+    interested: 'Interessiert?',
+    contactText: 'Kontaktieren Sie uns für eine unverbindliche Beratung.',
+    contactBtn: 'Jetzt anfragen'
+  },
+  en: {
+    services: 'Services',
+    interested: 'Interested?',
+    contactText: 'Contact us for a non-binding consultation.',
+    contactBtn: 'Get in touch'
+  },
+  fr: {
+    services: 'Services',
+    interested: 'Intéressé ?',
+    contactText: 'Contactez-nous pour un conseil sans engagement.',
+    contactBtn: 'Nous contacter'
+  },
+  es: {
+    services: 'Servicios',
+    interested: '¿Interesado?',
+    contactText: 'Contáctenos para una consulta sin compromiso.',
+    contactBtn: 'Contactar'
+  },
+  it: {
+    services: 'Servizi',
+    interested: 'Interessato?',
+    contactText: 'Contattaci per una consulenza senza impegno.',
+    contactBtn: 'Contattaci'
+  }
+}[locale] || {
+  services: 'Services',
+  interested: 'Interested?',
+  contactText: 'Contact us for a non-binding consultation.',
+  contactBtn: 'Get in touch'
+};
 ---
 
 <BaseLayout title={name} description={seoDesc}>
@@ -40,17 +116,17 @@ const content = await loadStaticPage(service.file);
   <div class="service-page">
     <div class="container">
       <Breadcrumbs items={[
-        { label: locale === 'en' ? 'Services' : 'Dienstleistungen', href: '/dienstleistungen/' },
+        { label: ui.services, href: lp('/dienstleistungen') },
         { label: name }
       ]} />
 
       <article class="service-content" set:html={content} />
 
       <section class="cta-section">
-        <h2>{locale === 'en' ? 'Interested?' : 'Interessiert?'}</h2>
-        <p>{locale === 'en' ? 'Contact us for a non-binding consultation.' : 'Kontaktieren Sie uns für eine unverbindliche Beratung.'}</p>
-        <a href="/kontakt/" class="btn btn-primary">
-          {locale === 'en' ? 'Get in touch' : 'Jetzt anfragen'}
+        <h2>{ui.interested}</h2>
+        <p>{ui.contactText}</p>
+        <a href={lp('/kontakt')} class="btn btn-primary">
+          {ui.contactBtn}
         </a>
       </section>
     </div>

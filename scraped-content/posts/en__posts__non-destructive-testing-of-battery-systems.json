@@ -1,0 +1,24 @@
+{
+  "url": "https://www.microvista.de/en/posts/non-destructive-testing-of-battery-systems/",
+  "slug": "en/posts/non-destructive-testing-of-battery-systems",
+  "title": "Non Destructive Testing of Battery Systems",
+  "type": "post",
+  "lang": "en",
+  "metaDescription": "Battery systems can have deviant qualities. Find out here how industrial CT is making sure that those are quality approved.",
+  "ogImage": "https://www.microvista.de/wp-content/uploads/2024/01/Batteriesystem-verbrannt-im-CT-Scan-1.webp",
+  "canonical": "https://www.microvista.de/en/posts/non-destructive-testing-of-battery-systems/",
+  "markdown": "## Ensuring the longevity of battery systems\n\nDue to their high energy density, lithium-ion batteries can be found in numerous technical devices – including smartphones, tablets, laptops, cameras & even electric cars.\n\nHowever, the batteries harbor dangers, which is why an inspection for safety-relevant defects is very important: the contact, insulation and electrolyte foils can be demolished if they are installed incorrectly, which can lead to a short circuit. This can result in an excessive thermal reaction of the electrolyte; the resulting outgassing ultimately causes the battery to expand externally. This not only leads to a loss of performance, but can also cause explosions.\n\nIn addition to assembly and production errors, thermal effects, mechanical damage or inappropriate storage can also cause internal and external short circuits, which can trigger life-threatening fires and explosions. To avoid explosions, rechargeable batteries containing lithium that have become bloated, deformed or outgassed should no longer be used.\n\n![CT-Bild von einem beschädigten Lithium-Ionen-Akku - Zerstörungsfreie Prüfung von Batteriesystemen](https://www.microvista.de/wp-content/uploads/2022/08/CT-Bild-von-einem-beschaedigten-Lithium-Ionen-Akku-Zerstoerungsfreie-Pruefung-von-Batteriesystemen.jpg)\n\nCT image of a damaged battery\n\n## Practical example: assembly control of lithium-ion batteries in smartphones\n\n### The challenge\n\nSmartphone battery explosions have already occurred in the past, even at well-known smartphone manufacturers. This is due to production and assembly errors in which the contacts, insulation or electrolyte film of the battery are damaged.\n\n### Possible consequences\n\nProduction and assembly errors can lead to a short circuit, which in turn can cause a strong thermal reaction of the electrolyte. The resulting outgassing leads to external swelling, a severe loss of performance & in the worst case scenario, a fire or explosion can occur. As many smartphone users carry the technical devices in close proximity to their bodies, there may be a risk to life.\n\n![CT-Bild von einem Smartphone - zerstörungsfreie Prüfung von Batteriesystemen](https://www.microvista.de/wp-content/uploads/2022/08/CT-Bild-von-Smartphone-zerstoerungsfreie-Pruefung-von-Batteriesystemen.jpg)\n\nCT scan of a smartphone\n\n### Advantages of the CT inspection\n\nIndustrial computed tomography can be used for non-destructive testing of lithium batteries in smartphones, as it is not necessary to dismantle the battery in small devices. Damaged batteries are detected directly in this way. After an IO inspection, the device can be used immediately.Mit der Qualitätsprüfung von Lithium-Ionen-Batterien können Hersteller so Rechtsstreitigkeiten & einem negativen Image entgegenwirken.\n\n[Schedule a free consultation](https://www.microvista.de/en/contact/)",
+  "htmlLength": 14171,
+  "markdownLength": 2855,
+  "images": [
+    "https://www.microvista.de/wp-content/uploads/2022/08/CT-Bild-von-einem-beschaedigten-Lithium-Ionen-Akku-Zerstoerungsfreie-Pruefung-von-Batteriesystemen.jpg",
+    "https://www.microvista.de/wp-content/uploads/2022/08/CT-Bild-von-einem-beschaedigten-Lithium-Ionen-Akku-Zerstoerungsfreie-Pruefung-von-Batteriesystemen-300x224.jpg",
+    "https://www.microvista.de/wp-content/uploads/2022/08/CT-Bild-von-einem-beschaedigten-Lithium-Ionen-Akku-Zerstoerungsfreie-Pruefung-von-Batteriesystemen-768x573.jpg",
+    "https://www.microvista.de/wp-content/uploads/2022/08/CT-Bild-von-Smartphone-zerstoerungsfreie-Pruefung-von-Batteriesystemen.jpg",
+    "https://www.microvista.de/wp-content/uploads/2022/08/CT-Bild-von-Smartphone-zerstoerungsfreie-Pruefung-von-Batteriesystemen-300x244.jpg",
+    "https://www.microvista.de/wp-content/uploads/2026/01/2025_04_MV_Blog_Trends-2026.png",
+    "https://www.microvista.de/wp-content/uploads/2026/01/2025_04_MV_Blog_Trends-2026-300x169.png",
+    "https://www.microvista.de/wp-content/uploads/2026/01/2025_04_MV_Blog_Trends-2026-768x432.png"
+  ],
+  "scrapedAt": "2026-02-26T09:47:59.548Z"
+}

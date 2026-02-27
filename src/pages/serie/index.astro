@@ -1,7 +1,9 @@
 ---
 import SerieLayout from '../../layouts/SerieLayout.astro';
+import { localePath, type Locale } from '../../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
 
 const content = {
   de: {
@@ -20,17 +22,14 @@ const content = {
       {
         title: 'Inline-CT',
         description: 'CT-Prüfung direkt in Ihrer Produktionslinie – vollautomatisch.',
-        href: '/serie/inline-ct'
       },
       {
         title: '100% Prüfung',
         description: 'Lückenlose Qualitätskontrolle für jeden einzelnen Artikel.',
-        href: '/serie/100-prozent-pruefung'
       },
       {
         title: 'KI-Automatisierung',
         description: 'Intelligente Auswertung ohne manuelle Eingriffe.',
-        href: '/serie/ki-automatisierung'
       }
     ],
     servicesTitle: 'Unsere Lösungen',
@@ -55,17 +54,14 @@ const content = {
       {
         title: 'Inline CT',
         description: 'CT inspection directly in your production line – fully automated.',
-        href: '/en/serie/inline-ct'
       },
       {
         title: '100% Inspection',
         description: 'Complete quality control for every single article.',
-        href: '/en/serie/100-percent-inspection'
       },
       {
         title: 'AI Automation',
         description: 'Intelligent evaluation without manual intervention.',
-        href: '/en/serie/ai-automation'
       }
     ],
     servicesTitle: 'Our Solutions',
@@ -76,11 +72,61 @@ const content = {
   }
 };
 
-const t = content[locale as keyof typeof content] || content.de;
+const t = content[locale as keyof typeof content] || content.en || content.de;
+
+const ui = {
+  de: {
+    learnMore: 'Mehr erfahren',
+    crossTitle: 'Noch in der Entwicklung?',
+    crossText: 'Für Prototypen und Erstmuster bieten wir schnelle Laboranalysen mit höchster Präzision.',
+    crossBtn: 'Labor entdecken',
+    seoTitle: 'Inline-CT für Serienprüfung'
+  },
+  en: {
+    learnMore: 'Learn more',
+    crossTitle: 'Still in development?',
+    crossText: 'For prototypes and first articles, we offer fast lab analyses with maximum precision.',
+    crossBtn: 'Discover Lab',
+    seoTitle: 'Inline CT for Serial Inspection'
+  },
+  fr: {
+    learnMore: 'En savoir plus',
+    crossTitle: 'Encore en développement ?',
+    crossText: 'Pour les prototypes et premiers articles, nous proposons des analyses labo rapides et précises.',
+    crossBtn: 'Découvrir le laboratoire',
+    seoTitle: 'CT en ligne pour inspection en série'
+  },
+  es: {
+    learnMore: 'Más información',
+    crossTitle: '¿Aún en desarrollo?',
+    crossText: 'Para prototipos y primeras muestras, ofrecemos análisis de laboratorio rápidos y precisos.',
+    crossBtn: 'Descubrir laboratorio',
+    seoTitle: 'CT en línea para inspección en serie'
+  },
+  it: {
+    learnMore: 'Scopri di più',
+    crossTitle: 'Ancora in sviluppo?',
+    crossText: 'Per prototipi e primi articoli offriamo analisi di laboratorio rapide e precise.',
+    crossBtn: 'Scopri il laboratorio',
+    seoTitle: 'CT in linea per controllo in serie'
+  }
+}[locale] || {
+  learnMore: 'Mehr erfahren',
+  crossTitle: 'Noch in der Entwicklung?',
+  crossText: 'Für Prototypen und Erstmuster bieten wir schnelle Laboranalysen mit höchster Präzision.',
+  crossBtn: 'Labor entdecken',
+  seoTitle: 'Inline-CT für Serienprüfung'
+};
+
+const serviceHrefs = [
+  lp('/serie/inline-ct'),
+  lp('/serie/100-prozent-pruefung'),
+  lp('/serie/ki-automatisierung'),
+];
 ---
 
 <SerieLayout 
-  title={locale === 'de' ? 'Inline-CT für Serienprüfung' : 'Inline CT for Serial Inspection'}
+  title={ui.seoTitle}
   description={t.subline}
 >
   <!-- Hero Section -->
@@ -94,8 +140,8 @@ const t = content[locale as keyof typeof content] || content.de;
         </h1>
         <p class="subline">{t.subline}</p>
         <div class="hero-cta">
-          <a href="/serie/kontakt" class="btn btn-primary btn-lg">{t.cta1}</a>
-          <a href="/serie/inline-ct" class="btn btn-secondary btn-lg">{t.cta2}</a>
+          <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.cta1}</a>
+          <a href={lp('/serie/inline-ct')} class="btn btn-secondary btn-lg">{t.cta2}</a>
         </div>
       </div>
     </div>
@@ -125,12 +171,12 @@ const t = content[locale as keyof typeof content] || content.de;
       </div>
       
       <div class="services-grid">
-        {t.services.map((service: any) => (
-          <a href={service.href} class="service-card card">
+        {t.services.map((service: any, index: number) => (
+          <a href={serviceHrefs[index]} class="service-card card">
             <h3>{service.title}</h3>
             <p>{service.description}</p>
             <span class="card-link">
-              Mehr erfahren
+              {ui.learnMore}
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </span>
           </a>
@@ -145,10 +191,10 @@ const t = content[locale as keyof typeof content] || content.de;
       <div class="cross-sell-box">
         <span class="cross-sell-icon">💡</span>
         <div class="cross-sell-content">
-          <strong>Noch in der Entwicklung?</strong>
-          <p>Für Prototypen und Erstmuster bieten wir schnelle Laboranalysen mit höchster Präzision.</p>
+          <strong>{ui.crossTitle}</strong>
+          <p>{ui.crossText}</p>
         </div>
-        <a href="/labor" class="btn btn-secondary">Labor entdecken</a>
+        <a href={lp('/labor')} class="btn btn-secondary">{ui.crossBtn}</a>
       </div>
     </div>
   </section>
@@ -159,7 +205,7 @@ const t = content[locale as keyof typeof content] || content.de;
       <div class="cta-content text-center">
         <h2>{t.ctaTitle}</h2>
         <p>{t.ctaSubline}</p>
-        <a href="/serie/kontakt" class="btn btn-primary btn-lg">{t.ctaButton}</a>
+        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.ctaButton}</a>
       </div>
     </div>
   </section>

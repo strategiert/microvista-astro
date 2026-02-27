@@ -2,8 +2,6 @@
 
 GET THE INSPECTION CAPACITY AS YOU NEED IT – Anywhere. Anytime. Fast.
 
-[Express-Inspektion  
-buchen](/kontakt/)
+## Anmeldeformular
 
-[Gratis-Beratung  
-sichern](/kontakt/)
+### Kostenlos rundum das Thema zerstörungsfreie Prüfung mit Schwerpunkt industrielle CT informiert bleiben!

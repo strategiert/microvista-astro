@@ -9,16 +9,27 @@ import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import Card from '../../components/ui/Card.astro';
 import Tag from '../../components/ui/Tag.astro';
 import { getCollection } from 'astro:content';
+import { localePath, type Locale } from '../../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const preferredContentLocale = locale === 'de' ? 'de' : 'en';
 
 // Alle Magazin-Artikel laden
 const allPosts = await getCollection('magazin', ({ data }) => {
   return !data.draft;
 });
 
+const localizedPosts = allPosts.filter((post) => {
+  if (preferredContentLocale === 'de') {
+    return !post.id.startsWith('en/');
+  }
+  return post.id.startsWith('en/');
+});
+
 // Nach Datum sortieren (neueste zuerst)
-const posts = allPosts.sort((a, b) =>
+const posts = localizedPosts.sort((a, b) =>
   new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
 );
 
@@ -63,13 +74,72 @@ const content = {
       'news': 'News',
       'tipps': 'Tips & Tricks'
     }
+  },
+  fr: {
+    title: 'Magazine',
+    subtitle: 'Expertise, tendances et perspectives du monde de la tomographie industrielle',
+    featured: 'À la une',
+    latest: 'Derniers articles',
+    categories: 'Catégories',
+    allCategories: 'Tous',
+    readMore: 'Lire la suite',
+    noArticles: 'Aucun article pour le moment.',
+    categoryLabels: {
+      'technologie': 'Technologie',
+      'branchen': 'Secteurs',
+      'case-studies': 'Études de cas',
+      'news': 'Actualités',
+      'tipps': 'Trucs et astuces'
+    }
+  },
+  es: {
+    title: 'Revista',
+    subtitle: 'Conocimientos, tendencias e información del mundo de la tomografía industrial',
+    featured: 'Destacados',
+    latest: 'Últimos artículos',
+    categories: 'Categorías',
+    allCategories: 'Todos',
+    readMore: 'Leer más',
+    noArticles: 'Aún no hay artículos.',
+    categoryLabels: {
+      'technologie': 'Tecnología',
+      'branchen': 'Sectores',
+      'case-studies': 'Casos de estudio',
+      'news': 'Noticias',
+      'tipps': 'Consejos y trucos'
+    }
+  },
+  it: {
+    title: 'Rivista',
+    subtitle: 'Competenze, tendenze e approfondimenti dal mondo della tomografia industriale',
+    featured: 'In evidenza',
+    latest: 'Ultimi articoli',
+    categories: 'Categorie',
+    allCategories: 'Tutti',
+    readMore: 'Leggi di più',
+    noArticles: 'Nessun articolo per ora.',
+    categoryLabels: {
+      'technologie': 'Tecnologia',
+      'branchen': 'Settori',
+      'case-studies': 'Casi di studio',
+      'news': 'Notizie',
+      'tipps': 'Suggerimenti e trucchi'
+    }
   }
 };
 
-const t = content[locale as keyof typeof content] || content.de;
+const t = content[locale as keyof typeof content] || content.en || content.de;
 
 const formatDate = (date: Date) => {
-  return new Intl.DateTimeFormat(locale === 'en' ? 'en-US' : 'de-DE', {
+  const dateLocale = {
+    de: 'de-DE',
+    en: 'en-US',
+    fr: 'fr-FR',
+    es: 'es-ES',
+    it: 'it-IT'
+  }[locale] || 'en-US';
+
+  return new Intl.DateTimeFormat(dateLocale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -96,9 +166,9 @@ const formatDate = (date: Date) => {
 
     <!-- Category Filter -->
     <nav class="category-filter">
-      <Tag href="/magazin" variant="primary">{t.allCategories}</Tag>
+      <Tag href={lp('/magazin')} variant="primary">{t.allCategories}</Tag>
       {categories.map(cat => (
-        <Tag href={`/magazin/kategorie/${cat}`} variant="default">
+        <Tag href={lp(`/magazin/kategorie/${cat}`)} variant="default">
           {t.categoryLabels[cat as keyof typeof t.categoryLabels] || cat}
         </Tag>
       ))}
@@ -117,7 +187,7 @@ const formatDate = (date: Date) => {
             <div class="featured-grid">
               {featuredPosts.map((post, index) => (
                 <Card
-                  href={`/magazin/${post.slug}`}
+                  href={lp(`/magazin/${post.slug}`)}
                   variant={index === 0 ? 'featured' : 'default'}
                   class={index === 0 ? 'featured-main' : ''}
                 >
@@ -148,7 +218,7 @@ const formatDate = (date: Date) => {
           <h2>{t.latest}</h2>
           <div class="posts-grid">
             {regularPosts.map(post => (
-              <Card href={`/magazin/${post.slug}`}>
+              <Card href={lp(`/magazin/${post.slug}`)}>
                 {post.data.image && (
                   <img
                     slot="image"

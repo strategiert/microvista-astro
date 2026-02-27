@@ -3,8 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import { localePath, type Locale } from '../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
+const locale = (Astro.locals.locale || 'de') as Locale;
 
 const t = {
   de: {
@@ -36,24 +37,70 @@ const t = {
     privacy: 'By subscribing you agree to our',
     privacyLink: 'Privacy Policy',
     privacyEnd: '. You can unsubscribe at any time.',
+  },
+  fr: {
+    title: 'Newsletter',
+    subtitle: 'Restez informé',
+    description: 'Recevez régulièrement des actualités sur le CT industriel, l’assurance qualité et nos services.',
+    emailLabel: 'Adresse e-mail',
+    emailPlaceholder: 'votre.email@entreprise.fr',
+    nameLabel: 'Nom (optionnel)',
+    namePlaceholder: 'Votre nom',
+    companyLabel: 'Entreprise (optionnel)',
+    companyPlaceholder: 'Votre entreprise',
+    submit: 'S’abonner à la newsletter',
+    privacy: 'En vous inscrivant, vous acceptez notre',
+    privacyLink: 'politique de confidentialité',
+    privacyEnd: '. Désinscription possible à tout moment.',
+  },
+  es: {
+    title: 'Newsletter',
+    subtitle: 'Manténgase informado',
+    description: 'Reciba noticias periódicas sobre CT industrial, aseguramiento de calidad y nuestros servicios.',
+    emailLabel: 'Correo electrónico',
+    emailPlaceholder: 'su.email@empresa.com',
+    nameLabel: 'Nombre (opcional)',
+    namePlaceholder: 'Su nombre',
+    companyLabel: 'Empresa (opcional)',
+    companyPlaceholder: 'Su empresa',
+    submit: 'Suscribirse al boletín',
+    privacy: 'Al suscribirse, acepta nuestra',
+    privacyLink: 'política de privacidad',
+    privacyEnd: '. Puede darse de baja en cualquier momento.',
+  },
+  it: {
+    title: 'Newsletter',
+    subtitle: 'Resta aggiornato',
+    description: 'Ricevi aggiornamenti regolari su CT industriale, qualità e i nostri servizi.',
+    emailLabel: 'Indirizzo e-mail',
+    emailPlaceholder: 'tua.email@azienda.it',
+    nameLabel: 'Nome (opzionale)',
+    namePlaceholder: 'Il tuo nome',
+    companyLabel: 'Azienda (opzionale)',
+    companyPlaceholder: 'La tua azienda',
+    submit: 'Iscriviti alla newsletter',
+    privacy: 'Iscrivendoti accetti la nostra',
+    privacyLink: 'informativa privacy',
+    privacyEnd: '. Puoi annullare l’iscrizione in qualsiasi momento.',
   }
 }[locale] || {
   title: 'Newsletter',
-  subtitle: 'Bleiben Sie informiert',
-  description: 'Erhalten Sie regelmäßig News zu industrieller CT, Qualitätssicherung und unseren Services.',
-  emailLabel: 'E-Mail-Adresse',
-  emailPlaceholder: 'ihre.email@unternehmen.de',
+  subtitle: 'Stay Informed',
+  description: 'Receive regular news about industrial CT, quality assurance and our services.',
+  emailLabel: 'Email Address',
+  emailPlaceholder: 'your.email@company.com',
   nameLabel: 'Name (optional)',
-  namePlaceholder: 'Ihr Name',
-  companyLabel: 'Unternehmen (optional)',
-  companyPlaceholder: 'Ihr Unternehmen',
-  submit: 'Newsletter abonnieren',
-  privacy: 'Mit der Anmeldung stimmen Sie unserer',
-  privacyLink: 'Datenschutzerklärung',
-  privacyEnd: 'zu. Abmeldung jederzeit möglich.',
+  namePlaceholder: 'Your Name',
+  companyLabel: 'Company (optional)',
+  companyPlaceholder: 'Your Company',
+  submit: 'Subscribe to Newsletter',
+  privacy: 'By subscribing you agree to our',
+  privacyLink: 'Privacy Policy',
+  privacyEnd: '. You can unsubscribe at any time.',
 };
 
-const privacyHref = locale === 'en' ? '/en/datenschutz/' : '/datenschutz/';
+const lp = (path: string) => localePath(path, locale);
+const privacyHref = lp('/datenschutz');
 ---
 
 <BaseLayout title={t.title} description={t.description}>

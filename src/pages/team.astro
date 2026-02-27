@@ -4,22 +4,44 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
 import { loadStaticPage } from '../lib/load-static-page';
+import { type Locale } from '../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
-const content = await loadStaticPage(locale === 'en' ? 'team-en.md' : 'team-de.md');
+const locale = (Astro.locals.locale || 'de') as Locale;
+const content = await loadStaticPage('team', locale);
 
-const title = locale === 'en' ? 'Our Team' : 'Unser Team';
-const description = locale === 'en'
-  ? 'Meet the Microvista team — CT experts, engineers and quality specialists.'
-  : 'Lernen Sie das Microvista-Team kennen — CT-Experten, Ingenieure und Qualitätsspezialisten.';
+const labels = {
+  de: {
+    title: 'Unser Team',
+    description: 'Lernen Sie das Microvista-Team kennen — CT-Experten, Ingenieure und Qualitätsspezialisten.'
+  },
+  en: {
+    title: 'Our Team',
+    description: 'Meet the Microvista team — CT experts, engineers and quality specialists.'
+  },
+  fr: {
+    title: 'Notre équipe',
+    description: 'Rencontrez l’équipe Microvista : experts CT, ingénieurs et spécialistes qualité.'
+  },
+  es: {
+    title: 'Nuestro equipo',
+    description: 'Conozca al equipo de Microvista: expertos en CT, ingenieros y especialistas en calidad.'
+  },
+  it: {
+    title: 'Il nostro team',
+    description: 'Scopri il team Microvista: esperti CT, ingegneri e specialisti qualità.'
+  }
+}[locale] || {
+  title: 'Unser Team',
+  description: 'Lernen Sie das Microvista-Team kennen — CT-Experten, Ingenieure und Qualitätsspezialisten.'
+};
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={labels.title} description={labels.description}>
   <Header slot="header" />
 
   <div class="team-page">
     <div class="container">
-      <Breadcrumbs items={[{ label: title }]} />
+      <Breadcrumbs items={[{ label: labels.title }]} />
       <article class="team-content" set:html={content} />
     </div>
   </div>

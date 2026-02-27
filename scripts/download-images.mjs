@@ -5,7 +5,7 @@
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
-import { join, dirname, basename } from 'path';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -28,14 +28,60 @@ async function downloadImage(url, filepath) {
   }
 }
 
+function unique(values) {
+  return [...new Set(values)];
+}
+
+function getRelativePathFromUrl(url) {
+  const urlPath = new URL(url).pathname;
+  let relativePath = urlPath.replace(/^\/wp-content\/uploads\//, '');
+
+  // Fallback für inkonsistente Alt-URLs:
+  // /wp-content/uploads/YYYY/MM/elementor/thumbs/... -> /wp-content/uploads/elementor/thumbs/...
+  relativePath = relativePath.replace(/^\d{4}\/\d{2}\/(?=elementor\/thumbs\/)/, '');
+
+  return relativePath;
+}
+
+function buildFallbackCandidates(url) {
+  const candidates = [url];
+  const parsed = new URL(url);
+
+  // Fallback 1: Elementor-Thumbs ohne YYYY/MM-Verzeichnis.
+  if (/^\/wp-content\/uploads\/\d{4}\/\d{2}\/elementor\/thumbs\//.test(parsed.pathname)) {
+    const alt = new URL(url);
+    alt.pathname = alt.pathname.replace(/^\/wp-content\/uploads\/\d{4}\/\d{2}\//, '/wp-content/uploads/');
+    candidates.push(alt.toString());
+  }
+
+  // Fallback 2: Größensuffix entfernen (z. B. -768x432.webp -> .webp).
+  if (/-\d+x\d+(\.\w+)$/i.test(parsed.pathname)) {
+    const alt = new URL(url);
+    alt.pathname = alt.pathname.replace(/-\d+x\d+(\.\w+)$/i, '$1');
+    candidates.push(alt.toString());
+  }
+
+  // Fallback 3: Kombination aus beiden (Elementor + Größensuffix).
+  if (
+    /^\/wp-content\/uploads\/\d{4}\/\d{2}\/elementor\/thumbs\//.test(parsed.pathname) &&
+    /-\d+x\d+(\.\w+)$/i.test(parsed.pathname)
+  ) {
+    const alt = new URL(url);
+    alt.pathname = alt.pathname
+      .replace(/^\/wp-content\/uploads\/\d{4}\/\d{2}\//, '/wp-content/uploads/')
+      .replace(/-\d+x\d+(\.\w+)$/i, '$1');
+    candidates.push(alt.toString());
+  }
+
+  return unique(candidates);
+}
+
 async function main() {
   const images = JSON.parse(readFileSync(IMAGES_FILE, 'utf-8'));
 
-  // Nur die größten Versionen behalten (ohne -NNNxNNN Suffixe)
-  const uniqueImages = [...new Set(images.map(url => {
-    // Entferne Größen-Suffixe wie -768x1024, -225x300, -1024x768 etc.
-    return url.replace(/-\d+x\d+(\.\w+)$/, '$1');
-  }))];
+  // Alle referenzierten Bild-URLs importieren (inkl. Größenvarianten),
+  // damit jede im Content verwendete URL lokal auflösbar ist.
+  const uniqueImages = unique(images);
 
   console.log(`=== Microvista Image Downloader ===`);
   console.log(`Total Bild-URLs: ${images.length}`);
@@ -54,9 +100,7 @@ async function main() {
     const batch = uniqueImages.slice(i, i + BATCH_SIZE);
     const promises = batch.map(async (url) => {
       // Pfad aus URL ableiten
-      const urlPath = new URL(url).pathname;
-      // /wp-content/uploads/2025/10/file.webp → 2025/10/file.webp
-      const relativePath = urlPath.replace(/^\/wp-content\/uploads\//, '');
+      const relativePath = getRelativePathFromUrl(url);
       const filepath = join(OUTPUT_DIR, relativePath);
 
       if (existsSync(filepath)) {
@@ -64,9 +108,22 @@ async function main() {
         return;
       }
 
-      const ok = await downloadImage(url, filepath);
+      const candidates = buildFallbackCandidates(url);
+      let ok = false;
+      let successfulUrl = url;
+      for (const candidate of candidates) {
+        ok = await downloadImage(candidate, filepath);
+        if (ok) {
+          successfulUrl = candidate;
+          break;
+        }
+      }
+
       if (ok) {
         success++;
+        if (successfulUrl !== url) {
+          console.warn(`  FALLBACK: ${url} -> ${successfulUrl}`);
+        }
       } else {
         failed++;
         console.warn(`  FEHLER: ${url}`);
@@ -87,9 +144,8 @@ async function main() {
 
   // URL-Mapping speichern für spätere Content-Anpassung
   const urlMap = {};
-  for (const url of uniqueImages) {
-    const urlPath = new URL(url).pathname;
-    const relativePath = urlPath.replace(/^\/wp-content\/uploads\//, '');
+  for (const url of images) {
+    const relativePath = getRelativePathFromUrl(url);
     urlMap[url] = `/images/wp/${relativePath}`;
   }
   writeFileSync(join(__dirname, '..', 'scraped-content', 'image-url-map.json'), JSON.stringify(urlMap, null, 2));

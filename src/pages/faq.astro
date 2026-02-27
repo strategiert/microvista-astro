@@ -4,22 +4,50 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
 import { loadStaticPage } from '../lib/load-static-page';
+import { type Locale } from '../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
-const content = await loadStaticPage(locale === 'en' ? 'faq-en.md' : 'faq-de.md');
+const locale = (Astro.locals.locale || 'de') as Locale;
+const content = await loadStaticPage('faq', locale);
 
-const title = locale === 'en' ? 'FAQ' : 'Häufig gestellte Fragen';
-const description = locale === 'en'
-  ? 'Frequently asked questions about industrial computed tomography at Microvista.'
-  : 'Häufig gestellte Fragen zur industriellen Computertomographie bei Microvista.';
+const labels = {
+  de: {
+    title: 'Häufig gestellte Fragen',
+    description: 'Häufig gestellte Fragen zur industriellen Computertomographie bei Microvista.',
+    breadcrumb: 'FAQ'
+  },
+  en: {
+    title: 'FAQ',
+    description: 'Frequently asked questions about industrial computed tomography at Microvista.',
+    breadcrumb: 'FAQ'
+  },
+  fr: {
+    title: 'FAQ',
+    description: 'Questions fréquentes sur la tomographie industrielle chez Microvista.',
+    breadcrumb: 'FAQ'
+  },
+  es: {
+    title: 'Preguntas frecuentes',
+    description: 'Preguntas frecuentes sobre tomografía industrial en Microvista.',
+    breadcrumb: 'FAQ'
+  },
+  it: {
+    title: 'Domande frequenti',
+    description: 'Domande frequenti sulla tomografia industriale in Microvista.',
+    breadcrumb: 'FAQ'
+  }
+}[locale] || {
+  title: 'Häufig gestellte Fragen',
+  description: 'Häufig gestellte Fragen zur industriellen Computertomographie bei Microvista.',
+  breadcrumb: 'FAQ'
+};
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={labels.title} description={labels.description}>
   <Header slot="header" />
 
   <div class="faq-page">
     <div class="container">
-      <Breadcrumbs items={[{ label: 'FAQ' }]} />
+      <Breadcrumbs items={[{ label: labels.breadcrumb }]} />
       <article class="faq-content" set:html={content} />
     </div>
   </div>

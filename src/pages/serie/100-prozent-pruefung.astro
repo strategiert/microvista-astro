@@ -1,0 +1,81 @@
+---
+import SerieLayout from '../../layouts/SerieLayout.astro';
+import { localePath, type Locale } from '../../i18n/translations';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const t = {
+  de: {
+    title: '100% Prüfung',
+    seoTitle: '100% CT-Prüfung für Serienproduktion | Microvista',
+    description: 'Lückenlose CT-Qualitätskontrolle für jeden einzelnen Artikel in Ihrer Serienproduktion.',
+    lead: 'Lückenlose Qualitätskontrolle für jeden einzelnen Artikel — keine Stichprobe, sondern echte 100%-Prüfung.',
+    sections: [
+      { title: 'Warum 100% Prüfung?', content: 'Stichprobenbasierte Qualitätskontrolle lässt defekte Teile durch. Bei sicherheitskritischen Bauteilen oder Null-Fehler-Strategien ist das inakzeptabel. Unsere CT-basierte 100%-Prüfung prüft jedes einzelne Teil — vollständig, zerstörungsfrei und in Taktzeit.' },
+      { title: 'So funktioniert es', content: 'Jedes Bauteil durchläuft automatisch den CT-Scanner. Die KI-gestützte Auswertung analysiert das vollständige 3D-Volumen in Echtzeit. Defekte Teile werden automatisch ausgeschleust. Gute Teile erhalten eine digitale Qualitätssignatur.' },
+      { title: 'Ihre Vorteile', content: 'Null-Fehler-Strategie in der Praxis umgesetzt. Sofortige Rückmeldung an die Produktion bei Prozessabweichungen. Lückenlose Dokumentation für Audit und Rückverfolgbarkeit. Reduktion von Garantie- und Reklamationskosten.' }
+    ],
+    cta: 'Beratung anfragen',
+  },
+  en: {
+    title: '100% Inspection',
+    seoTitle: '100% CT Inspection for Serial Production | Microvista',
+    description: 'Complete CT quality control for every single article in your serial production.',
+    lead: 'Complete quality control for every single article — no sampling, but true 100% inspection.',
+    sections: [
+      { title: 'Why 100% Inspection?', content: 'Sample-based quality control lets defective parts through. For safety-critical components or zero-defect strategies, this is unacceptable. Our CT-based 100% inspection tests every single part — completely, non-destructively, and at cycle time.' },
+      { title: 'How It Works', content: 'Every component automatically passes through the CT scanner. AI-powered analysis evaluates the complete 3D volume in real time. Defective parts are automatically rejected. Good parts receive a digital quality signature.' },
+      { title: 'Your Benefits', content: 'Zero-defect strategy implemented in practice. Immediate feedback to production on process deviations. Complete documentation for audit and traceability. Reduction of warranty and complaint costs.' }
+    ],
+    cta: 'Request Consultation',
+  }
+}[locale] || {
+  title: '100% Inspection',
+  seoTitle: '100% CT Inspection for Serial Production | Microvista',
+  description: 'Complete CT quality control for every single article in your serial production.',
+  lead: 'Complete quality control for every single article.',
+  sections: [],
+  cta: 'Request Consultation',
+};
+---
+
+<SerieLayout title={t.seoTitle} description={t.description}>
+  <section class="hero">
+    <div class="container">
+      <h1>{t.title}</h1>
+      <p class="lead">{t.lead}</p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container container-narrow">
+      {t.sections.map((section: any) => (
+        <div class="content-block">
+          <h2>{section.title}</h2>
+          <p>{section.content}</p>
+        </div>
+      ))}
+
+      <div class="cta-box">
+        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.cta}</a>
+      </div>
+    </div>
+  </section>
+</SerieLayout>
+
+<style>
+  .hero {
+    padding: var(--space-20) 0;
+    background: linear-gradient(135deg, var(--background, #0f172a) 0%, var(--primary, #1e293b) 50%, rgba(249, 115, 22, 0.2) 100%);
+    color: white;
+  }
+  .hero h1 { color: white; margin-bottom: var(--space-4); }
+  .lead { font-size: var(--text-xl); color: rgba(255,255,255,0.7); max-width: 700px; }
+  .container-narrow { max-width: 800px; }
+  .content-section { padding: var(--space-16) 0; }
+  .content-block { margin-bottom: var(--space-12); }
+  .content-block h2 { margin-bottom: var(--space-4); }
+  .content-block p { line-height: 1.8; color: var(--text-muted); }
+  .cta-box { text-align: center; margin-top: var(--space-12); }
+  .cta-box .btn-primary { background: var(--accent, #f97316); color: #000; font-weight: 600; }
+</style>

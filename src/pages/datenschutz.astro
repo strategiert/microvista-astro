@@ -4,17 +4,26 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
 import { loadStaticPage } from '../lib/load-static-page';
+import { type Locale } from '../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
-const content = await loadStaticPage(locale === 'en' ? 'datenschutz-en.md' : 'datenschutz.md');
+const locale = (Astro.locals.locale || 'de') as Locale;
+const content = await loadStaticPage('datenschutz', locale);
+
+const labels = {
+  de: { title: 'Datenschutzerklärung', description: 'Datenschutzerklärung der Microvista GmbH', breadcrumb: 'Datenschutz' },
+  en: { title: 'Privacy Policy', description: 'Privacy policy of Microvista GmbH', breadcrumb: 'Privacy' },
+  fr: { title: 'Politique de confidentialité', description: 'Politique de confidentialité de Microvista GmbH', breadcrumb: 'Confidentialité' },
+  es: { title: 'Política de privacidad', description: 'Política de privacidad de Microvista GmbH', breadcrumb: 'Privacidad' },
+  it: { title: 'Informativa sulla privacy', description: 'Informativa sulla privacy di Microvista GmbH', breadcrumb: 'Privacy' }
+}[locale] || { title: 'Datenschutzerklärung', description: 'Datenschutzerklärung der Microvista GmbH', breadcrumb: 'Datenschutz' };
 ---
 
-<BaseLayout title="Datenschutzerklärung" description="Datenschutzerklärung der Microvista GmbH">
+<BaseLayout title={labels.title} description={labels.description}>
   <Header slot="header" />
 
   <div class="legal-page">
     <div class="container">
-      <Breadcrumbs items={[{ label: 'Datenschutz' }]} />
+      <Breadcrumbs items={[{ label: labels.breadcrumb }]} />
       <article class="legal-content" set:html={content} />
     </div>
   </div>

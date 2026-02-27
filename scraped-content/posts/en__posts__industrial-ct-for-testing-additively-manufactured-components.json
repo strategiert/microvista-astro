@@ -1,0 +1,29 @@
+{
+  "url": "https://www.microvista.de/en/posts/industrial-ct-for-testing-additively-manufactured-components/",
+  "slug": "en/posts/industrial-ct-for-testing-additively-manufactured-components",
+  "title": "Non Destructive Testing Of Additively Manufactured Components",
+  "type": "post",
+  "lang": "en",
+  "metaDescription": "Additively manufactured components can have varying qualities. Find out how Industrial CT ensures that these are quality approved.",
+  "ogImage": "https://www.microvista.de/wp-content/uploads/2023/12/Zerstoerungsfreie-Pruefung-mit-industrieller-CT-auf-Risse-bei-einem-Turbinenrad.webp",
+  "canonical": "https://www.microvista.de/en/posts/industrial-ct-for-testing-additively-manufactured-components/",
+  "markdown": "## Challenges with additively manufactured components\n\nAdditive manufacturing is still a relatively new manufacturing method that can be used to develop very complex component shapes with intricate internal structures that can be used in a variety of ways. \n\nMaterials are applied successively – the product development process therefore requires carefully coordinated parameters.\n\nIn order to shorten the development phase, manufacturing defects should be detected at an early stage. Non-destructive testing of additively manufactured components using CT helps here.\n\n### Typical faults on metal components include\n\n-   Support structure residues in hard-to-reach areas\n-   Internal defects in the component\n-   Cracks\n\n### The following problems frequently occur with 3D plastic printing:\n\n-   Over- or under-extrusion\n-   Threads tighten\n-   Local overheating\n\nCT makes it possible to capture complex additively manufactured components in their entirety: even hidden and difficult-to-access surfaces can be inspected. In addition, the basis for a target/actual comparison can be created.\n\n![Stütztstrukturreste im CT-Bild - Prüfung additiv gefertigter Bauteile](https://www.microvista.de/wp-content/uploads/2022/08/Stuetztstrukturreste-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png.webp)\n\nCT image shows support structure remnants\n\n![Delamination im CT-Bild - Prüfung additiv gefertigter Bauteile](https://www.microvista.de/wp-content/uploads/2022/08/Delamination-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png.webp)\n\nCT image shows delamination\n\n## Practical example: Inspection of an aluminum wheel carrier with a complex structure\n\n### The challenge\n\nDue to the complex manufacturing process of additive manufacturing products, such as wheel carriers, the individual production stages must be precisely coordinated. Fast feedback on the quality of the wheel carrier right at the start of the process is therefore extremely important due to its complex bionic structure.\n\n### Possible consequences\n\nIf manufacturing faults are not detected or only insufficiently detected, this can lead to high reject rates. An unreliable analysis can have serious consequences, especially in the case of safety-relevant chassis components: A failure of the wheel carrier increases the risk of a serious accident.\n\n### Advantages of the CT test\n\nCT inspection shortens the development cycles in additive manufacturing and addresses the risks identified by the FMEA. In addition, non-destructive testing reduces the number of expensive prototypes required for a variety of features.\n\n![Prüfung additiv gefertigter Bauteile - Aluminium Radträger](https://www.microvista.de/wp-content/uploads/2022/08/Pruefung-additiv-gefertigter-Bauteile-Aluminium-Radtraeger.webp)\n\nAluminum wheel carrier\n\n[Schedule a free consultation](https://www.microvista.de/en/contact/)",
+  "htmlLength": 19965,
+  "markdownLength": 2859,
+  "images": [
+    "https://www.microvista.de/wp-content/uploads/2022/08/Stuetztstrukturreste-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png.webp",
+    "https://www.microvista.de/wp-content/uploads/2022/08/Stuetztstrukturreste-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png-300x178.webp",
+    "https://www.microvista.de/wp-content/uploads/2022/08/Stuetztstrukturreste-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png-1024x606.webp",
+    "https://www.microvista.de/wp-content/uploads/2022/08/Stuetztstrukturreste-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png-768x455.webp",
+    "https://www.microvista.de/wp-content/uploads/2022/08/Delamination-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png.webp",
+    "https://www.microvista.de/wp-content/uploads/2022/08/Delamination-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png-300x244.webp",
+    "https://www.microvista.de/wp-content/uploads/2022/08/Delamination-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png-768x626.webp",
+    "https://www.microvista.de/wp-content/uploads/2022/08/Pruefung-additiv-gefertigter-Bauteile-Aluminium-Radtraeger.webp",
+    "https://www.microvista.de/wp-content/uploads/2022/08/Pruefung-additiv-gefertigter-Bauteile-Aluminium-Radtraeger-300x275.webp",
+    "https://www.microvista.de/wp-content/uploads/2022/08/Pruefung-additiv-gefertigter-Bauteile-Aluminium-Radtraeger-768x705.webp",
+    "https://www.microvista.de/wp-content/uploads/2026/01/2025_04_MV_Blog_Trends-2026.png",
+    "https://www.microvista.de/wp-content/uploads/2026/01/2025_04_MV_Blog_Trends-2026-300x169.png",
+    "https://www.microvista.de/wp-content/uploads/2026/01/2025_04_MV_Blog_Trends-2026-768x432.png"
+  ],
+  "scrapedAt": "2026-02-26T09:47:59.089Z"
+}

@@ -1,47 +1,80 @@
 ---
-const locale = Astro.currentLocale || 'de';
+import { localePath, type Locale } from '../../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
 
 const nav = {
   de: [
     { label: 'Inline-CT', href: '/serie/inline-ct' },
     { label: '100% Prüfung', href: '/serie/100-prozent-pruefung' },
     { label: 'KI-Automatisierung', href: '/serie/ki-automatisierung' },
-    { label: 'Kontakt', href: '/serie/kontakt' },
+    { label: 'Kontakt', href: '/kontakt' },
   ],
   en: [
-    { label: 'Inline CT', href: '/en/serie/inline-ct' },
-    { label: '100% Inspection', href: '/en/serie/100-percent-inspection' },
-    { label: 'AI Automation', href: '/en/serie/ai-automation' },
-    { label: 'Contact', href: '/en/serie/contact' },
+    { label: 'Inline CT', href: '/serie/inline-ct' },
+    { label: '100% Inspection', href: '/serie/100-prozent-pruefung' },
+    { label: 'AI Automation', href: '/serie/ki-automatisierung' },
+    { label: 'Contact', href: '/kontakt' },
+  ],
+  fr: [
+    { label: 'CT en ligne', href: '/serie/inline-ct' },
+    { label: 'Inspection 100%', href: '/serie/100-prozent-pruefung' },
+    { label: 'Automatisation IA', href: '/serie/ki-automatisierung' },
+    { label: 'Contact', href: '/kontakt' },
+  ],
+  es: [
+    { label: 'CT en línea', href: '/serie/inline-ct' },
+    { label: 'Inspección 100%', href: '/serie/100-prozent-pruefung' },
+    { label: 'Automatización IA', href: '/serie/ki-automatisierung' },
+    { label: 'Contacto', href: '/kontakt' },
+  ],
+  it: [
+    { label: 'CT in linea', href: '/serie/inline-ct' },
+    { label: 'Ispezione 100%', href: '/serie/100-prozent-pruefung' },
+    { label: 'Automazione IA', href: '/serie/ki-automatisierung' },
+    { label: 'Contatto', href: '/kontakt' },
   ]
 };
 
-const items = nav[locale as keyof typeof nav] || nav.de;
+const items = nav[locale] || nav.en;
+
+const labels = {
+  de: { sub: 'Serienprüfung', switch: '→ Labor & Erstmuster', cta: 'ROI berechnen' },
+  en: { sub: 'Serial Inspection', switch: '→ Lab & First Article', cta: 'Calculate ROI' },
+  fr: { sub: 'Inspection en série', switch: '→ Laboratoire & Premier article', cta: 'Calculer le ROI' },
+  es: { sub: 'Inspección en serie', switch: '→ Laboratorio y primera muestra', cta: 'Calcular ROI' },
+  it: { sub: 'Controllo in serie', switch: '→ Laboratorio e primo articolo', cta: 'Calcola ROI' }
+}[locale] || { sub: 'Serial Inspection', switch: '→ Lab & First Article', cta: 'Calculate ROI' };
 ---
 
 <header class="header-serie">
   <div class="container">
     <div class="header-inner">
-      <a href={locale === 'de' ? '/' : `/${locale}`} class="logo">
-        <div class="logo-mark">M</div>
-        <div class="logo-content">
-          <span class="logo-text">Microvista</span>
-          <span class="logo-sub">Serienprüfung</span>
-        </div>
+      <a href={lp('/')} class="logo" aria-label="Microvista">
+        <img
+          class="logo-image"
+          src="/images/logos/2013-08-microvista_Logo_RGB-7.png"
+          alt="Microvista"
+          width="705"
+          height="399"
+          loading="eager"
+        />
+        <span class="logo-sub">{labels.sub}</span>
       </a>
       
       <nav class="main-nav">
         {items.map(item => (
-          <a href={item.href} class="nav-link">{item.label}</a>
+          <a href={lp(item.href)} class="nav-link">{item.label}</a>
         ))}
       </nav>
       
       <div class="header-actions">
-        <a href={locale === 'de' ? '/labor' : `/${locale}/labor`} class="switch-world">
-          <span>→ Labor & Erstmuster</span>
+        <a href={lp('/labor')} class="switch-world">
+          <span>{labels.switch}</span>
         </a>
-        <a href={locale === 'de' ? '/serie/kontakt' : `/${locale}/serie/kontakt`} class="btn btn-primary">
-          {locale === 'de' ? 'ROI berechnen' : 'Calculate ROI'}
+        <a href={lp('/kontakt')} class="btn btn-primary">
+          {labels.cta}
         </a>
       </div>
       
@@ -72,37 +105,16 @@ const items = nav[locale as keyof typeof nav] || nav.de;
   }
   
   .logo {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
     text-decoration: none;
   }
-  
-  .logo-mark {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-xl);
-    color: white;
-  }
-  
-  .logo-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .logo-text {
-    font-family: var(--font-heading);
-    font-size: var(--text-xl);
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1.1;
+
+  .logo-image {
+    display: block;
+    width: auto;
+    height: 42px;
   }
   
   .logo-sub {
@@ -110,6 +122,12 @@ const items = nav[locale as keyof typeof nav] || nav.de;
     color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 640px) {
+    .logo-sub {
+      display: none;
+    }
   }
   
   .main-nav {

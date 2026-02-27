@@ -1,0 +1,80 @@
+---
+import LaborLayout from '../../layouts/LaborLayout.astro';
+import { localePath, type Locale } from '../../i18n/translations';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const t = {
+  de: {
+    title: 'Schadensanalyse',
+    seoTitle: 'CT-Schadensanalyse | Microvista',
+    description: 'Zerstörungsfreie CT-Schadensanalyse für die Ursachenforschung bei Bauteilversagen.',
+    lead: 'Detaillierte Untersuchung von Bauteilversagen und Defekten mittels industrieller Computertomographie.',
+    sections: [
+      { title: 'Was ist CT-Schadensanalyse?', content: 'Die CT-Schadensanalyse ermöglicht eine vollständige 3D-Visualisierung innerer Strukturen ohne Zerstörung des Prüfteils. So können Risse, Poren, Einschlüsse und andere Defekte präzise lokalisiert und analysiert werden.' },
+      { title: 'Anwendungsgebiete', content: 'Unsere CT-Schadensanalyse kommt zum Einsatz bei: Produktionsfehlern und Qualitätsproblemen, Feldausfällen und Reklamationen, Materialermüdung und Verschleiß, Fertigungsprozess-Optimierung sowie Gutachten und Beweissicherung.' },
+      { title: 'Ihre Vorteile', content: 'Zerstörungsfreie Analyse — das Bauteil bleibt intakt. Sub-Mikrometer Auflösung für kleinste Defekte. Schnelle Ergebnisse innerhalb von 24-48 Stunden. Detaillierte 3D-Visualisierung und Dokumentation. ISO 9001 und ISO 17025 zertifizierte Prüfungen.' }
+    ],
+    cta: 'Schadensanalyse anfragen',
+  },
+  en: {
+    title: 'Failure Analysis',
+    seoTitle: 'CT Failure Analysis | Microvista',
+    description: 'Non-destructive CT failure analysis for root cause investigation of component failures.',
+    lead: 'Detailed investigation of component failures and defects using industrial computed tomography.',
+    sections: [
+      { title: 'What is CT Failure Analysis?', content: 'CT failure analysis enables complete 3D visualization of internal structures without destroying the test specimen. This allows cracks, pores, inclusions, and other defects to be precisely located and analyzed.' },
+      { title: 'Applications', content: 'Our CT failure analysis is used for: production defects and quality issues, field failures and complaints, material fatigue and wear, manufacturing process optimization, and expert reports and evidence preservation.' },
+      { title: 'Your Benefits', content: 'Non-destructive analysis — the component remains intact. Sub-micrometer resolution for the smallest defects. Fast results within 24-48 hours. Detailed 3D visualization and documentation. ISO 9001 and ISO 17025 certified inspections.' }
+    ],
+    cta: 'Request Failure Analysis',
+  }
+}[locale] || {
+  title: 'Failure Analysis',
+  seoTitle: 'CT Failure Analysis | Microvista',
+  description: 'Non-destructive CT failure analysis for root cause investigation of component failures.',
+  lead: 'Detailed investigation of component failures and defects using industrial computed tomography.',
+  sections: [],
+  cta: 'Request Failure Analysis',
+};
+---
+
+<LaborLayout title={t.seoTitle} description={t.description}>
+  <section class="hero">
+    <div class="container">
+      <h1>{t.title}</h1>
+      <p class="lead">{t.lead}</p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container container-narrow">
+      {t.sections.map((section: any) => (
+        <div class="content-block">
+          <h2>{section.title}</h2>
+          <p>{section.content}</p>
+        </div>
+      ))}
+
+      <div class="cta-box">
+        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.cta}</a>
+      </div>
+    </div>
+  </section>
+</LaborLayout>
+
+<style>
+  .hero {
+    padding: var(--space-20) 0;
+    background: linear-gradient(135deg, var(--primary) 0%, #1E3A8A 100%);
+    color: white;
+  }
+  .hero h1 { color: white; margin-bottom: var(--space-4); }
+  .lead { font-size: var(--text-xl); opacity: 0.8; max-width: 700px; }
+  .container-narrow { max-width: 800px; }
+  .content-section { padding: var(--space-16) 0; }
+  .content-block { margin-bottom: var(--space-12); }
+  .content-block h2 { margin-bottom: var(--space-4); color: var(--primary); }
+  .content-block p { line-height: 1.8; color: var(--text-muted); }
+  .cta-box { text-align: center; margin-top: var(--space-12); }
+</style>

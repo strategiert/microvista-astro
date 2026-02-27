@@ -3,6 +3,14 @@
  * SEO Component - Zentrale Meta-Tag Verwaltung
  * Basiert auf Astro SEO Guide Best Practices
  */
+import {
+  defaultLocale,
+  enabledLocales,
+  enabledLocaleRecords,
+  resolveLocale,
+  stripLocalePrefix
+} from '../../i18n/translations';
+
 interface Props {
   title: string;
   description: string;
@@ -30,17 +38,12 @@ const {
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://microvista.de';
 const canonical = canonicalUrl || new URL(Astro.url.pathname, siteUrl).toString();
 const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
-const locale = Astro.currentLocale || 'de';
+const locale = resolveLocale(Astro.locals.locale);
 
-// Hreflang URLs für alle 5 Sprachen
-const currentPath = Astro.url.pathname.replace(/^\/(de|en|fr|es|it)/, '').replace(/^\//, '/');
-const locales = {
-  de: `${siteUrl}${currentPath}`,           // Default ohne Prefix
-  en: `${siteUrl}/en${currentPath}`,
-  fr: `${siteUrl}/fr${currentPath}`,
-  es: `${siteUrl}/es${currentPath}`,
-  it: `${siteUrl}/it${currentPath}`
-};
+// Hreflang URLs nur für aktivierte Sprachen
+const currentPath = stripLocalePrefix(Astro.url.pathname);
+const locales = enabledLocaleRecords(currentPath, siteUrl);
+const xDefaultHref = locales[defaultLocale] || `${siteUrl}${currentPath}`;
 ---
 
 <!-- Primary Meta Tags -->
@@ -50,13 +53,11 @@ const locales = {
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 <link rel="canonical" href={canonical} />
 
-<!-- Hreflang für i18n (5 Sprachen) -->
-<link rel="alternate" hreflang="de" href={locales.de} />
-<link rel="alternate" hreflang="en" href={locales.en} />
-<link rel="alternate" hreflang="fr" href={locales.fr} />
-<link rel="alternate" hreflang="es" href={locales.es} />
-<link rel="alternate" hreflang="it" href={locales.it} />
-<link rel="alternate" hreflang="x-default" href={locales.de} />
+<!-- Hreflang für i18n -->
+{enabledLocales.map((item) => (
+  <link rel="alternate" hreflang={item} href={locales[item]} />
+))}
+<link rel="alternate" hreflang="x-default" href={xDefaultHref} />
 
 <!-- Open Graph -->
 <meta property="og:type" content={type} />

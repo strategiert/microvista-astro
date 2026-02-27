@@ -1,0 +1,19 @@
+{
+  "url": "https://www.microvista.de/en/posts/scanexpress-how-does-the-mobile-ct-work/",
+  "slug": "en/posts/scanexpress-how-does-the-mobile-ct-work",
+  "title": "SCANEXPRESS - How does the mobile CT work?",
+  "type": "post",
+  "lang": "en",
+  "metaDescription": "How easy is it to operate SCANEXPRESS and what processes run in the background? Take a look at how the mobile CT works now.",
+  "ogImage": "https://www.microvista.de/wp-content/uploads/2022/10/Bedienung-vom-mobilen-industriellen-CT.webp",
+  "canonical": "https://www.microvista.de/en/posts/scanexpress-how-does-the-mobile-ct-work/",
+  "markdown": "## So simple & fast is the operation\n\n### Procedure\n\n1\\. Select inspection program  \n2\\. Insert component and have it scanned  \n3\\. Data transfer from the server to the cloud  \n4\\. Receive the results of the cloud evaluation  \n5\\. Remove and sort component\n\nWith a setup tailored to your testing challenge, it is possible to automatically test your components via the Microvista Cloud in just a few seconds. Your evaluation programs are adjusted beforehand to your inspection parameters by means of artificial intelligence. Through this process, an inspection can be performed quickly & cost-effectively. So you know which components are OK and which are NOK. This way you can find out if your inspection process is capable and mastered, as well as prevent the further processing of NOK components.\n\n[Learn more  \nabout mobile CT now](https://www.mobile-ct.eu/)",
+  "htmlLength": 5649,
+  "markdownLength": 861,
+  "images": [
+    "https://www.microvista.de/wp-content/uploads/2026/01/2025_04_MV_Blog_Trends-2026.png",
+    "https://www.microvista.de/wp-content/uploads/2026/01/2025_04_MV_Blog_Trends-2026-300x169.png",
+    "https://www.microvista.de/wp-content/uploads/2026/01/2025_04_MV_Blog_Trends-2026-768x432.png"
+  ],
+  "scrapedAt": "2026-02-26T09:47:51.288Z"
+}

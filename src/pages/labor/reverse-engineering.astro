@@ -1,0 +1,80 @@
+---
+import LaborLayout from '../../layouts/LaborLayout.astro';
+import { localePath, type Locale } from '../../i18n/translations';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const t = {
+  de: {
+    title: 'Reverse Engineering',
+    seoTitle: 'CT Reverse Engineering | Microvista',
+    description: 'CT-basiertes Reverse Engineering — Digitalisierung und Analyse bestehender Bauteile.',
+    lead: 'Digitalisierung bestehender Bauteile und Ableitung von CAD-Daten mittels hochauflösender CT-Scans.',
+    sections: [
+      { title: 'Was ist CT-Reverse Engineering?', content: 'Beim CT-basierten Reverse Engineering wird ein physisches Bauteil durch einen hochauflösenden CT-Scan vollständig digitalisiert. Aus den 3D-Volumendaten können präzise CAD-Modelle, STL-Dateien und Maßprotokolle abgeleitet werden.' },
+      { title: 'Anwendungsgebiete', content: 'Reproduktion von Bauteilen ohne vorhandene CAD-Daten. Analyse von Wettbewerbsprodukten und Benchmarking. Dokumentation von Ist-Zuständen bei Altteilen. Qualitätskontrolle durch Soll-Ist-Vergleich. Nachkonstruktion und Optimierung bestehender Designs.' },
+      { title: 'Ihre Vorteile', content: 'Vollständige 3D-Erfassung inklusive innerer Geometrien — das unterscheidet CT von optischen 3D-Scannern. Höchste Genauigkeit bis in den Sub-Mikrometer-Bereich. Export in alle gängigen CAD-Formate (STEP, IGES, STL). Schnelle Durchlaufzeiten dank automatisierter Prozesse.' }
+    ],
+    cta: 'Reverse Engineering anfragen',
+  },
+  en: {
+    title: 'Reverse Engineering',
+    seoTitle: 'CT Reverse Engineering | Microvista',
+    description: 'CT-based reverse engineering — digitization and analysis of existing components.',
+    lead: 'Digitization of existing components and derivation of CAD data through high-resolution CT scans.',
+    sections: [
+      { title: 'What is CT Reverse Engineering?', content: 'In CT-based reverse engineering, a physical component is fully digitized through a high-resolution CT scan. From the 3D volume data, precise CAD models, STL files, and measurement protocols can be derived.' },
+      { title: 'Applications', content: 'Reproduction of components without existing CAD data. Competitive product analysis and benchmarking. Documentation of as-is conditions for legacy parts. Quality control through target-actual comparison. Reconstruction and optimization of existing designs.' },
+      { title: 'Your Benefits', content: 'Complete 3D capture including internal geometries — this distinguishes CT from optical 3D scanners. Highest accuracy down to the sub-micrometer range. Export to all common CAD formats (STEP, IGES, STL). Fast turnaround times thanks to automated processes.' }
+    ],
+    cta: 'Request Reverse Engineering',
+  }
+}[locale] || {
+  title: 'Reverse Engineering',
+  seoTitle: 'CT Reverse Engineering | Microvista',
+  description: 'CT-based reverse engineering — digitization and analysis of existing components.',
+  lead: 'Digitization of existing components and derivation of CAD data through high-resolution CT scans.',
+  sections: [],
+  cta: 'Request Reverse Engineering',
+};
+---
+
+<LaborLayout title={t.seoTitle} description={t.description}>
+  <section class="hero">
+    <div class="container">
+      <h1>{t.title}</h1>
+      <p class="lead">{t.lead}</p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container container-narrow">
+      {t.sections.map((section: any) => (
+        <div class="content-block">
+          <h2>{section.title}</h2>
+          <p>{section.content}</p>
+        </div>
+      ))}
+
+      <div class="cta-box">
+        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.cta}</a>
+      </div>
+    </div>
+  </section>
+</LaborLayout>
+
+<style>
+  .hero {
+    padding: var(--space-20) 0;
+    background: linear-gradient(135deg, var(--primary) 0%, #1E3A8A 100%);
+    color: white;
+  }
+  .hero h1 { color: white; margin-bottom: var(--space-4); }
+  .lead { font-size: var(--text-xl); opacity: 0.8; max-width: 700px; }
+  .container-narrow { max-width: 800px; }
+  .content-section { padding: var(--space-16) 0; }
+  .content-block { margin-bottom: var(--space-12); }
+  .content-block h2 { margin-bottom: var(--space-4); color: var(--primary); }
+  .content-block p { line-height: 1.8; color: var(--text-muted); }
+  .cta-box { text-align: center; margin-top: var(--space-12); }
+</style>

@@ -1,0 +1,81 @@
+---
+import SerieLayout from '../../layouts/SerieLayout.astro';
+import { localePath, type Locale } from '../../i18n/translations';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const t = {
+  de: {
+    title: 'Inline-CT',
+    seoTitle: 'Inline-CT für Serienprüfung | Microvista',
+    description: 'Inline-CT-Systeme für vollautomatisierte Qualitätsprüfung direkt in der Produktionslinie.',
+    lead: 'CT-Prüfung direkt in Ihrer Produktionslinie — vollautomatisch, taktzeittauglich, 100% Prüfabdeckung.',
+    sections: [
+      { title: 'Was ist Inline-CT?', content: 'Inline-CT integriert industrielle Computertomographie direkt in Ihre Fertigungslinie. Jedes Bauteil wird vollautomatisch gescannt, analysiert und bewertet — ohne manuellen Eingriff, ohne Stillstand, ohne Kompromisse bei der Prüftiefe.' },
+      { title: 'Technische Highlights', content: 'Prüfzeit unter 3 Sekunden pro Bauteil. Vollständige 3D-Volumendaten für jeden Artikel. Automatische Defekterkennung und IO/NIO-Klassifizierung. Nahtlose Integration in bestehende Produktionslinien via OPC UA, PROFINET oder REST-API. Rückverfolgbarkeit über Bauteil-ID und Chargen-Zuordnung.' },
+      { title: 'Ihre Vorteile', content: '100% Prüfabdeckung statt stichprobenbasierter Kontrolle. Frühzeitige Fehlererkennung reduziert Ausschusskosten. Lückenlose Qualitätsdokumentation für Automotive-Standards (IATF 16949). ROI typischerweise innerhalb von 12-18 Monaten.' }
+    ],
+    cta: 'Inline-CT Beratung anfragen',
+  },
+  en: {
+    title: 'Inline CT',
+    seoTitle: 'Inline CT for Serial Inspection | Microvista',
+    description: 'Inline CT systems for fully automated quality inspection directly in the production line.',
+    lead: 'CT inspection directly in your production line — fully automated, cycle-time capable, 100% inspection coverage.',
+    sections: [
+      { title: 'What is Inline CT?', content: 'Inline CT integrates industrial computed tomography directly into your production line. Every component is automatically scanned, analyzed, and evaluated — without manual intervention, without downtime, without compromising inspection depth.' },
+      { title: 'Technical Highlights', content: 'Inspection time under 3 seconds per part. Complete 3D volume data for every article. Automatic defect detection and pass/fail classification. Seamless integration into existing production lines via OPC UA, PROFINET, or REST API. Traceability via part ID and batch assignment.' },
+      { title: 'Your Benefits', content: '100% inspection coverage instead of sample-based control. Early defect detection reduces scrap costs. Complete quality documentation for automotive standards (IATF 16949). ROI typically within 12-18 months.' }
+    ],
+    cta: 'Request Inline CT Consultation',
+  }
+}[locale] || {
+  title: 'Inline-CT',
+  seoTitle: 'Inline CT for Serial Inspection | Microvista',
+  description: 'Inline CT systems for fully automated quality inspection directly in the production line.',
+  lead: 'CT inspection directly in your production line — fully automated, cycle-time capable, 100% inspection coverage.',
+  sections: [],
+  cta: 'Request Inline CT Consultation',
+};
+---
+
+<SerieLayout title={t.seoTitle} description={t.description}>
+  <section class="hero">
+    <div class="container">
+      <h1>{t.title}</h1>
+      <p class="lead">{t.lead}</p>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container container-narrow">
+      {t.sections.map((section: any) => (
+        <div class="content-block">
+          <h2>{section.title}</h2>
+          <p>{section.content}</p>
+        </div>
+      ))}
+
+      <div class="cta-box">
+        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.cta}</a>
+      </div>
+    </div>
+  </section>
+</SerieLayout>
+
+<style>
+  .hero {
+    padding: var(--space-20) 0;
+    background: linear-gradient(135deg, var(--background, #0f172a) 0%, var(--primary, #1e293b) 50%, rgba(249, 115, 22, 0.2) 100%);
+    color: white;
+  }
+  .hero h1 { color: white; margin-bottom: var(--space-4); }
+  .lead { font-size: var(--text-xl); color: rgba(255,255,255,0.7); max-width: 700px; }
+  .container-narrow { max-width: 800px; }
+  .content-section { padding: var(--space-16) 0; }
+  .content-block { margin-bottom: var(--space-12); }
+  .content-block h2 { margin-bottom: var(--space-4); }
+  .content-block p { line-height: 1.8; color: var(--text-muted); }
+  .cta-box { text-align: center; margin-top: var(--space-12); }
+  .cta-box .btn-primary { background: var(--accent, #f97316); color: #000; font-weight: 600; }
+</style>

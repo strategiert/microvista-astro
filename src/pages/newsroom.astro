@@ -4,9 +4,11 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
+import { localePath, type Locale } from '../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
-const lang = locale === 'en' ? 'en' : 'de';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+const lang = locale === 'de' ? 'de' : 'en';
 
 const t = {
   de: {
@@ -32,18 +34,59 @@ const t = {
     contact: 'Media Inquiries',
     contactText: 'For media inquiries please contact us.',
     contactBtn: 'Get in touch',
+    noPress: 'No press releases yet.',
+  },
+  fr: {
+    title: 'Newsroom',
+    subtitle: 'Presse et actualités',
+    description: 'Dernières actualités, communiqués de presse et ressources média de Microvista GmbH.',
+    press: 'Communiqués de presse',
+    media: 'Médiathèque',
+    mediaText: 'Vous trouverez ici notre logo, des images de nos services CT et des vidéos sur l’utilisation du CT industriel.',
+    readMore: 'Lire la suite',
+    contact: 'Demandes média',
+    contactText: 'Pour toute demande média, contactez-nous.',
+    contactBtn: 'Nous contacter',
+    noPress: 'Aucun communiqué pour le moment.',
+  },
+  es: {
+    title: 'Newsroom',
+    subtitle: 'Prensa y noticias',
+    description: 'Últimas noticias, comunicados de prensa y recursos multimedia de Microvista GmbH.',
+    press: 'Comunicados de prensa',
+    media: 'Mediateca',
+    mediaText: 'Aquí encontrará nuestro logotipo, imágenes de nuestros servicios CT y videos sobre el uso de CT industrial.',
+    readMore: 'Leer más',
+    contact: 'Consultas de medios',
+    contactText: 'Para consultas de medios, contáctenos.',
+    contactBtn: 'Contactar',
+    noPress: 'Aún no hay comunicados de prensa.',
+  },
+  it: {
+    title: 'Newsroom',
+    subtitle: 'Stampa e notizie',
+    description: 'Ultime notizie, comunicati stampa e materiali media di Microvista GmbH.',
+    press: 'Comunicati stampa',
+    media: 'Media library',
+    mediaText: 'Qui trovi il nostro logo, immagini dei servizi CT e video sull’utilizzo del CT industriale.',
+    readMore: 'Leggi di più',
+    contact: 'Richieste media',
+    contactText: 'Per richieste media, contattaci.',
+    contactBtn: 'Contattaci',
+    noPress: 'Nessun comunicato stampa al momento.',
   }
 }[locale] || {
   title: 'Newsroom',
-  subtitle: 'Presse & News',
-  description: 'Aktuelle Nachrichten, Pressemitteilungen und Medienmaterial der Microvista GmbH.',
-  press: 'Pressemitteilungen',
-  media: 'Mediathek',
-  mediaText: 'Hier finden Sie unser Logo und eine Auswahl an Bildern aus unserem CT-Dienstleistungsbereich sowie Videos über den Einsatz von industrieller CT.',
-  readMore: 'Weiterlesen',
-  contact: 'Medienanfragen',
-  contactText: 'Für Medienanfragen kontaktieren Sie uns gerne.',
-  contactBtn: 'Kontakt aufnehmen',
+  subtitle: 'Press & News',
+  description: 'Latest news, press releases and media material from Microvista GmbH.',
+  press: 'Press Releases',
+  media: 'Media Library',
+  mediaText: 'Here you will find our logo and a selection of images from our CT services area as well as videos about the use of industrial CT.',
+  readMore: 'Read more',
+  contact: 'Media Inquiries',
+  contactText: 'For media inquiries please contact us.',
+  contactBtn: 'Get in touch',
+  noPress: 'No press releases yet.',
 };
 
 // Get news/press articles from the magazin collection
@@ -74,8 +117,8 @@ const newsPosts = allPosts
         {newsPosts.length > 0 ? (
           <div class="news-list">
             {newsPosts.map(post => {
-              const slug = post.id.replace(/^(de|en)\//, '');
-              const href = lang === 'en' ? `/en/magazin/${slug}/` : `/magazin/${slug}/`;
+              const slug = post.id.replace(/^(de|en)\//, '').replace(/\.mdx?$/, '');
+              const href = lp(`/magazin/${slug}`);
               return (
                 <a href={href} class="news-card">
                   {post.data.image && (
@@ -94,7 +137,7 @@ const newsPosts = allPosts
             })}
           </div>
         ) : (
-          <p class="empty-notice">{locale === 'en' ? 'No press releases yet.' : 'Noch keine Pressemitteilungen.'}</p>
+          <p class="empty-notice">{t.noPress}</p>
         )}
       </section>
 
@@ -106,7 +149,7 @@ const newsPosts = allPosts
       <section class="contact-section">
         <h2>{t.contact}</h2>
         <p>{t.contactText}</p>
-        <a href="/kontakt/" class="btn btn-primary">{t.contactBtn}</a>
+        <a href={lp('/kontakt')} class="btn btn-primary">{t.contactBtn}</a>
       </section>
     </div>
   </div>

@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
+import { loadStaticPage } from '../lib/load-static-page';
+import { type Locale } from '../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+const content = await loadStaticPage('live-demo-scanexpress', locale);
+
+const labels = {
+  de: {
+    title: 'Live Demo ScanExpress',
+    description: 'Live-Demo zum mobilen CT-System ScanExpress.',
+    breadcrumb: 'Live Demo ScanExpress'
+  },
+  en: {
+    title: 'Live Demo ScanExpress',
+    description: 'Live demo of the mobile CT system ScanExpress.',
+    breadcrumb: 'Live Demo ScanExpress'
+  },
+  fr: {
+    title: 'Démo live ScanExpress',
+    description: 'Démonstration en direct du système CT mobile ScanExpress.',
+    breadcrumb: 'Démo live ScanExpress'
+  },
+  es: {
+    title: 'Demo en vivo ScanExpress',
+    description: 'Demostración en vivo del sistema CT móvil ScanExpress.',
+    breadcrumb: 'Demo en vivo ScanExpress'
+  },
+  it: {
+    title: 'Demo live ScanExpress',
+    description: 'Demo dal vivo del sistema CT mobile ScanExpress.',
+    breadcrumb: 'Demo live ScanExpress'
+  }
+}[locale] || {
+  title: 'Live Demo ScanExpress',
+  description: 'Live-Demo zum mobilen CT-System ScanExpress.',
+  breadcrumb: 'Live Demo ScanExpress'
+};
+---
+
+<BaseLayout title={labels.title} description={labels.description}>
+  <Header slot="header" />
+
+  <div class="static-page">
+    <div class="container">
+      <Breadcrumbs items={[{ label: labels.breadcrumb }]} />
+      <article class="static-content">
+        {content ? <div set:html={content} /> : <p>Inhalt folgt in Kürze.</p>}
+      </article>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .static-page { padding-bottom: var(--space-16); }
+  .static-content { max-width: 900px; margin: 0 auto; padding: var(--space-8) 0; }
+  .static-content :global(h1) { font-size: var(--text-4xl); margin-bottom: var(--space-8); }
+  .static-content :global(h2) { margin-top: var(--space-8); margin-bottom: var(--space-4); }
+  .static-content :global(h3) { margin-top: var(--space-6); margin-bottom: var(--space-3); }
+  .static-content :global(p) { line-height: 1.8; margin-bottom: var(--space-4); }
+  .static-content :global(img) { max-width: 100%; height: auto; border-radius: var(--radius-xl); }
+</style>

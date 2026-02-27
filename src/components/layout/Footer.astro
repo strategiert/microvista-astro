@@ -4,7 +4,7 @@
  */
 import { translations, type Locale, localePath } from '../../i18n/translations';
 
-const locale = (Astro.currentLocale || 'de') as Locale;
+const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
 const currentYear = new Date().getFullYear();
 
@@ -19,9 +19,15 @@ const footer = translations.footer;
     <div class="footer-grid">
       <!-- Brand -->
       <div class="footer-brand">
-        <a href={lp('/')} class="logo">
-          <div class="logo-mark">M</div>
-          <span class="logo-text">Microvista</span>
+        <a href={lp('/')} class="logo" aria-label="Microvista">
+          <img
+            class="logo-image"
+            src="/images/logos/2024_08-MV-Logo_weiss.png"
+            alt="Microvista"
+            width="705"
+            height="399"
+            loading="lazy"
+          />
         </a>
         <p class="tagline">{footer.tagline[locale]}</p>
       </div>
@@ -34,7 +40,7 @@ const footer = translations.footer;
             <li><a href={lp('/labor/erstmusterpruefung')}>{laborNav.erstmusterpruefung[locale]}</a></li>
             <li><a href={lp('/labor/schadensanalyse')}>{laborNav.schadensanalyse[locale]}</a></li>
             <li><a href={lp('/labor/reverse-engineering')}>{laborNav.reverseEngineering[locale]}</a></li>
-            <li><a href={lp('/labor/kontakt')}>{nav.kontakt[locale]}</a></li>
+            <li><a href={lp('/kontakt')}>{nav.kontakt[locale]}</a></li>
           </ul>
         </div>
 
@@ -44,7 +50,7 @@ const footer = translations.footer;
             <li><a href={lp('/serie/inline-ct')}>{serieNav.inlineCt[locale]}</a></li>
             <li><a href={lp('/serie/100-prozent-pruefung')}>{serieNav.hundertProzent[locale]}</a></li>
             <li><a href={lp('/serie/ki-automatisierung')}>{serieNav.kiAutomatisierung[locale]}</a></li>
-            <li><a href={lp('/serie/kontakt')}>{nav.kontakt[locale]}</a></li>
+            <li><a href={lp('/kontakt')}>{nav.kontakt[locale]}</a></li>
           </ul>
         </div>
 
@@ -54,15 +60,15 @@ const footer = translations.footer;
             <li><a href={lp('/magazin')}>{nav.magazin[locale]}</a></li>
             <li><a href={lp('/wiki')}>{nav.wiki[locale]}</a></li>
             <li><a href={lp('/branchen')}>{nav.branchen[locale]}</a></li>
-            <li><a href={lp('/ressourcen')}>{footer.downloads[locale]}</a></li>
+            <li><a href={lp('/dienstleistungen')}>{footer.downloads[locale]}</a></li>
           </ul>
         </div>
 
         <div class="link-group">
           <h4>{nav.unternehmen[locale]}</h4>
           <ul>
-            <li><a href={lp('/unternehmen')}>{footer.ueberUns[locale]}</a></li>
-            <li><a href={lp('/unternehmen/karriere')}>{footer.karriere[locale]}</a></li>
+            <li><a href={lp('/team')}>{footer.ueberUns[locale]}</a></li>
+            <li><a href={lp('/zertifizierungen')}>{footer.zertifizierungen[locale]}</a></li>
             <li><a href={lp('/impressum')}>{footer.impressum[locale]}</a></li>
             <li><a href={lp('/datenschutz')}>{footer.datenschutz[locale]}</a></li>
           </ul>
@@ -106,29 +112,14 @@ const footer = translations.footer;
   .footer-brand .logo {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-3);
-    color: white;
     text-decoration: none;
     margin-bottom: var(--space-4);
   }
 
-  .logo-mark {
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, #7C3AED, #00B4D8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-xl);
-  }
-
-  .logo-text {
-    font-family: var(--font-heading);
-    font-size: var(--text-2xl);
-    font-weight: 700;
+  .footer-brand .logo-image {
+    display: block;
+    width: auto;
+    height: 46px;
   }
 
   .tagline {

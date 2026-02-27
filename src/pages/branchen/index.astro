@@ -8,8 +8,10 @@ import Footer from '../../components/layout/Footer.astro';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import Card from '../../components/ui/Card.astro';
 import { getCollection } from 'astro:content';
+import { localePath, type Locale } from '../../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
 
 // Branchen-Daten laden
 const branchen = await getCollection('branchen');
@@ -26,10 +28,60 @@ const content = {
     subtitle: 'Industrial CT solutions for your industry',
     description: 'Every industry has specific quality inspection requirements. Discover how Microvista CT technology solves your challenges.',
     cta: 'Learn more'
+  },
+  fr: {
+    title: 'Secteurs',
+    subtitle: 'Solutions CT industrielles pour votre secteur',
+    description: 'Chaque secteur a ses propres exigences qualité. Découvrez comment la technologie CT de Microvista répond à vos défis.',
+    cta: 'En savoir plus'
+  },
+  es: {
+    title: 'Sectores',
+    subtitle: 'Soluciones CT industriales para su sector',
+    description: 'Cada sector tiene requisitos específicos de calidad. Descubra cómo la tecnología CT de Microvista resuelve sus desafíos.',
+    cta: 'Más información'
+  },
+  it: {
+    title: 'Settori',
+    subtitle: 'Soluzioni CT industriali per il tuo settore',
+    description: 'Ogni settore ha requisiti specifici di qualità. Scopri come la tecnologia CT di Microvista risolve le tue sfide.',
+    cta: 'Scopri di più'
   }
 };
 
-const t = content[locale as keyof typeof content] || content.de;
+const t = content[locale as keyof typeof content] || content.en || content.de;
+
+const ctaContent = {
+  de: {
+    title: 'Ihre Branche nicht dabei?',
+    text: 'CT-Technologie ist vielseitig einsetzbar. Kontaktieren Sie uns für eine individuelle Beratung zu Ihren spezifischen Anforderungen.',
+    button: 'Beratung anfragen'
+  },
+  en: {
+    title: 'Your industry not listed?',
+    text: 'CT technology is versatile. Contact us for individual consultation on your specific requirements.',
+    button: 'Request consultation'
+  },
+  fr: {
+    title: 'Votre secteur n’est pas listé ?',
+    text: 'La technologie CT est polyvalente. Contactez-nous pour un conseil adapté à vos exigences spécifiques.',
+    button: 'Demander une consultation'
+  },
+  es: {
+    title: '¿Su sector no aparece?',
+    text: 'La tecnología CT es versátil. Contáctenos para una consulta adaptada a sus necesidades específicas.',
+    button: 'Solicitar consulta'
+  },
+  it: {
+    title: 'Il tuo settore non è presente?',
+    text: 'La tecnologia CT è versatile. Contattaci per una consulenza personalizzata sulle tue esigenze specifiche.',
+    button: 'Richiedi consulenza'
+  }
+}[locale] || {
+  title: 'Your industry not listed?',
+  text: 'CT technology is versatile. Contact us for individual consultation on your specific requirements.',
+  button: 'Request consultation'
+};
 
 // Fallback-Branchen falls Collection leer
 const defaultBranchen = [
@@ -108,7 +160,7 @@ const displayBranchen = branchen.length > 0 ? branchen : defaultBranchen;
     <section class="branchen-grid">
       {displayBranchen.map((branche, index) => (
         <Card
-          href={`/branchen/${branche.slug}`}
+          href={lp(`/branchen/${branche.slug}`)}
           variant={index === 0 ? 'featured' : 'default'}
           class={index === 0 ? 'branche-featured' : ''}
         >
@@ -134,14 +186,10 @@ const displayBranchen = branchen.length > 0 ? branchen : defaultBranchen;
     <!-- CTA Section -->
     <section class="cta-section">
       <div class="cta-content">
-        <h2>{locale === 'de' ? 'Ihre Branche nicht dabei?' : 'Your industry not listed?'}</h2>
-        <p>
-          {locale === 'de'
-            ? 'CT-Technologie ist vielseitig einsetzbar. Kontaktieren Sie uns für eine individuelle Beratung zu Ihren spezifischen Anforderungen.'
-            : 'CT technology is versatile. Contact us for individual consultation on your specific requirements.'}
-        </p>
-        <a href="/kontakt" class="btn btn-primary btn-lg">
-          {locale === 'de' ? 'Beratung anfragen' : 'Request consultation'}
+        <h2>{ctaContent.title}</h2>
+        <p>{ctaContent.text}</p>
+        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">
+          {ctaContent.button}
         </a>
       </div>
     </section>

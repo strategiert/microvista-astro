@@ -3,14 +3,21 @@
  * Globaler Header - Wird auf allen Seiten angezeigt
  * Responsive Navigation mit Mobile Menu - 5 Sprachen
  */
-import { translations, localeNames, type Locale, localePath } from '../../i18n/translations';
+import {
+  translations,
+  localeNames,
+  type Locale,
+  localePath,
+  enabledLocales,
+  languageSwitchPath
+} from '../../i18n/translations';
 
 interface Props {
   theme?: 'light' | 'dark' | 'transparent';
 }
 
 const { theme = 'light' } = Astro.props;
-const locale = (Astro.currentLocale || 'de') as Locale;
+const locale = (Astro.locals.locale || 'de') as Locale;
 
 const lp = (path: string) => localePath(path, locale);
 
@@ -18,26 +25,35 @@ const nav = translations.nav;
 const laborNav = translations.laborNav;
 const serieNav = translations.serieNav;
 
-// Alle verfügbaren Sprachen
-const locales: Locale[] = ['de', 'en', 'fr', 'es', 'it'];
-
-// Get current path without locale prefix for language switching
+// Aktueller Pfad für Sprachwechsel
 const currentPath = Astro.url.pathname;
-const pathWithoutLocale = locale === 'de'
-  ? currentPath
-  : currentPath.replace(new RegExp(`^/${locale}`), '') || '/';
 
 // Helper to build language-specific URL preserving current path
 const getLangUrl = (targetLocale: Locale) => {
-  return targetLocale === 'de' ? pathWithoutLocale : `/${targetLocale}${pathWithoutLocale}`;
+  return languageSwitchPath(currentPath, targetLocale);
 };
 ---
 
 <header class:list={['site-header', `theme-${theme}`]}>
   <div class="container">
-    <a href={lp('/')} class="logo">
-      <div class="logo-mark">M</div>
-      <span class="logo-text">Microvista</span>
+    <a href={lp('/')} class="logo" aria-label="Microvista">
+      <img
+        class="logo-image logo-image-light"
+        src="/images/logos/2013-08-microvista_Logo_RGB-7.png"
+        alt="Microvista"
+        width="705"
+        height="399"
+        loading="eager"
+      />
+      <img
+        class="logo-image logo-image-dark"
+        src="/images/logos/2024_08-MV-Logo_weiss.png"
+        alt=""
+        aria-hidden="true"
+        width="705"
+        height="399"
+        loading="eager"
+      />
     </a>
 
     <nav class="main-nav" id="main-nav">
@@ -74,7 +90,7 @@ const getLangUrl = (targetLocale: Locale) => {
           </svg>
         </button>
         <ul class="lang-dropdown">
-          {locales.map(l => (
+          {enabledLocales.map(l => (
             <li>
               <a
                 href={getLangUrl(l)}
@@ -128,36 +144,30 @@ const getLangUrl = (targetLocale: Locale) => {
   }
 
   .logo {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: var(--space-3);
     text-decoration: none;
-    color: var(--text);
+    min-height: 40px;
   }
 
-  .theme-dark .logo,
-  .theme-transparent .logo {
-    color: white;
+  .logo-image {
+    display: block;
+    width: auto;
+    height: 42px;
   }
 
-  .logo-mark {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, #7C3AED, #00B4D8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: var(--text-lg);
-    color: white;
+  .logo-image-dark {
+    display: none;
   }
 
-  .logo-text {
-    font-family: var(--font-heading);
-    font-size: var(--text-xl);
-    font-weight: 700;
+  .theme-dark .logo-image-light,
+  .theme-transparent .logo-image-light {
+    display: none;
+  }
+
+  .theme-dark .logo-image-dark,
+  .theme-transparent .logo-image-dark {
+    display: block;
   }
 
   .main-nav {

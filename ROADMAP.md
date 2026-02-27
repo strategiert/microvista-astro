@@ -1,5 +1,7 @@
 # Microvista Astro - Roadmap
 
+> Aktueller operativer Stand: [docs/mission-control.md](./docs/mission-control.md)
+
 ## Phase 1: SEO-Fundament (Kritisch)
 
 ### 1.1 Technische SEO-Fixes

@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import { loadStaticPage } from '../../lib/load-static-page';
+import { type Locale } from '../../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+const content = await loadStaticPage('faq', locale);
+---
+
+<BaseLayout title="FAQ| Industrielle Computertomographie" description="Dank jahrelanger Erfahrung weiß Microvista, welche Fragen häufig zu industrieller CT gestellt werden. Finden Sie Ihre Antwort jetzt im FAQ!">
+  <Header slot="header" />
+
+  <div class="static-page">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'FAQ' }]} />
+      <article class="static-content">
+        {content ? <div set:html={content} /> : <p>Inhalt folgt in Kürze.</p>}
+      </article>
+    </div>
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .static-page { padding-bottom: var(--space-16); }
+  .static-content { max-width: 900px; margin: 0 auto; padding: var(--space-8) 0; }
+  .static-content :global(h1) { font-size: var(--text-4xl); margin-bottom: var(--space-8); }
+  .static-content :global(h2) { margin-top: var(--space-8); margin-bottom: var(--space-4); }
+  .static-content :global(h3) { margin-top: var(--space-6); margin-bottom: var(--space-3); }
+  .static-content :global(h4) { margin-top: var(--space-4); margin-bottom: var(--space-2); }
+  .static-content :global(p) { line-height: 1.8; margin-bottom: var(--space-4); }
+  .static-content :global(ul), .static-content :global(ol) { padding-left: var(--space-6); margin-bottom: var(--space-4); }
+  .static-content :global(li) { line-height: 1.7; margin-bottom: var(--space-2); }
+  .static-content :global(table) { width: 100%; border-collapse: collapse; margin-bottom: var(--space-6); }
+  .static-content :global(th), .static-content :global(td) { padding: var(--space-3); border: 1px solid var(--border, #eef2f5); }
+  .static-content :global(th) { background: var(--surface, #f8fafc); font-weight: 600; }
+  .static-content :global(img) { max-width: 100%; height: auto; border-radius: var(--radius-xl); margin: var(--space-4) 0; }
+  .static-content :global(a) { color: var(--accent, #ee7711); }
+  .static-content :global(strong) { font-weight: 700; }
+</style>

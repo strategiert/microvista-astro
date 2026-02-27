@@ -7,21 +7,33 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "i18n:inventory": "node scripts/i18n-inventory.mjs",
+    "i18n:check": "node scripts/i18n-missing-check.mjs",
+    "i18n:translate-static": "python scripts/translate_static_pages.py",
+    "wiki:umlauts": "node scripts/normalize-wiki-umlauts.mjs",
+    "wiki:matrix": "node scripts/generate-wiki-normen-matrix.mjs",
+    "sitemap:url-map": "node scripts/generate-sitemap-url-mapping.mjs",
+    "images:sync-refs": "node scripts/sync-content-image-references.mjs",
+    "images:audit": "node scripts/analyze-broken-images.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.0.0",
     "@astrojs/mdx": "^4.0.0",
-    "@astrojs/preact": "^4.0.0",
+    "@astrojs/react": "^4.4.2",
     "@astrojs/sitemap": "^3.2.0",
+    "@keystatic/astro": "^5.0.6",
+    "@keystatic/core": "^0.5.48",
     "astro": "^5.1.0",
     "cheerio": "^1.2.0",
     "node-fetch": "^3.3.2",
-    "preact": "^10.25.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "turndown": "^7.2.2"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "marked": "^17.0.3",
     "typescript": "^5.7.0"
   }
 }

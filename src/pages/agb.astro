@@ -4,17 +4,26 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
 import { loadStaticPage } from '../lib/load-static-page';
+import { type Locale } from '../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
-const content = await loadStaticPage(locale === 'en' ? 'agb-en.md' : 'agb.md');
+const locale = (Astro.locals.locale || 'de') as Locale;
+const content = await loadStaticPage('agb', locale);
+
+const labels = {
+  de: { title: 'AGB', description: 'Allgemeine Geschäftsbedingungen der Microvista GmbH' },
+  en: { title: 'Terms and Conditions', description: 'General terms and conditions of Microvista GmbH' },
+  fr: { title: 'Conditions générales', description: 'Conditions générales de Microvista GmbH' },
+  es: { title: 'Términos y condiciones', description: 'Términos y condiciones de Microvista GmbH' },
+  it: { title: 'Termini e condizioni', description: 'Termini e condizioni di Microvista GmbH' }
+}[locale] || { title: 'AGB', description: 'Allgemeine Geschäftsbedingungen der Microvista GmbH' };
 ---
 
-<BaseLayout title="AGB" description="Allgemeine Geschäftsbedingungen der Microvista GmbH">
+<BaseLayout title={labels.title} description={labels.description}>
   <Header slot="header" />
 
   <div class="legal-page">
     <div class="container">
-      <Breadcrumbs items={[{ label: 'AGB' }]} />
+      <Breadcrumbs items={[{ label: labels.title }]} />
       <article class="legal-content" set:html={content} />
     </div>
   </div>

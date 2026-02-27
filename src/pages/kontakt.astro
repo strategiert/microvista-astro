@@ -7,8 +7,10 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
 import ContactForm from '../components/forms/ContactForm.astro';
+import { localePath, type Locale } from '../i18n/translations';
 
-const locale = Astro.currentLocale || 'de';
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
 
 const content = {
   de: {
@@ -24,9 +26,9 @@ const content = {
     hoursValue: 'Mo-Fr: 8:00-17:00 Uhr',
     quickLinks: 'Schnellzugriff',
     links: [
-      { label: 'Labor-Anfrage', href: '/labor/kontakt' },
-      { label: 'Serie-Anfrage', href: '/serie/kontakt' },
-      { label: 'Support', href: '/support' }
+      { label: 'Labor-Leistungen', href: '/labor/erstmusterpruefung' },
+      { label: 'Serien-Lösungen', href: '/serie/inline-ct' },
+      { label: 'FAQ', href: '/faq' }
     ]
   },
   en: {
@@ -42,14 +44,68 @@ const content = {
     hoursValue: 'Mon-Fri: 8:00-17:00',
     quickLinks: 'Quick Links',
     links: [
-      { label: 'Lab Inquiry', href: '/labor/kontakt' },
-      { label: 'Series Inquiry', href: '/serie/kontakt' },
-      { label: 'Support', href: '/support' }
+      { label: 'Lab Services', href: '/labor/erstmusterpruefung' },
+      { label: 'Series Solutions', href: '/serie/inline-ct' },
+      { label: 'FAQ', href: '/faq' }
+    ]
+  },
+  fr: {
+    title: 'Contact',
+    subtitle: 'Parlez à nos experts',
+    description: 'Vous avez des questions sur nos solutions CT ? Nous vous aidons volontiers.',
+    formTitle: 'Écrivez-nous',
+    infoTitle: 'Informations de contact',
+    email: 'E-mail',
+    phone: 'Téléphone',
+    address: 'Adresse',
+    hours: 'Disponibilité',
+    hoursValue: 'Lun-Ven : 8h00-17h00',
+    quickLinks: 'Accès rapide',
+    links: [
+      { label: 'Services labo', href: '/labor/erstmusterpruefung' },
+      { label: 'Solutions série', href: '/serie/inline-ct' },
+      { label: 'FAQ', href: '/faq' }
+    ]
+  },
+  es: {
+    title: 'Contacto',
+    subtitle: 'Hable con nuestros expertos',
+    description: '¿Tiene preguntas sobre nuestras soluciones CT? Estaremos encantados de ayudarle.',
+    formTitle: 'Escríbanos',
+    infoTitle: 'Información de contacto',
+    email: 'Correo electrónico',
+    phone: 'Teléfono',
+    address: 'Dirección',
+    hours: 'Disponibilidad',
+    hoursValue: 'Lun-Vie: 8:00-17:00',
+    quickLinks: 'Acceso rápido',
+    links: [
+      { label: 'Servicios de laboratorio', href: '/labor/erstmusterpruefung' },
+      { label: 'Soluciones en serie', href: '/serie/inline-ct' },
+      { label: 'FAQ', href: '/faq' }
+    ]
+  },
+  it: {
+    title: 'Contatto',
+    subtitle: 'Parla con i nostri esperti',
+    description: 'Hai domande sulle nostre soluzioni CT? Saremo lieti di aiutarti.',
+    formTitle: 'Scrivici',
+    infoTitle: 'Informazioni di contatto',
+    email: 'E-mail',
+    phone: 'Telefono',
+    address: 'Indirizzo',
+    hours: 'Disponibilità',
+    hoursValue: 'Lun-Ven: 8:00-17:00',
+    quickLinks: 'Accesso rapido',
+    links: [
+      { label: 'Servizi laboratorio', href: '/labor/erstmusterpruefung' },
+      { label: 'Soluzioni in serie', href: '/serie/inline-ct' },
+      { label: 'FAQ', href: '/faq' }
     ]
   }
 };
 
-const t = content[locale as keyof typeof content] || content.de;
+const t = content[locale as keyof typeof content] || content.en || content.de;
 ---
 
 <BaseLayout
@@ -144,7 +200,7 @@ const t = content[locale as keyof typeof content] || content.de;
             <ul>
               {t.links.map(link => (
                 <li>
-                  <a href={link.href}>
+                  <a href={lp(link.href)}>
                     {link.label}
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
