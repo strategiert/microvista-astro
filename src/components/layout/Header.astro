@@ -14,9 +14,10 @@ import {
 
 interface Props {
   theme?: 'light' | 'dark' | 'transparent';
+  world?: 'labor' | 'serie';
 }
 
-const { theme = 'light' } = Astro.props;
+const { theme = 'light', world } = Astro.props;
 const locale = (Astro.locals.locale || 'de') as Locale;
 
 const lp = (path: string) => localePath(path, locale);
@@ -24,6 +25,32 @@ const lp = (path: string) => localePath(path, locale);
 const nav = translations.nav;
 const laborNav = translations.laborNav;
 const serieNav = translations.serieNav;
+
+// Kontext-Leiste: Labor- und Serie-spezifische Sub-Links
+const worldContext = {
+  labor: {
+    label: { de: 'Labor & Erstmuster', en: 'Lab & First Article', fr: 'Laboratoire', es: 'Laboratorio', it: 'Laboratorio' },
+    links: [
+      { de: 'Erstmusterprüfung', en: 'First Article Inspection', fr: 'Premier article', es: 'Primera muestra', it: 'Primo campione', href: '/labor/erstmusterpruefung' },
+      { de: 'Schadensanalyse', en: 'Failure Analysis', fr: 'Analyse de défaillance', es: 'Análisis de fallas', it: 'Analisi dei guasti', href: '/labor/schadensanalyse' },
+      { de: 'Reverse Engineering', en: 'Reverse Engineering', fr: 'Rétro-ingénierie', es: 'Ingeniería inversa', it: 'Reverse engineering', href: '/labor/reverse-engineering' },
+    ],
+    switch: { de: 'Zur Serienprüfung →', en: 'To Series Inspection →', fr: 'Vers l\'inspection série →', es: 'A inspección en serie →', it: 'All\'ispezione in serie →' },
+    switchHref: '/serie',
+  },
+  serie: {
+    label: { de: 'Serienprüfung', en: 'Series Inspection', fr: 'Inspection en série', es: 'Inspección en serie', it: 'Ispezione in serie' },
+    links: [
+      { de: 'Inline-CT', en: 'Inline CT', fr: 'CT en ligne', es: 'CT en línea', it: 'CT in linea', href: '/serie/inline-ct' },
+      { de: '100% Prüfung', en: '100% Inspection', fr: 'Inspection 100%', es: 'Inspección 100%', it: 'Ispezione 100%', href: '/serie/100-prozent-pruefung' },
+      { de: 'KI-Automatisierung', en: 'AI Automation', fr: 'Automatisation IA', es: 'Automatización IA', it: 'Automazione IA', href: '/serie/ki-automatisierung' },
+    ],
+    switch: { de: 'Zum Labor →', en: 'To the Lab →', fr: 'Vers le laboratoire →', es: 'Al laboratorio →', it: 'Al laboratorio →' },
+    switchHref: '/labor',
+  },
+};
+
+const worldCtx = world ? worldContext[world] : null;
 
 // Aktueller Pfad für Sprachwechsel
 const currentPath = Astro.url.pathname;
@@ -112,6 +139,29 @@ const getLangUrl = (targetLocale: Locale) => {
     </div>
   </div>
 </header>
+
+{worldCtx && (
+  <nav class:list={['world-bar', `world-bar--${world}`]} aria-label="Bereich-Navigation">
+    <div class="container">
+      <span class="world-bar__label">
+        {worldCtx.label[locale as keyof typeof worldCtx.label] || worldCtx.label.en}
+      </span>
+      <span class="world-bar__sep" aria-hidden="true">›</span>
+      <ul class="world-bar__links">
+        {worldCtx.links.map(link => (
+          <li>
+            <a href={lp(link.href)}>
+              {link[locale as keyof typeof link] as string || link.en}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href={lp(worldCtx.switchHref)} class="world-bar__switch">
+        {worldCtx.switch[locale as keyof typeof worldCtx.switch] || worldCtx.switch.en}
+      </a>
+    </div>
+  </nav>
+)}
 
 <style>
   .site-header {
@@ -391,6 +441,109 @@ const getLangUrl = (targetLocale: Locale) => {
 
     .header-actions .btn {
       display: none;
+    }
+  }
+
+  /* ──────────────────────────────────
+     Welt-Kontext-Leiste
+  ────────────────────────────────── */
+  :global(.world-bar) {
+    position: sticky;
+    top: 73px; /* Höhe des Haupt-Headers */
+    z-index: 99;
+    padding: 0 0;
+    font-size: var(--text-sm);
+    font-family: var(--font-heading);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+
+  :global(.world-bar--labor) {
+    background: var(--mv-violet);
+  }
+
+  :global(.world-bar--serie) {
+    background: var(--mv-gray-900);
+  }
+
+  :global(.world-bar .container) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+
+  :global(.world-bar__label) {
+    font-weight: 700;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--text-xs);
+    white-space: nowrap;
+  }
+
+  :global(.world-bar__sep) {
+    color: rgba(255,255,255,0.3);
+    font-size: var(--text-base);
+    line-height: 1;
+  }
+
+  :global(.world-bar__links) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+  }
+
+  :global(.world-bar__links a) {
+    display: block;
+    padding: var(--space-1) var(--space-3);
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  :global(.world-bar__links a:hover) {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+
+  :global(.world-bar__switch) {
+    margin-left: auto;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+  }
+
+  :global(.world-bar--labor .world-bar__switch:hover) {
+    border-color: var(--mv-orange);
+    color: var(--mv-orange);
+  }
+
+  :global(.world-bar--serie .world-bar__switch:hover) {
+    border-color: var(--mv-blue);
+    color: var(--mv-blue);
+  }
+
+  @media (max-width: 640px) {
+    :global(.world-bar__label),
+    :global(.world-bar__sep) {
+      display: none;
+    }
+    :global(.world-bar__switch) {
+      margin-left: 0;
     }
   }
 </style>

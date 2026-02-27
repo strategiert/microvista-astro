@@ -1,6 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import SerieHeader from '../components/layout/SerieHeader.astro';
+import Header from '../components/layout/Header.astro';
 import SerieFooter from '../components/layout/SerieFooter.astro';
 
 interface Props {
@@ -18,7 +18,7 @@ const { title, description, ogImage } = Astro.props;
   theme="serie"
   ogImage={ogImage}
 >
-  <SerieHeader slot="header" />
+  <Header slot="header" world="serie" />
   <slot />
   <SerieFooter slot="footer" />
 </BaseLayout>
