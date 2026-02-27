@@ -10,7 +10,8 @@ let markdownProcessorPromise: ReturnType<typeof createMarkdownProcessor> | undef
 
 async function getMarkdownProcessor() {
   if (!markdownProcessorPromise) {
-    markdownProcessorPromise = createMarkdownProcessor();
+    // syntaxHighlight: false verhindert WASM-Laden (shiki) in CF Workers
+    markdownProcessorPromise = createMarkdownProcessor({ syntaxHighlight: false });
   }
   return markdownProcessorPromise;
 }

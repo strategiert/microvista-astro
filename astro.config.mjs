@@ -1,5 +1,5 @@
 import { defineConfig } from 'astro/config';
-import cloudflare from '@astrojs/cloudflare';
+import node from '@astrojs/node';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
@@ -9,11 +9,7 @@ export default defineConfig({
   site: 'https://microvista.de',
   output: 'server',
   trailingSlash: 'never',
-  adapter: cloudflare({
-    platformProxy: {
-      enabled: true
-    }
-  }),
+  adapter: node({ mode: 'standalone' }),
   integrations: [
     mdx(),
     sitemap({
@@ -38,11 +34,11 @@ export default defineConfig({
       prefixDefaultLocale: false
     }
   },
+  markdown: {
+    syntaxHighlight: false,
+  },
   image: {
     domains: ['microvista.de', 'www.microvista.de'],
-    service: {
-      entrypoint: 'astro/assets/services/sharp'
-    }
   },
   vite: {
     ssr: {

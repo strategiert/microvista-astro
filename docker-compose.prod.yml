@@ -1,0 +1,11 @@
+services:
+  microvista:
+    build: .
+    container_name: microvista-web
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=4321
+    ports:
+      - "127.0.0.1:4321:4321"
