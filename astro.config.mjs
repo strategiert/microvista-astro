@@ -8,28 +8,40 @@ import { readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-// Blog-Post-URLs für Sitemap aus Content-Collection lesen (SSR kennt dynamische Routen nicht)
-function getMagazinUrls() {
+// Dynamische Content-Collection-URLs für Sitemap (SSR kennt dynamische Routen nicht)
+function getDynamicSitemapUrls() {
   const root = dirname(fileURLToPath(import.meta.url));
-  const base = join(root, 'src', 'content', 'magazin');
   const siteUrl = 'https://microvista.de';
   const urls = [];
+
+  // Blog-Posts: src/content/magazin/de/*.mdx + src/content/magazin/en/*.mdx
+  const magazinBase = join(root, 'src', 'content', 'magazin');
   for (const lang of ['de', 'en']) {
     try {
-      const files = readdirSync(join(base, lang));
+      const files = readdirSync(join(magazinBase, lang));
       for (const file of files) {
         if (!file.endsWith('.mdx')) continue;
         const slug = file.replace('.mdx', '');
-        // Ausgeschlossene Dateien (nicht echte Posts)
-        if (slug === 'posts') continue;
-        if (lang === 'de') {
-          urls.push(`${siteUrl}/magazin/${slug}`);
-        } else {
-          urls.push(`${siteUrl}/${lang}/magazin/${slug}`);
-        }
+        if (slug === 'posts') continue; // Archiv-Seite, kein Post
+        urls.push(lang === 'de'
+          ? `${siteUrl}/magazin/${slug}`
+          : `${siteUrl}/${lang}/magazin/${slug}`
+        );
       }
     } catch { /* Verzeichnis existiert nicht */ }
   }
+
+  // Branchen-Unterseiten: src/content/branchen/*.yaml
+  const branchenBase = join(root, 'src', 'content', 'branchen');
+  try {
+    const files = readdirSync(branchenBase);
+    for (const file of files) {
+      if (!file.endsWith('.yaml') && !file.endsWith('.yml')) continue;
+      const slug = file.replace(/\.ya?ml$/, '');
+      urls.push(`${siteUrl}/branchen/${slug}`);
+    }
+  } catch { /* Verzeichnis existiert nicht */ }
+
   return urls;
 }
 
@@ -46,7 +58,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      customPages: getMagazinUrls(),
+      customPages: getDynamicSitemapUrls(),
       filter: (page) => !page.includes('/keystatic'),
       i18n: {
         defaultLocale: 'de',
