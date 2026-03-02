@@ -175,7 +175,7 @@ Die industrielle Computertomographie (CT) revolutioniert die Erstbemusterung. Mi
 
 ### Besondere Vorgaben nach VDA für CT-Prüfungen
 
-Der VDA Band 2 erkennt [industrielle CT als Prüfverfahren](/beitraege/industrielle-computertomographie) ausdrücklich an, wenn folgende Anforderungen erfüllt sind:
+Der VDA Band 2 erkennt [industrielle CT als Prüfverfahren](/industrielle-computertomographie) ausdrücklich an, wenn folgende Anforderungen erfüllt sind:
 
 -   Kalibrierung und Rückverfolgbarkeit der Messmittel
 -   Prozessfähigkeitsnachweis (Gage R&R)

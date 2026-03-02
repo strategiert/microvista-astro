@@ -52,25 +52,25 @@ Mobiles CT-System ScanExpress unter den 20 innovativsten Vorhaben Sachsen-Anhalt
 
 ![Industrielles mobiles CT - Liveshow Case ScanExpress Besucher](/images/wp/2025/10/Industrielles-mobiles-CT-Liveshow-Case-ScanExpress-Besucher.webp)
 
-](/presse/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort/)
+](/magazin/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort)
 
-### [Weltweit erstes mobiles industrielles CT: Deutsches Tech-Unternehmen zeigt KI-gestütztes Prüfsystem live](/presse/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort/)
+### [Weltweit erstes mobiles industrielles CT: Deutsches Tech-Unternehmen zeigt KI-gestütztes Prüfsystem live](/magazin/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort)
 
 Live-Demonstration im November: Microvista aus Blankenburg macht mobile industrielle CT-Prüfung möglich.
 
-[Weiterlesen »](/presse/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort/)
+[Weiterlesen »](/magazin/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort)
 
 [
 
 ![Doppelspitze: Prof. Dr. Lutz Hagner und Dr. Robin Höhne](/images/wp/2025/11/Foto-06.11.25-11-42-45-2-scaled.jpg)
 
-](/presse/promovierter-ingenieur-ergaenzt-unternehmensgruender-in-gemeinsamer-geschaeftsfuehrung-fuehrungsteam-legt-fokus-auf-mobile-ct-technologie-und-ki-gestuetzte-loesungen/)
+](/magazin/geschaeftsfuehrung-mobile-ct-ki)
 
-### [Microvista GmbH stärkt Führungsteam: Dr. Robin Höhne und Prof. Dr. Lutz Hagner bilden Doppelspitze](/presse/promovierter-ingenieur-ergaenzt-unternehmensgruender-in-gemeinsamer-geschaeftsfuehrung-fuehrungsteam-legt-fokus-auf-mobile-ct-technologie-und-ki-gestuetzte-loesungen/) 
+### [Microvista GmbH stärkt Führungsteam: Dr. Robin Höhne und Prof. Dr. Lutz Hagner bilden Doppelspitze](/magazin/geschaeftsfuehrung-mobile-ct-ki) 
 
 Promovierter Ingenieur ergänzt Unternehmensgründer in gemeinsamer Geschäftsführung – Fokus auf mobile CT-Technologie und KI-gestützte Lösungen.
 
-[Weiterlesen »](/presse/promovierter-ingenieur-ergaenzt-unternehmensgruender-in-gemeinsamer-geschaeftsfuehrung-fuehrungsteam-legt-fokus-auf-mobile-ct-technologie-und-ki-gestuetzte-loesungen/)
+[Weiterlesen »](/magazin/geschaeftsfuehrung-mobile-ct-ki)
 
 [Alle Pressemitteilungen](/pressemitteilungen/)
 
@@ -80,13 +80,13 @@ Promovierter Ingenieur ergänzt Unternehmensgründer in gemeinsamer Geschäftsf�
 
 ![Blog Image Industrial CT Market Trends 2026](/images/wp/2026/01/2025_04_MV_Blog_Trends-2026.png)
 
-](/beitraege/markttrends-industrielle-computertomografie-2026/)
+](/magazin/markttrends-2026)
 
-### [Markttrends industrielle Computertomografie 2026](/beitraege/markttrends-industrielle-computertomografie-2026/)
+### [Markttrends industrielle Computertomografie 2026](/magazin/markttrends-2026)
 
 Der Markt für industrielle Computertomografie erreicht 2025 ein Volumen von 548 Millionen US-Dollar. Bis 2030 wird er 830 Millionen US-Dollar überschreiten – ein jährliches Wachstum
 
-[Weiterlesen »](/beitraege/markttrends-industrielle-computertomografie-2026/)
+[Weiterlesen »](/magazin/markttrends-2026)
 
 [
 
@@ -104,13 +104,13 @@ Sie benötigen eine schnelle und präzise Analyse ihrer Statoren? Microvista hat
 
 ![Industrielle-CT-in-der-Automobilindustrie-fur-Verbrenner-und-E-Autos](/images/wp/2023/02/Industrielle-CT-in-der-Automobilindustrie-fur-Verbrenner-und-E-Autos.webp)
 
-](/beitraege/zerstoerungsfreie-pruefverfahren/)
+](/magazin)
 
-### [Moderne zerstörungsfreie Prüfverfahren im Vergleich](/beitraege/zerstoerungsfreie-pruefverfahren/)
+### [Moderne zerstörungsfreie Prüfverfahren im Vergleich](/magazin)
 
 Die zerstörungsfreie Prüfung (ZfP) ermöglicht die vollständige Qualitätskontrolle aller produzierten Bauteile, ohne Material zu verschwenden. Während bei der zerstörenden Prüfung typischerweise ein gewisser Prozentsatz der
 
-[Weiterlesen »](/beitraege/zerstoerungsfreie-pruefverfahren/)
+[Weiterlesen »](/magazin)
 
 [Alle Beiträge](/beitraege/)
 

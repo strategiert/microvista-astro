@@ -4,10 +4,23 @@
 # (CF Pages würde sonst /en/* und /fr/* aus dem Worker ausschließen → 404)
 
 # Blog-Posts DE: /beitraege/[slug] → /magazin/[slug]
+# Spezifische Ausnahmen (Slug-Umbenennung) vor dem Wildcard:
+/beitraege/markttrends-industrielle-computertomografie-2026 /magazin/markttrends-2026 301
+/beitraege/markttrends-industrielle-computertomografie-2026/ /magazin/markttrends-2026 301
+/beitraege/zerstoerungsfreie-pruefverfahren /magazin 301
+/beitraege/zerstoerungsfreie-pruefverfahren/ /magazin 301
 /beitraege/* /magazin/:splat 301
 /beitraege/ /magazin 301
 
-# Presse → Newsroom (nur DE)
+# Presse → Magazin (spezifisch) bzw. Newsroom (Catch-All, nur DE)
+/presse/mobiles-ct-system-direkt-vor-ort /magazin/mobiles-ct-system-direkt-vor-ort 301
+/presse/mobiles-ct-system-direkt-vor-ort/ /magazin/mobiles-ct-system-direkt-vor-ort 301
+/presse/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort /magazin/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort 301
+/presse/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort/ /magazin/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort 301
+/presse/promovierter-ingenieur-ergaenzt-unternehmensgruender-in-gemeinsamer-geschaeftsfuehrung-fuehrungsteam-legt-fokus-auf-mobile-ct-technologie-und-ki-gestuetzte-loesungen /magazin/geschaeftsfuehrung-mobile-ct-ki 301
+/presse/promovierter-ingenieur-ergaenzt-unternehmensgruender-in-gemeinsamer-geschaeftsfuehrung-fuehrungsteam-legt-fokus-auf-mobile-ct-technologie-und-ki-gestuetzte-loesungen/ /magazin/geschaeftsfuehrung-mobile-ct-ki 301
+/presse/qualitaetskontrolle-die-zur-produktion-rollt-flexibel-mietbares-ct-system /magazin/qualitaetskontrolle-die-zur-produktion-rollt-flexibel-mietbares-ct-system 301
+/presse/qualitaetskontrolle-die-zur-produktion-rollt-flexibel-mietbares-ct-system/ /magazin/qualitaetskontrolle-die-zur-produktion-rollt-flexibel-mietbares-ct-system 301
 /presse/* /newsroom 301
 
 # Prüfaufgaben: alte verschachtelte URLs → flache Struktur
