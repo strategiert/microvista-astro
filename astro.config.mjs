@@ -42,6 +42,17 @@ function getDynamicSitemapUrls() {
     }
   } catch { /* Verzeichnis existiert nicht */ }
 
+  // Prüfaufgaben-Unterseiten: src/content/pruefaufgaben/*.yaml
+  const pruefBase = join(root, 'src', 'content', 'pruefaufgaben');
+  try {
+    const files = readdirSync(pruefBase);
+    for (const file of files) {
+      if (!file.endsWith('.yaml') && !file.endsWith('.yml')) continue;
+      const slug = file.replace(/\.ya?ml$/, '');
+      urls.push(`${siteUrl}/pruefaufgaben/${slug}`);
+    }
+  } catch { /* Verzeichnis existiert nicht */ }
+
   return urls;
 }
 
