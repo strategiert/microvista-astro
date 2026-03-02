@@ -12,6 +12,23 @@ import { localePath, type Locale } from '../i18n/translations';
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
 
+const contacts = {
+  sales: {
+    name: 'Jonas Wengerodt',
+    role: { de: 'Sales Manager', en: 'Sales Manager', fr: 'Responsable commercial', es: 'Director de ventas', it: 'Responsabile vendite' },
+    phone: '+49 3944 950-36',
+    email: 'vertrieb@microvista.de',
+    img: 'https://www.microvista.de/wp-content/uploads/2023/12/Jonas-Wengerodt.webp',
+  },
+  ceo: {
+    name: 'Dr. Robin Höhne',
+    role: { de: 'CEO | Microvista GmbH', en: 'CEO | Microvista GmbH', fr: 'PDG | Microvista GmbH', es: 'CEO | Microvista GmbH', it: 'CEO | Microvista GmbH' },
+    phone: '+49 3944 950-33',
+    email: 'vertrieb@microvista.de',
+    img: 'https://www.microvista.de/wp-content/uploads/2023/07/Robin-Hoehne-Division-Manager-150x150.webp',
+  },
+};
+
 const content = {
   de: {
     title: 'Kontakt',
@@ -23,7 +40,9 @@ const content = {
     phone: 'Telefon',
     address: 'Adresse',
     hours: 'Erreichbarkeit',
-    hoursValue: 'Mo-Fr: 8:00-17:00 Uhr',
+    hoursValue: 'Mo–Fr: 08:00–17:00 Uhr',
+    teamTitle: 'Ihre Ansprechpartner',
+    teamsLabel: 'Termin buchen (Microsoft Teams)',
     quickLinks: 'Schnellzugriff',
     links: [
       { label: 'Labor-Leistungen', href: '/labor/erstmusterpruefung' },
@@ -41,7 +60,9 @@ const content = {
     phone: 'Phone',
     address: 'Address',
     hours: 'Availability',
-    hoursValue: 'Mon-Fri: 8:00-17:00',
+    hoursValue: 'Mon–Fri: 08:00–17:00',
+    teamTitle: 'Your contacts',
+    teamsLabel: 'Book appointment (Microsoft Teams)',
     quickLinks: 'Quick Links',
     links: [
       { label: 'Lab Services', href: '/labor/erstmusterpruefung' },
@@ -59,7 +80,9 @@ const content = {
     phone: 'Téléphone',
     address: 'Adresse',
     hours: 'Disponibilité',
-    hoursValue: 'Lun-Ven : 8h00-17h00',
+    hoursValue: 'Lun–Ven : 08h00–17h00',
+    teamTitle: 'Vos interlocuteurs',
+    teamsLabel: 'Prendre rendez-vous (Microsoft Teams)',
     quickLinks: 'Accès rapide',
     links: [
       { label: 'Services labo', href: '/labor/erstmusterpruefung' },
@@ -77,7 +100,9 @@ const content = {
     phone: 'Teléfono',
     address: 'Dirección',
     hours: 'Disponibilidad',
-    hoursValue: 'Lun-Vie: 8:00-17:00',
+    hoursValue: 'Lun–Vie: 08:00–17:00',
+    teamTitle: 'Sus interlocutores',
+    teamsLabel: 'Reservar cita (Microsoft Teams)',
     quickLinks: 'Acceso rápido',
     links: [
       { label: 'Servicios de laboratorio', href: '/labor/erstmusterpruefung' },
@@ -95,7 +120,9 @@ const content = {
     phone: 'Telefono',
     address: 'Indirizzo',
     hours: 'Disponibilità',
-    hoursValue: 'Lun-Ven: 8:00-17:00',
+    hoursValue: 'Lun–Ven: 08:00–17:00',
+    teamTitle: 'I vostri interlocutori',
+    teamsLabel: 'Prenotare appuntamento (Microsoft Teams)',
     quickLinks: 'Accesso rapido',
     links: [
       { label: 'Servizi laboratorio', href: '/labor/erstmusterpruefung' },
@@ -148,7 +175,7 @@ const t = content[locale as keyof typeof content] || content.en || content.de;
               </div>
               <div>
                 <span class="info-label">{t.email}</span>
-                <a href="mailto:info@microvista.de">info@microvista.de</a>
+                <a href="mailto:vertrieb@microvista.de">vertrieb@microvista.de</a>
               </div>
             </div>
 
@@ -160,7 +187,7 @@ const t = content[locale as keyof typeof content] || content.en || content.de;
               </div>
               <div>
                 <span class="info-label">{t.phone}</span>
-                <a href="tel:+4912345678">+49 123 456 78</a>
+                <a href="tel:+4939449505036">+49 3944 950-36</a>
               </div>
             </div>
 
@@ -175,8 +202,9 @@ const t = content[locale as keyof typeof content] || content.en || content.de;
                 <span class="info-label">{t.address}</span>
                 <address>
                   Microvista GmbH<br>
-                  Musterstraße 123<br>
-                  12345 Musterstadt
+                  Am Münchenfelde 12<br>
+                  38889 Blankenburg<br>
+                  Deutschland
                 </address>
               </div>
             </div>
@@ -193,6 +221,36 @@ const t = content[locale as keyof typeof content] || content.en || content.de;
                 <span>{t.hoursValue}</span>
               </div>
             </div>
+          </div>
+
+          <!-- Ansprechpartner -->
+          <div class="team-contacts">
+            <h3>{t.teamTitle}</h3>
+            {[contacts.sales, contacts.ceo].map(person => (
+              <div class="team-contact-card">
+                <img src={person.img} alt={person.name} class="team-avatar" loading="lazy" />
+                <div class="team-contact-info">
+                  <strong>{person.name}</strong>
+                  <span class="team-role">{person.role[locale as keyof typeof person.role]}</span>
+                  <a href={`tel:${person.phone.replace(/[^+\d]/g, '')}`}>{person.phone}</a>
+                  <a href={`mailto:${person.email}`}>{person.email}</a>
+                </div>
+              </div>
+            ))}
+            <a
+              href="https://outlook.office365.com/owa/calendar/MicrovistazerstrungsfreiePrfung@netco.de/bookings/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="teams-btn"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              {t.teamsLabel}
+            </a>
           </div>
 
           <div class="quick-links">
@@ -314,6 +372,82 @@ const t = content[locale as keyof typeof content] || content.en || content.de;
   .info-item address {
     font-style: normal;
     line-height: 1.6;
+  }
+
+  /* Ansprechpartner */
+  .team-contacts {
+    margin-bottom: var(--space-8);
+  }
+
+  .team-contacts h3 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-4);
+  }
+
+  .team-contact-card {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    padding: var(--space-4);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-3);
+  }
+
+  .team-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .team-contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .team-contact-info strong {
+    font-size: var(--text-base);
+    color: var(--text);
+  }
+
+  .team-role {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  .team-contact-info a {
+    font-size: var(--text-sm);
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  .team-contact-info a:hover {
+    text-decoration: underline;
+  }
+
+  .teams-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    background: #5558AF;
+    color: white;
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin-top: var(--space-3);
+    transition: background var(--transition-fast);
+    justify-content: center;
+  }
+
+  .teams-btn:hover {
+    background: #444795;
   }
 
   .quick-links h3 {
