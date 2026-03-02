@@ -12,18 +12,7 @@ export default defineConfig({
   adapter: cloudflare({
     imageService: 'compile',
     routes: {
-      extend: {
-        include: [
-          { pattern: '/en/*' },
-          { pattern: '/fr/*' },
-          { pattern: '/es/*' },
-          { pattern: '/it/*' },
-          { pattern: '/en' },
-          { pattern: '/fr' },
-          { pattern: '/es' },
-          { pattern: '/it' },
-        ]
-      }
+      strategy: 'all'
     }
   }),
   integrations: [
