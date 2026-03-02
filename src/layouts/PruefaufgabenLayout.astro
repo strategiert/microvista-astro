@@ -1,0 +1,420 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { localePath, type Locale } from '../i18n/translations';
+
+interface Props {
+  title: string;
+  description?: string;
+  content?: string | null;
+  pageTitle?: string;
+  pageLead?: string;
+  locale: Locale;
+}
+
+const { title, description, content, locale } = Astro.props;
+let { pageTitle, pageLead } = Astro.props;
+const lp = (path: string) => localePath(path, locale);
+
+// Extract hero + article from markdown HTML if no override provided
+let articleContent = content || '';
+
+if (content) {
+  if (!pageTitle) {
+    const h1Match = content.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+    if (h1Match) {
+      pageTitle = h1Match[1].replace(/<[^>]+>/g, '').trim();
+    }
+  }
+
+  if (!pageLead) {
+    const h2Index = content.indexOf('<h2');
+    const beforeH2 = h2Index > -1 ? content.substring(0, h2Index) : '';
+    const pRegex = /<p>([\s\S]*?)<\/p>/gi;
+    let pMatch;
+    while ((pMatch = pRegex.exec(beforeH2)) !== null) {
+      const text = pMatch[1].replace(/<[^>]+>/g, '').trim();
+      if (text.length > 40 && !pMatch[1].includes('<a href')) {
+        pageLead = text.length > 220 ? text.slice(0, 217) + '...' : text;
+        break;
+      }
+    }
+  }
+
+  // Strip WP hero — article starts at first H2
+  const h2Index = content.indexOf('<h2');
+  if (h2Index > -1) articleContent = content.substring(h2Index);
+}
+
+pageTitle = pageTitle || title;
+
+const cta = {
+  de: {
+    anfragen: 'Anfrage stellen',
+    alleTasks: 'Alle Prüfaufgaben',
+    ctaTitle: 'Jetzt anfragen',
+    ctaText: 'Unsere CT-Experten beraten Sie kostenlos & unverbindlich.',
+    badge1: 'Express-Service verfügbar',
+    badge2: 'ISO 9001 zertifiziert',
+    badge3: 'Über 15 Jahre Erfahrung',
+  },
+  en: {
+    anfragen: 'Request Quote',
+    alleTasks: 'All Inspection Tasks',
+    ctaTitle: 'Get in Touch',
+    ctaText: 'Our CT experts are happy to advise you — free & non-binding.',
+    badge1: 'Express service available',
+    badge2: 'ISO 9001 certified',
+    badge3: 'Over 15 years of experience',
+  },
+  fr: {
+    anfragen: 'Demander un devis',
+    alleTasks: 'Toutes les tâches',
+    ctaTitle: 'Nous contacter',
+    ctaText: 'Nos experts CT vous conseillent gratuitement et sans engagement.',
+    badge1: 'Service express disponible',
+    badge2: 'Certifié ISO 9001',
+    badge3: 'Plus de 15 ans d\'expérience',
+  },
+  es: {
+    anfragen: 'Solicitar presupuesto',
+    alleTasks: 'Todas las tareas',
+    ctaTitle: 'Contactar',
+    ctaText: 'Nuestros expertos CT le asesoran de forma gratuita y sin compromiso.',
+    badge1: 'Servicio express disponible',
+    badge2: 'Certificado ISO 9001',
+    badge3: 'Más de 15 años de experiencia',
+  },
+  it: {
+    anfragen: 'Richiedi preventivo',
+    alleTasks: 'Tutte le attività',
+    ctaTitle: 'Contattaci',
+    ctaText: 'I nostri esperti CT ti consigliano gratuitamente e senza impegno.',
+    badge1: 'Servizio express disponibile',
+    badge2: 'Certificato ISO 9001',
+    badge3: 'Oltre 15 anni di esperienza',
+  },
+}[locale] ?? {
+  anfragen: 'Request Quote',
+  alleTasks: 'All Inspection Tasks',
+  ctaTitle: 'Get in Touch',
+  ctaText: 'Our CT experts are happy to advise you.',
+  badge1: 'Express service available',
+  badge2: 'ISO 9001 certified',
+  badge3: 'Over 15 years of experience',
+};
+---
+
+<BaseLayout title={title} description={description} theme="pruefaufgaben">
+  <Header slot="header" />
+
+  <!-- HERO -->
+  <section class="pa-hero">
+    <div class="container">
+      <nav class="pa-breadcrumb" aria-label="breadcrumb">
+        <a href={lp('/pruefaufgaben')}>{cta.alleTasks}</a>
+        <span aria-hidden="true"> / </span>
+        <span>{pageTitle}</span>
+      </nav>
+      <h1>{pageTitle}</h1>
+      {pageLead && <p class="pa-lead">{pageLead}</p>}
+      <div class="pa-hero-actions">
+        <a href={lp('/kontakt')} class="btn btn-primary">{cta.anfragen}</a>
+        <a href={lp('/pruefaufgaben')} class="btn-ghost">{cta.alleTasks}</a>
+      </div>
+      <div class="pa-badges">
+        <span class="pa-badge">{cta.badge1}</span>
+        <span class="pa-badge">{cta.badge2}</span>
+        <span class="pa-badge">{cta.badge3}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLE -->
+  <section class="pa-article">
+    <div class="container">
+      <div class="pa-body">
+        {content
+          ? <div set:html={articleContent} />
+          : <slot />
+        }
+        {!content && !Astro.slots.has('default') && <p>Inhalt folgt in Kürze.</p>}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="pa-cta-section">
+    <div class="container">
+      <div class="pa-cta-box">
+        <h2>{cta.ctaTitle}</h2>
+        <p>{cta.ctaText}</p>
+        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{cta.anfragen}</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  /* ===== HERO ===== */
+  .pa-hero {
+    background: linear-gradient(145deg, #32285b 0%, #1c1535 60%, #0f0c22 100%);
+    color: white;
+    padding: var(--space-20) 0 var(--space-16);
+  }
+
+  .pa-breadcrumb {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: var(--space-6);
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .pa-breadcrumb a {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .pa-breadcrumb a:hover {
+    color: #ee7711;
+  }
+
+  .pa-hero h1 {
+    font-size: var(--text-5xl);
+    color: white;
+    margin-bottom: var(--space-5);
+    max-width: 820px;
+    line-height: 1.1;
+  }
+
+  @media (max-width: 768px) {
+    .pa-hero h1 { font-size: var(--text-4xl); }
+  }
+
+  .pa-lead {
+    font-size: var(--text-xl);
+    color: rgba(255, 255, 255, 0.72);
+    max-width: 680px;
+    line-height: 1.7;
+    margin-bottom: var(--space-8);
+  }
+
+  .pa-hero-actions {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-8);
+  }
+
+  .btn-ghost {
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
+    font-size: var(--text-base);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 2px;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-ghost:hover {
+    color: white;
+    border-bottom-color: white;
+  }
+
+  .pa-badges {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .pa-badge {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    padding: 4px var(--space-3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-full);
+    color: rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  /* ===== ARTICLE ===== */
+  .pa-article {
+    padding: var(--space-16) 0 var(--space-20);
+    background: #ffffff;
+  }
+
+  .pa-body {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .pa-body :global(h2) {
+    font-size: var(--text-3xl);
+    color: #32285b;
+    margin-top: var(--space-16);
+    margin-bottom: var(--space-5);
+    padding-left: var(--space-4);
+    border-left: 4px solid #ee7711;
+    line-height: 1.25;
+  }
+
+  .pa-body :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .pa-body :global(h3) {
+    font-size: var(--text-2xl);
+    color: #32285b;
+    margin-top: var(--space-10);
+    margin-bottom: var(--space-4);
+  }
+
+  .pa-body :global(h4) {
+    font-size: var(--text-xl);
+    color: #32285b;
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+  }
+
+  .pa-body :global(p) {
+    font-size: var(--text-base);
+    line-height: 1.85;
+    margin-bottom: var(--space-5);
+    color: #374151;
+  }
+
+  .pa-body :global(ul),
+  .pa-body :global(ol) {
+    padding-left: var(--space-6);
+    margin-bottom: var(--space-5);
+  }
+
+  .pa-body :global(li) {
+    line-height: 1.75;
+    margin-bottom: var(--space-2);
+    color: #374151;
+  }
+
+  .pa-body :global(ul > li::marker) {
+    color: #ee7711;
+  }
+
+  .pa-body :global(strong) {
+    font-weight: 700;
+    color: #32285b;
+  }
+
+  .pa-body :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-xl);
+    margin: var(--space-8) 0;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .pa-body :global(a) {
+    color: #ee7711;
+    text-decoration: underline;
+    text-decoration-color: rgba(238, 119, 17, 0.35);
+    text-underline-offset: 3px;
+    transition: all var(--transition-fast);
+  }
+
+  .pa-body :global(a:hover) {
+    color: #c85e00;
+    text-decoration-color: #c85e00;
+  }
+
+  /* Tables */
+  .pa-body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-8) 0;
+    font-size: var(--text-sm);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .pa-body :global(th) {
+    background: #32285b;
+    color: white;
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    font-weight: 600;
+  }
+
+  .pa-body :global(td) {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+  }
+
+  .pa-body :global(tr:nth-child(even) td) {
+    background: #f9fafb;
+  }
+
+  .pa-body :global(tr:last-child td) {
+    border-bottom: none;
+  }
+
+  /* Blockquotes */
+  .pa-body :global(blockquote) {
+    border-left: 4px solid #ee7711;
+    padding: var(--space-4) var(--space-6);
+    background: #fffbf5;
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    margin: var(--space-8) 0;
+  }
+
+  .pa-body :global(blockquote p) {
+    margin: 0;
+    font-style: italic;
+    color: #4b5563;
+  }
+
+  /* ===== CTA ===== */
+  .pa-cta-section {
+    padding: var(--space-20) 0;
+    background: #f5f3ff;
+  }
+
+  .pa-cta-box {
+    max-width: 560px;
+    margin: 0 auto;
+    text-align: center;
+    background: white;
+    padding: var(--space-12) var(--space-10);
+    border-radius: var(--radius-2xl);
+    box-shadow: 0 8px 40px rgba(50, 40, 91, 0.12);
+  }
+
+  .pa-cta-box h2 {
+    color: #32285b;
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-4);
+    border: none;
+    padding: 0;
+  }
+
+  .pa-cta-box p {
+    color: #6b7280;
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-6);
+    line-height: 1.6;
+  }
+
+  .btn-lg {
+    padding: var(--space-4) var(--space-10);
+    font-size: var(--text-lg);
+  }
+</style>

@@ -1,8 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/layout/Header.astro';
-import Footer from '../../components/layout/Footer.astro';
-import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
+import PruefaufgabenLayout from '../../layouts/PruefaufgabenLayout.astro';
 import { getCollection } from 'astro:content';
 import { faqSchema, serviceSchema } from '../../components/seo/schemas';
 import { localePath, type Locale } from '../../i18n/translations';
@@ -17,174 +14,130 @@ const lp = (path: string) => localePath(path, locale);
 
 const t = {
   de: {
-    title: 'Prüfaufgaben',
     whatIs: 'Was ist das?',
     howItWorks: 'Wie funktioniert es?',
     benefits: 'Vorteile',
     applications: 'Anwendungsgebiete',
-    ctaTitlePrefix: 'Unterstützung bei',
-    ctaText: 'Unsere CT-Experten helfen Ihnen gerne weiter.',
-    ctaButton: 'Jetzt anfragen'
   },
   en: {
-    title: 'Inspection Tasks',
     whatIs: 'What is it?',
     howItWorks: 'How does it work?',
     benefits: 'Benefits',
     applications: 'Applications',
-    ctaTitlePrefix: 'Need help with',
-    ctaText: 'Our CT experts are here to help.',
-    ctaButton: 'Contact us'
   },
   fr: {
-    title: 'Tâches de contrôle',
-    whatIs: 'De quoi s’agit-il ?',
+    whatIs: 'De quoi s\'agit-il ?',
     howItWorks: 'Comment ça fonctionne ?',
     benefits: 'Avantages',
     applications: 'Applications',
-    ctaTitlePrefix: 'Besoin d’aide pour',
-    ctaText: 'Nos experts CT sont là pour vous aider.',
-    ctaButton: 'Nous contacter'
   },
   es: {
-    title: 'Tareas de inspección',
     whatIs: '¿Qué es?',
     howItWorks: '¿Cómo funciona?',
     benefits: 'Ventajas',
     applications: 'Aplicaciones',
-    ctaTitlePrefix: '¿Necesita ayuda con',
-    ctaText: 'Nuestros expertos CT están para ayudarle.',
-    ctaButton: 'Contactar'
   },
   it: {
-    title: 'Attività di ispezione',
     whatIs: 'Di cosa si tratta?',
     howItWorks: 'Come funziona?',
     benefits: 'Vantaggi',
     applications: 'Applicazioni',
-    ctaTitlePrefix: 'Hai bisogno di supporto per',
-    ctaText: 'I nostri esperti CT sono a tua disposizione.',
-    ctaButton: 'Contattaci'
-  }
-}[locale] || {
-  title: 'Inspection Tasks',
+  },
+}[locale] ?? {
   whatIs: 'What is it?',
   howItWorks: 'How does it work?',
   benefits: 'Benefits',
   applications: 'Applications',
-  ctaTitlePrefix: 'Need help with',
-  ctaText: 'Our CT experts are here to help.',
-  ctaButton: 'Contact us'
 };
 
 const schemas = [];
-if (task.faq?.length) {
-  schemas.push(faqSchema(task.faq));
-}
+if (task.faq?.length) schemas.push(faqSchema(task.faq));
 schemas.push(serviceSchema({
   name: task.name,
   description: task.description,
-  url: `https://microvista.de/pruefaufgaben/${task.slug}/`
+  url: `https://microvista.de/pruefaufgaben/${task.slug}/`,
 }));
 ---
 
-<BaseLayout
+<PruefaufgabenLayout
   title={task.seo.title}
   description={task.seo.description}
-  schema={schemas}
+  pageTitle={task.name}
+  pageLead={task.description}
+  locale={locale}
 >
-  <Header slot="header" />
+  <section class="slug-section">
+    <h2>{t.whatIs}</h2>
+    <div set:html={task.whatIs} />
+  </section>
 
-  <div class="pruefaufgabe-page">
-    <div class="container">
-      <Breadcrumbs items={[
-        { label: t.title, href: lp('/pruefaufgaben') },
-        { label: task.name }
-      ]} />
+  <section class="slug-section">
+    <h2>{t.howItWorks}</h2>
+    <div set:html={task.howItWorks} />
+  </section>
 
-      <!-- Hero -->
-      <section class="page-hero">
-        <h1>{task.name}</h1>
-        <p class="hero-desc">{task.description}</p>
-      </section>
+  <section class="slug-section">
+    <h2>{t.benefits}</h2>
+    <ul class="slug-benefits">
+      {task.benefits.map((b: string) => <li>{b}</li>)}
+    </ul>
+  </section>
 
-      <!-- Was ist das? -->
-      <section class="content-section">
-        <h2>{t.whatIs}</h2>
-        <div class="prose" set:html={task.whatIs} />
-      </section>
+  <section class="slug-section">
+    <h2>{t.applications}</h2>
+    <ul class="slug-apps">
+      {task.applications.map((a: string) => <li>{a}</li>)}
+    </ul>
+  </section>
 
-      <!-- Wie funktioniert es? -->
-      <section class="content-section">
-        <h2>{t.howItWorks}</h2>
-        <div class="prose" set:html={task.howItWorks} />
-      </section>
-
-      <!-- Vorteile -->
-      <section class="content-section">
-        <h2>{t.benefits}</h2>
-        <ul class="benefits-list">
-          {task.benefits.map((b: string) => <li>{b}</li>)}
-        </ul>
-      </section>
-
-      <!-- Anwendungen -->
-      <section class="content-section">
-        <h2>{t.applications}</h2>
-        <ul class="applications-list">
-          {task.applications.map((a: string) => <li>{a}</li>)}
-        </ul>
-      </section>
-
-      <!-- FAQ -->
-      {task.faq?.length > 0 && (
-        <section class="content-section faq-section">
-          <h2>FAQ</h2>
-          {task.faq.map((item: { question: string; answer: string }) => (
-            <details class="faq-item">
-              <summary>{item.question}</summary>
-              <div class="faq-answer" set:html={item.answer} />
-            </details>
-          ))}
-        </section>
-      )}
-
-      <!-- CTA -->
-      <section class="cta-section">
-        <h2>{t.ctaTitlePrefix} {task.name}?</h2>
-        <p>{t.ctaText}</p>
-        <a href={lp('/kontakt')} class="btn btn-primary">
-          {t.ctaButton}
-        </a>
-      </section>
-    </div>
-  </div>
-
-  <Footer slot="footer" />
-</BaseLayout>
+  {task.faq?.length > 0 && (
+    <section class="slug-section">
+      <h2>FAQ</h2>
+      {task.faq.map((item: { question: string; answer: string }) => (
+        <details class="faq-item">
+          <summary>{item.question}</summary>
+          <div class="faq-answer" set:html={item.answer} />
+        </details>
+      ))}
+    </section>
+  )}
+</PruefaufgabenLayout>
 
 <style>
-  .pruefaufgabe-page { padding-bottom: var(--space-16); }
-  .page-hero { text-align: center; padding: var(--space-12) 0; max-width: 700px; margin: 0 auto; }
-  .page-hero h1 { font-size: var(--text-4xl); margin-bottom: var(--space-4); }
-  .hero-desc { font-size: var(--text-xl); color: var(--text-muted); }
-  .content-section { max-width: 800px; margin: var(--space-12) auto 0; }
-  .content-section h2 { margin-bottom: var(--space-6); }
-  .prose { line-height: 1.8; }
-  .benefits-list, .applications-list { padding-left: var(--space-6); }
-  .benefits-list li, .applications-list li { margin-bottom: var(--space-3); line-height: 1.6; }
-  .benefits-list li::marker { content: '✓ '; color: var(--accent, #ee7711); }
-  .faq-item { border: 1px solid var(--border, #eef2f5); border-radius: var(--radius-lg); margin-bottom: var(--space-3); }
-  .faq-item summary { padding: var(--space-4) var(--space-5); cursor: pointer; font-weight: 600; }
-  .faq-item summary:hover { color: var(--primary); }
-  .faq-answer { padding: 0 var(--space-5) var(--space-4); line-height: 1.8; }
-  .cta-section {
-    text-align: center;
-    background: var(--surface, #f8fafc);
-    border-radius: var(--radius-xl);
-    padding: var(--space-12);
-    margin-top: var(--space-16);
+  .slug-section {
+    margin-bottom: var(--space-12);
   }
-  .cta-section h2 { margin-bottom: var(--space-3); }
-  .cta-section p { color: var(--text-muted); margin-bottom: var(--space-6); }
+
+  .slug-benefits li::marker,
+  .slug-apps li::marker {
+    color: #ee7711;
+  }
+
+  .faq-item {
+    border: 1px solid #e5e7eb;
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-3);
+    overflow: hidden;
+  }
+
+  .faq-item summary {
+    padding: var(--space-4) var(--space-5);
+    cursor: pointer;
+    font-weight: 600;
+    color: #32285b;
+    list-style: none;
+  }
+
+  .faq-item summary::-webkit-details-marker { display: none; }
+
+  .faq-item summary:hover {
+    background: #f5f3ff;
+  }
+
+  .faq-answer {
+    padding: 0 var(--space-5) var(--space-4);
+    line-height: 1.8;
+    color: #374151;
+    border-top: 1px solid #e5e7eb;
+  }
 </style>

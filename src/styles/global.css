@@ -131,6 +131,23 @@
 }
 
 /* =========================================
+   THEME: PRUEFAUFGABEN (Welt 3)
+   ========================================= */
+
+[data-theme="pruefaufgaben"] {
+  --primary: #32285b;
+  --primary-light: #4a3d80;
+  --accent: #ee7711;
+  --accent-light: #ff8822;
+  --background: #ffffff;
+  --surface: #f5f3ff;
+  --surface-hover: #ece9f8;
+  --text: #1e1b2e;
+  --text-muted: #6b7280;
+  --border: #e2e0f0;
+}
+
+/* =========================================
    RESET & BASE STYLES
    ========================================= */
 
