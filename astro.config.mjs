@@ -32,13 +32,7 @@ export default defineConfig({
     keystatic(),
     react()
   ],
-  i18n: {
-    defaultLocale: 'de',
-    locales: ['de', 'en', 'fr', 'es', 'it'],
-    routing: {
-      prefixDefaultLocale: false
-    }
-  },
+
   markdown: {
     syntaxHighlight: false,
   },
