@@ -10,7 +10,21 @@ export default defineConfig({
   output: 'server',
   trailingSlash: 'never',
   adapter: cloudflare({
-    imageService: 'compile'
+    imageService: 'compile',
+    routes: {
+      extend: {
+        include: [
+          { pattern: '/en/*' },
+          { pattern: '/fr/*' },
+          { pattern: '/es/*' },
+          { pattern: '/it/*' },
+          { pattern: '/en' },
+          { pattern: '/fr' },
+          { pattern: '/es' },
+          { pattern: '/it' },
+        ]
+      }
+    }
   }),
   integrations: [
     mdx(),
