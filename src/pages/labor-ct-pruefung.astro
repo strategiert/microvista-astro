@@ -1,0 +1,482 @@
+---
+/**
+ * Landing Page: Labor CT-Prüfung
+ * Zielseite für Labor-Dienstleistungen
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { localePath, type Locale } from '../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const content = {
+  de: {
+    title: 'Labor CT-Prüfung | Microvista',
+    description: 'Professionelle CT-Prüfung im zertifizierten Labor. Schnelle Ergebnisse, höchste Präzision. Jetzt unverbindlich anfragen!',
+    heroTitle: 'Ihr Bauteil verdient Klarheit',
+    heroSubtitle: 'Labor-CT-Prüfung mit 24-48h Express-Option',
+    heroDesc: 'Defektanalyse, Dimensionsmessung, CAD-Vergleich – zerstörungsfrei und präzise. ISO 9001 & 17025 zertifiziert.',
+    ctaPrimary: 'Jetzt Angebot anfordern',
+    ctaSecondary: 'Mehr erfahren',
+    benefits: [
+      { title: '24-48h Express', desc: 'Dringende Analysen priorisiert bearbeitet' },
+      { title: 'ISO 17025', desc: 'Akkreditiertes Prüflabor' },
+      { title: 'Sub-µm Auflösung', desc: 'Höchste Präzision für Details' },
+      { title: 'Detaillierte Reports', desc: 'Verständliche Ergebnisdokumentation' }
+    ],
+    servicesTitle: 'Unsere Labor-Leistungen',
+    services: [
+      { title: 'Defektanalyse', desc: 'Poren, Lunker, Risse – sichtbar gemacht in 2D & 3D', icon: 'microscope' },
+      { title: 'Dimensionsmessung', desc: 'Wanddicken, CAD Soll/Ist-Vergleich, Toleranzen', icon: 'measure' },
+      { title: 'Montagekontrolle', desc: 'Vollständigkeit, Position, Fügequalität prüfen', icon: 'assembly' },
+      { title: 'Porositätsanalyse', desc: 'Quantitative Auswertung nach VDG/VW-Normen', icon: 'pore' }
+    ],
+    processTitle: 'So funktioniert es',
+    process: [
+      { step: '1', title: 'Anfrage senden', desc: 'Bauteilbeschreibung und Prüfziel mitteilen' },
+      { step: '2', title: 'Probe einsenden', desc: 'Versand oder Abgabe im Labor' },
+      { step: '3', title: 'CT-Scan', desc: 'Professionelle Aufnahme im Prüflabor' },
+      { step: '4', title: 'Report erhalten', desc: 'Detaillierte Auswertung mit Bildern' }
+    ],
+    testimonial: {
+      quote: 'Die CT-Analyse von Microvista hat uns bei der Freigabe unseres Serienteils entscheidend unterstützt.',
+      author: 'Dr. Thomas Weber',
+      role: 'Leiter Qualitätssicherung, Automobilzulieferer'
+    },
+    ctaTitle: 'Bereit für Ihre CT-Analyse?',
+    ctaDesc: 'Senden Sie uns Ihre Anfrage – wir melden uns innerhalb von 24 Stunden.',
+    formTitle: 'Jetzt unverbindlich anfragen'
+  }
+};
+
+const t = content.de;
+---
+
+<BaseLayout title={t.title} description={t.description}>
+  <Header slot="header" />
+  
+  <main class="landing-page">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-bg">
+        <div class="gradient-orb"></div>
+      </div>
+      <div class="container">
+        <div class="hero-content">
+          <span class="hero-badge">🔬 Labor-Service</span>
+          <h1 class="hero-title">{t.heroTitle}</h1>
+          <p class="hero-subtitle">{t.heroSubtitle}</p>
+          <p class="hero-desc">{t.heroDesc}</p>
+          <div class="hero-actions">
+            <a href="#kontakt" class="btn btn-primary btn-lg">{t.ctaPrimary}</a>
+            <a href="#leistungen" class="btn btn-outline btn-lg">{t.ctaSecondary}</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <img src="/images/ct/Bauteil-im-CT-platziert-scaled.jpg" alt="CT-Prüfung im Labor" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits Bar -->
+    <section class="benefits-bar">
+      <div class="container">
+        <div class="benefits-grid">
+          {t.benefits.map(benefit => (
+            <div class="benefit-item">
+              <span class="benefit-title">{benefit.title}</span>
+              <span class="benefit-desc">{benefit.desc}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="leistungen" class="services">
+      <div class="container">
+        <h2 class="section-title">{t.servicesTitle}</h2>
+        <div class="services-grid">
+          {t.services.map(service => (
+            <div class="service-card">
+              <h3>{service.title}</h3>
+              <p>{service.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section class="process">
+      <div class="container">
+        <h2 class="section-title">{t.processTitle}</h2>
+        <div class="process-grid">
+          {t.process.map((step, i) => (
+            <div class="process-step">
+              <span class="step-number">{step.step}</span>
+              <h3>{step.title}</h3>
+              <p>{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="testimonial">
+      <div class="container">
+        <blockquote>
+          <p>"{t.testimonial.quote}"</p>
+          <footer>
+            <strong>{t.testimonial.author}</strong>
+            <span>{t.testimonial.role}</span>
+          </footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="kontakt" class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2>{t.ctaTitle}</h2>
+          <p>{t.ctaDesc}</p>
+          <a href={lp('/labor/kontakt')} class="btn btn-primary btn-xl">{t.ctaPrimary}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .landing-page {
+    --accent: var(--mv-violet);
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+  }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    padding: calc(var(--space-20) + 60px) 0 var(--space-16);
+    background: linear-gradient(135deg, var(--mv-violet) 0%, #1a1640 100%);
+    color: white;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .gradient-orb {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: rgba(142, 191, 214, 0.2);
+    border-radius: 50%;
+    filter: blur(100px);
+    top: -200px;
+    right: -200px;
+  }
+
+  .hero .container {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    align-items: center;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-subtitle {
+    font-size: var(--text-xl);
+    color: var(--mv-blue);
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-desc {
+    font-size: var(--text-lg);
+    color: rgba(255,255,255,0.8);
+    line-height: 1.7;
+    margin-bottom: var(--space-8);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  .hero-visual img {
+    border-radius: var(--radius-2xl);
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-base);
+  }
+
+  .btn-primary {
+    background: var(--mv-orange);
+    color: white;
+    border: 2px solid var(--mv-orange);
+  }
+
+  .btn-primary:hover {
+    background: var(--mv-orange-hover);
+    border-color: var(--mv-orange-hover);
+    transform: translateY(-2px);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.5);
+  }
+
+  .btn-outline:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: white;
+  }
+
+  .btn-lg {
+    padding: var(--space-4) var(--space-8);
+    font-size: var(--text-lg);
+  }
+
+  .btn-xl {
+    padding: var(--space-4) var(--space-10);
+    font-size: var(--text-xl);
+  }
+
+  /* Benefits Bar */
+  .benefits-bar {
+    background: var(--mv-gray-50);
+    padding: var(--space-8) 0;
+    border-bottom: 1px solid var(--mv-gray-200);
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+  }
+
+  .benefit-item {
+    text-align: center;
+  }
+
+  .benefit-title {
+    display: block;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--mv-violet);
+    margin-bottom: var(--space-1);
+  }
+
+  .benefit-desc {
+    font-size: var(--text-sm);
+    color: var(--mv-gray-600);
+  }
+
+  /* Sections */
+  .services, .process {
+    padding: var(--space-20) 0;
+  }
+
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-2xl), 4vw, var(--text-3xl));
+    font-weight: 700;
+    color: var(--mv-violet);
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .service-card {
+    padding: var(--space-6);
+    background: var(--mv-white);
+    border: 2px solid var(--mv-gray-100);
+    border-radius: var(--radius-xl);
+    transition: all var(--transition-base);
+  }
+
+  .service-card:hover {
+    border-color: var(--mv-blue);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .service-card h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    color: var(--mv-violet);
+    margin-bottom: var(--space-2);
+  }
+
+  .service-card p {
+    color: var(--mv-gray-600);
+    margin: 0;
+  }
+
+  /* Process */
+  .process {
+    background: linear-gradient(180deg, var(--mv-gray-50) 0%, var(--mv-white) 100%);
+  }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+  }
+
+  .process-step {
+    text-align: center;
+    position: relative;
+  }
+
+  .step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--mv-violet);
+    color: white;
+    border-radius: 50%;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    margin: 0 auto var(--space-4);
+  }
+
+  .process-step h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    color: var(--mv-violet);
+    margin-bottom: var(--space-2);
+  }
+
+  .process-step p {
+    font-size: var(--text-sm);
+    color: var(--mv-gray-600);
+    margin: 0;
+  }
+
+  /* Testimonial */
+  .testimonial {
+    padding: var(--space-16) 0;
+    background: var(--mv-violet);
+    color: white;
+  }
+
+  .testimonial blockquote {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .testimonial blockquote p {
+    font-size: var(--text-xl);
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
+  }
+
+  .testimonial footer strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+  }
+
+  .testimonial footer span {
+    color: var(--mv-blue);
+    font-size: var(--text-sm);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: var(--space-20) 0;
+    background: linear-gradient(135deg, var(--mv-orange) 0%, #d4600a 100%);
+    color: white;
+    text-align: center;
+  }
+
+  .cta-content h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+    font-weight: 700;
+    margin-bottom: var(--space-4);
+  }
+
+  .cta-content p {
+    font-size: var(--text-lg);
+    color: rgba(255,255,255,0.9);
+    max-width: 600px;
+    margin: 0 auto var(--space-8);
+  }
+
+  @media (max-width: 768px) {
+    .hero .container {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-visual {
+      order: -1;
+    }
+
+    .benefits-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .services-grid, .process-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</function_response>
+
+<function_calls>
+<invoke name="WriteFile">
+<parameter name="path">C:\Users\karent\Documents\Software\netco\microvista\website\microvista-astro\src\pages\express-ct-inspektion.astro

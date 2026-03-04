@@ -1,0 +1,459 @@
+---
+/**
+ * Landing Page: Express CT-Inspektion
+ * Für gesperrte Chargen und dringende Fälle
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { localePath, type Locale } from '../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const content = {
+  de: {
+    title: 'Express CT-Inspektion | 24-48h | Microvista',
+    description: 'Gesperrte Charge? Express CT-Prüfung in 24-48 Stunden. Sofortige Fehleranalyse für schnelle Freigabeentscheidungen.',
+    heroTitle: 'Gesperrte Charge?',
+    heroSubtitle: 'Express-Inspektion in 24-48 Stunden',
+    heroDesc: 'Wenn Zeit Geld ist: Priorisierte CT-Analyse für dringende Fälle. Schnelle Fehlererkennung, fundierte Entscheidungsgrundlage.',
+    ctaPrimary: 'Express anfordern',
+    painPoints: [
+      { title: 'Lieferverzug droht', desc: 'Jede Stunde zählt bei der Charge' },
+      { title: 'Kundenrekla droht', desc: 'Schnelle Klärung der Ursache nötig' },
+      { title: 'Produktion steht', desc: 'Material fehlt für den laufenden Betrieb' }
+    ],
+    solutionTitle: 'Unsere Express-Lösung',
+    solution: [
+      { title: '24h Annahme', desc: 'Priorisierter Zugang, sofortige Bearbeitung' },
+      { title: '48h Report', desc: 'Detaillierte Analyse mit Bilddokumentation' },
+      { title: 'Fehlerlokalisierung', desc: 'Präzise Ortung und Klassifizierung' },
+      { title: 'Freigabeempfehlung', desc: 'Fundierte Basis für Ihre Entscheidung' }
+    ],
+    stats: [
+      { value: '<24h', label: 'bis zum Scan' },
+      { value: '<48h', label: 'bis zum Report' },
+      { value: '99%', label: 'Termintreue' }
+    ],
+    howItWorks: [
+      { step: '1', title: 'Dringlichkeit melden', desc: 'Teilen Sie uns Ihren Zeitplan mit' },
+      { step: '2', title: 'Sofortige Annahme', desc: 'Priorisierte Probenannahme' },
+      { step: '3', title: 'Express-Analyse', desc: '24h-Scan im Prüflabor' },
+      { step: '4', title: 'Schnelle Entscheidung', desc: '48h-Report mit Empfehlung' }
+    ],
+    ctaTitle: 'Starten Sie jetzt Ihre Express-Analyse',
+    ctaDesc: 'Jede Minute zählt. Kontaktieren Sie uns für priorisierte Bearbeitung.',
+    emergencyContact: 'Dringend? Rufen Sie an: +49 3944 950-50'
+  }
+};
+
+const t = content.de;
+---
+
+<BaseLayout title={t.title} description={t.description}>
+  <Header slot="header" />
+  
+  <main class="landing-page">
+    <!-- Urgency Banner -->
+    <div class="urgency-banner">
+      <span>⚡ Express-Service verfügbar</span>
+      <a href="tel:+49394495050">{t.emergencyContact}</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">{t.heroTitle}</h1>
+          <p class="hero-subtitle">{t.heroSubtitle}</p>
+          <p class="hero-desc">{t.heroDesc}</p>
+          <a href="#kontakt" class="btn btn-primary btn-xl">{t.ctaPrimary}</a>
+        </div>
+        <div class="hero-visual">
+          <div class="urgency-card">
+            <span class="urgency-label">⚡ Express</span>
+            <div class="urgency-timer">
+              <span class="timer-value">24-48h</span>
+              <span class="timer-label">bis zum Report</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pain Points -->
+    <section class="pain-section">
+      <div class="container">
+        <h2 class="section-title">Kennen Sie das?</h2>
+        <div class="pain-grid">
+          {t.painPoints.map(pain => (
+            <div class="pain-card">
+              <h3>{pain.title}</h3>
+              <p>{pain.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Solution -->
+    <section class="solution-section">
+      <div class="container">
+        <h2 class="section-title">{t.solutionTitle}</h2>
+        <div class="solution-grid">
+          {t.solution.map(item => (
+            <div class="solution-card">
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="stats-grid">
+          {t.stats.map(stat => (
+            <div class="stat-item">
+              <span class="stat-value">{stat.value}</span>
+              <span class="stat-label">{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section class="process-section">
+      <div class="container">
+        <h2 class="section-title">So funktioniert Express</h2>
+        <div class="process-grid">
+          {t.howItWorks.map(step => (
+            <div class="process-step">
+              <span class="step-number">{step.step}</span>
+              <h3>{step.title}</h3>
+              <p>{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="kontakt" class="cta-section">
+      <div class="container">
+        <h2>{t.ctaTitle}</h2>
+        <p>{t.ctaDesc}</p>
+        <a href={lp('/labor/kontakt')} class="btn btn-primary btn-xl">{t.ctaPrimary}</a>
+        <p class="emergency-note">{t.emergencyContact}</p>
+      </div>
+    </section>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .landing-page {
+    --accent: var(--mv-orange);
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+  }
+
+  /* Urgency Banner */
+  .urgency-banner {
+    background: var(--mv-orange);
+    color: white;
+    padding: var(--space-3) 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-4);
+    font-weight: 600;
+  }
+
+  .urgency-banner a {
+    color: white;
+    text-decoration: underline;
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1a1640 0%, var(--mv-violet) 100%);
+    color: white;
+    padding: var(--space-16) 0;
+  }
+
+  .hero .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    align-items: center;
+  }
+
+  .hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
+    font-weight: 700;
+    color: var(--mv-orange);
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-subtitle {
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-desc {
+    font-size: var(--text-lg);
+    color: rgba(255,255,255,0.8);
+    margin-bottom: var(--space-8);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4) var(--space-8);
+    background: var(--mv-orange);
+    color: white;
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-decoration: none;
+    transition: all var(--transition-base);
+  }
+
+  .btn:hover {
+    background: var(--mv-orange-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(238, 119, 17, 0.4);
+  }
+
+  .btn-xl {
+    padding: var(--space-4) var(--space-10);
+    font-size: var(--text-xl);
+  }
+
+  /* Urgency Card */
+  .urgency-card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--mv-orange);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-8);
+    text-align: center;
+  }
+
+  .urgency-label {
+    display: inline-block;
+    background: var(--mv-orange);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    margin-bottom: var(--space-4);
+  }
+
+  .urgency-timer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .timer-value {
+    font-family: var(--font-heading);
+    font-size: var(--text-5xl);
+    font-weight: 700;
+    color: var(--mv-orange);
+  }
+
+  .timer-label {
+    color: rgba(255,255,255,0.8);
+  }
+
+  /* Pain Section */
+  .pain-section {
+    padding: var(--space-16) 0;
+    background: var(--mv-gray-50);
+  }
+
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-xl), 4vw, var(--text-2xl));
+    font-weight: 700;
+    color: var(--mv-violet);
+    text-align: center;
+    margin-bottom: var(--space-10);
+  }
+
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+
+  .pain-card {
+    background: white;
+    padding: var(--space-6);
+    border-radius: var(--radius-xl);
+    border-left: 4px solid #ef4444;
+    box-shadow: var(--shadow-md);
+  }
+
+  .pain-card h3 {
+    font-family: var(--font-heading);
+    color: #ef4444;
+    margin-bottom: var(--space-2);
+  }
+
+  .pain-card p {
+    color: var(--mv-gray-600);
+    margin: 0;
+  }
+
+  /* Solution Section */
+  .solution-section {
+    padding: var(--space-16) 0;
+  }
+
+  .solution-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .solution-card {
+    padding: var(--space-6);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, white 100%);
+    border: 2px solid rgba(16, 185, 129, 0.2);
+    border-radius: var(--radius-xl);
+  }
+
+  .solution-card h3 {
+    font-family: var(--font-heading);
+    color: #10b981;
+    margin-bottom: var(--space-2);
+  }
+
+  .solution-card p {
+    color: var(--mv-gray-600);
+    margin: 0;
+  }
+
+  /* Stats */
+  .stats-section {
+    background: var(--mv-violet);
+    padding: var(--space-10) 0;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+    text-align: center;
+  }
+
+  .stat-value {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    color: var(--mv-orange);
+  }
+
+  .stat-label {
+    color: rgba(255,255,255,0.8);
+  }
+
+  /* Process */
+  .process-section {
+    padding: var(--space-16) 0;
+    background: var(--mv-gray-50);
+  }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+  }
+
+  .process-step {
+    text-align: center;
+    position: relative;
+  }
+
+  .step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--mv-orange);
+    color: white;
+    border-radius: 50%;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    margin: 0 auto var(--space-4);
+  }
+
+  .process-step h3 {
+    font-family: var(--font-heading);
+    color: var(--mv-violet);
+    margin-bottom: var(--space-2);
+  }
+
+  .process-step p {
+    font-size: var(--text-sm);
+    color: var(--mv-gray-600);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: var(--space-16) 0;
+    background: linear-gradient(135deg, var(--mv-orange) 0%, #d4600a 100%);
+    color: white;
+    text-align: center;
+  }
+
+  .cta-section h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-2xl), 4vw, var(--text-3xl));
+    font-weight: 700;
+    margin-bottom: var(--space-4);
+  }
+
+  .cta-section p {
+    font-size: var(--text-lg);
+    color: rgba(255,255,255,0.9);
+    max-width: 600px;
+    margin: 0 auto var(--space-8);
+  }
+
+  .emergency-note {
+    margin-top: var(--space-6);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .hero .container {
+      grid-template-columns: 1fr;
+    }
+
+    .pain-grid, .solution-grid, .stats-grid, .process-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</function_calls>
+
+<function_calls>
+<invoke name="WriteFile">
+<parameter name="path">C:\Users\karent\Documents\Software\netco\microvista\website\microvista-astro\src\pages\kontakt-beratung.astro
