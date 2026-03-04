@@ -116,18 +116,50 @@ const imageSets: Record<string, string[]> = {
   ]
 };
 const fallbackImages = [
-  heroImage,
   '/images/wp/2025/12/3D-Vermessung-von-Bauteilen-mit-industrieller-CT.webp',
+  '/images/wp/2022/08/CAD-Soll-Ist-Vergleich-eines-Bauteils.webp',
+  '/images/wp/2022/08/Fehlerschwerpunktanalyse-von-Poren-und-Lunkern-Zerstoerungsfreie-Pruefung-von-Leichtmetallguss.webp',
+  '/images/wp/2022/08/Prufung-eines-Motorblocks-im-industriellen-CT-1.webp',
+  '/images/wp/2022/08/Soll-Ist-Vergleich-Handprothese-Zerstoerungsfreie-Pruefung-von-Medizintechnik.webp',
+  '/images/wp/2025/12/Laminographie-flache-Leiterplatte.webp',
   '/images/wp/2022/06/Querschnittsmessung-mit-CT.jpg',
   '/images/wp/2023/11/3D-Scan-industrielle-CT-von-einem-Riss.webp'
 ];
-const imagePool = Array.from(new Set([heroImage, ...(imageSets[slug as string] || []), ...fallbackImages]));
-const solutionsImage = imagePool[1] || imagePool[0];
-const visualImages = imagePool.slice(0, 3);
-const useCaseImages = imagePool.slice(1);
+const selectUniqueImages = (primary: string[], count: number, fallback: string[] = []) => {
+  const picked: string[] = [];
+  const seen = new Set<string>();
+  for (const img of [...primary, ...fallback]) {
+    if (!img || seen.has(img)) continue;
+    seen.add(img);
+    picked.push(img);
+    if (picked.length >= count) break;
+  }
+  return picked;
+};
+const slugImages = imageSets[slug as string] || [];
+const imagePool = selectUniqueImages([heroImage, ...slugImages], 12, fallbackImages);
+const visualImages = selectUniqueImages(
+  slugImages.filter((img) => img !== heroImage),
+  3,
+  fallbackImages.filter((img) => img !== heroImage)
+);
+const solutionsImage = (
+  selectUniqueImages(
+    slugImages.filter((img) => img !== heroImage && !visualImages.includes(img)),
+    1,
+    imagePool.filter((img) => img !== heroImage && !visualImages.includes(img))
+  )[0]
+) || heroImage;
+const useCaseCount = Math.max(4, data.useCases?.length || 0);
+const useCaseImages = selectUniqueImages(
+  slugImages.filter((img) => img !== heroImage && img !== solutionsImage && !visualImages.includes(img)),
+  useCaseCount,
+  imagePool.filter((img) => img !== heroImage && img !== solutionsImage && !visualImages.includes(img))
+);
 const getUseCaseImage = (idx: number) => {
-  const pool = useCaseImages.length > 0 ? useCaseImages : imagePool;
-  return pool[idx % pool.length];
+  if (useCaseImages[idx]) return useCaseImages[idx];
+  if (useCaseImages.length > 0) return useCaseImages[idx % useCaseImages.length];
+  return imagePool[idx % imagePool.length] || heroImage;
 };
 const getVisualCaption = (idx: number) => {
   if (data.useCases?.[idx]) return data.useCases[idx];
