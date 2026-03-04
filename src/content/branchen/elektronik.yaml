@@ -1,7 +1,7 @@
 name: "Elektronik & PCB"
 slug: "elektronik"
 description: "CT- und Laminographie-Prüfung für Elektronik – Lötfehler in BGAs und PCBs zuverlässig erkennen. BGA-Lotstellen, versteckte Brücken, Via-Fehler: Microvistas Laminographie-Technologie analysiert Leiterplatten und Elektronik-Baugruppen hochauflösend – ohne die Platine zu zerstören."
-heroImage: "/images/branchen/elektronik.jpg"
+heroImage: "/images/wp/2025/12/Laminographie-flache-Leiterplatte.webp"
 challenges:
   - title: "BGA-Lotstellen sind von außen nicht prüfbar – Fehler bleiben bis zum Ausfall verborgen"
     description: "Ball-Grid-Array-Komponenten haben ihre gesamten Lötverbindungen unter dem Bauteilgehäuse verborgen – eine visuelle Inspektion nach dem Löten ist vollständig ausgeschlossen. Cold Joints, Missing Solder und Bridging bleiben deshalb unentdeckt und führen erst unter thermomechanischer Beanspruchung im Feld zum Ausfall. In sicherheitskritischen Steuergeräten – etwa in Automotive-ECUs oder Avionik-Systemen – kann ein einziger fehlerhafter Lötkontakt schwerwiegende Folgen haben."

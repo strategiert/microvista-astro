@@ -19,6 +19,8 @@ if (!branche) {
 }
 
 const data = branche.data;
+const heroImage = data.heroImage || `/images/branchen/${slug}.jpg`;
+const getBranchenImage = (id: string, image?: string) => image || `/images/branchen/${id}.jpg`;
 
 const ui = {
   de: {
@@ -65,7 +67,7 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
     <!-- HERO with Background Image -->
     <section class="branche-hero" style={`--accent: ${accentColor};`}>
       <div class="hero-image-bg">
-        <img src={`/images/branchen/${slug}.jpg`} alt={data.name} />
+        <img src={heroImage} alt={data.name} />
         <div class="hero-gradient"></div>
       </div>
       
@@ -159,7 +161,7 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
             </div>
             <div class="solutions-visual">
               <div class="solutions-image-wrapper">
-                <img src={`/images/branchen/${slug}.jpg`} alt={data.name} class="solutions-image" />
+                <img src={heroImage} alt={data.name} class="solutions-image" />
                 <div class="solutions-overlay"></div>
                 <div class="solutions-badge">
                   <span>Individuelle Lösung</span>
@@ -183,7 +185,7 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
             {data.useCases.map((useCase: string, idx: number) => (
               <div class="usecase-card" style={`--accent: ${accentColor}; --index: ${idx}`}>
                 <div class="usecase-image">
-                  <img src={`/images/branchen/${slug}.jpg`} alt={useCase} />
+                  <img src={heroImage} alt={useCase} />
                   <div class="usecase-overlay"></div>
                 </div>
                 <div class="usecase-content">
@@ -296,7 +298,7 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
           {relatedBranchen.map((related) => (
             <a href={lp(`/branchen/${related.id}`)} class="related-card">
               <div class="related-image">
-                <img src={`/images/branchen/${related.id}.jpg`} alt={related.data.name} />
+                <img src={getBranchenImage(related.id, related.data.heroImage)} alt={related.data.name} />
                 <div class="related-overlay"></div>
               </div>
               <div class="related-content">

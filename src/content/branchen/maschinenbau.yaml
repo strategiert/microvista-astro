@@ -1,7 +1,7 @@
 name: "Maschinenbau & Anlagenbau"
 slug: "maschinenbau"
 description: "CT-Prüfung für Maschinenbau – von der Schadensanalyse bis zum Reverse Engineering. Für Maschinenbau und Anlagenbau bietet Microvista das vollständige ZfP-Spektrum: Schadensanalyse, Reverse Engineering alter Bauteile und normkonforme Qualitätsprüfung für Zulieferteile."
-heroImage: "/images/branchen/maschinenbau.jpg"
+heroImage: "/images/wp/2022/08/CAD-Soll-Ist-Vergleich-eines-Bauteils.webp"
 challenges:
   - title: "Schadensursachen bei Maschinenausfällen bleiben ohne 3D-Analyse im Dunkeln"
     description: "Wenn eine Maschine oder Anlage unerwartet ausfällt, muss die Ursache schnell und eindeutig geklärt werden – um Wiederholungsausfälle zu vermeiden und Haftungsfragen zu beantworten. Konventionelle Sichtprüfung und 2D-Röntgen reichen für die vollständige Schadensanalyse komplex belasteter Maschinenteile nicht aus, weil Rissursprünge, Ermüdungslinien und Sekundärschäden oft tief im Bauteilinneren liegen. Ohne belastbare Fehlerursachenanalyse sind gezielte Abhilfemaßnahmen nicht möglich – und die nächste ungeplante Abschaltung vorprogrammiert."

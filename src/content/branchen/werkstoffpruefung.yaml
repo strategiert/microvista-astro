@@ -1,7 +1,7 @@
 name: "Werkstoffprüfung (NDT/ZfP)"
 slug: "werkstoffpruefung"
 description: "Zerstörungsfreie Werkstoffprüfung mit CT – normkonform, schnell, für alle Materialien. Von Metallen über Kunststoffe bis hin zu Verbundwerkstoffen: Microvista prüft Ihre Werkstoffproben und Bauteile nach internationalen Normen – mit Taktzeiten unter 60 Sekunden."
-heroImage: "/images/wp/2022/06/stators.jpg"
+heroImage: "/images/wp/2024/10/Aluminium-Bauteil-in-der-CT-Werkstoffpruefung.webp"
 challenges:
   - title: "Klassische ZfP-Methoden (Ultraschall, Magnetpulver) liefern keine vollständigen 3D-Informationen"
     description: "Ultraschall, Magnetpulver- und Eindringprüfung liefern wertvolle Aussagen, sind aber auf bestimmte Geometrien, Oberflächenzustände und Materialen beschränkt und erfassen innere Defekte immer nur in einer oder wenigen Schnittebenen. Komplexe 3D-Fehlergeometrien – Rissformen, Porencluster, Einschlussverteilungen – lassen sich mit diesen Methoden nicht vollständig rekonstruieren. Für Bauteilfreigaben, die auf vollständiger Volumetrischer Analyse basieren müssen, ist industrielle CT die einzig geeignete Methode."
