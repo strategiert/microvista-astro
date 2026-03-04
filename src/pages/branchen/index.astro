@@ -83,7 +83,7 @@ const defaultBranchen = [
 ];
 
 const displayBranchen = branchen.length > 0 
-  ? branchen.map(b => ({ ...b.data, slug: b.slug }))
+  ? branchen.map(b => ({ ...b.data, slug: b.id }))
   : defaultBranchen;
 
 // Trust badges

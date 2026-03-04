@@ -11,7 +11,7 @@ import { localePath, type Locale } from '../../i18n/translations';
 
 const { slug } = Astro.params;
 const branchen = await getCollection('branchen');
-const branche = branchen.find(b => (b.data.slug || b.id) === slug) || null;
+const branche = branchen.find(b => b.id === slug) || null;
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
 
