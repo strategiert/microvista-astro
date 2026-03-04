@@ -1,12 +1,13 @@
 ---
 /**
- * Branchen Index - Übersicht aller Branchen-Seiten
+ * Branchen Index - Redesign
+ * Moderne Übersicht aller Branchen
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
-import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
-import Card from '../../components/ui/Card.astro';
+import BranchenHero from '../../components/sections/BranchenHero.astro';
+import BranchenCard from '../../components/sections/BranchenCard.astro';
 import { getCollection } from 'astro:content';
 import { localePath, type Locale } from '../../i18n/translations';
 
@@ -19,274 +20,300 @@ const branchen = await getCollection('branchen');
 const content = {
   de: {
     title: 'Branchen',
-    subtitle: 'Industrielle CT-Lösungen für Ihre Branche',
-    description: 'Jede Branche hat spezifische Anforderungen an die Qualitätsprüfung. Entdecken Sie, wie Microvista CT-Technologie Ihre Herausforderungen löst.',
-    cta: 'Mehr erfahren'
+    subtitle: 'CT-Lösungen für Ihre Branche',
+    description: 'Jede Branche hat spezifische Anforderungen an die Qualitätsprüfung. Entdecken Sie maßgeschneiderte CT-Lösungen für Ihren Anwendungsbereich.',
+    cta: 'Mehr erfahren',
+    ctaTitle: 'Ihre Branche nicht dabei?',
+    ctaText: 'CT-Technologie ist vielseitig einsetzbar. Kontaktieren Sie uns für eine individuelle Beratung zu Ihren spezifischen Anforderungen.',
+    ctaButton: 'Beratung anfragen',
+    trustTitle: 'Vertraut von führenden Unternehmen'
   },
   en: {
     title: 'Industries',
-    subtitle: 'Industrial CT solutions for your industry',
-    description: 'Every industry has specific quality inspection requirements. Discover how Microvista CT technology solves your challenges.',
-    cta: 'Learn more'
+    subtitle: 'CT solutions for your industry',
+    description: 'Every industry has specific quality inspection requirements. Discover tailored CT solutions for your application area.',
+    cta: 'Learn more',
+    ctaTitle: 'Your industry not listed?',
+    ctaText: 'CT technology is versatile. Contact us for individual consultation on your specific requirements.',
+    ctaButton: 'Request consultation',
+    trustTitle: 'Trusted by leading companies'
   },
   fr: {
     title: 'Secteurs',
-    subtitle: 'Solutions CT industrielles pour votre secteur',
-    description: 'Chaque secteur a ses propres exigences qualité. Découvrez comment la technologie CT de Microvista répond à vos défis.',
-    cta: 'En savoir plus'
+    subtitle: 'Solutions CT pour votre secteur',
+    description: 'Chaque secteur a ses propres exigences qualité. Découvrez des solutions CT adaptées à votre domaine d\'application.',
+    cta: 'En savoir plus',
+    ctaTitle: 'Votre secteur n\'est pas listé ?',
+    ctaText: 'La technologie CT est polyvalente. Contactez-nous pour un conseil adapté à vos besoins.',
+    ctaButton: 'Demander une consultation',
+    trustTitle: 'Fait confiance par les leaders'
   },
   es: {
     title: 'Sectores',
-    subtitle: 'Soluciones CT industriales para su sector',
-    description: 'Cada sector tiene requisitos específicos de calidad. Descubra cómo la tecnología CT de Microvista resuelve sus desafíos.',
-    cta: 'Más información'
+    subtitle: 'Soluciones CT para su sector',
+    description: 'Cada sector tiene requisitos específicos de calidad. Descubra soluciones CT personalizadas para su área de aplicación.',
+    cta: 'Más información',
+    ctaTitle: '¿Su sector no aparece?',
+    ctaText: 'La tecnología CT es versátil. Contáctenos para una consulta individual sobre sus necesidades.',
+    ctaButton: 'Solicitar consulta',
+    trustTitle: 'Confiado por empresas líderes'
   },
   it: {
     title: 'Settori',
-    subtitle: 'Soluzioni CT industriali per il tuo settore',
-    description: 'Ogni settore ha requisiti specifici di qualità. Scopri come la tecnologia CT di Microvista risolve le tue sfide.',
-    cta: 'Scopri di più'
+    subtitle: 'Soluzioni CT per il tuo settore',
+    description: 'Ogni settore ha requisiti specifici di qualità. Scopri soluzioni CT su misura per la tua area di applicazione.',
+    cta: 'Scopri di più',
+    ctaTitle: 'Il tuo settore non è presente?',
+    ctaText: 'La tecnologia CT è versatile. Contattaci per una consulenza personalizzata sulle tue esigenze.',
+    ctaButton: 'Richiedi consulenza',
+    trustTitle: 'Scelto dalle aziende leader'
   }
 };
 
-const t = content[locale as keyof typeof content] || content.en || content.de;
+const t = content[locale as keyof typeof content] || content.de;
 
-const ctaContent = {
-  de: {
-    title: 'Ihre Branche nicht dabei?',
-    text: 'CT-Technologie ist vielseitig einsetzbar. Kontaktieren Sie uns für eine individuelle Beratung zu Ihren spezifischen Anforderungen.',
-    button: 'Beratung anfragen'
-  },
-  en: {
-    title: 'Your industry not listed?',
-    text: 'CT technology is versatile. Contact us for individual consultation on your specific requirements.',
-    button: 'Request consultation'
-  },
-  fr: {
-    title: 'Votre secteur n’est pas listé ?',
-    text: 'La technologie CT est polyvalente. Contactez-nous pour un conseil adapté à vos exigences spécifiques.',
-    button: 'Demander une consultation'
-  },
-  es: {
-    title: '¿Su sector no aparece?',
-    text: 'La tecnología CT es versátil. Contáctenos para una consulta adaptada a sus necesidades específicas.',
-    button: 'Solicitar consulta'
-  },
-  it: {
-    title: 'Il tuo settore non è presente?',
-    text: 'La tecnologia CT è versatile. Contattaci per una consulenza personalizzata sulle tue esigenze specifiche.',
-    button: 'Richiedi consulenza'
-  }
-}[locale] || {
-  title: 'Your industry not listed?',
-  text: 'CT technology is versatile. Contact us for individual consultation on your specific requirements.',
-  button: 'Request consultation'
-};
-
-// Fallback-Branchen falls Collection leer
+// Fallback-Branchen
 const defaultBranchen = [
-  {
-    slug: 'automotive',
-    data: {
-      name: 'Automotive',
-      description: 'Qualitätssicherung für Gussteile, Schweißverbindungen und Elektronik-Komponenten in der Automobilindustrie.',
-      heroImage: '/images/branchen/automotive.jpg'
-    }
-  },
-  {
-    slug: 'elektronik',
-    data: {
-      name: 'Elektronik',
-      description: 'Inspektion von Leiterplatten, BGAs, Lötstellen und Mikroelektronik mit höchster Auflösung.',
-      heroImage: '/images/branchen/elektronik.jpg'
-    }
-  },
-  {
-    slug: 'medizintechnik',
-    data: {
-      name: 'Medizintechnik',
-      description: 'FDA-konforme Prüfung von Implantaten, Instrumenten und sterilen Verpackungen.',
-      heroImage: '/images/branchen/medizintechnik.jpg'
-    }
-  },
-  {
-    slug: 'luftfahrt',
-    data: {
-      name: 'Luft- und Raumfahrt',
-      description: 'Zertifizierte Prüfung sicherheitskritischer Komponenten nach Luftfahrt-Standards.',
-      heroImage: '/images/branchen/luftfahrt.jpg'
-    }
-  },
-  {
-    slug: 'kunststoff',
-    data: {
-      name: 'Kunststoffverarbeitung',
-      description: 'Analyse von Spritzgussteilen, Hohlräumen, Wandstärken und Faserverstärkungen.',
-      heroImage: '/images/branchen/kunststoff.jpg'
-    }
-  },
-  {
-    slug: 'energie',
-    data: {
-      name: 'Energie',
-      description: 'Prüfung von Batteriezellen, Brennstoffzellen und Komponenten für erneuerbare Energien.',
-      heroImage: '/images/branchen/energie.jpg'
-    }
-  }
+  { slug: 'automotive', name: 'Automotive', description: 'Qualitätssicherung für Gussteile, Schweißverbindungen und Elektronik-Komponenten in der Automobilindustrie.', icon: 'automotive' },
+  { slug: 'elektronik', name: 'Elektronik', description: 'Inspektion von Leiterplatten, BGAs, Lötstellen und Mikroelektronik mit höchster Auflösung.', icon: 'elektronik' },
+  { slug: 'medizintechnik', name: 'Medizintechnik', description: 'FDA-konforme Prüfung von Implantaten, Instrumenten und sterilen Verpackungen.', icon: 'medizintechnik' },
+  { slug: 'luftfahrt', name: 'Luft- und Raumfahrt', description: 'Zertifizierte Prüfung sicherheitskritischer Komponenten nach Luftfahrt-Standards.', icon: 'luftfahrt' },
+  { slug: 'kunststoff', name: 'Kunststoffverarbeitung', description: 'Analyse von Spritzgussteilen, Hohlräumen, Wandstärken und Faserverstärkungen.', icon: 'kunststoff' },
+  { slug: 'energie', name: 'Energie', description: 'Prüfung von Batteriezellen, Brennstoffzellen und Komponenten für erneuerbare Energien.', icon: 'energie' },
 ];
 
-const displayBranchen = branchen.length > 0 ? branchen : defaultBranchen;
+const displayBranchen = branchen.length > 0 
+  ? branchen.map(b => ({ ...b.data, slug: b.slug }))
+  : defaultBranchen;
+
+// Trust badges
+const trustBadges = ['ISO 9001', 'ISO 17025', 'NADCAP', 'FDA Ready'];
 ---
 
 <BaseLayout
   title={t.title}
-  description={t.subtitle}
+  description={t.description}
 >
   <Header slot="header" />
 
-  <div class="container">
-    <Breadcrumbs items={[
-      { label: t.title }
-    ]} />
-
+  <main class="branchen-page">
     <!-- Hero -->
-    <section class="page-hero">
-      <h1>{t.title}</h1>
-      <p class="subtitle">{t.subtitle}</p>
-      <p class="description">{t.description}</p>
-    </section>
+    <BranchenHero
+      title={t.title}
+      subtitle={t.subtitle}
+      description={t.description}
+      locale={locale}
+    />
 
     <!-- Branchen Grid -->
-    <section class="branchen-grid">
-      {displayBranchen.map((branche, index) => (
-        <Card
-          href={lp(`/branchen/${branche.slug}`)}
-          variant={index === 0 ? 'featured' : 'default'}
-          class={index === 0 ? 'branche-featured' : ''}
-        >
-          <div slot="image" class="branche-image">
-            <div class="image-placeholder">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
-              </svg>
-            </div>
-          </div>
-          <h3 slot="title">{branche.data.name}</h3>
-          <p slot="description">{branche.data.description}</p>
-          <div slot="footer" class="card-cta">
-            <span>{t.cta}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </div>
-        </Card>
-      ))}
+    <section class="branchen-section">
+      <div class="container">
+        <div class="branchen-grid">
+          {displayBranchen.map((branche, index) => (
+            <BranchenCard
+              slug={branche.slug}
+              name={branche.name}
+              description={branche.description}
+              icon={branche.icon || 'automotive'}
+              locale={locale}
+              ctaText={t.cta}
+              featured={index === 0}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust-section">
+      <div class="container">
+        <p class="trust-title">{t.trustTitle}</p>
+        <div class="trust-badges">
+          {trustBadges.map(badge => (
+            <span class="trust-badge">{badge}</span>
+          ))}
+        </div>
+      </div>
     </section>
 
     <!-- CTA Section -->
     <section class="cta-section">
-      <div class="cta-content">
-        <h2>{ctaContent.title}</h2>
-        <p>{ctaContent.text}</p>
-        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">
-          {ctaContent.button}
-        </a>
+      <div class="container">
+        <div class="cta-box">
+          <div class="cta-content">
+            <h2>{t.ctaTitle}</h2>
+            <p>{t.ctaText}</p>
+            <a href={lp('/kontakt')} class="cta-button">
+              {t.ctaButton}
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4.167 10h11.666m0 0L10 4.167M15.833 10L10 15.833" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+          <div class="cta-decoration">
+            <div class="decoration-circle"></div>
+            <div class="decoration-circle"></div>
+          </div>
+        </div>
       </div>
     </section>
-  </div>
+  </main>
 
   <Footer slot="footer" />
 </BaseLayout>
 
 <style>
-  .page-hero {
-    text-align: center;
-    padding: var(--space-12) 0;
-    max-width: 800px;
+  .branchen-page {
+    background: var(--mv-white);
+  }
+
+  .container {
+    max-width: 1280px;
     margin: 0 auto;
+    padding: 0 var(--container-padding);
   }
 
-  .page-hero h1 {
-    font-size: var(--text-5xl);
-    margin-bottom: var(--space-4);
-  }
-
-  .subtitle {
-    font-size: var(--text-2xl);
-    color: var(--primary);
-    margin-bottom: var(--space-4);
-  }
-
-  .description {
-    font-size: var(--text-lg);
-    color: var(--text-muted);
+  /* Branchen Section */
+  .branchen-section {
+    padding: var(--space-16) 0;
+    background: linear-gradient(180deg, var(--mv-gray-50) 0%, var(--mv-white) 100%);
   }
 
   .branchen-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: var(--space-6);
-    margin: var(--space-12) 0;
   }
 
-  @media (min-width: 768px) {
-    .branche-featured {
-      grid-column: span 2;
-    }
-
-    .branche-featured .branche-image {
-      aspect-ratio: 21/9;
+  @media (min-width: 1024px) {
+    .branchen-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
-  .branche-image {
-    aspect-ratio: 16/9;
-    background: linear-gradient(135deg, var(--surface) 0%, rgba(124, 58, 237, 0.1) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .image-placeholder {
-    color: var(--primary);
-    opacity: 0.5;
-  }
-
-  .card-cta {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    color: var(--primary);
-    font-weight: 600;
-  }
-
-  .card-cta svg {
-    transition: transform var(--transition-fast);
-  }
-
-  :global(.card:hover) .card-cta svg {
-    transform: translateX(4px);
-  }
-
-  .cta-section {
-    background: var(--surface);
-    border-radius: var(--radius-2xl);
-    padding: var(--space-16);
-    margin: var(--space-16) 0;
+  /* Trust Section */
+  .trust-section {
+    padding: var(--space-12) 0;
+    border-top: 1px solid var(--mv-gray-100);
     text-align: center;
   }
 
+  .trust-title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--mv-gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-4);
+  }
+
+  .trust-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+
+  .trust-badge {
+    padding: var(--space-2) var(--space-4);
+    background: var(--mv-gray-100);
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--mv-gray-600);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: var(--space-16) 0 var(--space-20);
+  }
+
+  .cta-box {
+    position: relative;
+    background: linear-gradient(135deg, var(--mv-violet) 0%, #1a1640 100%);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-10) var(--space-8);
+    overflow: hidden;
+  }
+
   .cta-content {
+    position: relative;
+    z-index: 1;
     max-width: 600px;
-    margin: 0 auto;
   }
 
   .cta-content h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-xl), 4vw, var(--text-3xl));
+    font-weight: 700;
+    color: var(--mv-white);
     margin-bottom: var(--space-4);
   }
 
   .cta-content p {
-    color: var(--text-muted);
+    font-size: var(--text-lg);
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.6;
     margin-bottom: var(--space-8);
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-6);
+    background: var(--mv-orange);
+    color: var(--mv-white);
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-base);
+  }
+
+  .cta-button:hover {
+    background: var(--mv-orange-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(238, 119, 17, 0.4);
+  }
+
+  .cta-decoration {
+    position: absolute;
+    right: -50px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .decoration-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .decoration-circle:nth-child(2) {
+    width: 280px;
+    height: 280px;
+    right: -40px;
+    opacity: 0.5;
+  }
+
+  @media (max-width: 768px) {
+    .cta-box {
+      padding: var(--space-8) var(--space-6);
+    }
+
+    .cta-decoration {
+      display: none;
+    }
+
+    .branchen-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

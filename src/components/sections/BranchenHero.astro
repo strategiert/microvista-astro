@@ -1,0 +1,125 @@
+---
+/**
+ * BranchenHero - Hero für Branchen Index
+ */
+import { localePath, type Locale } from '../../i18n/translations';
+
+interface Props {
+  title: string;
+  subtitle: string;
+  description: string;
+  locale: Locale;
+}
+
+const { title, subtitle, description, locale } = Astro.props;
+const lp = (path: string) => localePath(path, locale);
+---
+
+<section class="branchen-hero">
+  <div class="hero-bg">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="grid-pattern"></div>
+  </div>
+  
+  <div class="container">
+    <div class="hero-content">
+      <span class="hero-eyebrow">Branchenlösungen</span>
+      <h1 class="hero-title">{title}</h1>
+      <p class="hero-subtitle">{subtitle}</p>
+      <p class="hero-description">{description}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .branchen-hero {
+    position: relative;
+    padding: calc(var(--space-20) + 80px) 0 var(--space-16);
+    background: linear-gradient(135deg, var(--mv-violet) 0%, #1a1640 50%, #0f0c29 100%);
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .gradient-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.4;
+  }
+
+  .orb-1 {
+    width: 600px;
+    height: 600px;
+    background: rgba(142, 191, 214, 0.3);
+    top: -200px;
+    right: -200px;
+  }
+
+  .orb-2 {
+    width: 400px;
+    height: 400px;
+    background: rgba(238, 119, 17, 0.2);
+    bottom: -100px;
+    left: -100px;
+  }
+
+  .grid-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+
+  .container {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+  }
+
+  .hero-content {
+    text-align: center;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mv-blue);
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-4xl), 8vw, var(--text-6xl));
+    font-weight: 700;
+    color: var(--mv-white);
+    margin-bottom: var(--space-4);
+    line-height: 1.1;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(var(--text-xl), 3vw, var(--text-2xl));
+    color: var(--mv-blue);
+    font-weight: 500;
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-description {
+    font-size: clamp(var(--text-base), 2vw, var(--text-lg));
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.7;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+</style>

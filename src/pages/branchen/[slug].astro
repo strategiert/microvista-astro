@@ -1,13 +1,12 @@
 ---
 /**
- * Branchen Einzelseite - Dynamic Route
+ * Branchen Detail - Redesign
+ * Moderne Branchen-Detailseite
  */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
-import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
-import { serviceSchema, faqSchema } from '../../components/seo/schemas';
 import { localePath, type Locale } from '../../i18n/translations';
 
 const { slug } = Astro.params;
@@ -19,68 +18,65 @@ const lp = (path: string) => localePath(path, locale);
 const ui = {
   de: {
     industries: 'Branchen',
-    heroPrefix: 'CT-Prüfung für',
+    heroPrefix: 'CT-Lösungen für',
     challenges: 'Ihre Herausforderungen',
     solutions: 'Unsere Lösungen',
     applications: 'Anwendungen',
+    stats: 'Key Facts',
     contactBtn: 'Beratung anfragen',
-    labBtn: 'Labor-Services kennenlernen'
+    labBtn: 'Labor-Services',
+    back: 'Alle Branchen'
   },
   en: {
     industries: 'Industries',
-    heroPrefix: 'CT inspection for',
+    heroPrefix: 'CT solutions for',
     challenges: 'Your Challenges',
     solutions: 'Our Solutions',
     applications: 'Applications',
+    stats: 'Key Facts',
     contactBtn: 'Request Consultation',
-    labBtn: 'Learn about Lab Services'
+    labBtn: 'Lab Services',
+    back: 'All Industries'
   },
   fr: {
     industries: 'Secteurs',
-    heroPrefix: 'Inspection CT pour',
+    heroPrefix: 'Solutions CT pour',
     challenges: 'Vos défis',
     solutions: 'Nos solutions',
     applications: 'Applications',
+    stats: 'Faits clés',
     contactBtn: 'Demander une consultation',
-    labBtn: 'Découvrir les services labo'
+    labBtn: 'Services labo',
+    back: 'Tous les secteurs'
   },
   es: {
     industries: 'Sectores',
-    heroPrefix: 'Inspección CT para',
+    heroPrefix: 'Soluciones CT para',
     challenges: 'Sus desafíos',
     solutions: 'Nuestras soluciones',
     applications: 'Aplicaciones',
+    stats: 'Datos clave',
     contactBtn: 'Solicitar consulta',
-    labBtn: 'Conocer servicios de laboratorio'
+    labBtn: 'Servicios de laboratorio',
+    back: 'Todos los sectores'
   },
   it: {
     industries: 'Settori',
-    heroPrefix: 'Ispezione CT per',
+    heroPrefix: 'Soluzioni CT per',
     challenges: 'Le tue sfide',
     solutions: 'Le nostre soluzioni',
     applications: 'Applicazioni',
+    stats: 'Dati chiave',
     contactBtn: 'Richiedi consulenza',
-    labBtn: 'Scopri i servizi di laboratorio'
+    labBtn: 'Servizi di laboratorio',
+    back: 'Tutti i settori'
   }
-}[locale] || {
-  industries: 'Industries',
-  heroPrefix: 'CT inspection for',
-  challenges: 'Your Challenges',
-  solutions: 'Our Solutions',
-  applications: 'Applications',
-  contactBtn: 'Request Consultation',
-  labBtn: 'Learn about Lab Services'
-};
+}[locale] || ui.en;
 
-// Fallback-Daten falls keine Collection-Daten
+// Fallback-Daten
 const fallbackData: Record<string, any> = {
   automotive: {
-    name: 'Automotive',
-    description: 'CT-Prüflösungen für die Automobilindustrie',
-    seo: {
-      title: 'CT für Automotive | Microvista',
-      description: 'Industrielle CT-Prüfung für Gussteile, Schweißverbindungen und Elektronik in der Automobilindustrie.'
-    },
+    name: 'Automotive', description: 'CT-Prüflösungen für die Automobilindustrie',
     challenges: [
       { title: 'Komplexe Geometrien', description: 'Gussteile und Verbundwerkstoffe mit inneren Strukturen' },
       { title: 'Null-Fehler-Toleranz', description: 'Höchste Qualitätsanforderungen für sicherheitskritische Bauteile' },
@@ -97,18 +93,10 @@ const fallbackData: Record<string, any> = {
       { value: '99.9%', label: 'Erkennungsrate' },
       { value: '24/7', label: 'Produktion' }
     ],
-    cta: {
-      title: 'Optimieren Sie Ihre Qualitätsprüfung',
-      description: 'Erfahren Sie, wie CT-Technologie Ihre Automotive-Produktion verbessern kann.'
-    }
+    color: '#32285b'
   },
   luftfahrt: {
-    name: 'Luftfahrt',
-    description: 'Zertifizierte CT-Prüfung für Aerospace-Komponenten',
-    seo: {
-      title: 'CT für Luftfahrt | Microvista',
-      description: 'Zertifizierte CT-Prüfung für Turbinenschaufeln, Strukturbauteile und Verbundwerkstoffe in der Luftfahrtindustrie.'
-    },
+    name: 'Luftfahrt', description: 'Zertifizierte CT-Prüfung für Aerospace-Komponenten',
     challenges: [
       { title: 'Strenge Zertifizierung', description: 'NADCAP und EN/AS 9100 Anforderungen' },
       { title: 'Sicherheitskritische Bauteile', description: 'Null-Toleranz bei Defekten in Triebwerkskomponenten' },
@@ -125,22 +113,14 @@ const fallbackData: Record<string, any> = {
       { value: '<1µm', label: 'Auflösung' },
       { value: '100%', label: 'Rückverfolgung' }
     ],
-    cta: {
-      title: 'Zertifizierte Qualitätsprüfung',
-      description: 'Erfahren Sie mehr über unsere NADCAP-akkreditierten Prüfleistungen für die Luftfahrt.'
-    }
+    color: '#8b5cf6'
   },
   elektronik: {
-    name: 'Elektronik',
-    description: 'Präzise CT-Analyse für elektronische Baugruppen',
-    seo: {
-      title: 'CT für Elektronik | Microvista',
-      description: 'CT-Prüfung von Leiterplatten, BGA-Lötverbindungen und Halbleitergehäusen.'
-    },
+    name: 'Elektronik', description: 'Präzise CT-Analyse für elektronische Baugruppen',
     challenges: [
       { title: 'Miniaturisierung', description: 'Immer kleinere Strukturen und dichtere Packaging' },
       { title: 'Versteckte Defekte', description: 'Lötfehler unter BGAs und in Vias' },
-      { value: 'Hohe Taktung', description: 'Schnelle Prüfung in der SMT-Linie' }
+      { title: 'Hohe Taktung', description: 'Schnelle Prüfung in der SMT-Linie' }
     ],
     solutions: [
       { title: 'Nano-CT', description: 'Höchste Auflösung für Mikroelektronik' },
@@ -153,18 +133,10 @@ const fallbackData: Record<string, any> = {
       { value: '<10s', label: 'pro Board' },
       { value: '99.5%', label: 'Erkennungsrate' }
     ],
-    cta: {
-      title: 'Elektronik-Qualität sichern',
-      description: 'Entdecken Sie unsere CT-Lösungen für die Elektronikfertigung.'
-    }
+    color: '#00a0d2'
   },
   medizintechnik: {
-    name: 'Medizintechnik',
-    description: 'Validierte CT-Prüfung für Medizinprodukte',
-    seo: {
-      title: 'CT für Medizintechnik | Microvista',
-      description: 'FDA- und MDR-konforme CT-Prüfung für Implantate, Instrumente und medizinische Geräte.'
-    },
+    name: 'Medizintechnik', description: 'Validierte CT-Prüfung für Medizinprodukte',
     challenges: [
       { title: 'Regulatorische Anforderungen', description: 'FDA 21 CFR Part 11, MDR, ISO 13485' },
       { title: 'Biokompatibilität', description: 'Keine Kontamination der Prüfteile' },
@@ -181,18 +153,10 @@ const fallbackData: Record<string, any> = {
       { value: '100%', label: 'Dokumentation' },
       { value: 'FDA', label: 'ready' }
     ],
-    cta: {
-      title: 'Regulatorisch konforme Prüfung',
-      description: 'Sprechen Sie mit uns über validierte CT-Prüfung für Ihre Medizinprodukte.'
-    }
+    color: '#10b981'
   },
   kunststoff: {
-    name: 'Kunststoff',
-    description: 'CT-Analyse für Spritzguss und Kunststoffverarbeitung',
-    seo: {
-      title: 'CT für Kunststoff | Microvista',
-      description: 'CT-Prüfung von Spritzgussteilen, Faserorientierung und Wandstärkenanalyse.'
-    },
+    name: 'Kunststoffverarbeitung', description: 'CT-Analyse für Spritzguss und Kunststoffverarbeitung',
     challenges: [
       { title: 'Innere Strukturen', description: 'Lunker, Einfallstellen und Bindenähte' },
       { title: 'Faserorientierung', description: 'Analyse von GFK/CFK Füllung' },
@@ -209,18 +173,10 @@ const fallbackData: Record<string, any> = {
       { value: 'µm', label: 'Genauigkeit' },
       { value: '100%', label: 'zerstörungsfrei' }
     ],
-    cta: {
-      title: 'Kunststoffqualität optimieren',
-      description: 'Erfahren Sie, wie CT Ihre Spritzguss-Entwicklung beschleunigt.'
-    }
+    color: '#f59e0b'
   },
   energie: {
-    name: 'Energie',
-    description: 'CT-Prüfung für Batterien und Energiespeicher',
-    seo: {
-      title: 'CT für Energie & Batterien | Microvista',
-      description: 'CT-Analyse von Batteriezellen, Brennstoffzellen und Energiespeichersystemen.'
-    },
+    name: 'Energie & Batterien', description: 'CT-Prüfung für Batterien und Energiespeicher',
     challenges: [
       { title: 'Sicherheit', description: 'Defekte können zu thermischen Events führen' },
       { title: 'Elektrodenqualität', description: 'Beschichtung, Falten und Kontamination' },
@@ -237,125 +193,71 @@ const fallbackData: Record<string, any> = {
       { value: '100%', label: 'Prüfung' },
       { value: '24/7', label: 'Betrieb' }
     ],
-    cta: {
-      title: 'Batteriesicherheit gewährleisten',
-      description: 'Kontaktieren Sie uns für CT-Lösungen in der Batterieproduktion.'
-    }
-  },
-  'additive-fertigung': {
-    name: 'Additive Fertigung',
-    description: 'CT-Qualitätssicherung für 3D-gedruckte Bauteile',
-    seo: {
-      title: 'CT für Additive Fertigung | Microvista',
-      description: 'CT-Prüfung von 3D-Druck Bauteilen: Porosität, Pulvereinschlüsse und Maßhaltigkeit.'
-    },
-    challenges: [
-      { title: 'Prozessbedingte Defekte', description: 'Poren, Einschlüsse, Risse' },
-      { title: 'Komplexe Geometrien', description: 'Interne Kanäle und Gitterstrukturen' },
-      { title: 'Qualifizierung', description: 'Nachweis der Bauteilintegrität' }
-    ],
-    solutions: [
-      { title: 'Porositätsanalyse', description: 'Vollständige 3D-Porenverteilung' },
-      { title: 'Pulveranalyse', description: 'Ungeschmolzenes Pulver erkennen' },
-      { title: 'Geometrievergleich', description: 'Soll-Ist-Abgleich zum CAD' }
-    ],
-    useCases: ['SLM/LPBF', 'EBM', 'Binder Jetting', 'DED', 'Polymer 3D-Druck'],
-    stats: [
-      { value: '3D', label: 'Porenanalyse' },
-      { value: 'CAD', label: 'Vergleich' },
-      { value: '100%', label: 'zerstörungsfrei' }
-    ],
-    cta: {
-      title: 'AM-Qualität sichern',
-      description: 'Sprechen Sie mit uns über CT für Ihre additive Fertigung.'
-    }
-  },
-  batteriesysteme: {
-    name: 'Batteriesysteme',
-    description: 'Spezialisierte CT-Prüfung für Batteriezellen und -module',
-    seo: {
-      title: 'CT für Batteriesysteme | Microvista',
-      description: 'CT-Analyse von Lithium-Ionen-Zellen, Batteriemodulen und Elektrodenqualität.'
-    },
-    challenges: [
-      { title: 'Zellsicherheit', description: 'Interne Kurzschlüsse verhindern' },
-      { title: 'Elektrodenqualität', description: 'Beschichtungsfehler und Kontamination' },
-      { title: 'Serienproduktion', description: 'Hoher Durchsatz bei 100% Prüfung' }
-    ],
-    solutions: [
-      { title: 'Inline-Zellenprüfung', description: 'Vollautomatische CT jeder Zelle' },
-      { title: 'Partikel-Detektion', description: 'Metallische Kontaminationen finden' },
-      { title: 'Elektroden-Analyse', description: 'Beschichtung und Ausrichtung prüfen' }
-    ],
-    useCases: ['Pouchzellen', 'Rundzellen', 'Prismatische Zellen', 'Batteriemodule', 'Elektrodenfolien'],
-    stats: [
-      { value: '<3s', label: 'pro Zelle' },
-      { value: '20µm', label: 'Partikel' },
-      { value: '100%', label: 'Prüfung' }
-    ],
-    cta: {
-      title: 'Batteriequalität maximieren',
-      description: 'Erfahren Sie mehr über unsere Inline-CT für die Batterieproduktion.'
-    }
+    color: '#ee7711'
   }
 };
 
-const data = branche?.data || fallbackData[slug as string] || {
+const data = fallbackData[slug as string] || {
   name: slug,
   description: 'Branchenspezifische CT-Lösungen',
-  seo: { title: `${slug} | Microvista`, description: '' },
-  challenges: [],
-  solutions: [],
-  useCases: [],
-  stats: [],
-  cta: { title: 'Kontaktieren Sie uns', description: '' }
+  challenges: [], solutions: [], useCases: [], stats: [],
+  color: '#32285b'
 };
 
-// Schemas
-const schemas = [
-  serviceSchema({
-    name: `CT-Prüfung für ${data.name}`,
-    description: data.seo?.description || data.description,
-    url: `https://microvista.de/branchen/${slug}`
-  })
-];
-
-if (data.faq && data.faq.length > 0) {
-  schemas.push(faqSchema(data.faq));
-}
+const accentColor = data.color || '#32285b';
 ---
 
 <BaseLayout
-  title={data.seo?.title || `${data.name} | Microvista`}
-  description={data.seo?.description || data.description}
-  schema={schemas}
+  title={`${data.name} | ${ui.industries}`}
+  description={data.description}
 >
   <Header slot="header" />
 
   <article class="branche-page">
     <!-- Hero -->
-    <section class="hero">
+    <section class="branche-hero" style={`--accent: ${accentColor};`}>
+      <div class="hero-bg">
+        <div class="gradient-orb"></div>
+        <div class="grid-pattern"></div>
+      </div>
+      
       <div class="container">
-        <Breadcrumbs items={[
-          { label: ui.industries, href: lp('/branchen') },
-          { label: data.name }
-        ]} />
-
+        <nav class="hero-breadcrumb">
+          <a href={lp('/branchen')} class="breadcrumb-link">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15.833 10H4.167m0 0L10 15.833M4.167 10L10 4.167" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            {ui.back}
+          </a>
+        </nav>
+        
         <div class="hero-content">
-          <h1>{ui.heroPrefix} {data.name}</h1>
-          <p class="lead">{data.description}</p>
+          <span class="hero-prefix">{ui.heroPrefix}</span>
+          <h1 class="hero-title">{data.name}</h1>
+          <p class="hero-description">{data.description}</p>
+          
+          <div class="hero-actions">
+            <a href={lp('/kontakt')} class="btn-primary">
+              {ui.contactBtn}
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4.167 10h11.666m0 0L10 4.167M15.833 10L10 15.833" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a href={lp('/labor')} class="btn-secondary">
+              {ui.labBtn}
+            </a>
+          </div>
         </div>
       </div>
-      <div class="hero-bg"></div>
     </section>
 
-    <!-- Stats -->
+    <!-- Stats Bar -->
     {data.stats && data.stats.length > 0 && (
-      <section class="stats-bar">
+      <section class="stats-section" style={`--accent: ${accentColor};`}>
         <div class="container">
           <div class="stats-grid">
             {data.stats.map((stat: any) => (
-              <div class="stat">
+              <div class="stat-item">
                 <span class="stat-value">{stat.value}</span>
                 <span class="stat-label">{stat.label}</span>
               </div>
@@ -367,12 +269,19 @@ if (data.faq && data.faq.length > 0) {
 
     <!-- Challenges -->
     {data.challenges && data.challenges.length > 0 && (
-      <section class="section">
+      <section class="content-section">
         <div class="container">
-          <h2>{ui.challenges}</h2>
-          <div class="challenges-grid">
+          <h2 class="section-title">{ui.challenges}</h2>
+          <div class="cards-grid">
             {data.challenges.map((challenge: any) => (
-              <div class="challenge-card">
+              <div class="content-card challenge-card">
+                <div class="card-icon problem-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                </div>
                 <h3>{challenge.title}</h3>
                 <p>{challenge.description}</p>
               </div>
@@ -384,16 +293,16 @@ if (data.faq && data.faq.length > 0) {
 
     <!-- Solutions -->
     {data.solutions && data.solutions.length > 0 && (
-      <section class="section bg-surface">
+      <section class="content-section bg-alt" style={`--accent: ${accentColor};`}>
         <div class="container">
-          <h2>{ui.solutions}</h2>
-          <div class="solutions-grid">
+          <h2 class="section-title">{ui.solutions}</h2>
+          <div class="cards-grid">
             {data.solutions.map((solution: any) => (
-              <div class="solution-card">
-                <div class="solution-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <div class="content-card solution-card">
+                <div class="card-icon solution-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                    <path d="m9 11 3 3L22 4"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
                   </svg>
                 </div>
                 <h3>{solution.title}</h3>
@@ -407,12 +316,12 @@ if (data.faq && data.faq.length > 0) {
 
     <!-- Use Cases -->
     {data.useCases && data.useCases.length > 0 && (
-      <section class="section">
+      <section class="content-section">
         <div class="container">
-          <h2>{ui.applications}</h2>
-          <div class="usecases-list">
+          <h2 class="section-title">{ui.applications}</h2>
+          <div class="tags-cloud">
             {data.useCases.map((useCase: string) => (
-              <span class="usecase-tag">{useCase}</span>
+              <span class="tag-item" style={`--accent: ${accentColor};`}>{useCase}</span>
             ))}
           </div>
         </div>
@@ -420,17 +329,20 @@ if (data.faq && data.faq.length > 0) {
     )}
 
     <!-- CTA -->
-    <section class="cta-section">
+    <section class="bottom-cta" style={`--accent: ${accentColor};`}>
       <div class="container">
         <div class="cta-content">
-          <h2>{data.cta?.title}</h2>
-          <p>{data.cta?.description}</p>
-          <div class="cta-buttons">
-            <a href={lp('/kontakt')} class="btn btn-primary btn-lg">
+          <h2>Bereit für die nächste Prüfaufgabe?</h2>
+          <p>Kontaktieren Sie uns für eine unverbindliche Beratung zu Ihren spezifischen Anforderungen.</p>
+          <div class="cta-actions">
+            <a href={lp('/kontakt')} class="cta-btn primary">
               {ui.contactBtn}
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4.167 10h11.666m0 0L10 4.167M15.833 10L10 15.833" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </a>
-            <a href={lp('/labor')} class="btn btn-secondary btn-lg">
-              {ui.labBtn}
+            <a href={lp('/branchen')} class="cta-btn secondary">
+              {ui.back}
             </a>
           </div>
         </div>
@@ -442,33 +354,68 @@ if (data.faq && data.faq.length > 0) {
 </BaseLayout>
 
 <style>
-  .hero {
+  .branche-page {
+    background: var(--mv-white);
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+  }
+
+  /* Hero */
+  .branche-hero {
     position: relative;
-    padding: var(--space-12) 0 var(--space-20);
-    background: linear-gradient(135deg, var(--primary) 0%, #1E3A8A 100%);
-    color: white;
+    padding: calc(var(--space-16) + 80px) 0 var(--space-12);
+    background: linear-gradient(135deg, var(--accent) 0%, #1a1640 100%);
+    color: var(--mv-white);
+    overflow: hidden;
   }
 
   .hero-bg {
     position: absolute;
     inset: 0;
-    opacity: 0.1;
-    background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.3) 1px, transparent 0);
-    background-size: 32px 32px;
+    pointer-events: none;
   }
 
-  .hero :global(.breadcrumbs) {
+  .gradient-orb {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    filter: blur(100px);
+    top: -200px;
+    right: -200px;
+  }
+
+  .grid-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+
+  .hero-breadcrumb {
     position: relative;
-    z-index: 1;
+    margin-bottom: var(--space-8);
   }
 
-  .hero :global(.breadcrumbs a),
-  .hero :global(.breadcrumbs span) {
-    color: rgba(255,255,255,0.7);
+  .breadcrumb-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    transition: color var(--transition-fast);
   }
 
-  .hero :global(.breadcrumbs span[aria-current]) {
-    color: white;
+  .breadcrumb-link:hover {
+    color: var(--mv-white);
   }
 
   .hero-content {
@@ -476,170 +423,285 @@ if (data.faq && data.faq.length > 0) {
     max-width: 700px;
   }
 
-  .hero h1 {
-    font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
-    color: white;
-    margin-bottom: var(--space-6);
+  .hero-prefix {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mv-blue);
+    margin-bottom: var(--space-2);
   }
 
-  .lead {
-    font-size: var(--text-xl);
-    color: rgba(255,255,255,0.8);
-    line-height: 1.6;
+  .hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-3xl), 6vw, var(--text-5xl));
+    font-weight: 700;
+    margin-bottom: var(--space-4);
+    line-height: 1.1;
   }
 
-  .stats-bar {
-    background: var(--primary);
+  .hero-description {
+    font-size: var(--text-lg);
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.7;
+    margin-bottom: var(--space-8);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    background: var(--mv-orange);
+    color: var(--mv-white);
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-base);
+  }
+
+  .btn-primary:hover {
+    background: var(--mv-orange-hover);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--mv-white);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-base);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Stats */
+  .stats-section {
+    background: var(--accent);
     padding: var(--space-8) 0;
-    margin-top: calc(-1 * var(--space-12));
-    position: relative;
-    z-index: 1;
+    margin-top: -1px;
   }
 
   .stats-grid {
     display: flex;
     justify-content: center;
     gap: var(--space-12);
+    flex-wrap: wrap;
   }
 
-  .stat {
+  .stat-item {
     text-align: center;
   }
 
   .stat-value {
     display: block;
-    font-size: var(--text-4xl);
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
     font-weight: 700;
-    color: white;
+    color: var(--mv-white);
   }
 
   .stat-label {
     font-size: var(--text-sm);
-    color: rgba(255,255,255,0.6);
+    color: rgba(255, 255, 255, 0.7);
   }
 
-  .section {
+  /* Content Sections */
+  .content-section {
     padding: var(--space-16) 0;
   }
 
-  .section h2 {
+  .bg-alt {
+    background: linear-gradient(180deg, var(--mv-gray-50) 0%, var(--mv-white) 100%);
+  }
+
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-xl), 4vw, var(--text-2xl));
+    font-weight: 700;
+    color: var(--mv-violet);
+    margin-bottom: var(--space-8);
     text-align: center;
-    margin-bottom: var(--space-12);
   }
 
-  .bg-surface {
-    background: var(--surface);
-  }
-
-  .challenges-grid {
+  .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: var(--space-6);
   }
 
-  .challenge-card {
-    padding: var(--space-6);
-    background: var(--surface);
-    border: 1px solid var(--border);
+  .content-card {
+    background: var(--mv-white);
+    border: 2px solid var(--mv-gray-100);
     border-radius: var(--radius-xl);
-  }
-
-  .challenge-card h3 {
-    color: var(--primary);
-    margin-bottom: var(--space-2);
-  }
-
-  .challenge-card p {
-    color: var(--text-muted);
-    margin: 0;
-  }
-
-  .solutions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-6);
-  }
-
-  .solution-card {
     padding: var(--space-6);
-    background: var(--background);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xl);
+    transition: all var(--transition-base);
   }
 
-  .solution-icon {
-    width: 48px;
-    height: 48px;
-    background: rgba(124, 58, 237, 0.1);
+  .content-card:hover {
+    border-color: var(--mv-gray-200);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+  }
+
+  .card-icon {
+    width: 56px;
+    height: 56px;
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--primary);
     margin-bottom: var(--space-4);
   }
 
-  .solution-card h3 {
+  .problem-icon {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+  }
+
+  .solution-icon {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+  }
+
+  .content-card h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--mv-gray-900);
     margin-bottom: var(--space-2);
   }
 
-  .solution-card p {
-    color: var(--text-muted);
+  .content-card p {
+    font-size: var(--text-sm);
+    color: var(--mv-gray-600);
+    line-height: 1.6;
     margin: 0;
   }
 
-  .usecases-list {
+  /* Tags Cloud */
+  .tags-cloud {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--space-3);
   }
 
-  .usecase-tag {
-    padding: var(--space-2) var(--space-4);
-    background: var(--surface);
-    border: 1px solid var(--border);
+  .tag-item {
+    padding: var(--space-3) var(--space-5);
+    background: var(--mv-white);
+    border: 2px solid var(--mv-gray-100);
     border-radius: var(--radius-full);
-    font-weight: 500;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--mv-gray-700);
+    transition: all var(--transition-base);
   }
 
-  .cta-section {
-    padding: var(--space-20) 0;
-    background: linear-gradient(135deg, var(--primary) 0%, #1E3A8A 100%);
-    color: white;
+  .tag-item:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* Bottom CTA */
+  .bottom-cta {
+    padding: var(--space-16) 0 var(--space-20);
+    background: linear-gradient(135deg, var(--mv-violet) 0%, #1a1640 100%);
+    color: var(--mv-white);
   }
 
   .cta-content {
     text-align: center;
-    max-width: 700px;
+    max-width: 600px;
     margin: 0 auto;
   }
 
   .cta-content h2 {
-    color: white;
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-xl), 4vw, var(--text-2xl));
+    font-weight: 700;
     margin-bottom: var(--space-4);
   }
 
   .cta-content p {
-    color: rgba(255,255,255,0.7);
     font-size: var(--text-lg);
+    color: rgba(255, 255, 255, 0.7);
     margin-bottom: var(--space-8);
   }
 
-  .cta-buttons {
+  .cta-actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--space-4);
   }
 
-  .cta-buttons .btn-primary {
-    background: white;
-    color: var(--primary);
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-base);
   }
 
-  .cta-buttons .btn-secondary {
-    border-color: rgba(255,255,255,0.3);
-    color: white;
+  .cta-btn.primary {
+    background: var(--mv-orange);
+    color: var(--mv-white);
+  }
+
+  .cta-btn.primary:hover {
+    background: var(--mv-orange-hover);
+    transform: translateY(-2px);
+  }
+
+  .cta-btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--mv-white);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .cta-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .branche-hero {
+      padding: calc(var(--space-12) + 60px) 0 var(--space-8);
+    }
+
+    .stats-grid {
+      gap: var(--space-6);
+    }
+
+    .stat-value {
+      font-size: var(--text-2xl);
+    }
+
+    .content-section {
+      padding: var(--space-10) 0;
+    }
   }
 </style>
