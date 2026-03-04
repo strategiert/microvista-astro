@@ -21,6 +21,119 @@ if (!branche) {
 const data = branche.data;
 const heroImage = data.heroImage || `/images/branchen/${slug}.jpg`;
 const getBranchenImage = (id: string, image?: string) => image || `/images/branchen/${id}.jpg`;
+const imageSets: Record<string, string[]> = {
+  'additive-fertigung': [
+    '/images/wp/2022/08/Pruefung-additiv-gefertigter-Bauteile-Aluminium-Radtraeger.webp',
+    '/images/wp/2022/08/Stuetztstrukturreste-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png.webp',
+    '/images/wp/2022/08/Delamination-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png.webp',
+    '/images/wp/2023/11/Komplexer-additiv-gefertigter-Radtraeger.webp'
+  ],
+  'archaeologie': [
+    '/images/wp/2025/10/Schaedel-eines-ausgestorbenen-Hyrachyus.webp',
+    '/images/wp/2025/10/Schaedel-des-wilden-Wasserbueffels-montiert-im-CT-.webp',
+    '/images/wp/2025/10/Schaedel-eines-Zwergflusspferds.webp',
+    '/images/wp/2025/08/Reiter-3D.webp'
+  ],
+  'automotive': [
+    '/images/wp/2022/06/computed-tomography-scanning-automotive-industry.jpg',
+    '/images/wp/2022/08/Prufung-eines-Motorblocks-im-industriellen-CT-1.webp',
+    '/images/wp/2022/06/Schnittbild-eines-Turboladers-im-CT.jpg',
+    '/images/wp/2023/11/Messung-der-Querschnittsflaeche-eines-Turboladers-fuer-einen-Soll-Ist-Vergleich-Zerstoerungsfreie-Pruefung-von-Leichtmetallguss.webp'
+  ],
+  'e-mobilitaet': [
+    '/images/wp/2026/01/Krone-wird-auf-den-Hairpin-Stator-gesetzt-Titelbild.webp',
+    '/images/wp/2023/11/Hairpin-mit-Poren-3D.webp',
+    '/images/wp/2022/08/CT-Bild-von-einem-beschaedigten-Lithium-Ionen-Akku-Zerstoerungsfreie-Pruefung-von-Batteriesystemen.jpg',
+    '/images/wp/2022/08/CT-Bild-von-Smartphone-zerstoerungsfreie-Pruefung-von-Batteriesystemen.jpg',
+    '/images/wp/2023/05/Krone-wird-auf-den-Hairpin-Stator-gesetzt-1.webp'
+  ],
+  'eisenguss': [
+    '/images/wp/2023/12/Zerstoerungsfreie-Pruefung-von-Eisenguss-Turbolader-Defekte.webp',
+    '/images/wp/2022/08/CT-Bild-Pore-im-Eisenguss.webp',
+    '/images/wp/2022/08/3D-Bild-Rissprufung-Eisenguss-mit-CT-1.webp',
+    '/images/wp/2022/08/3D-Bild-Porositatsanalyse-von-Eisenguss-mit-CT.webp',
+    '/images/wp/2022/06/Riss-im-Kruemmer-durch-CT-sichtbar.jpg'
+  ],
+  'elektronik': [
+    '/images/wp/2025/12/Laminographie-flache-Leiterplatte.webp',
+    '/images/wp/2025/12/Laminographie-Leiterplatte-Grafik.webp',
+    '/images/wp/elementor/thumbs/3D-CT-Aufnahme-eines-Playstation-Controllers-1-qaw9a6uzg0qsa7ihphyy8j5quup9jn9ac86ve615hc.png',
+    '/images/wp/2022/08/CT-Bild-von-Smartphone-zerstoerungsfreie-Pruefung-von-Batteriesystemen.jpg'
+  ],
+  'forschung-entwicklung': [
+    '/images/wp/2025/12/3D-Vermessung-von-Bauteilen-mit-industrieller-CT.webp',
+    '/images/wp/2023/11/Artefakt-3D-Blick-ins-Innere.webp',
+    '/images/wp/2023/11/3D-Scan-industrielle-CT-von-einem-Riss.webp',
+    '/images/wp/2024/08/3D-CT-Pruefung-eines-Wassermantels-Bild1.webp',
+    '/images/wp/2025/11/3D_Front.jpg'
+  ],
+  'kunststofftechnik': [
+    '/images/wp/2022/06/Dichtlippe-als-CAD-Qualitaetszonen.png',
+    '/images/wp/2022/08/CAD-Soll-Ist-Vergleich-eines-Bauteils.webp',
+    '/images/wp/2022/06/Moegliche-Wandstaerke-beim-CT-Scan.png',
+    '/images/branchen/kunststofftechnik.jpg'
+  ],
+  'leichtmetallguss': [
+    '/images/wp/2022/08/Porositaetsanalyse-eines-Zylinderkopfs-Zerstoerungsfreie-Pruefung-von-Leichtmetallguss.webp',
+    '/images/wp/2022/08/Fehlerschwerpunktanalyse-von-Poren-und-Lunkern-Zerstoerungsfreie-Pruefung-von-Leichtmetallguss.webp',
+    '/images/wp/2023/11/ZFP-auf-Poren-mit-industrieller-CT-Messtechnik.webp',
+    '/images/wp/2025/03/ZK-3D.webp',
+    '/images/wp/2022/06/Poren-in-hoher-Aufloesung-1.jpg'
+  ],
+  'luftfahrt': [
+    '/images/wp/2023/12/Zerstoerungsfreie-Pruefung-mit-industrieller-CT-auf-Risse-bei-einem-Turbinenrad.webp',
+    '/images/branchen/luftfahrt.jpg',
+    '/images/wp/2022/06/hairpin-and-laser-welding.jpg',
+    '/images/wp/2023/11/3D-Scan-industrielle-CT-von-einem-Riss.webp',
+    '/images/wp/2022/08/Pruefung-additiv-gefertigter-Bauteile-Aluminium-Radtraeger.webp'
+  ],
+  'maschinenbau': [
+    '/images/wp/2022/08/CAD-Soll-Ist-Vergleich-eines-Bauteils.webp',
+    '/images/wp/2025/12/3D-Vermessung-von-Bauteilen-mit-industrieller-CT.webp',
+    '/images/wp/2022/06/Querschnittsmessung-mit-CT.jpg',
+    '/images/wp/2022/06/Abrollung-eines-Pruefbereichs-mit-Pore.jpg',
+    '/images/branchen/maschinenbau.jpg'
+  ],
+  'medizintechnik': [
+    '/images/wp/2022/08/Soll-Ist-Vergleich-Handprothese-Zerstoerungsfreie-Pruefung-von-Medizintechnik.webp',
+    '/images/wp/2025/08/Ibuprofen-3d-2.webp',
+    '/images/wp/2025/08/Newsletter-Header-Pharmaindustrie.webp',
+    '/images/branchen/medizintechnik.jpg'
+  ],
+  'werkstoffpruefung': [
+    '/images/wp/2024/10/Aluminium-Bauteil-in-der-CT-Werkstoffpruefung.webp',
+    '/images/wp/2023/11/ZFP-auf-Poren-mit-industrieller-CT-Messtechnik.webp',
+    '/images/wp/2022/06/Poren-in-hoher-Aufloesung-1.jpg',
+    '/images/wp/2022/08/Fehlerschwerpunktanalyse-von-Poren-und-Lunkern-Zerstoerungsfreie-Pruefung-von-Leichtmetallguss.webp',
+    '/images/branchen/werkstoffpruefung.jpg'
+  ],
+  'windenergie': [
+    '/images/branchen/windenergie.jpg',
+    '/images/branchen/energie.jpg',
+    '/images/wp/2025/12/3D-Vermessung-von-Bauteilen-mit-industrieller-CT.webp',
+    '/images/wp/2022/06/Querschnittsmessung-mit-CT.jpg',
+    '/images/wp/2022/06/Serienprufung-mit-industrieller-CT-im-Pruflabor-von-Microvista.png'
+  ]
+};
+const fallbackImages = [
+  heroImage,
+  '/images/wp/2025/12/3D-Vermessung-von-Bauteilen-mit-industrieller-CT.webp',
+  '/images/wp/2022/06/Querschnittsmessung-mit-CT.jpg',
+  '/images/wp/2023/11/3D-Scan-industrielle-CT-von-einem-Riss.webp'
+];
+const imagePool = Array.from(new Set([heroImage, ...(imageSets[slug as string] || []), ...fallbackImages]));
+const solutionsImage = imagePool[1] || imagePool[0];
+const visualImages = imagePool.slice(0, 3);
+const useCaseImages = imagePool.slice(1);
+const getUseCaseImage = (idx: number) => {
+  const pool = useCaseImages.length > 0 ? useCaseImages : imagePool;
+  return pool[idx % pool.length];
+};
+const getVisualCaption = (idx: number) => {
+  if (data.useCases?.[idx]) return data.useCases[idx];
+  if (data.solutions?.[idx]?.title) return data.solutions[idx].title;
+  return `${data.name} - CT-Einblick ${idx + 1}`;
+};
 
 const ui = {
   de: {
@@ -131,6 +244,22 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
       </section>
     )}
 
+    <!-- VISUAL EVIDENCE -->
+    {visualImages.length > 1 && (
+      <section class="visual-section">
+        <div class="container">
+          <div class="visual-grid">
+            {visualImages.map((img, idx) => (
+              <figure class={`visual-card visual-card-${idx}`}>
+                <img src={img} alt={`${data.name} CT-Einblick ${idx + 1}`} loading="lazy" />
+                <figcaption>{getVisualCaption(idx)}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
     <!-- SOLUTIONS with Image -->
     {data.solutions && data.solutions.length > 0 && (
       <section class="solutions-section" style={`--accent: ${accentColor};`}>
@@ -161,7 +290,7 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
             </div>
             <div class="solutions-visual">
               <div class="solutions-image-wrapper">
-                <img src={heroImage} alt={data.name} class="solutions-image" />
+                <img src={solutionsImage} alt={data.name} class="solutions-image" loading="lazy" />
                 <div class="solutions-overlay"></div>
                 <div class="solutions-badge">
                   <span>Individuelle Lösung</span>
@@ -185,7 +314,7 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
             {data.useCases.map((useCase: string, idx: number) => (
               <div class="usecase-card" style={`--accent: ${accentColor}; --index: ${idx}`}>
                 <div class="usecase-image">
-                  <img src={heroImage} alt={useCase} />
+                  <img src={getUseCaseImage(idx)} alt={useCase} loading="lazy" />
                   <div class="usecase-overlay"></div>
                 </div>
                 <div class="usecase-content">
@@ -605,6 +734,66 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
     color: var(--mv-gray-500);
     line-height: 1.6;
     margin: var(--space-2) 0 0;
+  }
+
+  /* VISUAL EVIDENCE */
+  .visual-section {
+    padding: var(--space-10) 0 var(--space-16);
+    background: linear-gradient(180deg, var(--mv-gray-50) 0%, var(--mv-white) 100%);
+  }
+
+  .visual-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+
+  .visual-card {
+    margin: 0;
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    box-shadow: var(--shadow-md);
+  }
+
+  .visual-card-0 {
+    grid-row: span 2;
+    aspect-ratio: auto;
+    min-height: 420px;
+  }
+
+  .visual-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .visual-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26, 22, 64, 0.82) 0%, rgba(26, 22, 64, 0.12) 60%);
+  }
+
+  .visual-card figcaption {
+    position: absolute;
+    z-index: 1;
+    left: var(--space-4);
+    right: var(--space-4);
+    bottom: var(--space-4);
+    color: var(--mv-white);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    line-height: 1.4;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  }
+
+  .visual-card:hover img {
+    transform: scale(1.06);
   }
 
   /* SOLUTIONS with Image */
@@ -1120,7 +1309,29 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
     font-weight: 700;
   }
 
+  @media (max-width: 1024px) {
+    .visual-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .visual-card-0 {
+      grid-column: span 2;
+      grid-row: span 1;
+      min-height: 320px;
+    }
+  }
+
   @media (max-width: 768px) {
+    .visual-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .visual-card,
+    .visual-card-0 {
+      grid-column: auto;
+      min-height: 240px;
+    }
+
     .solutions-layout {
       grid-template-columns: 1fr;
     }
