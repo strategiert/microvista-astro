@@ -1,0 +1,81 @@
+---
+interface Category {
+  key: string;
+  label: string;
+  description: string;
+  icon: string;
+  count: number;
+  slug: string;
+}
+
+interface Props {
+  categories: Category[];
+  title?: string;
+}
+
+const { categories, title = "Kategorien" } = Astro.props;
+
+const gradients = [
+  'linear-gradient(135deg, var(--mv-violet) 0%, var(--mv-violet-light) 100%)',
+  'linear-gradient(135deg, var(--mv-blue) 0%, var(--mv-cyan) 100%)',
+  'linear-gradient(135deg, var(--mv-orange) 0%, var(--mv-pink) 100%)',
+  'linear-gradient(135deg, var(--mv-purple) 0%, var(--mv-violet) 100%)',
+];
+---
+
+<div class="bento-grid">
+  <!-- Featured Category (Large) -->
+  <a href={`/wiki/kategorie/${categories[0]?.slug}`} class="bento-item span-2 glass-card category-card animate-fade-in-up stagger-1">
+    <div class="category-card-icon" style={`background: ${gradients[0]}`}>
+      <span>{categories[0]?.icon}</span>
+    </div>
+    <div>
+      <h3>{categories[0]?.label}</h3>
+      <p>{categories[0]?.description}</p>
+      <span class="category-card-count">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        {categories[0]?.count} Einträge
+      </span>
+    </div>
+  </a>
+  
+  <!-- Stats Card -->
+  <div class="bento-item glass-card animate-fade-in-up stagger-2" style="padding: 1.5rem;">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value">{categories.reduce((acc, c) => acc + c.count, 0)}</div>
+        <div class="stat-label">Einträge</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">{categories.length}</div>
+        <div class="stat-label">Kategorien</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Other Categories -->
+  {categories.slice(1).map((category, index) => (
+    <a 
+      href={`/wiki/kategorie/${category.slug}`} 
+      class={`bento-item glass-card category-card animate-fade-in-up stagger-${index + 3}`}
+    >
+      <div class="category-card-icon" style={`background: ${gradients[(index + 1) % gradients.length]}`}>
+        <span>{category.icon}</span>
+      </div>
+      <div>
+        <h3>{category.label}</h3>
+        <p>{category.description}</p>
+        <span class="category-card-count">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          {category.count} Einträge
+        </span>
+      </div>
+    </a>
+  ))}
+</div>

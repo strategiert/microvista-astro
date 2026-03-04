@@ -1,0 +1,59 @@
+---
+interface Props {
+  title: string;
+  subtitle: string;
+  searchPlaceholder: string;
+  termOfTheDay?: {
+    term: string;
+    definition: string;
+    slug: string;
+  };
+}
+
+const { title, subtitle, searchPlaceholder, termOfTheDay } = Astro.props;
+---
+
+<section class="wiki-hero">
+  <div class="wiki-hero-content">
+    <h1 set:html={title} />
+    <p class="wiki-hero-subtitle">{subtitle}</p>
+    
+    <div class="wiki-search-wrapper">
+      <svg class="wiki-search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.3-4.3"/>
+      </svg>
+      <input 
+        type="search" 
+        class="wiki-search" 
+        placeholder={searchPlaceholder}
+        id="wiki-search-input"
+      />
+    </div>
+  </div>
+  
+  {termOfTheDay && (
+    <div class="hero-featured animate-fade-in-up">
+      <div class="glass-card featured-card">
+        <span class="featured-card-badge">Begriff des Tages</span>
+        <h2>{termOfTheDay.term}</h2>
+        <p>{termOfTheDay.definition.slice(0, 150)}...</p>
+        <a href={`/wiki/${termOfTheDay.slug}`} class="featured-card-btn">
+          Mehr erfahren
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  )}
+</section>
+
+<style>
+  .hero-featured {
+    margin-top: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>

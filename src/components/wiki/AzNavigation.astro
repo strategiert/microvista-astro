@@ -1,0 +1,26 @@
+---
+interface Props {
+  letters: string[];
+  activeLetter?: string;
+}
+
+const { letters, activeLetter } = Astro.props;
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ'.split('');
+---
+
+<nav class="glass-card az-nav-container" aria-label="Alphabetische Navigation">
+  {alphabet.map(letter => {
+    const hasEntries = letters.includes(letter);
+    const isActive = activeLetter === letter;
+    return (
+      <a
+        href={hasEntries ? `#letter-${letter}` : undefined}
+        class:list={['az-pill', { active: isActive, disabled: !hasEntries }]}
+        aria-disabled={!hasEntries}
+        aria-current={isActive ? 'page' : undefined}
+      >
+        {letter}
+      </a>
+    );
+  })}
+</nav>

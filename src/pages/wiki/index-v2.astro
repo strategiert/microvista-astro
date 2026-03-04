@@ -1,0 +1,226 @@
+---
+/**
+ * Wiki Index V2 - Bento Grid + Glassmorphism Design
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import WikiHero from '../../components/wiki/WikiHero.astro';
+import CategoryBento from '../../components/wiki/CategoryBento.astro';
+import WikiEntryCard from '../../components/wiki/WikiEntryCard.astro';
+import AzNavigation from '../../components/wiki/AzNavigation.astro';
+import ThemeToggle from '../../components/wiki/ThemeToggle.astro';
+import { getCollection } from 'astro:content';
+import { localePath, type Locale } from '../../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+const contentLocale = locale === 'de' ? 'de' : 'en';
+
+// Wiki-Einträge laden
+const allEntries = await getCollection('wiki');
+const localizedEntries = allEntries.filter((entry) => {
+  if (contentLocale === 'de') return !entry.id.startsWith('en/');
+  return entry.id.startsWith('en/');
+});
+
+const entries = localizedEntries.sort((a, b) =>
+  a.data.term.localeCompare(b.data.term, locale)
+);
+
+// Nach Buchstaben gruppieren
+const groupedEntries = entries.reduce((acc, entry) => {
+  const letter = entry.data.term[0].toUpperCase();
+  if (!acc[letter]) acc[letter] = [];
+  acc[letter].push(entry);
+  return acc;
+}, {} as Record<string, typeof entries>);
+
+const availableLetters = Object.keys(groupedEntries);
+
+// Kategorien mit Counts
+const categoryData = [
+  { key: 'grundlagen', label: 'CT-Grundlagen', description: 'Grundlegende Konzepte der Computertomographie', icon: '🔬' },
+  { key: 'verfahren', label: 'Verfahren', description: 'Prüfverfahren und Methoden', icon: '⚙️' },
+  { key: 'qm', label: 'Qualitätsmanagement', description: 'QM-Systeme und Standards', icon: '✓' },
+  { key: 'materialien', label: 'Materialien', description: 'Werkstoffe und Analyse', icon: '🧪' },
+  { key: 'normen', label: 'Normen', description: 'Industriestandards', icon: '📋' },
+  { key: 'software', label: 'Software', description: 'CT-Software und Tools', icon: '💻' },
+];
+
+const categories = categoryData.map(cat => ({
+  ...cat,
+  slug: cat.key,
+  count: entries.filter(e => e.data.category === cat.key).length,
+})).filter(cat => cat.count > 0);
+
+// Begriff des Tages (pseudo-random basierend auf Datum)
+const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
+const featuredEntry = entries[dayOfYear % entries.length];
+
+const content = {
+  de: {
+    heroTitle: 'CT-<span>Lexikon</span>',
+    heroSubtitle: 'Fachbegriffe der industriellen Computertomographie verständlich erklärt',
+    searchPlaceholder: 'Begriff suchen...',
+    allEntries: 'Alle Einträge',
+    noResults: 'Keine Einträge gefunden.',
+  },
+  en: {
+    heroTitle: 'CT-<span>Glossary</span>',
+    heroSubtitle: 'Industrial CT terms explained clearly',
+    searchPlaceholder: 'Search term...',
+    allEntries: 'All entries',
+    noResults: 'No entries found.',
+  },
+}[contentLocale === 'de' ? 'de' : 'en'];
+---
+
+<BaseLayout
+  title="CT-Lexikon | Microvista"
+  description={content.heroSubtitle}
+>
+  <Header slot="header" />
+  
+  <div class="wiki-container bg-gradient-mesh">
+    <!-- Hero Section -->
+    <WikiHero
+      title={content.heroTitle}
+      subtitle={content.heroSubtitle}
+      searchPlaceholder={content.searchPlaceholder}
+      termOfTheDay={featuredEntry ? {
+        term: featuredEntry.data.term,
+        definition: featuredEntry.data.definition,
+        slug: featuredEntry.slug,
+      } : undefined}
+    />
+    
+    <!-- Category Bento Grid -->
+    <section class="wiki-section">
+      <CategoryBento categories={categories} />
+    </section>
+    
+    <!-- A-Z Navigation -->
+    <AzNavigation letters={availableLetters} />
+    
+    <!-- All Entries -->
+    <section class="wiki-section" id="entries">
+      <div class="section-header">
+        <h2 class="text-gradient">{content.allEntries}</h2>
+        <span class="entry-count">{entries.length} Einträge</span>
+      </div>
+      
+      {entries.length === 0 ? (
+        <div class="empty-state">
+          <p>{content.noResults}</p>
+        </div>
+      ) : (
+        <div class="entries-bento">
+          {Object.entries(groupedEntries).sort().map(([letter, letterEntries], groupIndex) => (
+            <section class="letter-group" id={`letter-${letter}`}>
+              <h3 class="letter-title">{letter}</h3>
+              <div class="entries-grid">
+                {letterEntries.map((entry, index) => (
+                  <WikiEntryCard
+                    term={entry.data.term}
+                    definition={entry.data.definition}
+                    category={categories.find(c => c.key === entry.data.category)?.label || entry.data.category}
+                    slug={entry.slug}
+                    delay={(groupIndex * 100) + (index * 50)}
+                  />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      )}
+    </section>
+  </div>
+  
+  <ThemeToggle />
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .wiki-section {
+    padding: 2rem 0;
+  }
+  
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .section-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  
+  .entry-count {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+  
+  .entries-bento {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .letter-group {
+    margin-bottom: 4rem;
+    scroll-margin-top: 6rem;
+  }
+  
+  .letter-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--mv-violet);
+    margin-bottom: 1.5rem;
+    opacity: 0.3;
+    font-family: var(--font-display);
+  }
+  
+  [data-theme="dark"] .letter-title {
+    color: var(--mv-blue);
+  }
+  
+  .entries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 6rem 2rem;
+    color: var(--text-muted);
+  }
+</style>
+
+<script>
+  // Client-side search
+  const searchInput = document.getElementById('wiki-search-input');
+  const entryCards = document.querySelectorAll('.wiki-entry-card');
+  const letterGroups = document.querySelectorAll('.letter-group');
+  
+  searchInput?.addEventListener('input', (e) => {
+    const query = (e.target as HTMLInputElement).value.toLowerCase();
+    
+    entryCards.forEach(card => {
+      const title = card.querySelector('.wiki-entry-title')?.textContent?.toLowerCase() || '';
+      const def = card.querySelector('.wiki-entry-definition')?.textContent?.toLowerCase() || '';
+      const matches = title.includes(query) || def.includes(query);
+      (card as HTMLElement).style.display = matches ? 'flex' : 'none';
+    });
+    
+    letterGroups.forEach(group => {
+      const visibleCards = group.querySelectorAll('.wiki-entry-card[style="display: flex;"], .wiki-entry-card:not([style])');
+      (group as HTMLElement).style.display = visibleCards.length > 0 ? 'block' : 'none';
+    });
+  });
+</script>
