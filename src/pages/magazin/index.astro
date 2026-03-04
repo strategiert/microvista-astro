@@ -1,25 +1,22 @@
 ---
 /**
- * Magazin Index - Blog-Übersicht mit Filterung
+ * Magazin Index - Editorial Style Redesign
+ * Blog-Übersicht mit modernem Layout
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
-import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
-import Card from '../../components/ui/Card.astro';
-import Tag from '../../components/ui/Tag.astro';
+import ArticleCard from '../../components/sections/ArticleCard.astro';
+import FeaturedArticle from '../../components/sections/FeaturedArticle.astro';
 import { getCollection } from 'astro:content';
 import { localePath, type Locale } from '../../i18n/translations';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
-
 const preferredContentLocale = locale === 'de' ? 'de' : 'en';
 
 // Alle Magazin-Artikel laden
-const allPosts = await getCollection('magazin', ({ data }) => {
-  return !data.draft;
-});
+const allPosts = await getCollection('magazin', ({ data }) => !data.draft);
 
 const localizedPosts = allPosts.filter((post) => {
   if (preferredContentLocale === 'de') {
@@ -47,7 +44,7 @@ const content = {
     featured: 'Empfohlen',
     latest: 'Neueste Artikel',
     categories: 'Kategorien',
-    allCategories: 'Alle',
+    allCategories: 'Alle Artikel',
     readMore: 'Weiterlesen',
     noArticles: 'Noch keine Artikel vorhanden.',
     categoryLabels: {
@@ -64,7 +61,7 @@ const content = {
     featured: 'Featured',
     latest: 'Latest Articles',
     categories: 'Categories',
-    allCategories: 'All',
+    allCategories: 'All Articles',
     readMore: 'Read more',
     noArticles: 'No articles yet.',
     categoryLabels: {
@@ -81,7 +78,7 @@ const content = {
     featured: 'À la une',
     latest: 'Derniers articles',
     categories: 'Catégories',
-    allCategories: 'Tous',
+    allCategories: 'Tous les articles',
     readMore: 'Lire la suite',
     noArticles: 'Aucun article pour le moment.',
     categoryLabels: {
@@ -98,7 +95,7 @@ const content = {
     featured: 'Destacados',
     latest: 'Últimos artículos',
     categories: 'Categorías',
-    allCategories: 'Todos',
+    allCategories: 'Todos los artículos',
     readMore: 'Leer más',
     noArticles: 'Aún no hay artículos.',
     categoryLabels: {
@@ -115,7 +112,7 @@ const content = {
     featured: 'In evidenza',
     latest: 'Ultimi articoli',
     categories: 'Categorie',
-    allCategories: 'Tutti',
+    allCategories: 'Tutti gli articoli',
     readMore: 'Leggi di più',
     noArticles: 'Nessun articolo per ora.',
     categoryLabels: {
@@ -130,20 +127,13 @@ const content = {
 
 const t = content[locale as keyof typeof content] || content.en || content.de;
 
-const formatDate = (date: Date) => {
-  const dateLocale = {
-    de: 'de-DE',
-    en: 'en-US',
-    fr: 'fr-FR',
-    es: 'es-ES',
-    it: 'it-IT'
-  }[locale] || 'en-US';
-
-  return new Intl.DateTimeFormat(dateLocale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(date);
+// Category Colors for filter
+const categoryColors: Record<string, string> = {
+  'technologie': '#32285b',
+  'branchen': '#00a0d2',
+  'case-studies': '#ee7711',
+  'news': '#8ebfd6',
+  'tipps': '#4a3d7a',
 };
 ---
 
@@ -153,168 +143,309 @@ const formatDate = (date: Date) => {
 >
   <Header slot="header" />
 
-  <div class="container">
-    <Breadcrumbs items={[
-      { label: t.title }
-    ]} />
-
-    <!-- Hero -->
-    <section class="page-hero">
-      <h1>{t.title}</h1>
-      <p class="subtitle">{t.subtitle}</p>
+  <main class="magazin-page">
+    <!-- Hero Section -->
+    <section class="magazin-hero">
+      <div class="container">
+        <div class="hero-content">
+          <span class="hero-eyebrow">Microvista {t.title}</span>
+          <h1 class="hero-title">{t.title}</h1>
+          <p class="hero-subtitle">{t.subtitle}</p>
+        </div>
+      </div>
+      <div class="hero-pattern"></div>
     </section>
 
     <!-- Category Filter -->
-    <nav class="category-filter">
-      <Tag href={lp('/magazin')} variant="primary">{t.allCategories}</Tag>
-      {categories.map(cat => (
-        <Tag href={lp(`/magazin/kategorie/${cat}`)} variant="default">
-          {t.categoryLabels[cat as keyof typeof t.categoryLabels] || cat}
-        </Tag>
-      ))}
+    <nav class="category-nav" aria-label="Kategorien">
+      <div class="container">
+        <div class="filter-scroll">
+          <a href={lp('/magazin')} class="category-chip active">
+            {t.allCategories}
+          </a>
+          {categories.map(cat => (
+            <a 
+              href={lp(`/magazin/kategorie/${cat}`)} 
+              class="category-chip"
+              style={`--cat-color: ${categoryColors[cat] || '#32285b'}`}
+            >
+              {t.categoryLabels[cat as keyof typeof t.categoryLabels] || cat}
+            </a>
+          ))}
+        </div>
+      </div>
     </nav>
 
     {posts.length === 0 ? (
-      <div class="empty-state">
-        <p>{t.noArticles}</p>
+      <div class="container">
+        <div class="empty-state">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          <p>{t.noArticles}</p>
+        </div>
       </div>
     ) : (
-      <>
-        <!-- Featured Posts -->
+      <div class="container">
+        <!-- Featured Article -->
         {featuredPosts.length > 0 && (
           <section class="featured-section">
-            <h2>{t.featured}</h2>
-            <div class="featured-grid">
-              {featuredPosts.map((post, index) => (
-                <Card
-                  href={lp(`/magazin/${post.slug}`)}
-                  variant={index === 0 ? 'featured' : 'default'}
-                  class={index === 0 ? 'featured-main' : ''}
-                >
-                  {post.data.image && (
-                    <img
-                      slot="image"
-                      src={post.data.image.src}
-                      alt={post.data.image.alt}
-                      loading={index === 0 ? 'eager' : 'lazy'}
-                    />
-                  )}
-                  <div slot="meta">
-                    <Tag variant={post.data.category === 'case-studies' ? 'serie' : 'labor'} size="sm">
-                      {t.categoryLabels[post.data.category as keyof typeof t.categoryLabels]}
-                    </Tag>
-                    <span>{formatDate(post.data.publishDate)}</span>
-                  </div>
-                  <h3 slot="title">{post.data.title}</h3>
-                  <p slot="description">{post.data.description}</p>
-                </Card>
+            <span class="section-eyebrow">{t.featured}</span>
+            <FeaturedArticle
+              title={featuredPosts[0].data.title}
+              description={featuredPosts[0].data.description}
+              image={featuredPosts[0].data.image}
+              category={featuredPosts[0].data.category}
+              categoryLabel={t.categoryLabels[featuredPosts[0].data.category as keyof typeof t.categoryLabels] || featuredPosts[0].data.category}
+              publishDate={featuredPosts[0].data.publishDate}
+              author={featuredPosts[0].data.author}
+              slug={featuredPosts[0].slug.replace(/^de\/|^en\//, '')}
+              locale={locale}
+              readMoreText={t.readMore}
+            />
+          </section>
+        )}
+
+        <!-- Secondary Featured (if exists) -->
+        {featuredPosts.length > 1 && (
+          <section class="secondary-featured">
+            <div class="secondary-grid">
+              {featuredPosts.slice(1, 3).map(post => (
+                <ArticleCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  image={post.data.image}
+                  category={post.data.category}
+                  categoryLabel={t.categoryLabels[post.data.category as keyof typeof t.categoryLabels] || post.data.category}
+                  publishDate={post.data.publishDate}
+                  slug={post.slug.replace(/^de\/|^en\//, '')}
+                  locale={locale}
+                  readMoreText={t.readMore}
+                  featured={true}
+                />
               ))}
             </div>
           </section>
         )}
 
         <!-- Regular Posts -->
-        <section class="posts-section">
-          <h2>{t.latest}</h2>
-          <div class="posts-grid">
-            {regularPosts.map(post => (
-              <Card href={lp(`/magazin/${post.slug}`)}>
-                {post.data.image && (
-                  <img
-                    slot="image"
-                    src={post.data.image.src}
-                    alt={post.data.image.alt}
-                    loading="lazy"
-                  />
-                )}
-                <div slot="meta">
-                  <Tag variant="default" size="sm">
-                    {t.categoryLabels[post.data.category as keyof typeof t.categoryLabels]}
-                  </Tag>
-                  <span>{formatDate(post.data.publishDate)}</span>
-                </div>
-                <h3 slot="title">{post.data.title}</h3>
-                <p slot="description">{post.data.description}</p>
-              </Card>
-            ))}
-          </div>
-        </section>
-      </>
+        {regularPosts.length > 0 && (
+          <section class="posts-section">
+            <div class="section-header">
+              <span class="section-eyebrow">{t.latest}</span>
+              <h2 class="section-title">{t.latest}</h2>
+            </div>
+            <div class="posts-grid">
+              {regularPosts.map(post => (
+                <ArticleCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  image={post.data.image}
+                  category={post.data.category}
+                  categoryLabel={t.categoryLabels[post.data.category as keyof typeof t.categoryLabels] || post.data.category}
+                  publishDate={post.data.publishDate}
+                  slug={post.slug.replace(/^de\/|^en\//, '')}
+                  locale={locale}
+                  readMoreText={t.readMore}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
     )}
-  </div>
+  </main>
 
   <Footer slot="footer" />
 </BaseLayout>
 
 <style>
-  .page-hero {
+  /* Hero Section */
+  .magazin-hero {
+    position: relative;
+    background: linear-gradient(135deg, var(--mv-violet) 0%, #1a1640 50%, #0f0c29 100%);
+    padding: calc(var(--space-24) + 80px) 0 var(--space-16);
+    overflow: hidden;
+  }
+
+  .hero-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(142, 191, 214, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(238, 119, 17, 0.08) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
     text-align: center;
-    padding: var(--space-12) 0;
-    max-width: 700px;
     margin: 0 auto;
   }
 
-  .page-hero h1 {
-    font-size: var(--text-5xl);
+  .hero-eyebrow {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mv-blue);
     margin-bottom: var(--space-4);
   }
 
-  .subtitle {
-    font-size: var(--text-xl);
-    color: var(--text-muted);
+  .hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-4xl), 8vw, var(--text-6xl));
+    font-weight: 700;
+    color: var(--mv-white);
+    margin-bottom: var(--space-6);
+    line-height: 1.1;
   }
 
-  .category-filter {
+  .hero-subtitle {
+    font-size: clamp(var(--text-lg), 2vw, var(--text-xl));
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.7;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* Category Filter */
+  .category-nav {
+    background: var(--mv-white);
+    border-bottom: 1px solid var(--mv-gray-100);
+    padding: var(--space-4) 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .filter-scroll {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    justify-content: center;
-    padding: var(--space-6) 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: var(--space-12);
+    gap: var(--space-3);
+    overflow-x: auto;
+    padding-bottom: var(--space-2);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
-  .empty-state {
-    text-align: center;
-    padding: var(--space-20) 0;
-    color: var(--text-muted);
+  .filter-scroll::-webkit-scrollbar {
+    display: none;
   }
 
-  .featured-section,
+  .category-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-2) var(--space-5);
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+    border: 2px solid var(--mv-gray-200);
+    color: var(--mv-gray-600);
+    background: var(--mv-white);
+  }
+
+  .category-chip:hover {
+    border-color: var(--cat-color, var(--mv-violet));
+    color: var(--cat-color, var(--mv-violet));
+  }
+
+  .category-chip.active {
+    background: var(--mv-violet);
+    border-color: var(--mv-violet);
+    color: var(--mv-white);
+  }
+
+  /* Container */
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+  }
+
+  /* Sections */
+  .featured-section {
+    padding: var(--space-12) 0;
+  }
+
+  .secondary-featured {
+    padding: var(--space-8) 0;
+  }
+
+  .secondary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  @media (max-width: 768px) {
+    .secondary-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .posts-section {
-    margin-bottom: var(--space-16);
+    padding: var(--space-12) 0 var(--space-20);
   }
 
-  .featured-section h2,
-  .posts-section h2 {
+  .section-header {
     margin-bottom: var(--space-8);
   }
 
-  .featured-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
+  .section-eyebrow {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mv-blue);
+    margin-bottom: var(--space-2);
   }
 
-  @media (min-width: 768px) {
-    .featured-grid {
-      grid-template-columns: 2fr 1fr;
-      grid-template-rows: repeat(2, 1fr);
-    }
-
-    .featured-main {
-      grid-row: span 2;
-    }
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-xl), 3vw, var(--text-2xl));
+    font-weight: 700;
+    color: var(--mv-violet);
   }
 
+  /* Posts Grid */
   .posts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: var(--space-6);
   }
 
-  /* Card title sizing */
-  .featured-main :global([slot="title"]) {
-    font-size: var(--text-2xl);
+  @media (max-width: 640px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Empty State */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-24) 0;
+    color: var(--mv-gray-400);
+    text-align: center;
+  }
+
+  .empty-state svg {
+    opacity: 0.5;
   }
 </style>

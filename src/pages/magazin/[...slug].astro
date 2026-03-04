@@ -1,14 +1,13 @@
 ---
 /**
- * Magazin Artikel - Dynamic Route
+ * Magazin Artikel - Editorial Redesign
  */
 import { getCollection, render } from 'astro:content';
 import { localePath, type Locale } from '../../i18n/translations';
-import MagazinLayout from '../../layouts/MagazinLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
-import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
-import Tag from '../../components/ui/Tag.astro';
+import ArticleCard from '../../components/sections/ArticleCard.astro';
 import SchemaOrg from '../../components/seo/SchemaOrg.astro';
 import { articleSchema } from '../../components/seo/schemas';
 
@@ -26,60 +25,58 @@ const ui = {
   de: {
     magazine: 'Magazin',
     updated: 'Aktualisiert',
-    tags: 'Tags:',
-    related: 'Ähnliche Artikel',
-    relatedText: 'Weitere Artikel folgen.'
+    tags: 'Tags',
+    related: 'Das könnte Sie auch interessieren',
+    back: 'Zurück zum Magazin',
+    share: 'Teilen',
+    author: 'Autor',
+    readTime: 'Min. Lesezeit'
   },
   en: {
     magazine: 'Magazine',
     updated: 'Updated',
-    tags: 'Tags:',
-    related: 'Related Articles',
-    relatedText: 'More articles coming soon.'
+    tags: 'Tags',
+    related: 'You might also like',
+    back: 'Back to Magazine',
+    share: 'Share',
+    author: 'Author',
+    readTime: 'min read'
   },
   fr: {
     magazine: 'Magazine',
     updated: 'Mis à jour',
-    tags: 'Tags :',
-    related: 'Articles connexes',
-    relatedText: 'D’autres articles arrivent bientôt.'
+    tags: 'Tags',
+    related: 'Cela pourrait vous intéresser',
+    back: 'Retour au magazine',
+    share: 'Partager',
+    author: 'Auteur',
+    readTime: 'min de lecture'
   },
   es: {
     magazine: 'Revista',
     updated: 'Actualizado',
-    tags: 'Etiquetas:',
-    related: 'Artículos relacionados',
-    relatedText: 'Pronto habrá más artículos.'
+    tags: 'Etiquetas',
+    related: 'También te puede interesar',
+    back: 'Volver a la revista',
+    share: 'Compartir',
+    author: 'Autor',
+    readTime: 'min de lectura'
   },
   it: {
     magazine: 'Rivista',
     updated: 'Aggiornato',
-    tags: 'Tag:',
-    related: 'Articoli correlati',
-    relatedText: 'Altri articoli in arrivo.'
+    tags: 'Tag',
+    related: 'Potrebbe interessarti anche',
+    back: 'Torna alla rivista',
+    share: 'Condividi',
+    author: 'Autore',
+    readTime: 'min di lettura'
   }
-}[locale] || {
-  magazine: 'Magazine',
-  updated: 'Updated',
-  tags: 'Tags:',
-  related: 'Related Articles',
-  relatedText: 'More articles coming soon.'
-};
+}[locale] || ui.en;
 
 const formatDate = (date: Date) => {
-  const dateLocale = {
-    de: 'de-DE',
-    en: 'en-US',
-    fr: 'fr-FR',
-    es: 'es-ES',
-    it: 'it-IT'
-  }[locale] || 'en-US';
-
-  return new Intl.DateTimeFormat(dateLocale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(date);
+  const dateLocale = { de: 'de-DE', en: 'en-US', fr: 'fr-FR', es: 'es-ES', it: 'it-IT' }[locale] || 'en-US';
+  return new Intl.DateTimeFormat(dateLocale, { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
 };
 
 const categoryLabels: Record<string, string> = {
@@ -89,6 +86,17 @@ const categoryLabels: Record<string, string> = {
   'news': 'News',
   'tipps': { de: 'Tipps & Tricks', en: 'Tips & Tricks', fr: 'Trucs et astuces', es: 'Consejos y trucos', it: 'Suggerimenti e trucchi' }[locale] || 'Tips & Tricks'
 };
+
+// Category Colors
+const categoryColors: Record<string, { bg: string; text: string }> = {
+  'technologie': { bg: 'rgba(50, 40, 91, 0.1)', text: '#32285b' },
+  'branchen': { bg: 'rgba(0, 160, 210, 0.1)', text: '#00a0d2' },
+  'case-studies': { bg: 'rgba(238, 119, 17, 0.1)', text: '#ee7711' },
+  'news': { bg: 'rgba(142, 191, 214, 0.15)', text: '#5a8fa8' },
+  'tipps': { bg: 'rgba(50, 40, 91, 0.08)', text: '#4a3d7a' },
+};
+
+const catColors = categoryColors[post.data.category] || categoryColors['technologie'];
 
 // Schema.org Article
 const schema = articleSchema({
@@ -100,9 +108,16 @@ const schema = articleSchema({
   modifiedDate: post.data.updateDate,
   author: post.data.author
 });
+
+// Related Posts (same category)
+const relatedPosts = posts
+  .filter(p => p.data.category === post.data.category && p.slug !== post.slug)
+  .slice(0, 3);
+
+const readingTime = Math.ceil(post.data.description.length / 200) + 3;
 ---
 
-<MagazinLayout
+<BaseLayout
   title={post.data.title}
   description={post.data.description}
   ogImage={post.data.image?.src}
@@ -110,173 +125,353 @@ const schema = articleSchema({
 >
   <Header slot="header" />
 
-  <article class="article">
-    <div class="container container-narrow">
-      <Breadcrumbs items={[
-        { label: ui.magazine, href: lp('/magazin') },
-        { label: post.data.title }
-      ]} />
-
-      <!-- Article Header -->
-      <header class="article-header">
-        <div class="article-meta">
-          <Tag variant="labor">
-            {categoryLabels[post.data.category] || post.data.category}
-          </Tag>
-          <time datetime={post.data.publishDate.toISOString()}>
-            {formatDate(post.data.publishDate)}
-          </time>
-          {post.data.updateDate && (
-            <span class="updated">
-              ({ui.updated}: {formatDate(post.data.updateDate)})
-            </span>
-          )}
-        </div>
-
-        <h1>{post.data.title}</h1>
-
-        <p class="article-lead">{post.data.description}</p>
-
-        <div class="article-author">
-          <div class="author-avatar">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
-          </div>
-          <span>{post.data.author}</span>
-        </div>
-      </header>
-
-      <!-- Featured Image -->
+  <article class="article-page">
+    <!-- Article Hero -->
+    <header class="article-hero">
       {post.data.image && (
-        <figure class="article-image">
-          <img
-            src={post.data.image.src}
-            alt={post.data.image.alt}
-            loading="eager"
-          />
-        </figure>
+        <div class="hero-image-wrap">
+          <img src={post.data.image.src} alt={post.data.image.alt} class="hero-image" />
+          <div class="hero-image-overlay"></div>
+        </div>
       )}
-
-      <!-- Article Content -->
-      <div class="article-content prose">
-        <Content />
-      </div>
-
-      <!-- Tags -->
-      {post.data.tags && post.data.tags.length > 0 && (
-        <footer class="article-footer">
-          <div class="article-tags">
-            <span class="tags-label">{ui.tags}</span>
-            {post.data.tags.map(tag => (
-              <Tag href={lp(`/magazin/tag/${tag}`)} variant="default" size="sm">
-                {tag}
-              </Tag>
-            ))}
+      
+      <div class="hero-content">
+        <div class="container">
+          <nav class="article-breadcrumb">
+            <a href={lp('/magazin')} class="breadcrumb-link">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15.833 10H4.167m0 0L10 15.833M4.167 10L10 4.167"/>
+              </svg>
+              {ui.magazine}
+            </a>
+          </nav>
+          
+          <div class="article-meta">
+            <span class="category-badge" style={`background: ${catColors.bg}; color: ${catColors.text};`}>
+              {categoryLabels[post.data.category] || post.data.category}
+            </span>
+            <time datetime={post.data.publishDate.toISOString()}>{formatDate(post.data.publishDate)}</time>
+            {post.data.updateDate && (
+              <span class="update-badge">{ui.updated}: {formatDate(post.data.updateDate)}</span>
+            )}
           </div>
-        </footer>
-      )}
+          
+          <h1 class="article-title">{post.data.title}</h1>
+          <p class="article-lead">{post.data.description}</p>
+          
+          <div class="article-author-bar">
+            <div class="author-info">
+              <div class="author-avatar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
+              <div class="author-details">
+                <span class="author-name">{post.data.author}</span>
+                <span class="reading-time">{readingTime} {ui.readTime}</span>
+              </div>
+            </div>
+            
+            <div class="share-buttons">
+              <span class="share-label">{ui.share}:</span>
+              <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${siteUrl}/magazin/${post.slug}`)}`} 
+                 target="_blank" rel="noopener" class="share-btn" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+              </a>
+              <a href={`mailto:?subject=${encodeURIComponent(post.data.title)}&body=${encodeURIComponent(`${siteUrl}/magazin/${post.slug}`)}`} 
+                 class="share-btn" aria-label="Email">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Article Content -->
+    <div class="article-body">
+      <div class="container container-narrow">
+        <div class="article-content prose">
+          <Content />
+        </div>
+
+        <!-- Tags -->
+        {post.data.tags && post.data.tags.length > 0 && (
+          <div class="article-tags">
+            <span class="tags-label">{ui.tags}:</span>
+            <div class="tags-list">
+              {post.data.tags.map(tag => (
+                <a href={lp(`/magazin/tag/${tag}`)} class="tag-link">{tag}</a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+
+    <!-- Back to Magazine -->
+    <div class="container container-narrow">
+      <nav class="back-nav">
+        <a href={lp('/magazin')} class="back-link">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15.833 10H4.167m0 0L10 15.833M4.167 10L10 4.167"/>
+          </svg>
+          {ui.back}
+        </a>
+      </nav>
     </div>
   </article>
 
-  <!-- Related Articles Placeholder -->
-  <section class="related-section">
-    <div class="container">
-      <h2>{ui.related}</h2>
-      <p class="text-muted">{ui.relatedText}</p>
-    </div>
-  </section>
+  <!-- Related Articles -->
+  {relatedPosts.length > 0 && (
+    <aside class="related-section">
+      <div class="container">
+        <span class="section-eyebrow">{ui.related}</span>
+        <h2 class="section-title">{ui.related}</h2>
+        <div class="related-grid">
+          {relatedPosts.map(related => (
+            <ArticleCard
+              title={related.data.title}
+              description={related.data.description}
+              image={related.data.image}
+              category={related.data.category}
+              categoryLabel={categoryLabels[related.data.category] || related.data.category}
+              publishDate={related.data.publishDate}
+              slug={related.slug.replace(/^de\/|^en\//, '')}
+              locale={locale}
+              readMoreText={ui.back.includes('Magazin') ? 'Weiterlesen' : 'Read more'}
+            />
+          ))}
+        </div>
+      </div>
+    </aside>
+  )}
 
   <Footer slot="footer" />
-</MagazinLayout>
+</BaseLayout>
 
 <style>
+  /* Article Hero */
+  .article-hero {
+    position: relative;
+    background: linear-gradient(135deg, var(--mv-violet) 0%, #1a1640 100%);
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-image-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+  }
+
+  .hero-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(50, 40, 91, 0.4) 0%,
+      rgba(50, 40, 91, 0.85) 60%,
+      var(--mv-violet) 100%
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: calc(var(--space-16) + 80px) 0 var(--space-12);
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+  }
+
   .container-narrow {
     max-width: 800px;
   }
 
-  .article-header {
-    padding: var(--space-8) 0;
+  .article-breadcrumb {
+    margin-bottom: var(--space-6);
+  }
+
+  .breadcrumb-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--mv-blue);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb-link:hover {
+    color: var(--mv-white);
   }
 
   .article-meta {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--space-3);
-    margin-bottom: var(--space-4);
-    font-size: var(--text-sm);
-    color: var(--text-muted);
-  }
-
-  .updated {
-    font-style: italic;
-  }
-
-  .article-header h1 {
-    font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
-    line-height: 1.2;
+    gap: var(--space-4);
     margin-bottom: var(--space-6);
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .category-badge {
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .update-badge {
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  .article-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
+    font-weight: 700;
+    color: var(--mv-white);
+    line-height: 1.15;
+    margin-bottom: var(--space-6);
+    max-width: 900px;
   }
 
   .article-lead {
-    font-size: var(--text-xl);
-    color: var(--text-muted);
-    line-height: 1.6;
-    margin-bottom: var(--space-6);
+    font-size: clamp(var(--text-lg), 2vw, var(--text-xl));
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.7;
+    margin-bottom: var(--space-8);
+    max-width: 700px;
   }
 
-  .article-author {
+  .article-author-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .author-info {
     display: flex;
     align-items: center;
     gap: var(--space-3);
   }
 
   .author-avatar {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    background: var(--surface);
+    background: rgba(142, 191, 214, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-muted);
+    color: var(--mv-blue);
   }
 
-  .article-image {
-    margin: 0 calc(-1 * var(--space-4)) var(--space-8);
-    border-radius: var(--radius-xl);
-    overflow: hidden;
+  .author-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
   }
 
-  @media (min-width: 768px) {
-    .article-image {
-      margin: 0 calc(-1 * var(--space-8)) var(--space-12);
-    }
+  .author-name {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--mv-white);
   }
 
-  .article-image img {
-    width: 100%;
-    height: auto;
-    display: block;
+  .reading-time {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.6);
   }
 
-  /* Prose Styles for Markdown Content */
+  .share-buttons {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .share-label {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .share-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    transition: all var(--transition-fast);
+  }
+
+  .share-btn:hover {
+    background: var(--mv-blue);
+    color: var(--mv-white);
+  }
+
+  /* Article Body */
+  .article-body {
+    padding: var(--space-16) 0 var(--space-8);
+  }
+
+  /* Prose Styles */
   .prose {
     font-size: var(--text-lg);
     line-height: 1.8;
-    color: var(--text);
+    color: var(--mv-gray-700);
   }
 
   .prose :global(h2) {
+    font-family: var(--font-heading);
     font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--mv-violet);
     margin-top: var(--space-12);
     margin-bottom: var(--space-4);
+    line-height: 1.3;
   }
 
   .prose :global(h3) {
+    font-family: var(--font-heading);
     font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--mv-violet);
     margin-top: var(--space-8);
     margin-bottom: var(--space-3);
   }
@@ -296,24 +491,29 @@ const schema = articleSchema({
   }
 
   .prose :global(blockquote) {
-    border-left: 4px solid var(--primary);
+    border-left: 4px solid var(--mv-orange);
     padding-left: var(--space-6);
     margin: var(--space-8) 0;
     font-style: italic;
-    color: var(--text-muted);
+    color: var(--mv-gray-600);
+    background: var(--mv-gray-50);
+    padding: var(--space-6) var(--space-6) var(--space-6) var(--space-8);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   }
 
   .prose :global(code) {
-    background: var(--surface);
+    background: var(--mv-gray-100);
     padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-sm);
     font-size: 0.9em;
+    color: var(--mv-violet);
   }
 
   .prose :global(pre) {
-    background: var(--surface);
-    padding: var(--space-4);
-    border-radius: var(--radius-lg);
+    background: var(--mv-violet);
+    color: var(--mv-white);
+    padding: var(--space-6);
+    border-radius: var(--radius-xl);
     overflow-x: auto;
     margin: var(--space-6) 0;
   }
@@ -321,50 +521,131 @@ const schema = articleSchema({
   .prose :global(pre code) {
     background: none;
     padding: 0;
+    color: inherit;
   }
 
   .prose :global(img) {
     max-width: 100%;
     height: auto;
-    border-radius: var(--radius-lg);
-    margin: var(--space-6) 0;
+    border-radius: var(--radius-xl);
+    margin: var(--space-8) 0;
+    box-shadow: var(--shadow-lg);
   }
 
   .prose :global(a) {
-    color: var(--primary);
+    color: var(--mv-violet);
     text-decoration: underline;
+    text-decoration-color: var(--mv-blue);
+    text-underline-offset: 3px;
+    transition: all var(--transition-fast);
   }
 
   .prose :global(a:hover) {
-    color: var(--accent);
+    color: var(--mv-orange);
+    text-decoration-color: var(--mv-orange);
   }
 
-  .article-footer {
-    padding-top: var(--space-8);
-    margin-top: var(--space-12);
-    border-top: 1px solid var(--border);
-  }
-
+  /* Tags */
   .article-tags {
     display: flex;
     flex-wrap: wrap;
+    gap: var(--space-3);
     align-items: center;
-    gap: var(--space-2);
+    padding-top: var(--space-8);
+    margin-top: var(--space-12);
+    border-top: 1px solid var(--mv-gray-200);
   }
 
   .tags-label {
     font-weight: 600;
-    color: var(--text-muted);
-    margin-right: var(--space-2);
+    color: var(--mv-gray-500);
   }
 
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .tag-link {
+    display: inline-flex;
+    padding: var(--space-1) var(--space-3);
+    background: var(--mv-gray-100);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    color: var(--mv-gray-600);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .tag-link:hover {
+    background: var(--mv-violet);
+    color: var(--mv-white);
+  }
+
+  /* Back Nav */
+  .back-nav {
+    padding: var(--space-8) 0 var(--space-12);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--mv-violet);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--mv-orange);
+  }
+
+  /* Related Section */
   .related-section {
-    background: var(--surface);
-    padding: var(--space-16) 0;
-    margin-top: var(--space-16);
+    background: linear-gradient(180deg, var(--mv-gray-50) 0%, var(--mv-white) 100%);
+    padding: var(--space-16) 0 var(--space-20);
   }
 
-  .related-section h2 {
-    margin-bottom: var(--space-4);
+  .section-eyebrow {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mv-blue);
+    margin-bottom: var(--space-2);
+  }
+
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-xl), 3vw, var(--text-2xl));
+    font-weight: 700;
+    color: var(--mv-violet);
+    margin-bottom: var(--space-8);
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--space-6);
+  }
+
+  @media (max-width: 640px) {
+    .related-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .article-author-bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .article-hero {
+      min-height: auto;
+    }
   }
 </style>

@@ -1,0 +1,246 @@
+---
+/**
+ * FeaturedArticle - Hero-Artikel für Magazin
+ * Großes Editorial-Design für den Hauptartikel
+ */
+import { localePath, type Locale } from '../../i18n/translations';
+
+interface Props {
+  title: string;
+  description: string;
+  image: { src: string; alt: string };
+  category: string;
+  categoryLabel: string;
+  publishDate: Date;
+  author: string;
+  slug: string;
+  locale: Locale;
+  readMoreText?: string;
+}
+
+const { 
+  title, 
+  description, 
+  image, 
+  category, 
+  categoryLabel,
+  publishDate, 
+  author,
+  slug, 
+  locale,
+  readMoreText = 'Jetzt lesen'
+} = Astro.props;
+
+const lp = (path: string) => localePath(path, locale);
+
+const formatDate = (date: Date) => {
+  const dateLocale = { de: 'de-DE', en: 'en-US', fr: 'fr-FR', es: 'es-ES', it: 'it-IT' }[locale] || 'de-DE';
+  return new Intl.DateTimeFormat(dateLocale, { year: 'numeric', month: 'long', day: 'numeric' }).format(date);
+};
+
+// Category Colors
+const categoryColors: Record<string, { bg: string; text: string; accent: string }> = {
+  'technologie': { bg: 'rgba(50, 40, 91, 0.9)', text: '#fff', accent: '#8ebfd6' },
+  'branchen': { bg: 'rgba(0, 160, 210, 0.9)', text: '#fff', accent: '#fff' },
+  'case-studies': { bg: 'rgba(238, 119, 17, 0.9)', text: '#fff', accent: '#fff' },
+  'news': { bg: 'rgba(142, 191, 214, 0.9)', text: '#32285b', accent: '#32285b' },
+  'tipps': { bg: 'rgba(50, 40, 91, 0.8)', text: '#fff', accent: '#8ebfd6' },
+};
+
+const colors = categoryColors[category] || categoryColors['technologie'];
+---
+
+<article class="featured-hero">
+  <a href={lp(`/magazin/${slug}`)} class="featured-link">
+    <div class="featured-image-wrap">
+      <img 
+        src={image.src} 
+        alt={image.alt} 
+        class="featured-image"
+        loading="eager"
+      />
+      <div class="featured-image-overlay"></div>
+    </div>
+    
+    <div class="featured-content">
+      <div class="featured-meta">
+        <span class="featured-badge" style={`background: ${colors.bg}; color: ${colors.text};`}>
+          {categoryLabel}
+        </span>
+        <time datetime={publishDate.toISOString()}>{formatDate(publishDate)}</time>
+      </div>
+      
+      <h2 class="featured-title">{title}</h2>
+      <p class="featured-description">{description}</p>
+      
+      <div class="featured-author">
+        <div class="author-avatar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <span class="author-name">{author}</span>
+      </div>
+      
+      <span class="featured-cta" style={`color: ${colors.accent};`}>
+        {readMoreText}
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M4.167 10h11.666m0 0L10 4.167M15.833 10L10 15.833" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .featured-hero {
+    position: relative;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    background: var(--mv-gray-900);
+    min-height: 500px;
+  }
+
+  .featured-link {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 500px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .featured-image-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .featured-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+  }
+
+  .featured-hero:hover .featured-image {
+    transform: scale(1.03);
+  }
+
+  .featured-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(50, 40, 91, 0.6) 0%, transparent 100%);
+  }
+
+  .featured-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-10);
+    background: linear-gradient(135deg, var(--mv-violet) 0%, #1a1640 100%);
+    color: var(--mv-white);
+  }
+
+  .featured-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+    font-size: var(--text-sm);
+  }
+
+  .featured-badge {
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .featured-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-2xl), 4vw, var(--text-4xl));
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--mv-white);
+    margin-bottom: var(--space-4);
+  }
+
+  .featured-description {
+    font-size: var(--text-lg);
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.7;
+    margin-bottom: var(--space-6);
+    max-width: 90%;
+  }
+
+  .featured-author {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-8);
+  }
+
+  .author-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mv-white);
+  }
+
+  .author-name {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .featured-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    font-weight: 600;
+    transition: gap var(--transition-fast);
+    align-self: flex-start;
+  }
+
+  .featured-hero:hover .featured-cta {
+    gap: var(--space-3);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .featured-hero {
+      min-height: auto;
+    }
+
+    .featured-link {
+      grid-template-columns: 1fr;
+      grid-template-rows: 240px auto;
+      min-height: auto;
+    }
+
+    .featured-image-overlay {
+      background: linear-gradient(to top, rgba(50, 40, 91, 0.8) 0%, transparent 100%);
+    }
+
+    .featured-content {
+      padding: var(--space-6);
+    }
+
+    .featured-title {
+      font-size: var(--text-xl);
+    }
+
+    .featured-description {
+      font-size: var(--text-base);
+      max-width: 100%;
+    }
+  }
+</style>
