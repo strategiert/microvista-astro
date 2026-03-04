@@ -1,6 +1,6 @@
 name: "Windenergie & Erneuerbare Energien"
 slug: "windenergie"
-description: "Industrielle CT für Windenergie-Komponenten: Getriebe, GFK-Rotorblätter, Lagergehäuse. Mobiles CT vor Ort mit ScanExpress. Ausfallprävention durch Früherkennung."
+description: "CT-Prüfung für Windenergie-Komponenten – Qualitätssicherung für zuverlässige Anlagen. Getriebeteile, Rotorblattsegmente, Lagergehäuse: CT-Prüfung vor der Montage verhindert kostspielige Wartungsausfälle und verlängert die Lebensdauer von Windenergieanlagen signifikant."
 heroImage: "/images/branchen/energie.jpg"
 challenges:
   - title: "Unentdeckte Fehler in Getriebekomponenten führen zu ungeplanten Wartungsausfällen mit hohen Kosten"
@@ -34,6 +34,9 @@ stats:
     label: "Spezial-Know-how für Verbundwerkstoff-Analyse"
   - value: "ROI"
     label: "Schnell positiv durch Ausfallprävention"
+quote:
+  text: "Eine vorzeitig erkannte Rissbildung im Planetenträger hat uns eine ungeplante Abschaltung von drei Wochen erspart. Das CT hat sich mehrfach bezahlt gemacht."
+  author: "Instandhaltungsmanager – Windparkbetreiber Nord"
 cta:
   title: "CT-Prüfung für Windenergie"
   description: "Kontaktieren Sie uns für CT-Prüfung Ihrer Windenergie-Komponenten – vor Ort oder im Labor."

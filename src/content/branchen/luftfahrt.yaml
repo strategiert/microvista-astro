@@ -1,16 +1,16 @@
 name: "Luft- und Raumfahrt"
 slug: "luftfahrt"
-description: "NADCAP-akkreditierte CT-Prüfung für Aerospace: Turbinenschaufeln, Titan, CFK-Composites. AS9100-konform. Sicherheitskritische Bauteile mit Nulltoleranz."
+description: "CT-Prüfung für Luft- und Raumfahrt – NADCAP-akkreditiert, für sicherheitskritische Bauteile. Triebwerkschaufeln, Strukturkomponenten, CFK-Verbundteile: Microvista prüft Aerospace-Bauteile NADCAP-konform mit industrieller CT – lückenloser Qualitätsnachweis, keine Ausnahmen."
 heroImage: "/images/branchen/luftfahrt.jpg"
 challenges:
   - title: "NADCAP und AS9100 verlangen lückenlosen, reproduzierbaren Qualitätsnachweis für jedes Bauteil"
-    description: "Regulatorische Anforderungen"
+    description: "Zertifizierung"
   - title: "Titanlegierungen und CFK-Composites lassen sich mit klassischen ZfP-Methoden nicht vollständig prüfen"
     description: "Materialkomplexität"
   - title: "Kühlbohrungen und innere Kanäle in Triebwerksteilen sind mit anderen Methoden nicht messbar"
-    description: "Geometrische Komplexität"
+    description: "Geometrie"
   - title: "Fehler in Flight-Critical-Parts können zu Totalausfällen führen – Nulltoleranz erforderlich"
-    description: "Sicherheitskritische Anforderungen"
+    description: "Sicherheit"
 solutions:
   - title: "NADCAP-konforme CT-Prüfung"
     description: "Vollständige Dokumentation nach NAS 410 und AS 7114 – alle Berichte revisionssicher archiviert"
@@ -34,9 +34,12 @@ stats:
     label: "Messgenauigkeit für kritische Bauteile"
   - value: "100%"
     label: "Rückverfolgbarkeit – jeder Scan dokumentiert"
+quote:
+  text: "Die NADCAP-Akkreditierung von Microvista hat unseren Qualifizierungsaufwand drastisch reduziert. Wir können jetzt komplexe Titanteile in 24 Stunden prüfen lassen – mit vollem Compliance-Nachweis."
+  author: "Quality Assurance Manager – Aerospace Tier-1 Supplier"
 cta:
-  title: "CT-Prüfung für Luft- und Raumfahrt"
-  description: "Kontaktieren Sie uns für NADCAP-konforme CT-Prüfung Ihrer Aerospace-Bauteile."
+  title: "NADCAP-konforme CT-Prüfung für Luft- und Raumfahrt"
+  description: "Kontaktieren Sie uns für zertifizierte CT-Prüfung Ihrer Aerospace-Bauteile nach NADCAP und AS9100."
 seo:
   title: "CT-Prüfung Luft- und Raumfahrt – NADCAP, AS9100, Titan & CFK | Microvista"
   description: "NADCAP-akkreditierte industrielle CT-Prüfung für Aerospace: Turbinenschaufeln, Titan, CFK-Composites. AS9100-konform. Sicherheitskritische Bauteile mit Nulltoleranz."

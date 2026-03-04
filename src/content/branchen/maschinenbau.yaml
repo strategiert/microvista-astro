@@ -1,6 +1,6 @@
 name: "Maschinenbau & Anlagenbau"
 slug: "maschinenbau"
-description: "Industrielle CT für Maschinenbau: Schadensanalyse, Reverse Engineering, Hydraulikblock-Prüfung. Für Anlagenbauer, Zulieferer und Instandhaltung. Express-Service."
+description: "CT-Prüfung für Maschinenbau – von der Schadensanalyse bis zum Reverse Engineering. Für Maschinenbau und Anlagenbau bietet Microvista das vollständige ZfP-Spektrum: Schadensanalyse, Reverse Engineering alter Bauteile und normkonforme Qualitätsprüfung für Zulieferteile."
 heroImage: "/images/branchen/maschinenbau.jpg"
 challenges:
   - title: "Schadensursachen bei Maschinenausfällen bleiben ohne 3D-Analyse im Dunkeln"
@@ -34,6 +34,9 @@ stats:
     label: "Jahre Erfahrung in industrieller Schadensanalyse"
   - value: "Express"
     label: "Notfall-Schadensanalyse bei Produktionsausfall"
+quote:
+  text: "Microvista hat in 48 Stunden per CT und Schadensanalyse die Ursache unseres Pumpenkurbelwellen-Versagens eindeutig identifiziert. Wir konnten sofort die richtigen Maßnahmen einleiten."
+  author: "Betriebsleiter – Prozessanlage Chemie"
 cta:
   title: "CT-Prüfung für Maschinenbau"
   description: "Kontaktieren Sie uns für CT-Prüfung, Schadensanalyse oder Reverse Engineering im Maschinenbau."

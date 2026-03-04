@@ -1,6 +1,6 @@
 name: "Kunststofftechnik / Spritzguss"
 slug: "kunststofftechnik"
-description: "Industrielle CT für Kunststoffbauteile: Spritzgussfehler, Bindenähte, Delamination in CFK/GFK. Werkzeugoptimierung, Wandstärkenanalyse, CAD-Abgleich."
+description: "CT-Prüfung für Kunststoffbauteile – Einfallstellen, Lunker, Bindenähte zerstörungsfrei aufdecken. Spritzguss-Fehler wie Bindenähte, Einfallstellen und Lunker verbergen sich im Inneren. Microvistas CT-Prüfung macht sie sichtbar – und hilft, Werkzeug- und Prozessparameter gezielt zu optimieren."
 heroImage: "/images/branchen/kunststoff.jpg"
 challenges:
   - title: "Bindenähte und innere Hohlräume in Spritzgussteilen sind von außen nicht erkennbar"
@@ -10,7 +10,7 @@ challenges:
   - title: "Werkzeugoptimierung ohne CT-Feedback bedeutet viele Iterationen und hohe Kosten"
     description: "Prozessoptimierung"
   - title: "Toleranzprüfung bei komplexen Kunststoffgeometrien mit Koordinatenmesstechnik allein unzureichend"
-    description: "Messaufgaben"
+    description: "Messtechnik"
 solutions:
   - title: "Bindenähte & Einfallstellen"
     description: "3D-Lokalisierung von Fließfehlern, Bindenähten und Einfallstellen im Bauteilinneren"
@@ -34,6 +34,9 @@ stats:
     label: "Delaminationen und Faserwellung sicher erkannt"
   - value: "FAST"
     label: "Express-Feedback für Werkzeugoptimierung"
+quote:
+  text: "Dank CT-Feedback konnten wir die Angussposition in drei Iterationen optimieren statt zehn. Zeit und Werkzeugkosten haben wir damit mehr als halbiert."
+  author: "Projektingenieur – Kunststoffverarbeiter Automotive"
 cta:
   title: "CT-Prüfung für Kunststofftechnik"
   description: "Kontaktieren Sie uns für zerstörungsfreie CT-Analyse Ihrer Spritzguss- und Kunststoffbauteile."

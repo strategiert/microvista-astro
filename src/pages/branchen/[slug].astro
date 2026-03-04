@@ -226,7 +226,22 @@ const accentColor = industryColors[slug as string] || '#32285b';
       </section>
     )}
 
-    <!-- 6. SERVICE OPTIONS SECTION -->
+    <!-- 6. TESTIMONIAL SECTION -->
+    {data.quote && (
+      <section class="testimonial-section">
+        <div class="container">
+          <div class="testimonial-card">
+            <svg class="quote-icon" width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+            </svg>
+            <blockquote>{data.quote.text}</blockquote>
+            <cite>— {data.quote.author}</cite>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- 7. SERVICE OPTIONS SECTION -->
     <section class="services-section" style={`--accent: ${accentColor};`}>
       <div class="container">
         <h2 class="section-title">{t.servicesTitle}</h2>
@@ -598,6 +613,40 @@ const accentColor = industryColors[slug as string] || '#32285b';
   .btn-accent:hover {
     background: var(--mv-orange-hover);
     transform: translateY(-2px);
+  }
+
+  /* TESTIMONIAL */
+  .testimonial-section {
+    padding: var(--space-16) 0;
+    background: linear-gradient(135deg, var(--mv-violet) 0%, #1a1640 100%);
+  }
+
+  .testimonial-card {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    color: var(--mv-white);
+  }
+
+  .quote-icon {
+    color: var(--mv-orange);
+    opacity: 0.5;
+    margin-bottom: var(--space-4);
+  }
+
+  .testimonial-card blockquote {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-lg), 3vw, var(--text-xl));
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: var(--space-6);
+    color: var(--mv-white);
+  }
+
+  .testimonial-card cite {
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.7);
+    font-style: normal;
   }
 
   /* USE CASES */

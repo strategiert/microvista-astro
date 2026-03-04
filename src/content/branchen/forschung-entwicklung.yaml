@@ -1,6 +1,6 @@
 name: "Forschung & Entwicklung"
 slug: "forschung-entwicklung"
-description: "Industrielle CT für F&E: Materialcharakterisierung, Prototypen-Feedback, Failure Analysis. ISO 17025-akkreditiert. Express-Turnaround für Institute und Entwicklungsabteilungen."
+description: "Industrielle CT für Forschung & Entwicklung – Materialforschung bis Produkterprobung. Universitäten, Forschungsinstitute und Entwicklungsabteilungen nutzen Microvistas CT-Expertise für Materialcharakterisierung, Bauteilentwicklung und Failure Analysis – ohne eigenes CT-Investment."
 heroImage: "/images/branchen/forschung.jpg"
 challenges:
   - title: "Eigenes CT-Equipment kostet ab 500.000 € – zu teuer für viele Forschungsbudgets"
@@ -34,6 +34,9 @@ stats:
     label: "Express-Turnaround für Forschungsprojekte"
   - value: "RAW"
     label: "Rohdaten-Lieferung für eigene Auswertungstools"
+quote:
+  text: "Microvistas CT-Dienstleistung ist für unser Institut die kosteneffizienteste Art, hochauflösende 3D-Daten zu bekommen. Die Datenqualität ist exzellent, die Turnaround-Zeit beeindruckend."
+  author: "Prof. Dr. Materialwissenschaften – TU Bergakademie Freiberg"
 cta:
   title: "CT-Prüfung für Forschung & Entwicklung"
   description: "Kontaktieren Sie uns für CT-Unterstützung Ihrer Forschungs- und Entwicklungsprojekte."

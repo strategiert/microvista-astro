@@ -1,10 +1,10 @@
 name: "Medizintechnik & Pharma"
 slug: "medizintechnik"
-description: "Industrielle CT für Medizinprodukte: Implantat-Prüfung, Pharmaverpackung, Chirurgieinstrumente. FDA Ready, MDR-konform, ISO 13485. Lückenloser Qualitätsnachweis."
+description: "CT-Prüfung für Medizintechnik & Pharma – lückenlose Qualitätssicherung nach MDR und FDA. Implantate, Chirurgieinstrumente, Pharmaverpackungen: Microvista prüft medizintechnische Produkte zerstörungsfrei nach MDR, ISO 13485 und FDA 21 CFR Part 820 – vollständig dokumentiert."
 heroImage: "/images/branchen/medizintechnik.jpg"
 challenges:
   - title: "MDR und FDA verlangen lückenlosen Qualitätsnachweis – Stichproben reichen nicht mehr aus"
-    description: "Regulatorische Anforderungen"
+    description: "Regulatorik"
   - title: "Implantate mit Gitterstrukturen (3D-gedrucktes Titan) lassen sich nur mit CT prüfen"
     description: "Komplexe Geometrien"
   - title: "Pharmaverpackungen (Blister) müssen auf Vollständigkeit geprüft werden ohne zu öffnen"
@@ -34,6 +34,9 @@ stats:
     label: "Qualitätsmanagementsystem Medizintechnik"
   - value: "0"
     label: "Zerstörung – Implantate nach CT verwendbar"
+quote:
+  text: "CT hat unsere Implantat-Freigabe komplett verändert. Jedes Implantat wird vollständig geprüft, kein Stück mehr geschlachtet – und der Nachweis für die notified body ist sofort verfügbar."
+  author: "Regulatory Affairs Manager – Implantatehersteller"
 cta:
   title: "CT-Prüfung für Medizintechnik & Pharma"
   description: "Kontaktieren Sie uns für FDA- und MDR-konforme CT-Prüfung Ihrer Medizinprodukte."

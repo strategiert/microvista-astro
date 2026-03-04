@@ -1,6 +1,6 @@
 name: "Elektronik & PCB"
 slug: "elektronik"
-description: "Industrielle CT und Laminographie für Elektronik: BGA-Lotstellen, Via-Analyse, PCB-Prüfung. Void-Analyse nach IPC-7095. Für Automotive, Aerospace, Consumer Electronics."
+description: "CT- und Laminographie-Prüfung für Elektronik – Lötfehler in BGAs und PCBs zuverlässig erkennen. BGA-Lotstellen, versteckte Brücken, Via-Fehler: Microvistas Laminographie-Technologie analysiert Leiterplatten und Elektronik-Baugruppen hochauflösend – ohne die Platine zu zerstören."
 heroImage: "/images/branchen/elektronik.jpg"
 challenges:
   - title: "BGA-Lotstellen sind von außen nicht prüfbar – Fehler bleiben bis zum Ausfall verborgen"
@@ -34,6 +34,9 @@ stats:
     label: "Volumenberechnung nach IPC-7095"
   - value: "10×"
     label: "Höhere Auflösung mit VistaXPro-Software"
+quote:
+  text: "Mit Microvistas Laminographie haben wir endlich unsere BGA-Ausfallrate in den Griff bekommen. Wir sehen jetzt jeden Cold Joint – bevor er zum Kundenrückläufer wird."
+  author: "Test-Ingenieur – Automobilelektronik-Hersteller"
 cta:
   title: "CT-Prüfung für Elektronik & PCB"
   description: "Kontaktieren Sie uns für hochauflösende CT- und Laminographie-Prüfung Ihrer Elektronik-Baugruppen."
