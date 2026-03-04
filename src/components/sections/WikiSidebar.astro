@@ -1,0 +1,201 @@
+---
+/**
+ * WikiSidebar - Navigation Sidebar für Wiki Artikel
+ * Ähnlich wie GitBook/Notion Docs
+ */
+import { localePath, type Locale } from '../../i18n/translations';
+
+interface Entry {
+  slug: string;
+  term: string;
+  category: string;
+}
+
+interface Props {
+  entries: Entry[];
+  currentSlug: string;
+  categories: Record<string, string>;
+  locale: Locale;
+  title?: string;
+}
+
+const { entries, currentSlug, categories, locale, title = 'Lexikon' } = Astro.props;
+const lp = (path: string) => localePath(path, locale);
+
+// Group entries by first letter
+const groupedEntries = entries.reduce((acc, entry) => {
+  const letter = entry.term[0].toUpperCase();
+  if (!acc[letter]) acc[letter] = [];
+  acc[letter].push(entry);
+  return acc;
+}, {} as Record<string, Entry[]>);
+
+const letters = Object.keys(groupedEntries).sort();
+
+// Category colors
+const categoryColors: Record<string, string> = {
+  'grundlagen': 'bg-violet-500',
+  'verfahren': 'bg-cyan-500',
+  'qm': 'bg-orange-500',
+  'materialien': 'bg-emerald-500',
+  'normen': 'bg-purple-500',
+  'software': 'bg-sky-500',
+  'hardware': 'bg-amber-500',
+  'allgemein': 'bg-slate-500',
+};
+---
+
+<aside class="wiki-sidebar">
+  <div class="sidebar-header">
+    <a href={lp('/wiki')} class="sidebar-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
+      {title}
+    </a>
+  </div>
+
+  <nav class="sidebar-nav" aria-label="Wiki Navigation">
+    {letters.map(letter => (
+      <div class="nav-group">
+        <h4 class="nav-letter">{letter}</h4>
+        <ul class="nav-list">
+          {groupedEntries[letter].map(entry => {
+            const isActive = entry.slug === currentSlug;
+            const colorClass = categoryColors[entry.category] || 'bg-slate-500';
+            return (
+              <li>
+                <a 
+                  href={lp(`/wiki/${entry.slug}`)} 
+                  class:list={['nav-link', { 'active': isActive }]}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  <span class={`nav-dot ${colorClass}`}></span>
+                  <span class="nav-term">{entry.term}</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))}
+  </nav>
+</aside>
+
+<style>
+  .wiki-sidebar {
+    width: 280px;
+    height: calc(100vh - 80px);
+    position: sticky;
+    top: 80px;
+    overflow-y: auto;
+    background: var(--mv-gray-50);
+    border-right: 1px solid var(--mv-gray-200);
+    padding: var(--space-6) 0;
+  }
+
+  .wiki-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .wiki-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .wiki-sidebar::-webkit-scrollbar-thumb {
+    background: var(--mv-gray-300);
+    border-radius: var(--radius-full);
+  }
+
+  .sidebar-header {
+    padding: 0 var(--space-4) var(--space-4);
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--mv-gray-200);
+  }
+
+  .sidebar-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--mv-violet);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .sidebar-title:hover {
+    color: var(--mv-orange);
+  }
+
+  .sidebar-title svg {
+    color: var(--mv-blue);
+  }
+
+  .sidebar-nav {
+    padding: 0 var(--space-2);
+  }
+
+  .nav-group {
+    margin-bottom: var(--space-4);
+  }
+
+  .nav-letter {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--mv-violet);
+    padding: var(--space-2) var(--space-3);
+    margin-bottom: var(--space-1);
+  }
+
+  .nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    color: var(--mv-gray-600);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: all var(--transition-fast);
+  }
+
+  .nav-link:hover {
+    background: var(--mv-white);
+    color: var(--mv-violet);
+  }
+
+  .nav-link.active {
+    background: var(--mv-white);
+    color: var(--mv-violet);
+    font-weight: 600;
+  }
+
+  .nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .nav-term {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (max-width: 1024px) {
+    .wiki-sidebar {
+      display: none;
+    }
+  }
+</style>

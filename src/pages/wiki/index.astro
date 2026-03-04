@@ -1,12 +1,14 @@
 ---
 /**
- * Wiki Index - Lexikon-Übersicht mit A-Z Navigation
+ * Wiki Index - Redesign
+ * Modernes Lexikon-Layout mit Bento Grid und alphabetischer Navigation
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
-import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
-import Tag from '../../components/ui/Tag.astro';
+import WikiHero from '../../components/sections/WikiHero.astro';
+import WikiCategoryGrid from '../../components/sections/WikiCategoryGrid.astro';
+import WikiEntryCard from '../../components/sections/WikiEntryCard.astro';
 import { getCollection } from 'astro:content';
 import { localePath, type Locale } from '../../i18n/translations';
 
@@ -24,12 +26,12 @@ const localizedEntries = allEntries.filter((entry) => {
   return entry.id.startsWith('en/');
 });
 
-// Alphabetisch sortieren
+// Nach Alphabet sortieren
 const entries = localizedEntries.sort((a, b) =>
   a.data.term.localeCompare(b.data.term, locale)
 );
 
-// Nach Anfangsbuchstaben gruppieren
+// Nach Buchstaben gruppieren
 const groupedEntries = entries.reduce((acc, entry) => {
   const letter = entry.data.term[0].toUpperCase();
   if (!acc[letter]) acc[letter] = [];
@@ -39,110 +41,150 @@ const groupedEntries = entries.reduce((acc, entry) => {
 
 // Alle Buchstaben A-Z
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-const availableLetters = Object.keys(groupedEntries);
+const availableLetters = Object.keys(groupedEntries).sort();
 
-// Kategorien
-const categories = [...new Set(entries.map(e => e.data.category))];
+// Kategorien mit Count
+const categoryCounts = entries.reduce((acc, entry) => {
+  acc[entry.data.category] = (acc[entry.data.category] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+
+const categories = Object.keys(categoryCounts).map(cat => ({
+  id: cat,
+  label: cat,
+  count: categoryCounts[cat]
+}));
 
 const content = {
   de: {
     title: 'CT-Lexikon',
     subtitle: 'Fachbegriffe der industriellen Computertomographie verständlich erklärt',
-    search: 'Begriff suchen...',
+    searchPlaceholder: 'Begriff suchen...',
     categories: 'Kategorien',
-    allCategories: 'Alle',
-    noEntries: 'Noch keine Einträge vorhanden.',
+    allEntries: 'Alle Einträge',
+    noEntries: 'Keine Einträge gefunden.',
     entries: 'Einträge',
     categoryLabels: {
-      'grundlagen': 'CT-Grundlagen',
+      'grundlagen': 'Grundlagen',
       'verfahren': 'Verfahren',
-      'qm': 'Qualitätsmanagement',
+      'qm': 'QM',
       'materialien': 'Materialien',
-      'normen': 'Normen & Standards',
+      'normen': 'Normen',
       'software': 'Software',
       'hardware': 'Hardware',
       'allgemein': 'Allgemein'
+    },
+    stats: {
+      entries: 'Einträge',
+      categories: 'Kategorien'
     }
   },
   en: {
     title: 'CT Glossary',
-    subtitle: 'Industrial computed tomography terms explained clearly',
-    search: 'Search term...',
+    subtitle: 'Industrial CT terms explained clearly',
+    searchPlaceholder: 'Search term...',
     categories: 'Categories',
-    allCategories: 'All',
-    noEntries: 'No entries yet.',
+    allEntries: 'All Entries',
+    noEntries: 'No entries found.',
     entries: 'entries',
     categoryLabels: {
-      'grundlagen': 'CT Basics',
+      'grundlagen': 'Basics',
       'verfahren': 'Methods',
-      'qm': 'Quality Management',
+      'qm': 'QM',
       'materialien': 'Materials',
       'normen': 'Standards',
       'software': 'Software',
       'hardware': 'Hardware',
       'allgemein': 'General'
+    },
+    stats: {
+      entries: 'Entries',
+      categories: 'Categories'
     }
   },
   fr: {
     title: 'Glossaire CT',
-    subtitle: 'Termes de la tomographie industrielle expliqués clairement',
-    search: 'Rechercher un terme...',
+    subtitle: 'Termes de la tomographie industrielle expliqués',
+    searchPlaceholder: 'Rechercher...',
     categories: 'Catégories',
-    allCategories: 'Tous',
-    noEntries: 'Aucune entrée pour le moment.',
+    allEntries: 'Tous les entrées',
+    noEntries: 'Aucune entrée trouvée.',
     entries: 'entrées',
     categoryLabels: {
-      'grundlagen': 'Bases CT',
+      'grundlagen': 'Bases',
       'verfahren': 'Méthodes',
-      'qm': 'Management qualité',
+      'qm': 'MQ',
       'materialien': 'Matériaux',
       'normen': 'Normes',
       'software': 'Logiciel',
       'hardware': 'Matériel',
       'allgemein': 'Général'
+    },
+    stats: {
+      entries: 'Entrées',
+      categories: 'Catégories'
     }
   },
   es: {
     title: 'Glosario CT',
-    subtitle: 'Términos de tomografía industrial explicados claramente',
-    search: 'Buscar término...',
+    subtitle: 'Términos de tomografía industrial explicados',
+    searchPlaceholder: 'Buscar...',
     categories: 'Categorías',
-    allCategories: 'Todos',
-    noEntries: 'Aún no hay entradas.',
+    allEntries: 'Todas las entradas',
+    noEntries: 'No se encontraron entradas.',
     entries: 'entradas',
     categoryLabels: {
-      'grundlagen': 'Fundamentos CT',
+      'grundlagen': 'Fundamentos',
       'verfahren': 'Métodos',
-      'qm': 'Gestión de calidad',
+      'qm': 'GC',
       'materialien': 'Materiales',
       'normen': 'Normas',
       'software': 'Software',
       'hardware': 'Hardware',
       'allgemein': 'General'
+    },
+    stats: {
+      entries: 'Entradas',
+      categories: 'Categorías'
     }
   },
   it: {
     title: 'Glossario CT',
-    subtitle: 'Termini della tomografia industriale spiegati chiaramente',
-    search: 'Cerca termine...',
+    subtitle: 'Termini della tomografia industriale spiegati',
+    searchPlaceholder: 'Cerca...',
     categories: 'Categorie',
-    allCategories: 'Tutti',
-    noEntries: 'Nessuna voce per ora.',
+    allEntries: 'Tutte le voci',
+    noEntries: 'Nessuna voce trovata.',
     entries: 'voci',
     categoryLabels: {
-      'grundlagen': 'Fondamenti CT',
+      'grundlagen': 'Fondamenti',
       'verfahren': 'Metodi',
-      'qm': 'Gestione qualità',
+      'qm': 'GQ',
       'materialien': 'Materiali',
       'normen': 'Norme',
       'software': 'Software',
       'hardware': 'Hardware',
       'allgemein': 'Generale'
+    },
+    stats: {
+      entries: 'Voci',
+      categories: 'Categorie'
     }
   }
 };
 
-const t = content[locale as keyof typeof content] || content.en || content.de;
+const t = content[locale as keyof typeof content] || content.de;
+
+const categoryData = categories.map(cat => ({
+  id: cat.id,
+  label: t.categoryLabels[cat.id as keyof typeof t.categoryLabels] || cat.id,
+  count: cat.count
+}));
+
+const stats = [
+  { value: entries.length.toString(), label: t.stats.entries },
+  { value: categories.length.toString(), label: t.stats.categories }
+];
 ---
 
 <BaseLayout
@@ -151,284 +193,234 @@ const t = content[locale as keyof typeof content] || content.en || content.de;
 >
   <Header slot="header" />
 
-  <div class="container">
-    <Breadcrumbs items={[
-      { label: t.title }
-    ]} />
+  <main class="wiki-page">
+    <!-- Hero Section -->
+    <WikiHero
+      title={t.title}
+      subtitle={t.subtitle}
+      searchPlaceholder={t.searchPlaceholder}
+      locale={locale}
+      stats={stats}
+    />
 
-    <!-- Hero -->
-    <section class="page-hero">
-      <h1>{t.title}</h1>
-      <p class="subtitle">{t.subtitle}</p>
+    <!-- Category Grid -->
+    <WikiCategoryGrid
+      categories={categoryData}
+      locale={locale}
+      title={t.categories}
+    />
 
-      <!-- Search -->
-      <div class="search-box">
-        <input
-          type="search"
-          id="wiki-search"
-          placeholder={t.search}
-          aria-label={t.search}
-        />
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"/>
-          <path d="m21 21-4.3-4.3"/>
-        </svg>
+    <!-- Alphabet Navigation -->
+    <nav class="alphabet-nav" aria-label="Alphabetische Navigation">
+      <div class="container">
+        <div class="alphabet-scroll">
+          {alphabet.map(letter => {
+            const hasEntries = availableLetters.includes(letter);
+            return (
+              <a
+                href={hasEntries ? `#letter-${letter}` : undefined}
+                class:list={['alphabet-letter', { 'disabled': !hasEntries, 'active': hasEntries }]}
+                aria-disabled={!hasEntries}
+              >
+                {letter}
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </nav>
+
+    <!-- Entries List -->
+    <section class="entries-section">
+      <div class="container">
+        <h2 class="section-title">{t.allEntries}</h2>
+        
+        {entries.length === 0 ? (
+          <div class="empty-state">
+            <p>{t.noEntries}</p>
+          </div>
+        ) : (
+          <div class="entries-content">
+            {availableLetters.map(letter => (
+              <div class="letter-group" id={`letter-${letter}`}>
+                <h3 class="letter-heading">
+                  <span class="letter-marker">{letter}</span>
+                </h3>
+                <div class="entries-grid">
+                  {groupedEntries[letter].map(entry => (
+                    <WikiEntryCard
+                      term={entry.data.term}
+                      definition={entry.data.definition}
+                      category={entry.data.category}
+                      categoryLabel={t.categoryLabels[entry.data.category as keyof typeof t.categoryLabels] || entry.data.category}
+                      slug={entry.slug}
+                      locale={locale}
+                      synonyms={entry.data.synonyms}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
-
-    <!-- Category Filter -->
-    <nav class="category-filter">
-      <Tag href={lp('/wiki')} variant="primary">{t.allCategories}</Tag>
-      {categories.map(cat => (
-        <Tag href={lp(`/wiki/kategorie/${cat}`)} variant="default">
-          {t.categoryLabels[cat as keyof typeof t.categoryLabels] || cat}
-        </Tag>
-      ))}
-    </nav>
-
-    <!-- A-Z Navigation -->
-    <nav class="az-nav" aria-label="Alphabetische Navigation">
-      {alphabet.map(letter => (
-        <a
-          href={availableLetters.includes(letter) ? `#letter-${letter}` : undefined}
-          class:list={[
-            'az-letter',
-            { 'disabled': !availableLetters.includes(letter) }
-          ]}
-          aria-disabled={!availableLetters.includes(letter)}
-        >
-          {letter}
-        </a>
-      ))}
-    </nav>
-
-    {entries.length === 0 ? (
-      <div class="empty-state">
-        <p>{t.noEntries}</p>
-      </div>
-    ) : (
-      <div class="wiki-content">
-        {Object.entries(groupedEntries).sort().map(([letter, letterEntries]) => (
-          <section class="letter-section" id={`letter-${letter}`}>
-            <h2 class="letter-heading">{letter}</h2>
-            <div class="entries-list">
-              {letterEntries.map(entry => (
-                <a href={lp(`/wiki/${entry.slug}`)} class="wiki-entry">
-                  <div class="entry-main">
-                    <h3>{entry.data.term}</h3>
-                    <p>{entry.data.definition}</p>
-                  </div>
-                  <Tag variant="default" size="sm">
-                    {t.categoryLabels[entry.data.category as keyof typeof t.categoryLabels]}
-                  </Tag>
-                </a>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
-    )}
-
-    <!-- Stats -->
-    <div class="wiki-stats">
-      <span>{entries.length} {t.entries}</span>
-    </div>
-  </div>
+  </main>
 
   <Footer slot="footer" />
 </BaseLayout>
 
 <style>
-  .page-hero {
-    text-align: center;
-    padding: var(--space-12) 0;
-    max-width: 700px;
+  .wiki-page {
+    background: var(--mv-white);
+  }
+
+  .container {
+    max-width: 900px;
     margin: 0 auto;
+    padding: 0 var(--container-padding);
   }
 
-  .page-hero h1 {
-    font-size: var(--text-5xl);
-    margin-bottom: var(--space-4);
+  /* Alphabet Navigation */
+  .alphabet-nav {
+    position: sticky;
+    top: 80px;
+    z-index: 10;
+    background: linear-gradient(180deg, var(--mv-white) 0%, rgba(255,255,255,0.95) 100%);
+    backdrop-filter: blur(8px);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--mv-gray-200);
   }
 
-  .subtitle {
-    font-size: var(--text-xl);
-    color: var(--text-muted);
-    margin-bottom: var(--space-8);
-  }
-
-  .search-box {
-    position: relative;
-    max-width: 400px;
-    margin: 0 auto;
-  }
-
-  .search-box input {
-    width: 100%;
-    padding: var(--space-3) var(--space-4) var(--space-3) var(--space-12);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-full);
-    font-size: var(--text-base);
-    background: var(--surface);
-    transition: all var(--transition-fast);
-  }
-
-  .search-box input:focus {
-    outline: none;
-    border-color: var(--mv-violet);
-    box-shadow: 0 0 0 3px rgba(50, 40, 91, 0.15);
-  }
-
-  .search-box svg {
-    position: absolute;
-    left: var(--space-4);
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-  }
-
-  .category-filter {
+  .alphabet-scroll {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    justify-content: center;
-    padding: var(--space-6) 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .az-nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     gap: var(--space-1);
-    padding: var(--space-6) 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: var(--space-8);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
-  .az-letter {
+  .alphabet-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .alphabet-letter {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 36px;
     height: 36px;
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--text);
+    color: var(--mv-violet);
     text-decoration: none;
     border-radius: var(--radius-md);
     transition: all var(--transition-fast);
   }
 
-  .az-letter:hover:not(.disabled) {
+  .alphabet-letter.active:hover {
     background: var(--mv-violet);
-    color: white;
+    color: var(--mv-white);
   }
 
-  .az-letter.disabled {
-    color: var(--text-muted);
-    opacity: 0.4;
+  .alphabet-letter.disabled {
+    color: var(--mv-gray-300);
     cursor: default;
+  }
+
+  /* Entries Section */
+  .entries-section {
+    padding: var(--space-12) 0 var(--space-20);
+  }
+
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--mv-violet);
+    margin-bottom: var(--space-8);
+  }
+
+  .letter-group {
+    margin-bottom: var(--space-12);
+    scroll-margin-top: 140px;
+  }
+
+  .letter-heading {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--mv-gray-100);
+  }
+
+  .letter-marker {
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--mv-violet);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--mv-gray-50);
+    border-radius: var(--radius-lg);
+  }
+
+  .entries-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
   }
 
   .empty-state {
     text-align: center;
-    padding: var(--space-20) 0;
-    color: var(--text-muted);
+    padding: var(--space-16) 0;
+    color: var(--mv-gray-500);
   }
 
-  .letter-section {
-    margin-bottom: var(--space-12);
-    scroll-margin-top: var(--space-20);
-  }
+  @media (max-width: 640px) {
+    .alphabet-nav {
+      top: 60px;
+    }
 
-  .letter-heading {
-    font-size: var(--text-3xl);
-    color: var(--mv-violet);
-    padding-bottom: var(--space-4);
-    border-bottom: 2px solid var(--mv-violet);
-    margin-bottom: var(--space-6);
-  }
+    .alphabet-letter {
+      width: 32px;
+      height: 32px;
+      font-size: var(--text-xs);
+    }
 
-  .entries-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  .wiki-entry {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: var(--space-4);
-    padding: var(--space-4);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    text-decoration: none;
-    color: inherit;
-    transition: all var(--transition-fast);
-  }
-
-  .wiki-entry:hover {
-    border-color: var(--mv-violet);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .entry-main {
-    flex: 1;
-  }
-
-  .wiki-entry h3 {
-    color: var(--text);
-    margin-bottom: var(--space-1);
-    transition: color var(--transition-fast);
-  }
-
-  .wiki-entry:hover h3 {
-    color: var(--mv-violet);
-  }
-
-  .wiki-entry p {
-    color: var(--text-muted);
-    font-size: var(--text-sm);
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .wiki-stats {
-    text-align: center;
-    padding: var(--space-8) 0;
-    color: var(--text-muted);
-    font-size: var(--text-sm);
+    .letter-group {
+      scroll-margin-top: 120px;
+    }
   }
 </style>
 
 <script>
-  // Simple client-side search
+  // Client-side search
   const searchInput = document.getElementById('wiki-search') as HTMLInputElement;
-  const entries = document.querySelectorAll('.wiki-entry');
-  const sections = document.querySelectorAll('.letter-section');
+  const entryCards = document.querySelectorAll('.wiki-card');
+  const letterGroups = document.querySelectorAll('.letter-group');
 
   searchInput?.addEventListener('input', (e) => {
     const query = (e.target as HTMLInputElement).value.toLowerCase();
 
-    entries.forEach(entry => {
-      const term = entry.querySelector('h3')?.textContent?.toLowerCase() || '';
-      const definition = entry.querySelector('p')?.textContent?.toLowerCase() || '';
+    entryCards.forEach(card => {
+      const term = card.querySelector('.term')?.textContent?.toLowerCase() || '';
+      const definition = card.querySelector('.definition')?.textContent?.toLowerCase() || '';
       const matches = term.includes(query) || definition.includes(query);
-      (entry as HTMLElement).style.display = matches ? 'flex' : 'none';
+      (card as HTMLElement).style.display = matches ? 'flex' : 'none';
     });
 
-    // Hide empty sections
-    sections.forEach(section => {
-      const visibleEntries = section.querySelectorAll('.wiki-entry[style="display: flex"], .wiki-entry:not([style])');
-      const hasVisible = Array.from(section.querySelectorAll('.wiki-entry')).some(
-        e => (e as HTMLElement).style.display !== 'none'
-      );
-      (section as HTMLElement).style.display = hasVisible ? 'block' : 'none';
+    // Hide empty letter groups
+    letterGroups.forEach(group => {
+      const visibleCards = group.querySelectorAll('.wiki-card[style="display: flex;"], .wiki-card:not([style])');
+      const hasVisible = visibleCards.length > 0;
+      (group as HTMLElement).style.display = hasVisible ? 'block' : 'none';
     });
   });
 </script>

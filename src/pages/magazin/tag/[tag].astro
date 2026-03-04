@@ -1,0 +1,196 @@
+---
+/**
+ * Magazin Tag-Seite
+ * Filtert Artikel nach Tag, SSR-Route
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/layout/Header.astro';
+import Footer from '../../../components/layout/Footer.astro';
+import ArticleCard from '../../../components/sections/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { localePath, type Locale } from '../../../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+const preferredContentLocale = locale === 'de' ? 'de' : 'en';
+
+const { tag } = Astro.params;
+
+if (!tag) {
+  return Astro.redirect(lp('/magazin'));
+}
+
+const allPosts = await getCollection('magazin', ({ data }) => !data.draft);
+const localizedPosts = allPosts.filter((post) => {
+  if (preferredContentLocale === 'de') return !post.id.startsWith('en/');
+  return post.id.startsWith('en/');
+});
+const posts = localizedPosts
+  .filter(post => post.data.tags?.includes(tag))
+  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime());
+
+if (posts.length === 0) {
+  return Astro.redirect(lp('/magazin'));
+}
+
+const categoryLabels: Record<string, Record<string, string>> = {
+  de: { technologie: 'Technologie', branchen: 'Branchen', 'case-studies': 'Case Studies', news: 'News', tipps: 'Tipps & Tricks' },
+  en: { technologie: 'Technology', branchen: 'Industries', 'case-studies': 'Case Studies', news: 'News', tipps: 'Tips & Tricks' },
+  fr: { technologie: 'Technologie', branchen: 'Secteurs', 'case-studies': 'Études de cas', news: 'Actualités', tipps: 'Trucs et astuces' },
+  es: { technologie: 'Tecnología', branchen: 'Sectores', 'case-studies': 'Casos de estudio', news: 'Noticias', tipps: 'Consejos y trucos' },
+  it: { technologie: 'Tecnologia', branchen: 'Settori', 'case-studies': 'Casi di studio', news: 'Notizie', tipps: 'Suggerimenti e trucchi' },
+};
+const labels = categoryLabels[locale] ?? categoryLabels.en;
+
+// Tag-Label: Slug zu lesbarem Label
+const tagLabel = tag.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+const uiText: Record<string, Record<string, string>> = {
+  de: { back: '← Alle Artikel', readMore: 'Weiterlesen', tagPrefix: 'Thema:', articleCount: (n: number) => `${n} Artikel` },
+  en: { back: '← All Articles', readMore: 'Read more', tagPrefix: 'Topic:', articleCount: (n: number) => `${n} article${n === 1 ? '' : 's'}` },
+  fr: { back: '← Tous les articles', readMore: 'Lire la suite', tagPrefix: 'Sujet:', articleCount: (n: number) => `${n} article${n === 1 ? '' : 's'}` },
+  es: { back: '← Todos los artículos', readMore: 'Leer más', tagPrefix: 'Tema:', articleCount: (n: number) => `${n} artículo${n === 1 ? '' : 's'}` },
+  it: { back: '← Tutti gli articoli', readMore: 'Leggi di più', tagPrefix: 'Argomento:', articleCount: (n: number) => `${n} articolo${n === 1 ? '' : 'i'}` },
+};
+const ui = uiText[locale] ?? uiText.en;
+
+const metaTitle = locale === 'de'
+  ? `${tagLabel} – Magazin | Microvista`
+  : `${tagLabel} – Magazine | Microvista`;
+const metaDescription = locale === 'de'
+  ? `Alle Artikel zum Thema ${tagLabel} auf microvista.de — Industrielle Computertomographie und zerstörungsfreie Prüfung.`
+  : `All articles on ${tagLabel} at microvista.de — industrial computed tomography and non-destructive testing.`;
+---
+
+<BaseLayout title={metaTitle} description={metaDescription}>
+  <Header slot="header" />
+
+  <main class="tag-page">
+    <!-- Hero -->
+    <section class="tag-hero">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href={lp('/magazin')}>{ui.back}</a>
+        </nav>
+        <span class="tag-eyebrow">{ui.tagPrefix}</span>
+        <h1 class="hero-title">{tagLabel}</h1>
+        <span class="article-count">{posts.length} {posts.length === 1 ? 'Artikel' : 'Artikel'}</span>
+      </div>
+      <div class="hero-pattern"></div>
+    </section>
+
+    <!-- Artikel -->
+    <div class="container posts-container">
+      <section class="posts-section">
+        <div class="posts-grid">
+          {posts.map(post => (
+            <ArticleCard
+              title={post.data.title}
+              description={post.data.description}
+              image={post.data.image}
+              category={post.data.category}
+              categoryLabel={labels[post.data.category] || post.data.category}
+              publishDate={post.data.publishDate}
+              slug={post.slug.replace(/^de\/|^en\//, '')}
+              locale={locale}
+              readMoreText={ui.readMore}
+            />
+          ))}
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .tag-hero {
+    position: relative;
+    background: linear-gradient(135deg, var(--mv-violet) 0%, #1a1640 50%, #0f0c29 100%);
+    padding: calc(var(--space-24) + 80px) 0 var(--space-16);
+    overflow: hidden;
+  }
+
+  .hero-pattern {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(142, 191, 214, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(238, 119, 17, 0.08) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+    position: relative;
+    z-index: 1;
+  }
+
+  .posts-container {
+    z-index: auto;
+  }
+
+  .breadcrumb {
+    margin-bottom: var(--space-6);
+  }
+
+  .breadcrumb a {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    letter-spacing: 0.05em;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--mv-blue);
+  }
+
+  .tag-eyebrow {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mv-orange);
+    margin-bottom: var(--space-3);
+  }
+
+  .hero-title {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-3xl), 6vw, var(--text-5xl));
+    font-weight: 700;
+    color: var(--mv-white);
+    margin-bottom: var(--space-4);
+    line-height: 1.1;
+    text-transform: capitalize;
+  }
+
+  .article-count {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--mv-blue);
+    letter-spacing: 0.1em;
+  }
+
+  .posts-section {
+    padding: var(--space-12) 0 var(--space-20);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--space-6);
+  }
+
+  @media (max-width: 640px) {
+    .posts-grid { grid-template-columns: 1fr; }
+  }
+</style>
