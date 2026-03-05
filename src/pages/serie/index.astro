@@ -7,116 +7,309 @@ const lp = (path: string) => localePath(path, locale);
 
 const content = {
   de: {
-    badge: 'Serienprüfung',
-    headline: '100% Qualität.',
-    headlineAccent: '0% Stillstand.',
-    subline: 'Automatisierte CT-Prüfung für Ihre Serienproduktion. Maximaler Durchsatz, höchste Erkennungsrate, nahtlose Integration in Ihre bestehenden Prozesse.',
-    cta1: 'ROI berechnen',
-    cta2: 'Lösungen ansehen',
+    badge: 'Zerstörungsfreie Serienprüfung',
+    tagline: 'GET YOUR INSPECTION DONE – Anywhere. Anytime. Fast.',
+    headline: 'Zerstörungsfreie',
+    headlineAccent: 'Serienprüfung',
+    headlineSub: 'Hohe Stückzahl. Geringe Prüfkosten.',
+    subline: 'Falls Sie eine zerstörungsfreie Serienprüfung mit industrieller Computertomographie durchführen wollen, hat Microvista die passende Lösung – wirtschaftlich, zuverlässig, skalierbar.',
+    cta1: 'Express-Inspektion buchen',
+    cta2: 'Gratis-Beratung sichern',
+
     stats: [
       { value: '100%', label: 'Prüfabdeckung' },
       { value: '<3s', label: 'pro Bauteil' },
-      { value: '99.9%', label: 'Erkennungsrate' }
+      { value: '99.9%', label: 'Erkennungsrate' },
+      { value: '450kV', label: 'Röhrenleistung' },
     ],
+
+    whyTitle: 'Hohe Stückzahl = geringe Prüfkosten pro Bauteil',
+    whyText: 'Die zerstörungsfreie Serienprüfung mit industrieller CT ist die wirtschaftlichste Form der Qualitätssicherung für komplexe Bauteile in hohen Stückzahlen. Die Prüfkosten pro Bauteil sinken mit steigender Stückzahl – und Microvista liefert die gesamte Infrastruktur: CT-Labor, mobiles CT oder automatisierte Cloud-Auswertung.',
+    whyBenefits: [
+      'Erreichung eines fähigen / beherrschten Produktionsprozesses',
+      'Reduzierung der Kosten für die Weiterverarbeitung von Bauteilen mit verdeckten Mängeln',
+      'Verhinderung der Sperrung Ihrer Charge durch den Microvista Qualitätsnachweis',
+    ],
+
+    aufgabenTitle: 'Typische Prüfaufgaben in der Serienprüfung',
+    aufgabenSubline: 'Ein einziger CT-Scan liefert alle folgenden Informationen gleichzeitig – kein separates Prüfverfahren nötig.',
+    aufgaben: [
+      { icon: '◎', title: 'Poren, Lunker & Einschlüsse', text: 'Volumetrische Fehlstellen in Guss- und Sinterbauteilen sicher detektieren' },
+      { icon: '✂', title: 'Grat & Kernreste', text: 'Späne und Kernreste in Hohlräumen aufspüren – auch verdeckt' },
+      { icon: '⌇', title: 'Rissprüfung', text: 'Haarrisse und Kaltlaufstellen dreidimensional sichtbar machen' },
+      { icon: '◉', title: 'Porositätenanalyse', text: 'Verteilung und Volumenanteil von Poren präzise quantifizieren' },
+      { icon: '↔', title: 'Wanddickenmessung', text: 'Schichtdicken und Wandstärken hochpräzise über das gesamte Bauteilvolumen' },
+      { icon: '⊞', title: 'CAD Soll/Ist-Vergleich', text: 'Maßabweichungen vom CAD-Modell farblich visualisieren' },
+      { icon: '⚙', title: 'Montage- & Fügefehler', text: 'Schweißnähte, Presspassungen und Klebeverbindungen berührungslos prüfen' },
+      { icon: '⚡', title: 'Hairpin-Statoren', text: 'Lückenlose Qualitätsprüfung von E-Motor-Wicklungen und Statorpaketen' },
+    ],
+
+    verfahrenTitle: 'Zerstörungsfreie Prüfmethoden im Vergleich',
+    verfahrenSubline: 'Warum industrielle CT die überlegene Methode für komplexe Serienteile ist',
+    verfahren: [
+      {
+        method: 'Röntgendiffraktion (RT)',
+        badge: 'Eingeschränkt',
+        badgeOk: false,
+        cons: ['Nur 2D-Bilder – keine Volumendaten', 'Teure Geräte & lange Untersuchungszeiten', 'Limitierte Defekterkennung bei komplexen Geometrien'],
+      },
+      {
+        method: 'Ultraschallprüfung (UT)',
+        badge: 'Eingeschränkt',
+        badgeOk: false,
+        cons: ['Unzuverlässig bei dünnen oder hohlen Bauteilen', 'Schlechte Kopplung bei rauen Oberflächen', 'Kein vollständiger Volumenscan möglich'],
+      },
+      {
+        method: 'Magnetpulver- & Eindringprüfung (MT/PT)',
+        badge: 'Begrenzt',
+        badgeOk: false,
+        cons: ['Nur Oberflächenfehler detektierbar', 'Eingeschränkt auf bestimmte Materialien', 'Kein Einsatz bei Hohlräumen & inneren Strukturen'],
+      },
+      {
+        method: 'Sichtprüfung (VT)',
+        badge: 'Begrenzt',
+        badgeOk: false,
+        cons: ['Nur äußerlich sichtbare Fehler', 'Stark abhängig vom Prüfer', 'Keine innenliegenden Defekte detektierbar'],
+      },
+      {
+        method: 'Industrielle CT (Microvista)',
+        badge: 'Empfohlen',
+        badgeOk: true,
+        cons: ['3D-Volumenbilder für jeden Scan', 'Risse, Poren, Maße & Fügefehler in EINEM Durchlauf', '100% zerstörungsfrei – Bauteil bleibt unversehrt'],
+      },
+    ],
+
+    optionenTitle: 'Wie kann eine Serienprüfung realisiert werden?',
+    optionenSubline: 'Drei Wege zur wirtschaftlichsten Qualitätssicherung für Ihre Produktion',
+    optionen: [
+      {
+        nr: '01',
+        title: 'CT-Labor von Microvista',
+        text: 'Bauteile einsenden – die Experten von Microvista scannen & werten aus. Keine Investitionskosten, kein Personalaufwand, keine Schulungen. Die ideale Option für Einzelteile, Chargenfreigaben oder wiederkehrende Serienprüfungen.',
+        note: 'Express-Scan < 24h möglich (nach Absprache & abhängig von Teileanzahl)',
+        img: '/images/ct/Bauteil-im-CT-platziert-scaled.jpg',
+        imgAlt: 'Bauteil wird im Microvista CT-Labor platziert',
+        href: '/labor',
+        btnLabel: 'CT-Labor entdecken',
+      },
+      {
+        nr: '02',
+        title: 'Mobiles CT mieten – ScanExpress',
+        text: 'Prüfung direkt vor Ort in Ihrer Produktion – ohne Versand der Bauteile. Das mobile CT ScanExpress verschafft Ihnen volle Flexibilität und spart hohe Investmentkosten & Wartezeiten.',
+        note: 'Ideal für temporären Bedarf oder Serienfertigung vor Ort',
+        img: '/images/ct/ScanExpress-Compact-Frontaufnahme-scaled.png',
+        imgAlt: 'ScanExpress – das mobile industrielle CT von Microvista',
+        href: '/live-demo-scanexpress',
+        btnLabel: 'ScanExpress kennenlernen',
+      },
+      {
+        nr: '03',
+        title: 'Microvista Cloud',
+        text: 'Sie besitzen bereits ein eigenes CT? Laden Sie Ihre CT-Scan-Daten in die Microvista Cloud und lassen Sie diese automatisch auswerten. Spart erheblichen Zeitaufwand – manuelle Auswertung entfällt vollständig.',
+        note: 'Für Betriebe mit eigenem CT-System und hohem Prüfvolumen',
+        img: '/images/ct/Beispiel-Bedienoberflaeche-der-CT-Software-am-Laptop.png',
+        imgAlt: 'Microvista Cloud Software zur automatisierten CT-Auswertung',
+        href: '/kontakt',
+        btnLabel: 'Cloud-Lösung anfragen',
+      },
+    ],
+
+    specsTitle: 'Unsere Messkapazitäten',
+    specsNote: 'Microvista setzt auf eine 450kV Röhre mit besonders hoher Photonenenergie – zerstörungsfreie Prüfung von dickwandigem Eisenguss bis ca. 70 mm Wandstärke möglich.',
+    specs: [
+      { value: '798 mm', label: 'Max. Bauteil-Ø' },
+      { value: '1.802 mm', label: 'Max. Bauteil-Länge' },
+      { value: '200 kg', label: 'Max. Gewicht' },
+      { value: '0,02–1 mm', label: 'Auflösung' },
+      { value: '450 kV', label: 'Röhrenleistung' },
+      { value: '< 24h', label: 'Express-Option' },
+      { value: '10 AT', label: 'Standard-Lieferzeit' },
+    ],
+
+    servicesTitle: 'Unsere Lösungen für die Serienprüfung',
+    servicesSubline: 'Maßgeschneiderte Prüfsysteme für jede Produktionsanforderung',
     services: [
       {
         title: 'Inline-CT',
-        description: 'CT-Prüfung direkt in Ihrer Produktionslinie – vollautomatisch.',
+        description: 'CT-Prüfung direkt in Ihrer Produktionslinie – vollautomatisch, taktzeittauglich, 100% Prüfabdeckung ohne Stillstand.',
       },
       {
         title: '100% Prüfung',
-        description: 'Lückenlose Qualitätskontrolle für jeden einzelnen Artikel.',
+        description: 'Lückenlose Qualitätskontrolle für jeden einzelnen Artikel. Kein Bauteil verlässt die Fertigung ohne Qualitätsnachweis.',
       },
       {
         title: 'KI-Automatisierung',
-        description: 'Intelligente Auswertung ohne manuelle Eingriffe.',
-      }
+        description: 'Intelligente Defekterkennung ohne manuelle Eingriffe. Schneller, reproduzierbarer und günstiger als manuelle Auswertung.',
+      },
     ],
-    servicesTitle: 'Unsere Lösungen',
-    servicesSubline: 'Maßgeschneiderte Prüfsysteme für Ihre Produktionsanforderungen',
+    learnMore: 'Mehr erfahren',
+
+    crossTitle: 'Noch in der Entwicklungsphase?',
+    crossText: 'Für Prototypen, Erstmuster und Schadensanalysen bieten wir schnelle CT-Laboranalysen mit höchster Präzision.',
+    crossBtn: 'CT-Labor entdecken',
+
     ctaTitle: 'Bereit für 100% Qualität?',
-    ctaSubline: 'Lassen Sie uns gemeinsam Ihre Prüfprozesse optimieren. Unverbindliche Beratung und ROI-Berechnung.',
-    ctaButton: 'Jetzt Beratung anfragen'
+    ctaSubline: 'Lassen Sie uns gemeinsam Ihre Serienprüfung planen. Unverbindliche Beratung & individuelle ROI-Berechnung.',
+    ctaButton: 'Jetzt Beratung anfragen',
   },
+
   en: {
-    badge: 'Serial Inspection',
-    headline: '100% Quality.',
-    headlineAccent: '0% Downtime.',
-    subline: 'Automated CT inspection for your serial production. Maximum throughput, highest detection rate, seamless integration into your existing processes.',
-    cta1: 'Calculate ROI',
-    cta2: 'View Solutions',
+    badge: 'Non-Destructive Series Inspection',
+    tagline: 'GET YOUR INSPECTION DONE – Anywhere. Anytime. Fast.',
+    headline: 'Non-Destructive',
+    headlineAccent: 'Series Inspection',
+    headlineSub: 'High Volume. Low Cost Per Part.',
+    subline: 'Industrial CT series inspection from Microvista – economical, reliable, scalable. Lab, mobile, or cloud-based – we have the right solution for your production.',
+    cta1: 'Book Express Inspection',
+    cta2: 'Get Free Consultation',
+
     stats: [
       { value: '100%', label: 'Coverage' },
       { value: '<3s', label: 'per part' },
-      { value: '99.9%', label: 'Detection rate' }
+      { value: '99.9%', label: 'Detection rate' },
+      { value: '450kV', label: 'Tube power' },
     ],
+
+    whyTitle: 'High volume = low cost per part',
+    whyText: 'CT-based non-destructive series inspection is the most economical form of quality assurance for complex parts in high volumes. Cost per part decreases as volume increases – and Microvista provides the complete infrastructure: CT lab, mobile CT, or automated cloud evaluation.',
+    whyBenefits: [
+      'Achieve a capable / controlled production process',
+      'Reduce costs of further processing parts with hidden defects',
+      'Prevent batch blocking with Microvista quality certification',
+    ],
+
+    aufgabenTitle: 'Typical inspection tasks in series production',
+    aufgabenSubline: 'A single CT scan delivers all the following information simultaneously – no separate inspection method needed.',
+    aufgaben: [
+      { icon: '◎', title: 'Pores, Voids & Inclusions', text: 'Reliably detect volumetric defects in cast and sintered parts' },
+      { icon: '✂', title: 'Burrs & Core Residues', text: 'Detect chips and core remnants in cavities – even hidden ones' },
+      { icon: '⌇', title: 'Crack Inspection', text: 'Make hairline cracks and cold shuts visible in 3D' },
+      { icon: '◉', title: 'Porosity Analysis', text: 'Precisely quantify pore distribution and volume fraction' },
+      { icon: '↔', title: 'Wall Thickness Measurement', text: 'High-precision wall thickness measurement across the entire volume' },
+      { icon: '⊞', title: 'CAD Comparison', text: 'Color-visualize deviations from the CAD model' },
+      { icon: '⚙', title: 'Assembly & Joint Defects', text: 'Non-contact inspection of welds, press fits and adhesive bonds' },
+      { icon: '⚡', title: 'Hairpin Stators', text: 'Complete quality inspection of e-motor windings and stator packs' },
+    ],
+
+    verfahrenTitle: 'Non-destructive testing methods compared',
+    verfahrenSubline: 'Why industrial CT is the superior method for complex series parts',
+    verfahren: [
+      {
+        method: 'X-Ray Diffraction (RT)',
+        badge: 'Limited',
+        badgeOk: false,
+        cons: ['2D images only – no volume data', 'Expensive equipment & long inspection times', 'Limited defect detection for complex geometries'],
+      },
+      {
+        method: 'Ultrasonic Testing (UT)',
+        badge: 'Limited',
+        badgeOk: false,
+        cons: ['Unreliable for thin or hollow parts', 'Poor coupling on rough surfaces', 'No full volume scan possible'],
+      },
+      {
+        method: 'Magnetic Particle & Penetrant Testing (MT/PT)',
+        badge: 'Restricted',
+        badgeOk: false,
+        cons: ['Only surface defects detectable', 'Limited to specific materials', 'No cavities or internal structures'],
+      },
+      {
+        method: 'Visual Testing (VT)',
+        badge: 'Restricted',
+        badgeOk: false,
+        cons: ['Only externally visible defects', 'Highly inspector-dependent', 'No internal defects detectable'],
+      },
+      {
+        method: 'Industrial CT (Microvista)',
+        badge: 'Recommended',
+        badgeOk: true,
+        cons: ['3D volume images for every scan', 'Cracks, pores, dimensions & joint defects in ONE pass', '100% non-destructive – part remains intact'],
+      },
+    ],
+
+    optionenTitle: 'How can series inspection be realized?',
+    optionenSubline: 'Three paths to the most economical quality assurance for your production',
+    optionen: [
+      {
+        nr: '01',
+        title: 'CT Lab by Microvista',
+        text: 'Ship parts to us – Microvista experts scan & evaluate. No investment costs, no personnel expense, no training. The ideal option for individual parts, batch approvals, or recurring series inspections.',
+        note: 'Express scan < 24h possible (by appointment & depending on part count)',
+        img: '/images/ct/Bauteil-im-CT-platziert-scaled.jpg',
+        imgAlt: 'Part being placed in the Microvista CT lab',
+        href: '/labor',
+        btnLabel: 'Discover CT Lab',
+      },
+      {
+        nr: '02',
+        title: 'Mobile CT Rental – ScanExpress',
+        text: 'On-site inspection at your facility – no need to ship parts. The mobile ScanExpress CT gives you full flexibility and saves high investment and waiting costs.',
+        note: 'Ideal for temporary needs or on-site series production',
+        img: '/images/ct/ScanExpress-Compact-Frontaufnahme-scaled.png',
+        imgAlt: 'ScanExpress – the mobile industrial CT by Microvista',
+        href: '/live-demo-scanexpress',
+        btnLabel: 'Learn about ScanExpress',
+      },
+      {
+        nr: '03',
+        title: 'Microvista Cloud',
+        text: 'Already own a CT? Upload your scan data to the Microvista Cloud for automated evaluation. Saves significant time – manual evaluation is completely eliminated.',
+        note: 'For facilities with their own CT system and high inspection volumes',
+        img: '/images/ct/Beispiel-Bedienoberflaeche-der-CT-Software-am-Laptop.png',
+        imgAlt: 'Microvista Cloud software for automated CT evaluation',
+        href: '/kontakt',
+        btnLabel: 'Request Cloud Solution',
+      },
+    ],
+
+    specsTitle: 'Our Measurement Capabilities',
+    specsNote: 'Microvista uses a 450kV tube with exceptionally high photon energy – enabling non-destructive inspection of thick-walled iron castings up to approx. 70 mm wall thickness.',
+    specs: [
+      { value: '798 mm', label: 'Max. Part Ø' },
+      { value: '1,802 mm', label: 'Max. Part Length' },
+      { value: '200 kg', label: 'Max. Weight' },
+      { value: '0.02–1 mm', label: 'Resolution' },
+      { value: '450 kV', label: 'Tube Power' },
+      { value: '< 24h', label: 'Express Option' },
+      { value: '10 WD', label: 'Standard Lead Time' },
+    ],
+
+    servicesTitle: 'Our Series Inspection Solutions',
+    servicesSubline: 'Customized inspection systems for every production requirement',
     services: [
       {
         title: 'Inline CT',
-        description: 'CT inspection directly in your production line – fully automated.',
+        description: 'CT inspection directly in your production line – fully automated, cycle-time capable, 100% coverage without downtime.',
       },
       {
         title: '100% Inspection',
-        description: 'Complete quality control for every single article.',
+        description: 'Complete quality control for every single article. No part leaves production without quality certification.',
       },
       {
         title: 'AI Automation',
-        description: 'Intelligent evaluation without manual intervention.',
-      }
+        description: 'Intelligent defect detection without manual intervention. Faster, more reproducible, and cheaper than manual evaluation.',
+      },
     ],
-    servicesTitle: 'Our Solutions',
-    servicesSubline: 'Tailored inspection systems for your production requirements',
+    learnMore: 'Learn more',
+
+    crossTitle: 'Still in development?',
+    crossText: 'For prototypes, first articles, and failure analysis, we offer fast CT lab analyses with maximum precision.',
+    crossBtn: 'Discover CT Lab',
+
     ctaTitle: 'Ready for 100% quality?',
-    ctaSubline: 'Let us optimize your inspection processes together. Non-binding consultation and ROI calculation.',
-    ctaButton: 'Request Consultation Now'
-  }
+    ctaSubline: 'Let us plan your series inspection together. Non-binding consultation and individual ROI calculation.',
+    ctaButton: 'Request Consultation Now',
+  },
 };
 
 const t = content[locale as keyof typeof content] || content.en || content.de;
 
 const ui = {
-  de: {
-    learnMore: 'Mehr erfahren',
-    crossTitle: 'Noch in der Entwicklung?',
-    crossText: 'Für Prototypen und Erstmuster bieten wir schnelle Laboranalysen mit höchster Präzision.',
-    crossBtn: 'Labor entdecken',
-    seoTitle: 'Inline-CT für Serienprüfung'
-  },
-  en: {
-    learnMore: 'Learn more',
-    crossTitle: 'Still in development?',
-    crossText: 'For prototypes and first articles, we offer fast lab analyses with maximum precision.',
-    crossBtn: 'Discover Lab',
-    seoTitle: 'Inline CT for Serial Inspection'
-  },
-  fr: {
-    learnMore: 'En savoir plus',
-    crossTitle: 'Encore en développement ?',
-    crossText: 'Pour les prototypes et premiers articles, nous proposons des analyses labo rapides et précises.',
-    crossBtn: 'Découvrir le laboratoire',
-    seoTitle: 'CT en ligne pour inspection en série'
-  },
-  es: {
-    learnMore: 'Más información',
-    crossTitle: '¿Aún en desarrollo?',
-    crossText: 'Para prototipos y primeras muestras, ofrecemos análisis de laboratorio rápidos y precisos.',
-    crossBtn: 'Descubrir laboratorio',
-    seoTitle: 'CT en línea para inspección en serie'
-  },
-  it: {
-    learnMore: 'Scopri di più',
-    crossTitle: 'Ancora in sviluppo?',
-    crossText: 'Per prototipi e primi articoli offriamo analisi di laboratorio rapide e precise.',
-    crossBtn: 'Scopri il laboratorio',
-    seoTitle: 'CT in linea per controllo in serie'
-  }
-}[locale] || {
-  learnMore: 'Mehr erfahren',
-  crossTitle: 'Noch in der Entwicklung?',
-  crossText: 'Für Prototypen und Erstmuster bieten wir schnelle Laboranalysen mit höchster Präzision.',
-  crossBtn: 'Labor entdecken',
-  seoTitle: 'Inline-CT für Serienprüfung'
-};
+  de: { seoTitle: 'Zerstörungsfreie Serienprüfung mit industrieller CT', seoDesc: 'Microvista bietet zerstörungsfreie Serienprüfung mit industrieller CT – im Labor, mobil oder via Cloud. 100% Prüfabdeckung, < 24h Express, ISO 9001 & 17025 zertifiziert.' },
+  en: { seoTitle: 'Non-Destructive Series Inspection with Industrial CT', seoDesc: 'Microvista offers non-destructive series inspection with industrial CT – lab, mobile or cloud. 100% coverage, < 24h express, ISO 9001 & 17025 certified.' },
+  fr: { seoTitle: 'Contrôle en série non destructif par CT industriel', seoDesc: 'Microvista propose un contrôle en série non destructif par tomographie computérisée industrielle.' },
+  es: { seoTitle: 'Inspección en serie no destructiva con CT industrial', seoDesc: 'Microvista ofrece inspección en serie no destructiva con tomografía computarizada industrial.' },
+  it: { seoTitle: 'Ispezione in serie non distruttiva con CT industriale', seoDesc: 'Microvista offre ispezione in serie non distruttiva con tomografia computerizzata industriale.' },
+}[locale] || { seoTitle: 'Zerstörungsfreie Serienprüfung mit industrieller CT', seoDesc: '' };
 
 const serviceHrefs = [
   lp('/serie/inline-ct'),
@@ -125,33 +318,46 @@ const serviceHrefs = [
 ];
 ---
 
-<SerieLayout 
+<SerieLayout
   title={ui.seoTitle}
-  description={t.subline}
+  description={ui.seoDesc}
 >
-  <!-- Hero Section -->
+
+  <!-- ─── 1. HERO ──────────────────────────────────── -->
   <section class="hero">
-    <div class="container">
-      <div class="hero-content">
-        <span class="badge">{t.badge}</span>
-        <h1>
-          {t.headline}
-          <span class="accent">{t.headlineAccent}</span>
-        </h1>
-        <p class="subline">{t.subline}</p>
-        <div class="hero-cta">
-          <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.cta1}</a>
-          <a href={lp('/serie/inline-ct')} class="btn btn-secondary btn-lg">{t.cta2}</a>
+    <div class="hero-inner">
+      <div class="container hero-container">
+        <div class="hero-content">
+          <span class="badge">{t.badge}</span>
+          <p class="tagline">{t.tagline}</p>
+          <h1>
+            {t.headline}
+            <span class="accent">{t.headlineAccent}</span>
+            <span class="sub">{t.headlineSub}</span>
+          </h1>
+          <p class="subline">{t.subline}</p>
+          <div class="hero-cta">
+            <a href={lp('/express-ct-inspektion')} class="btn btn-orange btn-lg">{t.cta1}</a>
+            <a href={lp('/kontakt')} class="btn btn-ghost btn-lg">{t.cta2}</a>
+          </div>
         </div>
       </div>
+      <div class="hero-image-col">
+        <img
+          src="/images/ct/Microvista-Industrieller-CT-Container-Truck-ScanExpress-4K-scaled.jpg"
+          alt="Microvista ScanExpress – mobiles industrielles CT im Container-Truck"
+          loading="eager"
+          class="hero-img"
+        />
+        <div class="hero-img-overlay"></div>
+      </div>
     </div>
-    <div class="hero-bg"></div>
   </section>
-  
-  <!-- Stats Bar -->
+
+  <!-- ─── 2. STATS BAR ─────────────────────────────── -->
   <section class="stats-bar">
     <div class="container">
-      <div class="stats-list">
+      <div class="stats-grid">
         {t.stats.map((s: any) => (
           <div class="stat-item">
             <span class="stat-value">{s.value}</span>
@@ -161,22 +367,152 @@ const serviceHrefs = [
       </div>
     </div>
   </section>
-  
-  <!-- Services Section -->
-  <section class="services section">
+
+  <!-- ─── 3. WARUM CT FÜR SERIENPRÜFUNG? ───────────── -->
+  <section class="why-section section">
+    <div class="container">
+      <div class="why-grid">
+        <div class="why-text">
+          <h2>{t.whyTitle}</h2>
+          <p>{t.whyText}</p>
+          <ul class="benefits-list">
+            {t.whyBenefits.map((b: string) => (
+              <li class="benefit-item">
+                <span class="benefit-check">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                </span>
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="why-image">
+          <img
+            src="/images/ct/Analyse-industrieller-CT-Scan-scaled.png"
+            alt="Analyse eines industriellen CT-Scans – Microvista Software"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 4. PRÜFAUFGABEN ───────────────────────────── -->
+  <section class="aufgaben-section section">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>{t.aufgabenTitle}</h2>
+        <p class="text-muted">{t.aufgabenSubline}</p>
+      </div>
+      <div class="aufgaben-grid">
+        {t.aufgaben.map((a: any) => (
+          <div class="aufgabe-card">
+            <span class="aufgabe-icon">{a.icon}</span>
+            <h3>{a.title}</h3>
+            <p>{a.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 5. VERFAHREN VERGLEICH ───────────────────── -->
+  <section class="verfahren-section section">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>{t.verfahrenTitle}</h2>
+        <p class="text-muted">{t.verfahrenSubline}</p>
+      </div>
+      <div class="verfahren-grid">
+        {t.verfahren.map((v: any) => (
+          <div class={`verfahren-card ${v.badgeOk ? 'verfahren-card--winner' : ''}`}>
+            <div class="verfahren-header">
+              <h3>{v.method}</h3>
+              <span class={`verfahren-badge ${v.badgeOk ? 'badge--ok' : 'badge--nok'}`}>{v.badge}</span>
+            </div>
+            <ul class="verfahren-list">
+              {v.cons.map((c: string) => (
+                <li>
+                  <span class={`list-icon ${v.badgeOk ? 'icon--ok' : 'icon--nok'}`}>
+                    {v.badgeOk
+                      ? <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                      : <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    }
+                  </span>
+                  <span>{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 6. REALISIERUNGSOPTIONEN ─────────────────── -->
+  <section class="optionen-section section">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>{t.optionenTitle}</h2>
+        <p class="text-muted">{t.optionenSubline}</p>
+      </div>
+      <div class="optionen-grid">
+        {t.optionen.map((o: any) => (
+          <div class="option-card">
+            <div class="option-image-wrap">
+              <img src={o.img} alt={o.imgAlt} loading="lazy" />
+              <span class="option-nr">{o.nr}</span>
+            </div>
+            <div class="option-body">
+              <h3>{o.title}</h3>
+              <p>{o.text}</p>
+              <div class="option-note">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>{o.note}</span>
+              </div>
+              <a href={lp(o.href)} class="option-link">
+                {o.btnLabel}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 7. SPEZIFIKATIONEN ───────────────────────── -->
+  <section class="specs-section">
+    <div class="container">
+      <div class="specs-header text-center">
+        <h2>{t.specsTitle}</h2>
+      </div>
+      <div class="specs-grid">
+        {t.specs.map((s: any) => (
+          <div class="spec-item">
+            <span class="spec-value">{s.value}</span>
+            <span class="spec-label">{s.label}</span>
+          </div>
+        ))}
+      </div>
+      <p class="specs-note">{t.specsNote}</p>
+    </div>
+  </section>
+
+  <!-- ─── 8. LÖSUNGEN (Services Grid) ─────────────── -->
+  <section class="services-section section">
     <div class="container">
       <div class="section-header text-center">
         <h2>{t.servicesTitle}</h2>
         <p class="text-muted">{t.servicesSubline}</p>
       </div>
-      
       <div class="services-grid">
-        {t.services.map((service: any, index: number) => (
-          <a href={serviceHrefs[index]} class="service-card card">
-            <h3>{service.title}</h3>
-            <p>{service.description}</p>
+        {t.services.map((s: any, i: number) => (
+          <a href={serviceHrefs[i]} class="service-card">
+            <h3>{s.title}</h3>
+            <p>{s.description}</p>
             <span class="card-link">
-              {ui.learnMore}
+              {t.learnMore}
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </span>
           </a>
@@ -184,264 +520,389 @@ const serviceHrefs = [
       </div>
     </div>
   </section>
-  
-  <!-- Cross-Sell Hint -->
+
+  <!-- ─── 9. CROSS-SELL ────────────────────────────── -->
   <section class="cross-sell">
     <div class="container">
       <div class="cross-sell-box">
-        <span class="cross-sell-icon">💡</span>
-        <div class="cross-sell-content">
-          <strong>{ui.crossTitle}</strong>
-          <p>{ui.crossText}</p>
+        <div class="cross-sell-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 3.13-2.06 5.79-5 6.71V17a1 1 0 0 1-1 1H11a1 1 0 0 1-1-1v-1.29C7.06 14.79 5 12.13 5 9a7 7 0 0 1 7-7z"/><path d="M9 21h6M10 17v4M14 17v4"/></svg>
         </div>
-        <a href={lp('/labor')} class="btn btn-secondary">{ui.crossBtn}</a>
+        <div class="cross-sell-content">
+          <strong>{t.crossTitle}</strong>
+          <p>{t.crossText}</p>
+        </div>
+        <a href={lp('/labor')} class="btn btn-outline-orange">{t.crossBtn}</a>
       </div>
     </div>
   </section>
-  
-  <!-- CTA Section -->
+
+  <!-- ─── 10. CTA ───────────────────────────────────── -->
   <section class="cta-section">
     <div class="container">
-      <div class="cta-content text-center">
-        <h2>{t.ctaTitle}</h2>
-        <p>{t.ctaSubline}</p>
-        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.ctaButton}</a>
+      <div class="cta-inner">
+        <div class="cta-text">
+          <h2>{t.ctaTitle}</h2>
+          <p>{t.ctaSubline}</p>
+        </div>
+        <a href={lp('/kontakt')} class="btn btn-orange btn-lg">{t.ctaButton}</a>
       </div>
     </div>
   </section>
+
 </SerieLayout>
 
 <style>
+  /* ─── Utility ─── */
+  .container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+  }
+  .section { padding: var(--space-20) 0; }
+  .section-header { margin-bottom: var(--space-12); }
+  .section-header h2, .specs-header h2, .why-text h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-2xl), 3.5vw, var(--text-4xl));
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+  }
+  .text-center { text-align: center; }
+  .text-muted { color: var(--text-muted); font-size: var(--text-lg); }
+
+  /* ─── Buttons ─── */
+  .btn {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading); font-weight: 600; font-size: var(--text-base);
+    letter-spacing: 0.03em; text-decoration: none;
+    transition: all var(--transition-base); border: 2px solid transparent; cursor: pointer;
+  }
+  .btn-lg { padding: var(--space-4) var(--space-8); font-size: var(--text-lg); }
+  .btn-orange { background: var(--accent); color: #000; }
+  .btn-orange:hover { background: var(--accent-light); }
+  .btn-ghost { border-color: rgba(255,255,255,0.35); color: white; background: transparent; }
+  .btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: white; }
+  .btn-outline-orange { border-color: var(--accent); color: var(--accent); background: transparent; }
+  .btn-outline-orange:hover { background: rgba(249,115,22,0.12); }
+
+  /* ─── Hero ─── */
   .hero {
-    position: relative;
-    padding: var(--space-24) 0;
-    background: linear-gradient(135deg, var(--background) 0%, var(--primary) 50%, rgba(249, 115, 22, 0.2) 100%);
+    background: var(--background);
     color: white;
     overflow: hidden;
   }
-  
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    opacity: 0.2;
-    background-image: 
-      linear-gradient(rgba(249, 115, 22, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(249, 115, 22, 0.1) 1px, transparent 1px);
-    background-size: 40px 40px;
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 55% 45%;
+    min-height: 580px;
   }
-  
-  .hero-content {
-    position: relative;
-    max-width: 700px;
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-image-col { display: none; }
   }
-  
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-4);
-    background: rgba(249, 115, 22, 0.2);
-    border: 1px solid rgba(249, 115, 22, 0.3);
-    border-radius: var(--radius-full);
-    font-size: var(--text-sm);
-    color: var(--accent);
-    margin-bottom: var(--space-6);
-  }
-  
-  .hero h1 {
-    font-size: clamp(var(--text-4xl), 6vw, var(--text-6xl));
-    color: white;
-    margin-bottom: var(--space-6);
-  }
-  
-  .hero h1 .accent {
-    display: block;
-    color: var(--accent);
-  }
-  
-  .subline {
-    font-size: var(--text-xl);
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: var(--space-8);
-    line-height: 1.6;
-  }
-  
-  .hero-cta {
+  .hero-container {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-4);
+    align-items: center;
+    padding-top: var(--space-20);
+    padding-bottom: var(--space-20);
   }
-  
-  .hero .btn-primary {
-    background: var(--accent);
-    color: #000;
+  .hero-content { max-width: 620px; }
+  .badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-4);
+    background: rgba(249,115,22,0.18);
+    border: 1px solid rgba(249,115,22,0.35);
+    border-radius: var(--radius-full);
+    font-family: var(--font-heading);
+    font-size: var(--text-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--space-4);
+  }
+  .tagline {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
     font-weight: 600;
   }
-  
-  .hero .btn-secondary {
-    border-color: var(--border);
+  .hero h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
     color: white;
+    line-height: 1.05;
+    text-transform: uppercase;
+    margin-bottom: var(--space-6);
   }
-  
-  .hero .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
+  .hero h1 .accent { display: block; color: var(--accent); }
+  .hero h1 .sub {
+    display: block;
+    font-size: clamp(var(--text-xl), 2.5vw, var(--text-2xl));
+    color: var(--text-muted);
+    text-transform: none;
+    font-weight: 400;
+    margin-top: var(--space-2);
   }
-  
+  .subline {
+    font-size: var(--text-lg);
+    color: rgba(255,255,255,0.7);
+    line-height: 1.65;
+    margin-bottom: var(--space-8);
+    max-width: 520px;
+  }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+  .hero-image-col { position: relative; overflow: hidden; }
+  .hero-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .hero-img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, var(--background) 0%, transparent 25%);
+  }
+
+  /* ─── Stats Bar ─── */
   .stats-bar {
     background: var(--primary);
-    border-top: 1px solid rgba(249, 115, 22, 0.2);
-    border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+    border-top: 1px solid rgba(249,115,22,0.2);
+    border-bottom: 1px solid rgba(249,115,22,0.2);
     padding: var(--space-8) 0;
   }
-  
-  .stats-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-12);
-  }
-  
-  .stat-item {
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
     text-align: center;
   }
-  
-  .stat-value {
-    display: block;
-    font-size: var(--text-4xl);
-    font-weight: 700;
-    font-family: var(--font-heading);
-    color: var(--accent);
-  }
-  
-  .stat-label {
-    font-size: var(--text-sm);
-    color: rgba(255, 255, 255, 0.6);
-  }
-  
-  .services {
-    background: var(--background);
-  }
-  
-  .section-header {
-    margin-bottom: var(--space-12);
-  }
-  
-  .section-header h2 {
-    color: var(--text);
-    margin-bottom: var(--space-4);
-  }
-  
-  .services-grid {
+  @media (max-width: 640px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat-item { display: flex; flex-direction: column; gap: var(--space-1); }
+  .stat-value { font-family: var(--font-heading); font-size: var(--text-4xl); font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: var(--text-sm); color: rgba(255,255,255,0.6); }
+
+  /* ─── Why Section ─── */
+  .why-section { background: var(--surface); }
+  .why-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-8);
-  }
-  
-  .service-card {
-    text-decoration: none;
-    color: inherit;
-    background: var(--surface);
-    border-color: var(--border);
-  }
-  
-  .service-card:hover {
-    border-color: var(--accent);
-  }
-  
-  .service-card h3 {
-    color: var(--text);
-    margin-bottom: var(--space-3);
-    transition: color var(--transition-fast);
-  }
-  
-  .service-card:hover h3 {
-    color: var(--accent);
-  }
-  
-  .service-card p {
-    color: var(--text-muted);
-    margin-bottom: var(--space-4);
-  }
-  
-  .card-link {
-    display: inline-flex;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
     align-items: center;
-    gap: var(--space-2);
-    color: var(--accent);
-    font-weight: 600;
   }
-  
-  .service-card:hover .card-link svg {
-    transform: translateX(4px);
+  @media (max-width: 768px) {
+    .why-grid { grid-template-columns: 1fr; }
+    .why-image { display: none; }
   }
-  
-  .card-link svg {
-    transition: transform var(--transition-fast);
-  }
-  
-  .cross-sell {
-    padding: var(--space-8) 0;
-    background: var(--surface);
-  }
-  
-  .cross-sell-box {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-6);
-    padding: var(--space-6);
+  .why-text h2 { color: var(--text); margin-bottom: var(--space-6); }
+  .why-text > p { color: var(--text-muted); line-height: 1.7; margin-bottom: var(--space-8); }
+  .benefits-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+  .benefit-item {
+    display: flex; align-items: flex-start; gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
     background: var(--background);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-lg);
     border: 1px solid var(--border);
   }
-  
-  .cross-sell-icon {
-    font-size: var(--text-2xl);
+  .benefit-check {
+    display: flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px;
+    background: var(--accent); color: #000;
+    border-radius: var(--radius-full);
+    flex-shrink: 0; margin-top: 2px;
   }
-  
-  .cross-sell-content {
-    flex: 1;
-    min-width: 200px;
+  .benefit-item span:last-child { color: var(--text); font-size: var(--text-sm); line-height: 1.5; }
+  .why-image img { width: 100%; height: 460px; object-fit: cover; border-radius: var(--radius-2xl); box-shadow: var(--shadow-xl); }
+
+  /* ─── Prüfaufgaben ─── */
+  .aufgaben-section { background: var(--background); }
+  .aufgaben-section .section-header h2 { color: var(--text); }
+  .aufgaben-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
   }
-  
-  .cross-sell-content strong {
-    color: var(--text);
+  @media (max-width: 900px) { .aufgaben-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 500px) { .aufgaben-grid { grid-template-columns: 1fr; } }
+  .aufgabe-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+    transition: all var(--transition-base);
   }
-  
-  .cross-sell-content p {
-    color: var(--text-muted);
-    margin: 0;
+  .aufgabe-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .aufgabe-icon { display: block; font-size: var(--text-2xl); margin-bottom: var(--space-3); color: var(--accent); }
+  .aufgabe-card h3 { font-family: var(--font-heading); font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); margin-bottom: var(--space-2); }
+  .aufgabe-card p { font-size: var(--text-sm); color: var(--text-muted); line-height: 1.6; margin: 0; }
+
+  /* ─── Verfahren Vergleich ─── */
+  .verfahren-section { background: var(--surface); }
+  .verfahren-section .section-header h2 { color: var(--text); }
+  .verfahren-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-4);
+    align-items: start;
   }
-  
-  .cross-sell .btn-secondary {
+  @media (max-width: 1100px) { .verfahren-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px) { .verfahren-grid { grid-template-columns: 1fr; } }
+  .verfahren-card {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-5);
+  }
+  .verfahren-card--winner {
     border-color: var(--accent);
-    color: var(--accent);
+    background: rgba(249,115,22,0.07);
+    box-shadow: 0 0 0 1px var(--accent);
   }
-  
-  .cta-section {
-    padding: var(--space-20) 0;
-    background: linear-gradient(135deg, var(--primary) 0%, rgba(249, 115, 22, 0.3) 100%);
-    color: white;
+  .verfahren-header { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-4); }
+  .verfahren-card h3 { font-family: var(--font-heading); font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); margin: 0; }
+  .verfahren-badge {
+    display: inline-block;
+    padding: 2px var(--space-2);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    width: fit-content;
   }
-  
-  .cta-content {
-    max-width: 700px;
-    margin: 0 auto;
+  .badge--ok { background: rgba(249,115,22,0.2); color: var(--accent); }
+  .badge--nok { background: rgba(148,163,184,0.15); color: var(--text-muted); }
+  .verfahren-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+  .verfahren-list li { display: flex; align-items: flex-start; gap: var(--space-2); font-size: var(--text-xs); color: var(--text-muted); line-height: 1.5; }
+  .list-icon { flex-shrink: 0; margin-top: 2px; }
+  .icon--ok { color: var(--accent); }
+  .icon--nok { color: var(--text-muted); }
+
+  /* ─── Optionen ─── */
+  .optionen-section { background: var(--background); }
+  .optionen-section .section-header h2 { color: var(--text); }
+  .optionen-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
   }
-  
-  .cta-content h2 {
-    color: white;
-    margin-bottom: var(--space-4);
+  @media (max-width: 900px) { .optionen-grid { grid-template-columns: 1fr; } }
+  .option-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    transition: all var(--transition-base);
   }
-  
-  .cta-content p {
-    color: rgba(255, 255, 255, 0.7);
+  .option-card:hover { border-color: var(--accent); box-shadow: 0 20px 40px -10px rgba(249,115,22,0.2); }
+  .option-image-wrap { position: relative; height: 200px; overflow: hidden; }
+  .option-image-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .option-nr {
+    position: absolute; top: var(--space-4); left: var(--space-4);
+    background: var(--accent); color: #000;
+    font-family: var(--font-heading); font-size: var(--text-2xl); font-weight: 700;
+    width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-lg);
+  }
+  .option-body { padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+  .option-body h3 { font-family: var(--font-heading); font-size: var(--text-lg); text-transform: uppercase; color: var(--text); margin: 0; }
+  .option-body > p { font-size: var(--text-sm); color: var(--text-muted); line-height: 1.65; margin: 0; flex: 1; }
+  .option-note {
+    display: flex; align-items: flex-start; gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: rgba(249,115,22,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-size: var(--text-xs); color: var(--text-muted);
+  }
+  .option-note svg { color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+  .option-link {
+    display: inline-flex; align-items: center; gap: var(--space-2);
+    color: var(--accent); font-family: var(--font-heading); font-weight: 700;
+    text-decoration: none; font-size: var(--text-sm);
+    transition: gap var(--transition-fast);
+  }
+  .option-link:hover { gap: var(--space-3); }
+  .option-link svg { transition: transform var(--transition-fast); }
+  .option-link:hover svg { transform: translateX(4px); }
+
+  /* ─── Specs ─── */
+  .specs-section {
+    background: var(--primary);
+    padding: var(--space-16) 0;
+    border-top: 1px solid rgba(249,115,22,0.2);
+    border-bottom: 1px solid rgba(249,115,22,0.2);
+  }
+  .specs-header { margin-bottom: var(--space-10); }
+  .specs-header h2 { color: white; }
+  .specs-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: var(--space-4);
+    text-align: center;
     margin-bottom: var(--space-8);
   }
-  
-  .cta-content .btn-primary {
-    background: var(--accent);
-    color: #000;
-    font-weight: 600;
+  @media (max-width: 1100px) { .specs-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 600px) { .specs-grid { grid-template-columns: repeat(2, 1fr); } }
+  .spec-item { display: flex; flex-direction: column; gap: var(--space-1); }
+  .spec-value { font-family: var(--font-heading); font-size: var(--text-2xl); font-weight: 700; color: var(--accent); }
+  .spec-label { font-size: var(--text-xs); color: rgba(255,255,255,0.55); }
+  .specs-note { text-align: center; font-size: var(--text-sm); color: rgba(255,255,255,0.5); max-width: 680px; margin: 0 auto; }
+
+  /* ─── Services Grid ─── */
+  .services-section { background: var(--surface); }
+  .services-section .section-header h2 { color: var(--text); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
   }
+  @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } }
+  .service-card {
+    text-decoration: none; color: inherit;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    transition: all var(--transition-base);
+    display: block;
+  }
+  .service-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .service-card h3 { font-family: var(--font-heading); font-size: var(--text-xl); text-transform: uppercase; color: var(--text); margin-bottom: var(--space-3); transition: color var(--transition-fast); }
+  .service-card:hover h3 { color: var(--accent); }
+  .service-card p { font-size: var(--text-sm); color: var(--text-muted); line-height: 1.6; margin-bottom: var(--space-4); }
+  .card-link { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--accent); font-family: var(--font-heading); font-weight: 700; font-size: var(--text-sm); }
+  .service-card:hover .card-link svg { transform: translateX(4px); }
+  .card-link svg { transition: transform var(--transition-fast); }
+
+  /* ─── Cross-Sell ─── */
+  .cross-sell { padding: var(--space-8) 0; background: var(--background); }
+  .cross-sell-box {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-6);
+    padding: var(--space-6);
+    background: var(--surface);
+    border: 1px solid rgba(249,115,22,0.25);
+    border-radius: var(--radius-2xl);
+  }
+  .cross-sell-icon {
+    width: 44px; height: 44px;
+    background: rgba(249,115,22,0.12);
+    border-radius: var(--radius-lg);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent); flex-shrink: 0;
+  }
+  .cross-sell-content { flex: 1; min-width: 200px; }
+  .cross-sell-content strong { display: block; font-family: var(--font-heading); text-transform: uppercase; color: var(--text); margin-bottom: var(--space-1); }
+  .cross-sell-content p { color: var(--text-muted); font-size: var(--text-sm); margin: 0; }
+
+  /* ─── CTA ─── */
+  .cta-section {
+    padding: var(--space-20) 0;
+    background: linear-gradient(135deg, var(--primary) 0%, rgba(249,115,22,0.25) 100%);
+  }
+  .cta-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--space-8); flex-wrap: wrap;
+  }
+  .cta-text { flex: 1; min-width: 280px; }
+  .cta-text h2 { font-family: var(--font-heading); font-size: var(--text-3xl); text-transform: uppercase; color: white; margin-bottom: var(--space-3); }
+  .cta-text p { color: rgba(255,255,255,0.65); font-size: var(--text-lg); margin: 0; }
 </style>
