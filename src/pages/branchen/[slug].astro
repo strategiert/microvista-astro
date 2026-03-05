@@ -1,7 +1,4 @@
 ---
-/**
- * Branchen Detail - Visuell aufgewertet mit mehr Bildern
- */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
@@ -19,255 +16,85 @@ if (!branche) {
 }
 
 const data = branche.data;
-const heroImage = data.heroImage || `/images/branchen/${slug}.jpg`;
-const getBranchenImage = (id: string, image?: string) => image || `/images/branchen/${id}.jpg`;
-const imageSets: Record<string, string[]> = {
-  'additive-fertigung': [
-    '/images/wp/2022/08/Pruefung-additiv-gefertigter-Bauteile-Aluminium-Radtraeger.webp',
-    '/images/wp/2022/08/Stuetztstrukturreste-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png.webp',
-    '/images/wp/2022/08/Delamination-im-CT-Bild-Pruefung-additiv-gefertigter-Bauteile.png.webp',
-    '/images/wp/2023/11/Komplexer-additiv-gefertigter-Radtraeger.webp'
-  ],
-  'archaeologie': [
-    '/images/wp/2025/10/Schaedel-eines-ausgestorbenen-Hyrachyus.webp',
-    '/images/wp/2025/10/Schaedel-des-wilden-Wasserbueffels-montiert-im-CT-.webp',
-    '/images/wp/2025/10/Schaedel-eines-Zwergflusspferds.webp',
-    '/images/wp/2025/08/Reiter-3D.webp'
-  ],
-  'automotive': [
-    '/images/wp/2022/06/computed-tomography-scanning-automotive-industry.jpg',
-    '/images/wp/2022/08/Prufung-eines-Motorblocks-im-industriellen-CT-1.webp',
-    '/images/wp/2022/06/Schnittbild-eines-Turboladers-im-CT.jpg',
-    '/images/wp/2023/11/Messung-der-Querschnittsflaeche-eines-Turboladers-fuer-einen-Soll-Ist-Vergleich-Zerstoerungsfreie-Pruefung-von-Leichtmetallguss.webp'
-  ],
-  'e-mobilitaet': [
-    '/images/wp/2026/01/Krone-wird-auf-den-Hairpin-Stator-gesetzt-Titelbild.webp',
-    '/images/wp/2023/11/Hairpin-mit-Poren-3D.webp',
-    '/images/wp/2022/08/CT-Bild-von-einem-beschaedigten-Lithium-Ionen-Akku-Zerstoerungsfreie-Pruefung-von-Batteriesystemen.jpg',
-    '/images/wp/2022/08/CT-Bild-von-Smartphone-zerstoerungsfreie-Pruefung-von-Batteriesystemen.jpg',
-    '/images/wp/2023/05/Krone-wird-auf-den-Hairpin-Stator-gesetzt-1.webp'
-  ],
-  'eisenguss': [
-    '/images/wp/2023/12/Zerstoerungsfreie-Pruefung-von-Eisenguss-Turbolader-Defekte.webp',
-    '/images/wp/2022/08/CT-Bild-Pore-im-Eisenguss.webp',
-    '/images/wp/2022/08/3D-Bild-Rissprufung-Eisenguss-mit-CT-1.webp',
-    '/images/wp/2022/08/3D-Bild-Porositatsanalyse-von-Eisenguss-mit-CT.webp',
-    '/images/wp/2022/06/Riss-im-Kruemmer-durch-CT-sichtbar.jpg'
-  ],
-  'elektronik': [
-    '/images/wp/2025/12/Laminographie-flache-Leiterplatte.webp',
-    '/images/wp/2025/12/Laminographie-Leiterplatte-Grafik.webp',
-    '/images/wp/elementor/thumbs/3D-CT-Aufnahme-eines-Playstation-Controllers-1-qaw9a6uzg0qsa7ihphyy8j5quup9jn9ac86ve615hc.png',
-    '/images/wp/2022/08/CT-Bild-von-Smartphone-zerstoerungsfreie-Pruefung-von-Batteriesystemen.jpg'
-  ],
-  'forschung-entwicklung': [
-    '/images/wp/2025/12/3D-Vermessung-von-Bauteilen-mit-industrieller-CT.webp',
-    '/images/wp/2023/11/Artefakt-3D-Blick-ins-Innere.webp',
-    '/images/wp/2023/11/3D-Scan-industrielle-CT-von-einem-Riss.webp',
-    '/images/wp/2024/08/3D-CT-Pruefung-eines-Wassermantels-Bild1.webp',
-    '/images/wp/2025/11/3D_Front.jpg'
-  ],
-  'kunststofftechnik': [
-    '/images/wp/2022/06/Dichtlippe-als-CAD-Qualitaetszonen.png',
-    '/images/wp/2022/08/CAD-Soll-Ist-Vergleich-eines-Bauteils.webp',
-    '/images/wp/2022/06/Moegliche-Wandstaerke-beim-CT-Scan.png',
-    '/images/branchen/kunststofftechnik.jpg'
-  ],
-  'leichtmetallguss': [
-    '/images/wp/2022/08/Porositaetsanalyse-eines-Zylinderkopfs-Zerstoerungsfreie-Pruefung-von-Leichtmetallguss.webp',
-    '/images/wp/2022/08/Fehlerschwerpunktanalyse-von-Poren-und-Lunkern-Zerstoerungsfreie-Pruefung-von-Leichtmetallguss.webp',
-    '/images/wp/2023/11/ZFP-auf-Poren-mit-industrieller-CT-Messtechnik.webp',
-    '/images/wp/2025/03/ZK-3D.webp',
-    '/images/wp/2022/06/Poren-in-hoher-Aufloesung-1.jpg'
-  ],
-  'luftfahrt': [
-    '/images/wp/2023/12/Zerstoerungsfreie-Pruefung-mit-industrieller-CT-auf-Risse-bei-einem-Turbinenrad.webp',
-    '/images/branchen/luftfahrt.jpg',
-    '/images/wp/2022/06/hairpin-and-laser-welding.jpg',
-    '/images/wp/2023/11/3D-Scan-industrielle-CT-von-einem-Riss.webp',
-    '/images/wp/2022/08/Pruefung-additiv-gefertigter-Bauteile-Aluminium-Radtraeger.webp'
-  ],
-  'maschinenbau': [
-    '/images/wp/2022/08/CAD-Soll-Ist-Vergleich-eines-Bauteils.webp',
-    '/images/wp/2025/12/3D-Vermessung-von-Bauteilen-mit-industrieller-CT.webp',
-    '/images/wp/2022/06/Querschnittsmessung-mit-CT.jpg',
-    '/images/wp/2022/06/Abrollung-eines-Pruefbereichs-mit-Pore.jpg',
-    '/images/branchen/maschinenbau.jpg'
-  ],
-  'medizintechnik': [
-    '/images/wp/2022/08/Soll-Ist-Vergleich-Handprothese-Zerstoerungsfreie-Pruefung-von-Medizintechnik.webp',
-    '/images/wp/2025/08/Ibuprofen-3d-2.webp',
-    '/images/wp/2025/08/Newsletter-Header-Pharmaindustrie.webp',
-    '/images/branchen/medizintechnik.jpg'
-  ],
-  'werkstoffpruefung': [
-    '/images/wp/2024/10/Aluminium-Bauteil-in-der-CT-Werkstoffpruefung.webp',
-    '/images/wp/2023/11/ZFP-auf-Poren-mit-industrieller-CT-Messtechnik.webp',
-    '/images/wp/2022/06/Poren-in-hoher-Aufloesung-1.jpg',
-    '/images/wp/2022/08/Fehlerschwerpunktanalyse-von-Poren-und-Lunkern-Zerstoerungsfreie-Pruefung-von-Leichtmetallguss.webp',
-    '/images/branchen/werkstoffpruefung.jpg'
-  ],
-  'windenergie': [
-    '/images/branchen/windenergie.jpg',
-    '/images/branchen/energie.jpg',
-    '/images/wp/2025/12/3D-Vermessung-von-Bauteilen-mit-industrieller-CT.webp',
-    '/images/wp/2022/06/Querschnittsmessung-mit-CT.jpg',
-    '/images/wp/2022/06/Serienprufung-mit-industrieller-CT-im-Pruflabor-von-Microvista.png'
-  ]
-};
-const fallbackImages = [
-  '/images/wp/2025/12/3D-Vermessung-von-Bauteilen-mit-industrieller-CT.webp',
-  '/images/wp/2022/08/CAD-Soll-Ist-Vergleich-eines-Bauteils.webp',
-  '/images/wp/2022/08/Fehlerschwerpunktanalyse-von-Poren-und-Lunkern-Zerstoerungsfreie-Pruefung-von-Leichtmetallguss.webp',
-  '/images/wp/2022/08/Prufung-eines-Motorblocks-im-industriellen-CT-1.webp',
-  '/images/wp/2022/08/Soll-Ist-Vergleich-Handprothese-Zerstoerungsfreie-Pruefung-von-Medizintechnik.webp',
-  '/images/wp/2025/12/Laminographie-flache-Leiterplatte.webp',
-  '/images/wp/2022/06/Querschnittsmessung-mit-CT.jpg',
-  '/images/wp/2023/11/3D-Scan-industrielle-CT-von-einem-Riss.webp'
-];
-const selectUniqueImages = (primary: string[], count: number, fallback: string[] = []) => {
-  const picked: string[] = [];
-  const seen = new Set<string>();
-  for (const img of [...primary, ...fallback]) {
-    if (!img || seen.has(img)) continue;
-    seen.add(img);
-    picked.push(img);
-    if (picked.length >= count) break;
-  }
-  return picked;
-};
-const slugImages = imageSets[slug as string] || [];
-const imagePool = selectUniqueImages([heroImage, ...slugImages], 12, fallbackImages);
-const visualImages = selectUniqueImages(
-  slugImages.filter((img) => img !== heroImage),
-  3,
-  fallbackImages.filter((img) => img !== heroImage)
-);
-const solutionsImage = (
-  selectUniqueImages(
-    slugImages.filter((img) => img !== heroImage && !visualImages.includes(img)),
-    1,
-    imagePool.filter((img) => img !== heroImage && !visualImages.includes(img))
-  )[0]
-) || heroImage;
-const useCaseCount = Math.max(4, data.useCases?.length || 0);
-const useCaseImages = selectUniqueImages(
-  slugImages.filter((img) => img !== heroImage && img !== solutionsImage && !visualImages.includes(img)),
-  useCaseCount,
-  imagePool.filter((img) => img !== heroImage && img !== solutionsImage && !visualImages.includes(img))
-);
-const getUseCaseImage = (idx: number) => {
-  if (useCaseImages[idx]) return useCaseImages[idx];
-  if (useCaseImages.length > 0) return useCaseImages[idx % useCaseImages.length];
-  return imagePool[idx % imagePool.length] || heroImage;
-};
-const getVisualCaption = (idx: number) => {
-  if (data.useCases?.[idx]) return data.useCases[idx];
-  if (data.solutions?.[idx]?.title) return data.solutions[idx].title;
-  return `${data.name} - CT-Einblick ${idx + 1}`;
-};
-
-const ui = {
-  de: {
-    kicker: 'Branchenlösung',
-    contactBtn: 'Beratung anfragen',
-    labBtn: 'Labor-Services',
-    expressBtn: 'Express buchen',
-    back: 'Alle Branchen',
-    challengesTitle: 'Diese Herausforderungen kennen wir',
-    solutionsTitle: `Unsere CT-Lösungen für ${data.name}`,
-    useCasesTitle: 'Anwendungsfälle',
-    statsTitle: 'Key Facts',
-    servicesTitle: 'Unsere Service-Optionen',
-    ctaTitle: 'Bereit für die nächste Prüfaufgabe?',
-    ctaSubtitle: 'Kontaktieren Sie uns für eine unverbindliche Beratung zu Ihren spezifischen Anforderungen.',
-    trustBadges: ['ISO 9001', 'ISO 17025', 'NADCAP', 'FDA Ready'],
-    services: {
-      labor: { title: 'CT-Labor', desc: 'Hochauflösende Prüfung im akkreditierten Labor', when: 'Für Einzelprüfungen, Erstmuster und komplexe Analysen' },
-      scanexpress: { title: 'ScanExpress', desc: 'Mobiles CT direkt bei Ihnen vor Ort', when: 'Für Großbauteile, Serienprüfung und Express-Service' },
-      cloud: { title: 'Cloud-Auswertung', desc: 'Flexible Auswertung Ihrer CT-Daten', when: 'Für eigene Auswertung, Rohdaten-Export und Kollaboration' }
-    }
-  }
-}[locale] || ui.de;
-
-const t = ui;
-
-const industryColors: Record<string, string> = {
-  'automotive': '#32285b', 'luftfahrt': '#8b5cf6', 'elektronik': '#00a0d2', 'medizintechnik': '#10b981',
-  'kunststofftechnik': '#f59e0b', 'windenergie': '#06b6d4', 'maschinenbau': '#6366f1', 'forschung-entwicklung': '#ec4899',
-  'additive-fertigung': '#06b6d4', 'e-mobilitaet': '#10b981', 'eisenguss': '#64748b', 'leichtmetallguss': '#00a0d2',
-  'werkstoffpruefung': '#f59e0b', 'archaeologie': '#8b5cf6'
-};
-
-const accentColor = industryColors[slug as string] || '#32285b';
-
-// Get related industries for gallery
-const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
+const accentColor = '#32285b';
+const related = branchen.filter(b => b.id !== slug).slice(0, 3);
 ---
 
 <BaseLayout title={data.seo?.title || `${data.name} | Microvista`} description={data.seo?.description || data.description}>
   <Header slot="header" />
 
-  <article class="branche-page">
-    <!-- HERO with Background Image -->
-    <section class="branche-hero" style={`--accent: ${accentColor};`}>
-      <div class="hero-image-bg">
-        <img src={heroImage} alt={data.name} />
-        <div class="hero-gradient"></div>
+  <main class="branche-page">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-bg">
+        <img src={`/images/branchen/${slug}.jpg`} alt="" />
+        <div class="hero-overlay"></div>
       </div>
-      
       <div class="container">
-        <nav class="hero-breadcrumb">
-          <a href={lp('/branchen')} class="breadcrumb-link">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M15.833 10H4.167m0 0L10 15.833M4.167 10L10 4.167" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            {t.back}
-          </a>
-        </nav>
-        
+        <a href={lp('/branchen')} class="back-link">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15.833 10H4.167m0 0L10 15.833M4.167 10L10 4.167" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Alle Branchen
+        </a>
         <div class="hero-content">
-          <div class="hero-kicker">
-            <span class="kicker-label">{t.kicker}</span>
-            <div class="trust-badges-small">
-              {t.trustBadges.map(badge => <span class="badge">{badge}</span>)}
-            </div>
-          </div>
+          <span class="hero-eyebrow">Branchenlösung</span>
           <h1 class="hero-title">{data.name}</h1>
-          <p class="hero-description">{data.description}</p>
-          
+          <p class="hero-desc">{data.description}</p>
+          <div class="hero-badges">
+            <span class="badge">ISO 9001</span>
+            <span class="badge">ISO 17025</span>
+            <span class="badge">NADCAP</span>
+            <span class="badge">FDA Ready</span>
+          </div>
           <div class="hero-actions">
-            <a href={lp('/kontakt-beratung')} class="btn-primary">
-              {t.contactBtn}
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4.167 10h11.666m0 0L10 4.167M15.833 10L10 15.833" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-            <a href={lp('/labor-ct-pruefung')} class="btn-secondary">
-              {t.labBtn}
-            </a>
+            <a href={lp('/kontakt-beratung')} class="btn btn-primary">Beratung anfragen</a>
+            <a href={lp('/express-ct-inspektion')} class="btn btn-secondary">Express buchen</a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- PAIN POINTS with Icons -->
-    {data.challenges && data.challenges.length > 0 && (
-      <section class="pain-section">
+    <!-- Challenges -->
+    {data.challenges && (
+      <section class="section section-gray">
         <div class="container">
           <div class="section-header">
-            <span class="section-eyebrow" style={`color: ${accentColor}`}>Herausforderungen</span>
-            <h2 class="section-title">{t.challengesTitle}</h2>
+            <span class="eyebrow">Die Herausforderungen</span>
+            <h2 class="section-title">Diese Probleme kennen wir</h2>
           </div>
-          <div class="pain-grid">
-            {data.challenges.map((challenge: any, idx: number) => (
-              <div class="pain-card" style={`--index: ${idx}`}>
-                <div class="pain-number">0{idx + 1}</div>
-                <div class="pain-content">
-                  <p class="pain-text">{challenge.title}</p>
-                  {challenge.description && challenge.description.length > 20 && (
-                    <p class="pain-description">{challenge.description}</p>
-                  )}
+          <div class="challenges-grid">
+            {data.challenges.map((c, i) => (
+              <div class="challenge-card">
+                <div class="challenge-num">{String(i + 1).padStart(2, '0')}</div>
+                <h3>{c.title}</h3>
+                <p>{c.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Solutions -->
+    {data.solutions && (
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="eyebrow">Unsere Antwort</span>
+            <h2 class="section-title">CT-Lösungen für {data.name}</h2>
+          </div>
+          <div class="solutions-list">
+            {data.solutions.map((s, i) => (
+              <div class="solution-item">
+                <div class="solution-marker">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                <div class="solution-content">
+                  <h3>{s.title}</h3>
+                  <p>{s.description}</p>
                 </div>
               </div>
             ))}
@@ -276,83 +103,19 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
       </section>
     )}
 
-    <!-- VISUAL EVIDENCE -->
-    {visualImages.length > 1 && (
-      <section class="visual-section">
+    <!-- Use Cases -->
+    {data.useCases && (
+      <section class="section section-dark">
         <div class="container">
-          <div class="visual-grid">
-            {visualImages.map((img, idx) => (
-              <figure class={`visual-card visual-card-${idx}`}>
-                <img src={img} alt={`${data.name} CT-Einblick ${idx + 1}`} loading="lazy" />
-                <figcaption>{getVisualCaption(idx)}</figcaption>
-              </figure>
-            ))}
+          <div class="section-header light">
+            <span class="eyebrow light">Praxisbeispiele</span>
+            <h2 class="section-title light">Anwendungsfälle</h2>
           </div>
-        </div>
-      </section>
-    )}
-
-    <!-- SOLUTIONS with Image -->
-    {data.solutions && data.solutions.length > 0 && (
-      <section class="solutions-section" style={`--accent: ${accentColor};`}>
-        <div class="container">
-          <div class="solutions-layout">
-            <div class="solutions-content">
-              <div class="section-header">
-                <span class="section-eyebrow">Lösungen</span>
-                <h2 class="section-title">{t.solutionsTitle}</h2>
-              </div>
-              <div class="solutions-list">
-                {data.solutions.map((solution: any, idx: number) => (
-                  <div class="solution-item">
-                    <div class="solution-marker"></div>
-                    <div class="solution-text">
-                      <h3>{solution.title}</h3>
-                      <p>{solution.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <a href={lp('/express-ct-inspektion')} class="btn-accent">
-                {t.expressBtn}
-                <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4.167 10h11.666m0 0L10 4.167M15.833 10L10 15.833" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </a>
-            </div>
-            <div class="solutions-visual">
-              <div class="solutions-image-wrapper">
-                <img src={solutionsImage} alt={data.name} class="solutions-image" loading="lazy" />
-                <div class="solutions-overlay"></div>
-                <div class="solutions-badge">
-                  <span>Individuelle Lösung</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    )}
-
-    <!-- USE CASES Gallery -->
-    {data.useCases && data.useCases.length > 0 && (
-      <section class="usecases-section">
-        <div class="container">
-          <div class="section-header centered">
-            <span class="section-eyebrow" style={`color: ${accentColor}`}>Praxisbeispiele</span>
-            <h2 class="section-title">{t.useCasesTitle}</h2>
-          </div>
-          <div class="usecases-grid">
-            {data.useCases.map((useCase: string, idx: number) => (
-              <div class="usecase-card" style={`--accent: ${accentColor}; --index: ${idx}`}>
-                <div class="usecase-image">
-                  <img src={getUseCaseImage(idx)} alt={useCase} loading="lazy" />
-                  <div class="usecase-overlay"></div>
-                </div>
-                <div class="usecase-content">
-                  <span class="usecase-number">{String(idx + 1).padStart(2, '0')}</span>
-                  <p>{useCase}</p>
-                </div>
+          <div class="usecases-list">
+            {data.useCases.map((u, i) => (
+              <div class="usecase-item">
+                <span class="usecase-num">{String(i + 1).padStart(2, '0')}</span>
+                <p>{u}</p>
               </div>
             ))}
           </div>
@@ -360,36 +123,34 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
       </section>
     )}
 
-    <!-- TESTIMONIAL -->
+    <!-- Quote -->
     {data.quote && (
-      <section class="testimonial-section" style={`--accent: ${accentColor};`}>
-        <div class="container">
-          <div class="testimonial-card">
-            <div class="quote-icon">
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-              </svg>
-            </div>
-            <blockquote>{data.quote.text}</blockquote>
+      <section class="section section-accent">
+        <div class="container narrow">
+          <blockquote class="quote">
+            <svg class="quote-icon" width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+            </svg>
+            <p>{data.quote.text}</p>
             <cite>— {data.quote.author}</cite>
-          </div>
+          </blockquote>
         </div>
       </section>
     )}
 
-    <!-- STATS Bento Grid -->
-    {data.stats && data.stats.length > 0 && (
-      <section class="stats-section" style={`--accent: ${accentColor};`}>
+    <!-- Stats -->
+    {data.stats && (
+      <section class="section">
         <div class="container">
           <div class="section-header centered">
-            <span class="section-eyebrow light">Überzeugende Zahlen</span>
-            <h2 class="section-title light">{t.statsTitle}</h2>
+            <span class="eyebrow">Fakten</span>
+            <h2 class="section-title">Überzeugende Zahlen</h2>
           </div>
-          <div class="stats-bento">
-            {data.stats.map((stat: any, idx: number) => (
-              <div class={`stat-box stat-box-${idx}`}>
-                <span class="stat-value">{stat.value}</span>
-                <span class="stat-label">{stat.label}</span>
+          <div class="stats-grid">
+            {data.stats.map((s) => (
+              <div class="stat-card">
+                <span class="stat-value">{s.value}</span>
+                <span class="stat-label">{s.label}</span>
               </div>
             ))}
           </div>
@@ -397,75 +158,63 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
       </section>
     )}
 
-    <!-- SERVICES -->
-    <section class="services-section" style={`--accent: ${accentColor};`}>
+    <!-- Services -->
+    <section class="section section-gray">
       <div class="container">
         <div class="section-header centered">
-          <span class="section-eyebrow">Services</span>
-          <h2 class="section-title">{t.servicesTitle}</h2>
+          <span class="eyebrow">Services</span>
+          <h2 class="section-title">So arbeiten wir</h2>
         </div>
         <div class="services-grid">
           <a href={lp('/labor-ct-pruefung')} class="service-card">
-            <div class="service-icon labor-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <div class="service-icon purple">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M10 2v7.31"/><path d="M14 2v7.31"/><path d="M8.5 2h7"/><path d="M14 12.5a2.5 2.5 0 0 0-5 0v4a2.5 2.5 0 0 0 5 0z"/>
                 <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"/>
               </svg>
             </div>
-            <h3>{t.services.labor.title}</h3>
-            <p class="service-desc">{t.services.labor.desc}</p>
-            <p class="service-when">{t.services.labor.when}</p>
-            <span class="service-link">Mehr erfahren →</span>
+            <h3>CT-Labor</h3>
+            <p>Hochauflösende Prüfung im akkreditierten Labor für Einzelprüfungen und Erstmuster.</p>
+            <span class="link-arrow">Mehr erfahren →</span>
           </a>
-          
           <a href={lp('/serie/scanexpress')} class="service-card featured">
-            <div class="service-badge">⚡ Express</div>
-            <div class="service-icon scanexpress-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="12" r="3"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/>
+            <span class="featured-badge">Express verfügbar</span>
+            <div class="service-icon orange">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/><path d="M12 2v4"/><path d="M12 18v4"/>
               </svg>
             </div>
-            <h3>{t.services.scanexpress.title}</h3>
-            <p class="service-desc">{t.services.scanexpress.desc}</p>
-            <p class="service-when">{t.services.scanexpress.when}</p>
-            <span class="service-link">Mehr erfahren →</span>
+            <h3>ScanExpress</h3>
+            <p>Mobiles CT direkt bei Ihnen vor Ort für Großbauteile und schnelle Serienprüfung.</p>
+            <span class="link-arrow">Mehr erfahren →</span>
           </a>
-          
           <a href={lp('/cloud')} class="service-card">
-            <div class="service-icon cloud-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <div class="service-icon blue">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M17.5 19c0-1.7-1.3-3-3-3h-3.5"/><path d="M17.5 19c1.7 0 3-1.3 3-3s-1.3-3-3-3h-1"/>
-                <path d="M6.5 13c-1.7 0-3 1.3-3 3s1.3 3 3 3h1"/><path d="M6.5 13h1c1.7 0 3-1.3 3-3s-1.3-3-3-3"/>
-                <path d="M12 13v3"/><circle cx="12" cy="7" r="5"/>
               </svg>
             </div>
-            <h3>{t.services.cloud.title}</h3>
-            <p class="service-desc">{t.services.cloud.desc}</p>
-            <p class="service-when">{t.services.cloud.when}</p>
-            <span class="service-link">Mehr erfahren →</span>
+            <h3>Cloud-Auswertung</h3>
+            <p>Flexible Auswertung Ihrer CT-Daten mit unserer sicheren Cloud-Plattform.</p>
+            <span class="link-arrow">Mehr erfahren →</span>
           </a>
         </div>
       </div>
     </section>
 
-    <!-- RELATED INDUSTRIES Gallery -->
-    <section class="related-section">
+    <!-- Related -->
+    <section class="section">
       <div class="container">
         <div class="section-header centered">
-          <span class="section-eyebrow" style={`color: ${accentColor}`}>Entdecken Sie mehr</span>
+          <span class="eyebrow">Entdecken</span>
           <h2 class="section-title">Weitere Branchen</h2>
         </div>
         <div class="related-grid">
-          {relatedBranchen.map((related) => (
-            <a href={lp(`/branchen/${related.id}`)} class="related-card">
-              <div class="related-image">
-                <img src={getBranchenImage(related.id, related.data.heroImage)} alt={related.data.name} />
-                <div class="related-overlay"></div>
-              </div>
-              <div class="related-content">
-                <h3>{related.data.name}</h3>
-                <span>Mehr erfahren →</span>
-              </div>
+          {related.map((r) => (
+            <a href={lp(`/branchen/${r.id}`)} class="related-card">
+              <img src={`/images/branchen/${r.id}.jpg`} alt={r.data.name} />
+              <div class="related-overlay"></div>
+              <span class="related-name">{r.data.name}</span>
             </a>
           ))}
         </div>
@@ -473,924 +222,643 @@ const relatedBranchen = branchen.filter(b => b.id !== slug).slice(0, 3);
     </section>
 
     <!-- CTA -->
-    <section class="cta-section" style={`--accent: ${accentColor};`}>
-      <div class="container">
-        <div class="cta-box">
-          <h2>{t.ctaTitle}</h2>
-          <p>{t.ctaSubtitle}</p>
-          <div class="cta-actions">
-            <a href={lp('/kontakt-beratung')} class="cta-btn primary">
-              {t.contactBtn}
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4.167 10h11.666m0 0L10 4.167M15.833 10L10 15.833" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </a>
-            <a href={lp('/express-ct-inspektion')} class="cta-btn secondary">
-              {t.expressBtn}
-            </a>
-          </div>
-          <p class="usp-reminder">
-            <span class="usp-highlight">GET YOUR INSPECTION DONE</span><br/>
-            Anywhere. Anytime. Fast.
-          </p>
+    <section class="section section-cta">
+      <div class="container narrow centered">
+        <h2 class="cta-title">Bereit für die nächste Prüfaufgabe?</h2>
+        <p class="cta-text">Kontaktieren Sie uns für eine unverbindliche Beratung zu Ihren spezifischen Anforderungen.</p>
+        <div class="cta-actions">
+          <a href={lp('/kontakt-beratung')} class="btn btn-primary btn-large">Beratung anfragen</a>
+          <a href={lp('/express-ct-inspektion')} class="btn btn-outline btn-large">Express buchen</a>
         </div>
+        <p class="usp">GET YOUR INSPECTION DONE<br/><span>Anywhere. Anytime. Fast.</span></p>
       </div>
     </section>
-  </article>
+  </main>
 
   <Footer slot="footer" />
 </BaseLayout>
 
 <style>
+  /* Base */
   .branche-page {
-    --accent: var(--mv-violet);
+    --accent: #32285b;
+    --accent-light: #f3f0ff;
   }
 
   .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 var(--container-padding);
+    padding: 0 24px;
   }
 
-  /* HERO with Image Background */
-  .branche-hero {
+  .container.narrow {
+    max-width: 800px;
+  }
+
+  .container.centered {
+    text-align: center;
+  }
+
+  /* Hero */
+  .hero {
     position: relative;
     min-height: 85vh;
     display: flex;
     align-items: flex-end;
-    color: var(--mv-white);
+    color: white;
     overflow: hidden;
   }
 
-  .hero-image-bg {
+  .hero-bg {
     position: absolute;
     inset: 0;
     z-index: 0;
   }
 
-  .hero-image-bg img {
+  .hero-bg img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .hero-gradient {
+  .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(26, 22, 64, 0.98) 0%,
-      rgba(26, 22, 64, 0.8) 40%,
-      rgba(50, 40, 91, 0.4) 70%,
-      rgba(50, 40, 91, 0.2) 100%
-    );
+    background: linear-gradient(to top, rgba(26,22,64,0.95) 0%, rgba(26,22,64,0.7) 50%, rgba(50,40,91,0.4) 100%);
   }
 
-  .hero-breadcrumb {
-    position: relative;
-    margin-bottom: var(--space-6);
-    padding-top: calc(var(--space-16) + 60px);
-  }
-
-  .breadcrumb-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    transition: color 0.3s ease;
-  }
-
-  .breadcrumb-link:hover {
-    color: var(--mv-white);
-  }
-
-  .hero-content {
+  .hero .container {
     position: relative;
     z-index: 1;
-    max-width: 800px;
-    padding-bottom: var(--space-16);
+    padding-bottom: 80px;
   }
 
-  .hero-kicker {
-    display: flex;
+  .back-link {
+    display: inline-flex;
     align-items: center;
-    gap: var(--space-4);
-    margin-bottom: var(--space-4);
-    flex-wrap: wrap;
-  }
-
-  .kicker-label {
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--mv-orange);
-  }
-
-  .trust-badges-small {
-    display: flex;
-    gap: var(--space-2);
-  }
-
-  .badge {
-    padding: var(--space-1) var(--space-2);
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-sm);
-    font-size: var(--text-xs);
+    gap: 8px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 14px;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(8px);
+    margin-bottom: 32px;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: white;
+  }
+
+  .hero-eyebrow {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #ee7711;
+    margin-bottom: 12px;
   }
 
   .hero-title {
-    font-family: var(--font-heading);
-    font-size: clamp(var(--text-3xl), 6vw, var(--text-5xl));
+    font-family: var(--font-heading, system-ui);
+    font-size: clamp(40px, 6vw, 64px);
     font-weight: 700;
-    margin-bottom: var(--space-4);
     line-height: 1.1;
-    color: var(--mv-white);
-    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+    color: white;
+    text-shadow: 0 2px 30px rgba(0,0,0,0.5);
   }
 
-  .hero-description {
-    font-size: clamp(var(--text-base), 2vw, var(--text-xl));
-    color: rgba(255, 255, 255, 0.85);
+  .hero-desc {
+    font-size: clamp(16px, 2vw, 20px);
     line-height: 1.6;
-    margin-bottom: var(--space-8);
-    max-width: 600px;
+    color: rgba(255,255,255,0.9);
+    max-width: 700px;
+    margin-bottom: 24px;
+  }
+
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .badge {
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    backdrop-filter: blur(4px);
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-4);
+    gap: 12px;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-family: var(--font-heading, system-ui);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
   }
 
   .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-4) var(--space-6);
-    background: var(--mv-orange);
-    color: var(--mv-white);
-    border-radius: var(--radius-md);
-    font-family: var(--font-heading);
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
+    background: #ee7711;
+    color: white;
   }
 
   .btn-primary:hover {
-    background: var(--mv-orange-hover);
+    background: #d66a0d;
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px -5px rgba(238, 119, 17, 0.4);
   }
 
   .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-4) var(--space-6);
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--mv-white);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: var(--radius-md);
-    font-family: var(--font-heading);
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.15);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
   }
 
   .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255,255,255,0.25);
   }
 
-  /* Section Headers */
-  .section-header {
-    margin-bottom: var(--space-10);
+  .btn-outline {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255,255,255,0.5);
   }
 
-  .section-header.centered {
+  .btn-outline:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: white;
+  }
+
+  .btn-large {
+    padding: 16px 32px;
+    font-size: 16px;
+  }
+
+  /* Sections */
+  .section {
+    padding: 80px 0;
+  }
+
+  .section-gray {
+    background: #f8f9fa;
+  }
+
+  .section-dark {
+    background: #1a1640;
+    color: white;
+  }
+
+  .section-accent {
+    background: var(--accent);
+    color: white;
+  }
+
+  .section-cta {
+    background: linear-gradient(135deg, #1a1640 0%, #32285b 100%);
+    color: white;
     text-align: center;
   }
 
-  .section-eyebrow {
+  /* Section Header */
+  .section-header {
+    margin-bottom: 48px;
+  }
+
+  .section-header.centered,
+  .section-header.light {
+    text-align: center;
+  }
+
+  .eyebrow {
     display: block;
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    margin-bottom: var(--space-2);
+    color: #ee7711;
+    margin-bottom: 8px;
   }
 
-  .section-eyebrow.light {
-    color: rgba(255, 255, 255, 0.7);
+  .eyebrow.light {
+    color: rgba(255,255,255,0.7);
   }
 
   .section-title {
-    font-family: var(--font-heading);
-    font-size: clamp(var(--text-xl), 4vw, var(--text-2xl));
+    font-family: var(--font-heading, system-ui);
+    font-size: clamp(28px, 4vw, 36px);
     font-weight: 700;
-    color: var(--mv-violet);
+    color: #1a1640;
+    line-height: 1.2;
   }
 
   .section-title.light {
-    color: var(--mv-white);
+    color: white;
   }
 
-  /* PAIN POINTS */
-  .pain-section {
-    padding: var(--space-20) 0;
-    background: var(--mv-gray-50);
-  }
-
-  .pain-grid {
+  /* Challenges */
+  .challenges-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
   }
 
-  .pain-card {
-    background: var(--mv-white);
-    border: 1px solid var(--mv-gray-100);
-    border-radius: var(--radius-xl);
-    padding: var(--space-6);
-    display: flex;
-    gap: var(--space-4);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+  .challenge-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 28px;
+    transition: all 0.2s;
   }
 
-  .pain-card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: #ef4444;
+  .challenge-card:hover {
+    border-color: #ee7711;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   }
 
-  .pain-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .pain-number {
-    font-family: var(--font-heading);
-    font-size: var(--text-2xl);
+  .challenge-num {
+    font-family: var(--font-heading, system-ui);
+    font-size: 32px;
     font-weight: 700;
-    color: #ef4444;
-    opacity: 0.5;
+    color: #ee7711;
+    opacity: 0.3;
     line-height: 1;
+    margin-bottom: 12px;
   }
 
-  .pain-text {
-    font-size: var(--text-base);
-    color: var(--mv-gray-700);
-    line-height: 1.5;
-    margin: 0;
-  }
-
-  .pain-description {
-    font-size: var(--text-sm);
-    color: var(--mv-gray-500);
-    line-height: 1.6;
-    margin: var(--space-2) 0 0;
-  }
-
-  /* VISUAL EVIDENCE */
-  .visual-section {
-    padding: var(--space-10) 0 var(--space-16);
-    background: linear-gradient(180deg, var(--mv-gray-50) 0%, var(--mv-white) 100%);
-  }
-
-  .visual-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr 1fr;
-    gap: var(--space-4);
-    align-items: stretch;
-  }
-
-  .visual-card {
-    margin: 0;
-    position: relative;
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    aspect-ratio: 4/3;
-    box-shadow: var(--shadow-md);
-  }
-
-  .visual-card-0 {
-    grid-row: span 2;
-    aspect-ratio: auto;
-    min-height: 420px;
-  }
-
-  .visual-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-  }
-
-  .visual-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(26, 22, 64, 0.82) 0%, rgba(26, 22, 64, 0.12) 60%);
-  }
-
-  .visual-card figcaption {
-    position: absolute;
-    z-index: 1;
-    left: var(--space-4);
-    right: var(--space-4);
-    bottom: var(--space-4);
-    color: var(--mv-white);
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
+  .challenge-card h3 {
+    font-size: 17px;
     font-weight: 600;
+    color: #1a1640;
+    margin-bottom: 12px;
     line-height: 1.4;
-    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
   }
 
-  .visual-card:hover img {
-    transform: scale(1.06);
+  .challenge-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4b5563;
+    margin: 0;
   }
 
-  /* SOLUTIONS with Image */
-  .solutions-section {
-    padding: var(--space-20) 0;
-    background: var(--mv-white);
-  }
-
-  .solutions-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-12);
-    align-items: center;
-  }
-
+  /* Solutions */
   .solutions-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
-    margin-bottom: var(--space-8);
+    gap: 24px;
+    max-width: 900px;
   }
 
   .solution-item {
     display: flex;
-    gap: var(--space-4);
-    padding: var(--space-4);
-    background: var(--mv-gray-50);
-    border-radius: var(--radius-lg);
-    border-left: 3px solid var(--accent);
+    gap: 20px;
+    padding: 24px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #32285b;
   }
 
   .solution-marker {
-    width: 12px;
-    height: 12px;
-    background: var(--accent);
+    width: 28px;
+    height: 28px;
+    background: #10b981;
     border-radius: 50%;
-    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
     flex-shrink: 0;
   }
 
-  .solution-text h3 {
-    font-family: var(--font-heading);
-    font-size: var(--text-base);
-    font-weight: 700;
-    color: var(--mv-gray-900);
-    margin-bottom: var(--space-1);
+  .solution-content h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1640;
+    margin-bottom: 8px;
   }
 
-  .solution-text p {
-    font-size: var(--text-sm);
-    color: var(--mv-gray-600);
+  .solution-content p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #4b5563;
     margin: 0;
   }
 
-  .btn-accent {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-4) var(--space-6);
-    background: var(--mv-orange);
-    color: var(--mv-white);
-    border-radius: var(--radius-md);
-    font-family: var(--font-heading);
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
+  /* Use Cases */
+  .usecases-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
-  .btn-accent:hover {
-    background: var(--mv-orange-hover);
-    transform: translateY(-2px);
+  .usecase-item {
+    display: flex;
+    gap: 20px;
+    padding: 24px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
   }
 
-  .solutions-visual {
-    position: relative;
-  }
-
-  .solutions-image-wrapper {
-    position: relative;
-    border-radius: var(--radius-2xl);
-    overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(50, 40, 91, 0.25);
-  }
-
-  .solutions-image {
-    width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
-  }
-
-  .solutions-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(50,40,91,0.6), transparent);
-  }
-
-  .solutions-badge {
-    position: absolute;
-    bottom: var(--space-4);
-    left: var(--space-4);
-    background: var(--mv-white);
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-full);
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    color: var(--mv-violet);
-  }
-
-  /* USE CASES Gallery */
-  .usecases-section {
-    padding: var(--space-20) 0;
-    background: linear-gradient(180deg, var(--mv-gray-50) 0%, var(--mv-white) 100%);
-  }
-
-  .usecases-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: var(--space-4);
-  }
-
-  .usecase-card {
-    position: relative;
-    border-radius: var(--radius-xl);
-    overflow: hidden;
-    background: var(--mv-white);
-    border: 1px solid var(--mv-gray-100);
-    transition: all 0.3s ease;
-  }
-
-  .usecase-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-xl);
-  }
-
-  .usecase-image {
-    position: relative;
-    height: 160px;
-    overflow: hidden;
-  }
-
-  .usecase-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-
-  .usecase-card:hover .usecase-image img {
-    transform: scale(1.1);
-  }
-
-  .usecase-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent 0%, rgba(50,40,91,0.8) 100%);
-  }
-
-  .usecase-content {
-    padding: var(--space-4);
-    position: relative;
-  }
-
-  .usecase-number {
-    position: absolute;
-    top: -20px;
-    right: var(--space-4);
-    font-family: var(--font-heading);
-    font-size: var(--text-3xl);
+  .usecase-num {
+    font-family: var(--font-heading, system-ui);
+    font-size: 24px;
     font-weight: 700;
-    color: var(--accent);
-    opacity: 0.3;
+    color: #ee7711;
+    line-height: 1;
   }
 
-  .usecase-content p {
-    font-size: var(--text-sm);
-    color: var(--mv-gray-700);
+  .usecase-item p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.85);
     margin: 0;
-    line-height: 1.5;
   }
 
-  /* TESTIMONIAL */
-  .testimonial-section {
-    padding: var(--space-20) 0;
-    background: linear-gradient(135deg, var(--mv-violet) 0%, #1a1640 100%);
-  }
-
-  .testimonial-card {
-    max-width: 800px;
-    margin: 0 auto;
+  /* Quote */
+  .quote {
     text-align: center;
-    color: var(--mv-white);
-    position: relative;
   }
 
   .quote-icon {
-    color: var(--accent);
+    color: #ee7711;
     opacity: 0.5;
-    margin-bottom: var(--space-4);
+    margin-bottom: 24px;
   }
 
-  .testimonial-card blockquote {
-    font-family: var(--font-heading);
-    font-size: clamp(var(--text-lg), 3vw, var(--text-2xl));
+  .quote p {
+    font-family: var(--font-heading, system-ui);
+    font-size: clamp(20px, 3vw, 28px);
     font-weight: 600;
     line-height: 1.5;
-    margin-bottom: var(--space-6);
-    color: var(--mv-white);
+    margin-bottom: 24px;
+    color: white;
   }
 
-  .testimonial-card cite {
-    font-size: var(--text-sm);
-    color: rgba(255, 255, 255, 0.7);
+  .quote cite {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
     font-style: normal;
   }
 
-  /* STATS Bento */
-  .stats-section {
-    padding: var(--space-20) 0;
-    background: var(--accent);
-  }
-
-  .stats-bento {
+  /* Stats */
+  .stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
   }
 
-  .stat-box {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-xl);
-    padding: var(--space-6);
+  .stat-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 32px;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: all 0.2s;
   }
 
-  .stat-box:hover {
-    background: rgba(255, 255, 255, 0.15);
+  .stat-card:hover {
+    border-color: #32285b;
     transform: translateY(-4px);
-  }
-
-  .stat-box-0 {
-    grid-column: span 2;
-    grid-row: span 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
   }
 
   .stat-value {
     display: block;
-    font-family: var(--font-heading);
-    font-size: var(--text-3xl);
+    font-family: var(--font-heading, system-ui);
+    font-size: 40px;
     font-weight: 700;
-    color: var(--mv-white);
-    margin-bottom: var(--space-2);
-  }
-
-  .stat-box-0 .stat-value {
-    font-size: var(--text-5xl);
+    color: #32285b;
+    line-height: 1;
+    margin-bottom: 8px;
   }
 
   .stat-label {
-    font-size: var(--text-sm);
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    color: #6b7280;
   }
 
-  /* SERVICES */
-  .services-section {
-    padding: var(--space-20) 0;
-    background: var(--mv-white);
-  }
-
+  /* Services */
   .services-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-6);
+    gap: 24px;
   }
 
   .service-card {
     position: relative;
-    background: var(--mv-white);
-    border: 1px solid var(--mv-gray-100);
-    border-radius: var(--radius-xl);
-    padding: var(--space-6);
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 32px;
     text-decoration: none;
     color: inherit;
-    transition: all 0.3s ease;
+    transition: all 0.2s;
   }
 
   .service-card:hover {
-    border-color: var(--accent);
+    border-color: #32285b;
     transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
   }
 
   .service-card.featured {
-    border-color: var(--mv-orange);
-    box-shadow: 0 0 0 1px var(--mv-orange);
+    border-color: #ee7711;
+    box-shadow: 0 0 0 1px #ee7711;
   }
 
-  .service-badge {
+  .featured-badge {
     position: absolute;
     top: -10px;
-    right: var(--space-4);
-    background: var(--mv-orange);
-    color: var(--mv-white);
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-full);
-    font-size: var(--text-xs);
+    right: 20px;
+    background: #ee7711;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   .service-icon {
     width: 56px;
     height: 56px;
-    border-radius: var(--radius-lg);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: var(--space-4);
+    margin-bottom: 20px;
   }
 
-  .labor-icon {
-    background: rgba(50, 40, 91, 0.1);
-    color: var(--mv-violet);
+  .service-icon.purple {
+    background: #f3f0ff;
+    color: #32285b;
   }
 
-  .scanexpress-icon {
-    background: rgba(238, 119, 17, 0.1);
-    color: var(--mv-orange);
+  .service-icon.orange {
+    background: #fff4eb;
+    color: #ee7711;
   }
 
-  .cloud-icon {
-    background: rgba(0, 160, 210, 0.1);
-    color: var(--mv-cyan);
+  .service-icon.blue {
+    background: #e6f7ff;
+    color: #00a0d2;
   }
 
   .service-card h3 {
-    font-family: var(--font-heading);
-    font-size: var(--text-lg);
+    font-size: 20px;
     font-weight: 700;
-    color: var(--mv-gray-900);
-    margin-bottom: var(--space-2);
+    color: #1a1640;
+    margin-bottom: 12px;
   }
 
-  .service-desc {
-    font-size: var(--text-sm);
-    color: var(--mv-gray-600);
-    margin-bottom: var(--space-2);
+  .service-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4b5563;
+    margin-bottom: 20px;
   }
 
-  .service-when {
-    font-size: var(--text-xs);
-    color: var(--mv-gray-500);
-    font-style: italic;
-    margin-bottom: var(--space-4);
-  }
-
-  .service-link {
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
+  .link-arrow {
+    font-size: 14px;
     font-weight: 600;
-    color: var(--accent);
+    color: #32285b;
   }
 
-  /* RELATED */
-  .related-section {
-    padding: var(--space-20) 0;
-    background: var(--mv-gray-50);
+  .service-card:hover .link-arrow {
+    color: #ee7711;
   }
 
+  /* Related */
   .related-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-4);
+    gap: 20px;
   }
 
   .related-card {
     position: relative;
-    border-radius: var(--radius-xl);
+    border-radius: 12px;
     overflow: hidden;
-    text-decoration: none;
-    color: var(--mv-white);
     aspect-ratio: 16/10;
+    text-decoration: none;
   }
 
-  .related-image {
-    position: absolute;
-    inset: 0;
-  }
-
-  .related-image img {
+  .related-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform 0.4s;
   }
 
-  .related-card:hover .related-image img {
-    transform: scale(1.1);
+  .related-card:hover img {
+    transform: scale(1.08);
   }
 
   .related-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(26,22,64,0.9) 0%, rgba(50,40,91,0.4) 100%);
-    transition: background 0.3s ease;
+    background: linear-gradient(to top, rgba(26,22,64,0.9) 0%, transparent 100%);
   }
 
-  .related-card:hover .related-overlay {
-    background: linear-gradient(to top, rgba(26,22,64,0.95) 0%, rgba(50,40,91,0.5) 100%);
-  }
-
-  .related-content {
+  .related-name {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: var(--space-5);
-  }
-
-  .related-content h3 {
-    font-family: var(--font-heading);
-    font-size: var(--text-lg);
-    font-weight: 700;
-    margin-bottom: var(--space-1);
-  }
-
-  .related-content span {
-    font-size: var(--text-sm);
-    opacity: 0.8;
+    bottom: 20px;
+    left: 20px;
+    font-family: var(--font-heading, system-ui);
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
   }
 
   /* CTA */
-  .cta-section {
-    padding: var(--space-16) 0 var(--space-20);
-    background: linear-gradient(135deg, var(--mv-violet) 0%, #1a1640 100%);
-  }
-
-  .cta-box {
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto;
-    color: var(--mv-white);
-  }
-
-  .cta-box h2 {
-    font-family: var(--font-heading);
-    font-size: clamp(var(--text-xl), 4vw, var(--text-2xl));
+  .cta-title {
+    font-family: var(--font-heading, system-ui);
+    font-size: clamp(28px, 4vw, 36px);
     font-weight: 700;
-    margin-bottom: var(--space-4);
+    margin-bottom: 16px;
   }
 
-  .cta-box > p {
-    font-size: var(--text-lg);
-    color: rgba(255, 255, 255, 0.7);
-    margin-bottom: var(--space-8);
+  .cta-text {
+    font-size: 18px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 32px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .cta-actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--space-4);
-    margin-bottom: var(--space-10);
+    gap: 12px;
+    margin-bottom: 40px;
   }
 
-  .cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-6);
-    border-radius: var(--radius-md);
-    font-family: var(--font-heading);
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
+  .usp {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 
-  .cta-btn.primary {
-    background: var(--mv-orange);
-    color: var(--mv-white);
-  }
-
-  .cta-btn.primary:hover {
-    background: var(--mv-orange-hover);
-    transform: translateY(-2px);
-  }
-
-  .cta-btn.secondary {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--mv-white);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-  }
-
-  .cta-btn.secondary:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  .usp-reminder {
-    font-family: var(--font-heading);
-    font-size: var(--text-sm);
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 0.05em;
-  }
-
-  .usp-highlight {
-    color: var(--mv-orange);
+  .usp span {
+    color: #ee7711;
     font-weight: 700;
   }
 
-  @media (max-width: 1024px) {
-    .visual-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .visual-card-0 {
-      grid-column: span 2;
-      grid-row: span 1;
-      min-height: 320px;
-    }
-  }
-
+  /* Responsive */
   @media (max-width: 768px) {
-    .visual-grid {
+    .section {
+      padding: 60px 0;
+    }
+
+    .hero .container {
+      padding-bottom: 60px;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+    .challenges-grid,
+    .services-grid,
+    .stats-grid,
+    .related-grid {
       grid-template-columns: 1fr;
     }
 
-    .visual-card,
-    .visual-card-0 {
-      grid-column: auto;
-      min-height: 240px;
+    .solution-item {
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .solutions-layout {
-      grid-template-columns: 1fr;
-    }
-
-    .solutions-visual {
-      order: -1;
-    }
-
-    .stats-bento {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .stat-box-0 {
-      grid-column: span 2;
-      grid-row: span 1;
-    }
-
-    .stat-value {
-      font-size: var(--text-xl);
-    }
-
-    .stat-box-0 .stat-value {
-      font-size: var(--text-3xl);
-    }
-
-    .branche-hero {
-      min-height: 70vh;
+    .usecase-item {
+      flex-direction: column;
     }
   }
 </style>
