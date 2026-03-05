@@ -1,0 +1,880 @@
+---
+/**
+ * InspectVista – Software & Cloud-Auswertung Landing Page
+ * URL: /software
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { localePath, type Locale } from '../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const content = {
+  de: {
+    seoTitle: 'InspectVista – Industrielle CT-Software zur Automatisierung',
+    seoDesc: 'InspectVista automatisiert Ihre CT-Datenauswertung: 5× schneller, 10× höhere Auflösung, Laminografie – als Software oder Cloud-Service. ISO 9001 & 17025 zertifiziert.',
+
+    badge: 'InspectVista · CT-Software & Cloud-Auswertung',
+    tagline: 'GET YOUR INSPECTION DONE – Anywhere. Anytime. Fast.',
+    headline: 'Industrielle CT-Software',
+    headlineAccent: 'zur Automatisierung',
+    subline: 'Mit InspectVista erfolgt Ihre CT-Datenauswertung vollautomatisch – schnell, präzise, wirtschaftlich. Nutzen Sie die Software direkt auf Ihrer CT-Anlage oder übergeben Sie die Auswertung an Microvista via Cloud.',
+    cta1: 'Software anfragen',
+    cta2: 'Cloud-Auswertung testen',
+
+    stats: [
+      { value: '5×', label: 'schnellere Scans' },
+      { value: '10×', label: 'höhere Auflösung' },
+      { value: '100%', label: 'automatisiert' },
+      { value: 'ISO', label: '9001 & 17025' },
+    ],
+
+    fuerWenTitle: 'Zwei Wege zur automatisierten CT-Auswertung',
+    fuerWenSubline: 'InspectVista passt sich Ihrer Infrastruktur an – egal ob Sie eine neue Software suchen oder Auswertungskapazität benötigen.',
+    wege: [
+      {
+        nr: 'A',
+        tag: 'Software',
+        title: 'InspectVista direkt auf Ihrer CT-Anlage',
+        text: 'Sie besitzen ein industrielles CT-System und suchen nach einer moderneren, leistungsfähigeren Auswertungssoftware? InspectVista (VistaXPro) läuft direkt auf Ihrer Anlage und liefert 5× schnellere Scans, 10× höhere Auflösung und neue Prüfverfahren wie die Laminografie.',
+        bullets: [
+          '5× schnellere Scan-Zyklen',
+          '10× höhere Bildauflösung',
+          'Laminografie (LayerScan) für flache Bauteile',
+          'Vollautomatische IO/NIO-Klassifizierung',
+        ],
+        cta: 'Software anfragen',
+        href: '/kontakt',
+        accent: '#00a0d2',
+      },
+      {
+        nr: 'B',
+        tag: 'Cloud',
+        title: 'Sie scannen – Microvista wertet aus',
+        text: 'Manuelle Auswertung raubt Ihnen wertvolle Zeit? Sie besitzen ein CT, aber es fehlen Auswertungskapazitäten, geschultes Personal oder Spezialsoftware? Laden Sie Ihre rekonstruierten Scan-Daten sicher in die Microvista Cloud – wir liefern Ihnen den fertigen Prüfbericht.',
+        bullets: [
+          'Keine eigene Auswertungssoftware nötig',
+          'Kein Personalaufwand für Datenanalyse',
+          'Q-Gate Qualitätskontrolle vor Freigabe',
+          'Lieferung als Datensatz + Prüfbericht',
+        ],
+        cta: 'Cloud-Auswertung anfragen',
+        href: '/kontakt',
+        accent: '#ee7711',
+      },
+    ],
+
+    featuresTitle: 'Was InspectVista kann',
+    featuresSubline: 'Von der automatischen Defekterkennung bis zur Laminografie – alle Prüfverfahren in einer Software.',
+    features: [
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
+        title: 'Vollautomatische Auswertung',
+        text: 'CT-Daten werden ohne manuelle Eingriffe analysiert. IO/NIO-Klassifizierung in Echtzeit, vollständig reproduzierbar.',
+      },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
+        title: 'Laminografie / LayerScan',
+        text: 'Hochauflösende Schichtbilder flacher Bauteile ohne 360°-Drehung. Ideal für Leiterplatten, Schweißnähte und dünnwandige Strukturen.',
+      },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>`,
+        title: '5× schnellere Scans',
+        text: 'VistaXPro reduziert Scan-Zeiten drastisch. Mehr Durchsatz, kürzere Wartezeiten, höhere Wirtschaftlichkeit bei Serienprüfungen.',
+      },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>`,
+        title: '10× höhere Auflösung',
+        text: 'Kleinste Defekte werden sichtbar. Bei erhöhter Bildqualität sinken gleichzeitig Prüfzeit und Datenmenge – weniger Speicherbedarf, mehr Präzision.',
+      },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+        title: 'Q-Gate Qualitätskontrolle',
+        text: 'Jeder Auswertungsauftrag durchläuft einen mehrstufigen Qualitäts-Check, bevor der Bericht freigegeben wird. Keine unkontrollierten Ergebnisse.',
+      },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`,
+        title: 'Sichere Cloud-Plattform',
+        text: 'Rekonstruierte Scan-Daten werden verschlüsselt übertragen. Ergebnisse und Berichte stehen über die interne Software-Plattform bereit.',
+      },
+    ],
+
+    workflowTitle: 'So funktioniert die Cloud-Auswertung',
+    workflowSubline: 'Einfach, sicher und schnell – von Ihrem CT direkt zum fertigen Prüfbericht.',
+    workflow: [
+      { nr: '1', title: 'Anfrage & Absprache', text: 'Sie definieren Prüfaufgabe, Stückzahl und Anforderungen. Express-Option (< 24h) auf Anfrage.' },
+      { nr: '2', title: 'Scan & Upload', text: 'Sie führen den CT-Scan durch und laden die rekonstruierten Daten + Anforderungen in die sichere Microvista Cloud.' },
+      { nr: '3', title: 'Automatische Auswertung + Q-Gate', text: 'InspectVista wertet vollautomatisch aus. Ein Q-Gate prüft die Ergebnisse auf Qualität und Plausibilität.' },
+      { nr: '4', title: 'Bericht & Datensatz', text: 'Sie erhalten den fertigen Prüfbericht und Datensatz über die Cloud-Plattform. Vertraulich, verschlüsselt, sofort nutzbar.' },
+    ],
+
+    aufgabenTitle: 'Prüfaufgaben mit InspectVista',
+    aufgabenSubline: 'Ein Scan. Alle Informationen. Keine manuelle Auswertung.',
+    aufgaben: [
+      { icon: '⊞', title: 'CAD Soll/Ist-Vergleich', text: 'Maßabweichungen farblich visualisiert' },
+      { icon: '↔', title: 'Wanddickenmessung', text: 'Hochpräzise über das gesamte Volumen' },
+      { icon: '◉', title: 'Porositätsanalyse', text: 'Volumenanteil und Verteilung von Poren' },
+      { icon: '⌇', title: 'Rissprüfung', text: 'Haarrisse und Kaltlaufstellen im 3D-Volumen' },
+      { icon: '⚙', title: 'Montage & Fügekontrolle', text: 'Schweißnähte, Presspassungen, Kleber' },
+      { icon: '⚡', title: 'Hairpin-Statoren', text: 'E-Motor-Wicklungen vollständig prüfen' },
+      { icon: '◼', title: 'Laminografie', text: 'Flache Bauteile ohne 360°-Drehung' },
+      { icon: '↗', title: 'Schweißnahtprüfung', text: 'Bindefehler und Einschlüsse erkennen' },
+    ],
+
+    updateTitle: 'Das steckt im VistaXPro-Update',
+    updateText: 'Microvista hat seine Yxlon FF85-CT-Anlage auf die VistaXPro-Variante upgedatet. Das Ergebnis: Scans bis zu 5-mal schneller, eine bis zu 10-mal höhere Auflösung – und das neue Prüfverfahren Laminografie (LayerScan) steht zur Verfügung.',
+    updateItems: [
+      { stat: '5×', label: 'schnellere Scan-Zyklen', detail: 'Weniger Prüfzeit, höherer Durchsatz' },
+      { stat: '10×', label: 'höhere Auflösung', detail: 'Kleinste Defekte sichtbar, weniger Datenmenge' },
+      { stat: 'Neu', label: 'Laminografie', detail: 'LayerScan für flache Bauteile ohne 360°-Drehung' },
+    ],
+
+    ctaTitle: 'Bereit für automatisierte CT-Auswertung?',
+    ctaSubline: 'Software-Beratung oder Cloud-Auswertung – wir melden uns innerhalb von 24 Stunden.',
+    cta1: 'Software anfragen',
+    cta2: 'Cloud-Auswertung testen',
+  },
+
+  en: {
+    seoTitle: 'InspectVista – Industrial CT Software for Automation',
+    seoDesc: 'InspectVista automates your CT data evaluation: 5× faster, 10× higher resolution, laminography – as software or cloud service. ISO 9001 & 17025 certified.',
+
+    badge: 'InspectVista · CT Software & Cloud Evaluation',
+    tagline: 'GET YOUR INSPECTION DONE – Anywhere. Anytime. Fast.',
+    headline: 'Industrial CT Software',
+    headlineAccent: 'for Automation',
+    subline: 'InspectVista automates your CT data evaluation – fast, precise, economical. Use the software directly on your CT system or delegate evaluation to Microvista via cloud.',
+    cta1: 'Request Software',
+    cta2: 'Test Cloud Evaluation',
+
+    stats: [
+      { value: '5×', label: 'faster scans' },
+      { value: '10×', label: 'higher resolution' },
+      { value: '100%', label: 'automated' },
+      { value: 'ISO', label: '9001 & 17025' },
+    ],
+
+    fuerWenTitle: 'Two paths to automated CT evaluation',
+    fuerWenSubline: 'InspectVista adapts to your infrastructure – whether you need new software or evaluation capacity.',
+    wege: [
+      {
+        nr: 'A',
+        tag: 'Software',
+        title: 'InspectVista on your CT system',
+        text: 'Do you own an industrial CT system and need better, more powerful evaluation software? InspectVista (VistaXPro) runs directly on your system and delivers 5× faster scans, 10× higher resolution, and new inspection methods like laminography.',
+        bullets: [
+          '5× faster scan cycles',
+          '10× higher image resolution',
+          'Laminography (LayerScan) for flat parts',
+          'Fully automatic pass/fail classification',
+        ],
+        cta: 'Request Software',
+        href: '/kontakt',
+        accent: '#00a0d2',
+      },
+      {
+        nr: 'B',
+        tag: 'Cloud',
+        title: 'You scan – Microvista evaluates',
+        text: 'Manual evaluation consuming too much time? You own a CT but lack evaluation capacity, trained staff, or specialized software? Upload your reconstructed scan data securely to the Microvista Cloud – we deliver the finished inspection report.',
+        bullets: [
+          'No own evaluation software needed',
+          'No personnel effort for data analysis',
+          'Q-Gate quality control before release',
+          'Delivery as dataset + inspection report',
+        ],
+        cta: 'Request Cloud Evaluation',
+        href: '/kontakt',
+        accent: '#ee7711',
+      },
+    ],
+
+    featuresTitle: 'What InspectVista can do',
+    featuresSubline: 'From automatic defect detection to laminography – all inspection methods in one software.',
+    features: [
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
+        title: 'Fully Automatic Evaluation',
+        text: 'CT data is analyzed without manual intervention. Pass/fail classification in real time, fully reproducible.',
+      },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
+        title: 'Laminography / LayerScan',
+        text: 'High-resolution layer images of flat parts without 360° rotation. Ideal for PCBs, weld seams, and thin-walled structures.',
+      },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>`,
+        title: '5× Faster Scans',
+        text: 'VistaXPro drastically reduces scan times. More throughput, shorter wait times, higher efficiency for series inspections.',
+      },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>`,
+        title: '10× Higher Resolution',
+        text: 'The smallest defects become visible. Higher image quality simultaneously reduces inspection time and data volume.',
+      },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+        title: 'Q-Gate Quality Control',
+        text: 'Every evaluation job goes through a multi-stage quality check before the report is released. No uncontrolled results.',
+      },
+      {
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`,
+        title: 'Secure Cloud Platform',
+        text: 'Reconstructed scan data is transmitted encrypted. Results and reports are available via the internal software platform.',
+      },
+    ],
+
+    workflowTitle: 'How cloud evaluation works',
+    workflowSubline: 'Simple, secure and fast – from your CT directly to the finished inspection report.',
+    workflow: [
+      { nr: '1', title: 'Request & Agreement', text: 'You define the inspection task, quantity, and requirements. Express option (< 24h) available on request.' },
+      { nr: '2', title: 'Scan & Upload', text: 'You perform the CT scan and upload the reconstructed data + requirements to the secure Microvista Cloud.' },
+      { nr: '3', title: 'Automatic Evaluation + Q-Gate', text: 'InspectVista evaluates fully automatically. A Q-Gate checks the results for quality and plausibility.' },
+      { nr: '4', title: 'Report & Dataset', text: 'You receive the finished inspection report and dataset via the cloud platform. Confidential, encrypted, immediately usable.' },
+    ],
+
+    aufgabenTitle: 'Inspection tasks with InspectVista',
+    aufgabenSubline: 'One scan. All information. No manual evaluation.',
+    aufgaben: [
+      { icon: '⊞', title: 'CAD Comparison', text: 'Dimensional deviations visualized in color' },
+      { icon: '↔', title: 'Wall Thickness', text: 'High-precision across the entire volume' },
+      { icon: '◉', title: 'Porosity Analysis', text: 'Volume fraction and pore distribution' },
+      { icon: '⌇', title: 'Crack Inspection', text: 'Hairline cracks and cold shuts in 3D' },
+      { icon: '⚙', title: 'Assembly & Joint Control', text: 'Welds, press fits, adhesive bonds' },
+      { icon: '⚡', title: 'Hairpin Stators', text: 'Complete e-motor winding inspection' },
+      { icon: '◼', title: 'Laminography', text: 'Flat parts without 360° rotation' },
+      { icon: '↗', title: 'Weld Seam Inspection', text: 'Detect bonding errors and inclusions' },
+    ],
+
+    updateTitle: "What's inside the VistaXPro update",
+    updateText: 'Microvista upgraded its Yxlon FF85 CT system to the VistaXPro variant. The result: scans up to 5× faster, up to 10× higher resolution – and the new laminography (LayerScan) inspection method is now available.',
+    updateItems: [
+      { stat: '5×', label: 'faster scan cycles', detail: 'Less inspection time, higher throughput' },
+      { stat: '10×', label: 'higher resolution', detail: 'Smallest defects visible, less data volume' },
+      { stat: 'New', label: 'Laminography', detail: 'LayerScan for flat parts without 360° rotation' },
+    ],
+
+    ctaTitle: 'Ready for automated CT evaluation?',
+    ctaSubline: 'Software consultation or cloud evaluation – we respond within 24 hours.',
+    cta1: 'Request Software',
+    cta2: 'Test Cloud Evaluation',
+  },
+};
+
+const t = content[locale as keyof typeof content] || content.en || content.de;
+---
+
+<BaseLayout
+  title={t.seoTitle}
+  description={t.seoDesc}
+  theme="neutral"
+>
+  <Header slot="header" />
+
+  <!-- ─── 1. HERO ─────────────────────────────────────── -->
+  <section class="sw-hero">
+    <div class="sw-hero-inner">
+      <div class="sw-container sw-hero-container">
+        <div class="sw-hero-content">
+          <div class="sw-badge-row">
+            <img
+              src="/images/logos/Microvista-InspectVista-Logo-2025-colored-02.png"
+              alt="InspectVista Logo"
+              class="sw-product-logo"
+              loading="eager"
+            />
+          </div>
+          <p class="sw-tagline">{t.tagline}</p>
+          <h1>
+            {t.headline}
+            <span class="sw-accent">{t.headlineAccent}</span>
+          </h1>
+          <p class="sw-subline">{t.subline}</p>
+          <div class="sw-hero-cta">
+            <a href={lp('/kontakt')} class="sw-btn sw-btn-cyan sw-btn-lg">{t.cta1}</a>
+            <a href={lp('/kontakt')} class="sw-btn sw-btn-ghost sw-btn-lg">{t.cta2}</a>
+          </div>
+        </div>
+      </div>
+      <div class="sw-hero-img-col">
+        <img
+          src="/images/ct/Beispiel-Bedienoberflaeche-der-CT-Software-am-Laptop.png"
+          alt="InspectVista CT-Software Benutzeroberfläche auf Laptop"
+          class="sw-hero-img"
+          loading="eager"
+        />
+        <div class="sw-hero-img-fade"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 2. STATS BAR ────────────────────────────────── -->
+  <section class="sw-stats">
+    <div class="sw-container">
+      <div class="sw-stats-grid">
+        {t.stats.map((s: any) => (
+          <div class="sw-stat">
+            <span class="sw-stat-value">{s.value}</span>
+            <span class="sw-stat-label">{s.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 3. FÜR WEN? (Zwei Wege) ────────────────────── -->
+  <section class="sw-section sw-fuerwen">
+    <div class="sw-container">
+      <div class="sw-section-head sw-center">
+        <h2>{t.fuerWenTitle}</h2>
+        <p class="sw-muted">{t.fuerWenSubline}</p>
+      </div>
+      <div class="sw-wege-grid">
+        {t.wege.map((w: any) => (
+          <div class="sw-weg-card">
+            <div class="sw-weg-header" style={`border-color: ${w.accent}`}>
+              <span class="sw-weg-nr" style={`background: ${w.accent}`}>{w.nr}</span>
+              <span class="sw-weg-tag">{w.tag}</span>
+            </div>
+            <h3>{w.title}</h3>
+            <p>{w.text}</p>
+            <ul class="sw-weg-bullets">
+              {w.bullets.map((b: string) => (
+                <li>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style={`color: ${w.accent}`}><path d="M20 6L9 17l-5-5"/></svg>
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+            <a href={lp(w.href)} class="sw-weg-cta" style={`color: ${w.accent}; border-color: ${w.accent}`}>
+              {w.cta}
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 4. FEATURES GRID ─────────────────────────────── -->
+  <section class="sw-section sw-features">
+    <div class="sw-container">
+      <div class="sw-section-head sw-center">
+        <h2>{t.featuresTitle}</h2>
+        <p class="sw-muted">{t.featuresSubline}</p>
+      </div>
+      <div class="sw-features-grid">
+        {t.features.map((f: any) => (
+          <div class="sw-feature-card">
+            <div class="sw-feature-icon" set:html={f.icon}></div>
+            <h3>{f.title}</h3>
+            <p>{f.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 5. CLOUD-WORKFLOW ────────────────────────────── -->
+  <section class="sw-section sw-workflow">
+    <div class="sw-container">
+      <div class="sw-section-head sw-center">
+        <h2>{t.workflowTitle}</h2>
+        <p class="sw-muted">{t.workflowSubline}</p>
+      </div>
+      <div class="sw-workflow-grid">
+        {t.workflow.map((w: any, i: number) => (
+          <div class="sw-workflow-step">
+            <div class="sw-workflow-nr">{w.nr}</div>
+            {i < t.workflow.length - 1 && (
+              <div class="sw-workflow-arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+            )}
+            <h3>{w.title}</h3>
+            <p>{w.text}</p>
+          </div>
+        ))}
+      </div>
+      <div class="sw-workflow-image">
+        <img
+          src="/images/ct/Auswertung-CT-Scan-vom-CT-Techniker-Dustin-Klein-e1761286147918.jpg"
+          alt="CT-Techniker Dustin Klein bei der Auswertung eines industriellen CT-Scans"
+          loading="lazy"
+        />
+        <div class="sw-workflow-label">
+          <span>CT-Datenauswertung über die Cloud</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 6. PRÜFAUFGABEN ──────────────────────────────── -->
+  <section class="sw-section sw-aufgaben">
+    <div class="sw-container">
+      <div class="sw-section-head sw-center">
+        <h2>{t.aufgabenTitle}</h2>
+        <p class="sw-muted">{t.aufgabenSubline}</p>
+      </div>
+      <div class="sw-aufgaben-grid">
+        {t.aufgaben.map((a: any) => (
+          <div class="sw-aufgabe">
+            <span class="sw-aufgabe-icon">{a.icon}</span>
+            <div>
+              <strong>{a.title}</strong>
+              <span>{a.text}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 7. VISTAXPRO UPDATE BANNER ──────────────────── -->
+  <section class="sw-update">
+    <div class="sw-container">
+      <div class="sw-update-inner">
+        <div class="sw-update-text">
+          <span class="sw-update-badge">VistaXPro Update</span>
+          <h2>{t.updateTitle}</h2>
+          <p>{t.updateText}</p>
+        </div>
+        <div class="sw-update-stats">
+          {t.updateItems.map((item: any) => (
+            <div class="sw-update-stat">
+              <span class="sw-update-val">{item.stat}</span>
+              <strong>{item.label}</strong>
+              <span>{item.detail}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="sw-update-img">
+        <img
+          src="/images/ct/CT-Techniker-am-industriellen-CT-Dustin-Klein-scaled-e1761285791426.jpg"
+          alt="CT-Techniker am industriellen CT-System von Microvista"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 8. CTA ───────────────────────────────────────── -->
+  <section class="sw-cta">
+    <div class="sw-container">
+      <div class="sw-cta-inner">
+        <div class="sw-cta-text">
+          <h2>{t.ctaTitle}</h2>
+          <p>{t.ctaSubline}</p>
+        </div>
+        <div class="sw-cta-btns">
+          <a href={lp('/kontakt')} class="sw-btn sw-btn-cyan sw-btn-lg">{t.cta1}</a>
+          <a href={lp('/kontakt')} class="sw-btn sw-btn-outline sw-btn-lg">{t.cta2}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  /* ─── Software Page Design System ─────────────── */
+  :root {
+    --sw-bg: #0e0c1e;
+    --sw-surface: #1a1535;
+    --sw-surface2: #221d42;
+    --sw-violet: #32285b;
+    --sw-cyan: #00a0d2;
+    --sw-cyan-light: #33bce0;
+    --sw-orange: #ee7711;
+    --sw-text: #ece9ff;
+    --sw-muted-color: #8b85a0;
+    --sw-border: rgba(255,255,255,0.07);
+    --sw-glow-cyan: rgba(0,160,210,0.15);
+    --sw-glow-violet: rgba(50,40,91,0.5);
+  }
+
+  /* ─── Utility ─── */
+  .sw-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 3vw, 2rem);
+  }
+  .sw-section { padding: 5rem 0; }
+  .sw-section-head { margin-bottom: 3rem; }
+  .sw-section-head h2 {
+    font-family: 'Antonio', sans-serif;
+    font-size: clamp(1.875rem, 3.5vw, 2.5rem);
+    text-transform: uppercase;
+    color: var(--sw-text);
+    margin-bottom: 0.75rem;
+  }
+  .sw-center { text-align: center; }
+  .sw-muted { color: var(--sw-muted-color); font-size: 1.125rem; line-height: 1.6; }
+
+  /* ─── Buttons ─── */
+  .sw-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-family: 'Antonio', sans-serif; font-weight: 600; font-size: 1rem;
+    letter-spacing: 0.03em; text-decoration: none;
+    transition: all 150ms ease; border: 2px solid transparent; cursor: pointer;
+  }
+  .sw-btn-lg { padding: 1rem 2rem; font-size: 1.125rem; }
+  .sw-btn-cyan { background: var(--sw-cyan); color: #000; }
+  .sw-btn-cyan:hover { background: var(--sw-cyan-light); }
+  .sw-btn-ghost { background: transparent; border-color: rgba(255,255,255,0.25); color: white; }
+  .sw-btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: white; }
+  .sw-btn-outline { background: transparent; border-color: var(--sw-cyan); color: var(--sw-cyan); }
+  .sw-btn-outline:hover { background: var(--sw-glow-cyan); }
+
+  /* ─── Hero ─── */
+  .sw-hero {
+    background: var(--sw-bg);
+    overflow: hidden;
+    position: relative;
+  }
+  .sw-hero::before {
+    content: '';
+    position: absolute;
+    top: -120px; left: -120px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,160,210,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .sw-hero-inner {
+    display: grid;
+    grid-template-columns: 55% 45%;
+    min-height: 600px;
+  }
+  @media (max-width: 900px) {
+    .sw-hero-inner { grid-template-columns: 1fr; }
+    .sw-hero-img-col { display: none; }
+  }
+  .sw-hero-container {
+    display: flex;
+    align-items: center;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  .sw-hero-content { max-width: 580px; position: relative; z-index: 1; }
+  .sw-badge-row { margin-bottom: 1.5rem; }
+  .sw-product-logo {
+    height: 48px;
+    width: auto;
+    display: block;
+    filter: brightness(1.1);
+  }
+  .sw-tagline {
+    font-family: 'Antonio', sans-serif;
+    font-size: 0.8125rem;
+    letter-spacing: 0.14em;
+    color: var(--sw-cyan);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  .sw-hero h1 {
+    font-family: 'Antonio', sans-serif;
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    color: white;
+    line-height: 1.05;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .sw-accent { display: block; color: var(--sw-cyan); }
+  .sw-subline {
+    font-size: 1.0625rem;
+    color: rgba(255,255,255,0.68);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .sw-hero-cta { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .sw-hero-img-col { position: relative; overflow: hidden; }
+  .sw-hero-img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center left;
+    display: block;
+  }
+  .sw-hero-img-fade {
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, var(--sw-bg) 0%, transparent 30%),
+                linear-gradient(to top, var(--sw-bg) 0%, transparent 20%);
+  }
+
+  /* ─── Stats Bar ─── */
+  .sw-stats {
+    background: var(--sw-surface);
+    border-top: 1px solid rgba(0,160,210,0.2);
+    border-bottom: 1px solid rgba(0,160,210,0.2);
+    padding: 2rem 0;
+  }
+  .sw-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem; text-align: center;
+  }
+  @media (max-width: 640px) { .sw-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .sw-stat { display: flex; flex-direction: column; gap: 0.25rem; }
+  .sw-stat-value {
+    font-family: 'Antonio', sans-serif;
+    font-size: 2.5rem; font-weight: 700;
+    color: var(--sw-cyan);
+    line-height: 1;
+  }
+  .sw-stat-label { font-size: 0.875rem; color: var(--sw-muted-color); }
+
+  /* ─── Für wen / Zwei Wege ─── */
+  .sw-fuerwen { background: var(--sw-bg); }
+  .sw-wege-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  @media (max-width: 768px) { .sw-wege-grid { grid-template-columns: 1fr; } }
+  .sw-weg-card {
+    background: var(--sw-surface);
+    border: 1px solid var(--sw-border);
+    border-radius: 1rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+  }
+  .sw-weg-card:hover { box-shadow: 0 20px 40px -10px rgba(0,0,0,0.4); }
+  .sw-weg-header {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 2px solid;
+  }
+  .sw-weg-nr {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 0.375rem;
+    font-family: 'Antonio', sans-serif; font-size: 1.25rem; font-weight: 700;
+    color: #000; flex-shrink: 0;
+  }
+  .sw-weg-tag {
+    font-family: 'Antonio', sans-serif;
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--sw-muted-color);
+  }
+  .sw-weg-card h3 {
+    font-family: 'Antonio', sans-serif;
+    font-size: 1.25rem; text-transform: uppercase;
+    color: var(--sw-text); margin: 0;
+  }
+  .sw-weg-card > p { font-size: 0.9375rem; color: var(--sw-muted-color); line-height: 1.65; margin: 0; }
+  .sw-weg-bullets { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.625rem; }
+  .sw-weg-bullets li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.875rem; color: var(--sw-text); line-height: 1.4; }
+  .sw-weg-bullets li svg { flex-shrink: 0; margin-top: 2px; }
+  .sw-weg-cta {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border: 1.5px solid; border-radius: 0.375rem;
+    font-family: 'Antonio', sans-serif; font-weight: 600;
+    text-decoration: none; font-size: 0.875rem;
+    transition: background 150ms ease;
+    margin-top: auto;
+    width: fit-content;
+  }
+  .sw-weg-cta:hover { background: rgba(255,255,255,0.05); }
+  .sw-weg-cta svg { transition: transform 150ms ease; }
+  .sw-weg-cta:hover svg { transform: translateX(4px); }
+
+  /* ─── Features ─── */
+  .sw-features { background: var(--sw-surface); }
+  .sw-features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  @media (max-width: 900px) { .sw-features-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .sw-features-grid { grid-template-columns: 1fr; } }
+  .sw-feature-card {
+    background: var(--sw-bg);
+    border: 1px solid var(--sw-border);
+    border-radius: 0.875rem;
+    padding: 1.75rem;
+    transition: all 200ms ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .sw-feature-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--sw-cyan), transparent);
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+  .sw-feature-card:hover { border-color: rgba(0,160,210,0.3); transform: translateY(-2px); }
+  .sw-feature-card:hover::before { opacity: 1; }
+  .sw-feature-icon { color: var(--sw-cyan); margin-bottom: 1rem; }
+  .sw-feature-card h3 {
+    font-family: 'Antonio', sans-serif;
+    font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--sw-text); margin-bottom: 0.625rem;
+  }
+  .sw-feature-card p { font-size: 0.875rem; color: var(--sw-muted-color); line-height: 1.65; margin: 0; }
+
+  /* ─── Workflow ─── */
+  .sw-workflow { background: var(--sw-bg); }
+  .sw-workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    position: relative;
+    margin-bottom: 3rem;
+  }
+  @media (max-width: 900px) { .sw-workflow-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 500px) { .sw-workflow-grid { grid-template-columns: 1fr; } }
+  .sw-workflow-step {
+    background: var(--sw-surface);
+    border: 1px solid var(--sw-border);
+    border-radius: 0.875rem;
+    padding: 1.5rem;
+    position: relative;
+  }
+  .sw-workflow-nr {
+    width: 40px; height: 40px;
+    background: var(--sw-cyan);
+    color: #000;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Antonio', sans-serif; font-size: 1.25rem; font-weight: 700;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+  }
+  .sw-workflow-arrow {
+    position: absolute; right: -0.75rem; top: 50%;
+    transform: translateY(-50%);
+    color: var(--sw-cyan);
+    z-index: 2;
+    display: none;
+  }
+  @media (min-width: 901px) { .sw-workflow-arrow { display: block; } }
+  .sw-workflow-step h3 {
+    font-family: 'Antonio', sans-serif;
+    font-size: 0.9375rem; text-transform: uppercase;
+    color: var(--sw-text); margin-bottom: 0.5rem;
+  }
+  .sw-workflow-step p { font-size: 0.8125rem; color: var(--sw-muted-color); line-height: 1.6; margin: 0; }
+  .sw-workflow-image {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    max-height: 400px;
+  }
+  .sw-workflow-image img { width: 100%; height: 400px; object-fit: cover; object-position: center top; display: block; }
+  .sw-workflow-label {
+    position: absolute; bottom: 1.5rem; left: 1.5rem;
+    background: rgba(14,12,30,0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0,160,210,0.3);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-family: 'Antonio', sans-serif;
+    font-size: 0.875rem; color: var(--sw-cyan);
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+
+  /* ─── Prüfaufgaben ─── */
+  .sw-aufgaben { background: var(--sw-surface); }
+  .sw-aufgaben-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  @media (max-width: 900px) { .sw-aufgaben-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 500px) { .sw-aufgaben-grid { grid-template-columns: 1fr; } }
+  .sw-aufgabe {
+    display: flex; align-items: flex-start; gap: 0.875rem;
+    background: var(--sw-bg);
+    border: 1px solid var(--sw-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    transition: border-color 150ms ease;
+  }
+  .sw-aufgabe:hover { border-color: rgba(0,160,210,0.3); }
+  .sw-aufgabe-icon { font-size: 1.5rem; color: var(--sw-cyan); flex-shrink: 0; line-height: 1.4; }
+  .sw-aufgabe > div { display: flex; flex-direction: column; gap: 0.25rem; }
+  .sw-aufgabe strong { font-family: 'Antonio', sans-serif; font-size: 0.9375rem; text-transform: uppercase; color: var(--sw-text); }
+  .sw-aufgabe span { font-size: 0.8125rem; color: var(--sw-muted-color); line-height: 1.5; }
+
+  /* ─── Update Banner ─── */
+  .sw-update {
+    background: var(--sw-violet);
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .sw-update::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at top right, rgba(0,160,210,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .sw-update .sw-container { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  @media (max-width: 768px) { .sw-update .sw-container { grid-template-columns: 1fr; } .sw-update-img { display: none; } }
+  .sw-update-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(0,160,210,0.2);
+    border: 1px solid rgba(0,160,210,0.4);
+    border-radius: 9999px;
+    font-family: 'Antonio', sans-serif;
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--sw-cyan);
+    margin-bottom: 1rem;
+  }
+  .sw-update-inner h2 {
+    font-family: 'Antonio', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    text-transform: uppercase;
+    color: white;
+    margin-bottom: 1rem;
+  }
+  .sw-update-inner > .sw-update-text > p { font-size: 0.9375rem; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 2rem; }
+  .sw-update-stats { display: flex; flex-direction: column; gap: 1rem; }
+  .sw-update-stat {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: rgba(255,255,255,0.06);
+    border-radius: 0.625rem;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .sw-update-val {
+    font-family: 'Antonio', sans-serif;
+    font-size: 2rem; font-weight: 700;
+    color: var(--sw-cyan);
+    min-width: 60px; text-align: center;
+  }
+  .sw-update-stat strong { display: block; font-family: 'Antonio', sans-serif; text-transform: uppercase; color: white; font-size: 0.875rem; }
+  .sw-update-stat span { font-size: 0.8125rem; color: rgba(255,255,255,0.55); }
+  .sw-update-img img { width: 100%; height: 380px; object-fit: cover; border-radius: 1rem; box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
+
+  /* ─── CTA ─── */
+  .sw-cta {
+    background: var(--sw-bg);
+    padding: 5rem 0;
+    border-top: 1px solid var(--sw-border);
+  }
+  .sw-cta-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 2rem;
+  }
+  .sw-cta-text { flex: 1; min-width: 280px; }
+  .sw-cta-text h2 {
+    font-family: 'Antonio', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    text-transform: uppercase;
+    color: white; margin-bottom: 0.75rem;
+  }
+  .sw-cta-text p { color: var(--sw-muted-color); font-size: 1.0625rem; margin: 0; }
+  .sw-cta-btns { display: flex; flex-wrap: wrap; gap: 1rem; }
+</style>
