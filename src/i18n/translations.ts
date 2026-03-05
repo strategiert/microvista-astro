@@ -94,6 +94,13 @@ export const translations = {
       fr: 'Contact',
       es: 'Contacto',
       it: 'Contatto'
+    },
+    software: {
+      de: 'Software',
+      en: 'Software',
+      fr: 'Logiciel',
+      es: 'Software',
+      it: 'Software'
     }
   },
 
