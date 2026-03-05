@@ -4,8 +4,8 @@
   "description": "Industrielle Computertomographie. Anywhere. Anytime. Fast.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0f",
-  "theme_color": "#7C3AED",
+  "background_color": "#1f1840",
+  "theme_color": "#32285b",
   "icons": [
     {
       "src": "/favicon-192x192.png",
