@@ -8,14 +8,16 @@ interface Props {
   slug: string;
   name: string;
   description: string;
+  heroImage?: string;
   icon: string;
   locale: Locale;
   ctaText: string;
   featured?: boolean;
 }
 
-const { slug, name, description, icon, locale, ctaText, featured = false } = Astro.props;
+const { slug, name, description, heroImage, icon, locale, ctaText, featured = false } = Astro.props;
 const lp = (path: string) => localePath(path, locale);
+const cardImage = heroImage || `/images/branchen/${slug}.jpg`;
 
 // Industry Icons
 const icons: Record<string, string> = {
@@ -62,7 +64,7 @@ const color = colors[icon] || colors['automotive'];
   <a href={lp(`/branchen/${slug}`)} class="card-link">
     <div class="card-visual">
       <img 
-        src={`/images/branchen/${slug}.jpg`} 
+        src={cardImage}
         alt={name}
         class="card-image" 
         loading={featured ? 'eager' : 'lazy'}
