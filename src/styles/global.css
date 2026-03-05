@@ -101,15 +101,19 @@
    ========================================= */
 
 [data-theme="labor"] {
-  --primary: #0A2463;
-  --primary-light: #1E3A8A;
-  --accent: #00B4D8;
-  --accent-light: #48CAE4;
+  /* Primary: Dunkellila für Text */
+  --primary: #32285b;
+  --primary-light: #4a3d7a;
+  /* Accent: Orange für CTAs */
+  --accent: #ee7711;
+  --accent-light: #ff9933;
+  /* Background: Weiß/Hell */
   --background: #ffffff;
-  --surface: #f8fafc;
-  --surface-hover: #f1f5f9;
-  --text: #1e293b;
-  --text-muted: #64748b;
+  --surface: #f1f5f9;
+  --surface-hover: #e2e8f0;
+  /* Text: Dunkellila */
+  --text: #32285b;
+  --text-muted: #475569;
   --border: #e2e8f0;
 }
 
@@ -120,8 +124,8 @@
 [data-theme="serie"] {
   --primary: #1A365D;
   --primary-light: #2D4A7C;
-  --accent: #F97316;
-  --accent-light: #FB923C;
+  --accent: #ee7711;
+  --accent-light: #ff9933;
   --background: #0F172A;
   --surface: #1E293B;
   --surface-hover: #334155;
