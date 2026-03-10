@@ -214,7 +214,7 @@ Mieten Sie ihn an jedem Standort so lange, wie Sie ihn brauchen.
 Verhindern Sie die Zerstörung von Komponenten für statistische Zwecke  
 sowie eine möglich notwendige Veredelung von nachgelagertem Ausschuss. Dadurch werden Ressourcen geschont und der CO2-Ausstoß reduziert.
 
-![Industrielles mobiles CT -ScanExpress](https://www.mobile-ct.eu/wp-content/uploads/2026/01/Industrielles-mobiles-CT-ScanExpress.webp)
+![Industrielles mobiles CT -ScanExpress](https://www.mobile-ct.eu/images/wp/2026/01/Industrielles-mobiles-CT-ScanExpress.webp)
 
 [Jetzt unverbindlich anfragen](#Kontaktformular)
 

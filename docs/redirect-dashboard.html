@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microvista — URL-Migrationsstatus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0e12;
+    --surface: #14171e;
+    --surface-2: #1b1f28;
+    --border: #262b36;
+    --border-light: #333a48;
+    --text: #e2e5eb;
+    --text-muted: #7d8594;
+    --text-dim: #4e5564;
+    --green: #34d399;
+    --green-bg: rgba(52, 211, 153, 0.08);
+    --green-border: rgba(52, 211, 153, 0.2);
+    --amber: #fbbf24;
+    --amber-bg: rgba(251, 191, 36, 0.08);
+    --amber-border: rgba(251, 191, 36, 0.2);
+    --red: #f87171;
+    --red-bg: rgba(248, 113, 113, 0.08);
+    --red-border: rgba(248, 113, 113, 0.2);
+    --blue: #60a5fa;
+    --blue-bg: rgba(96, 165, 250, 0.08);
+    --brand: #003366;
+    --accent: #ff6600;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Instrument Sans', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  /* ── Header ── */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo-mark {
+    width: 10px;
+    height: 32px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  .header h1 span {
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-left: 8px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .header-badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+  }
+
+  /* ── Main ── */
+  .main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 40px;
+  }
+
+  /* ── KPI Row ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+  }
+
+  .kpi-card.total::before { background: var(--blue); }
+  .kpi-card.ok::before { background: var(--green); }
+  .kpi-card.redirect::before { background: var(--amber); }
+  .kpi-card.missing::before { background: var(--red); }
+
+  .kpi-label {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .kpi-value {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .kpi-card.total .kpi-value { color: var(--blue); }
+  .kpi-card.ok .kpi-value { color: var(--green); }
+  .kpi-card.redirect .kpi-value { color: var(--amber); }
+  .kpi-card.missing .kpi-value { color: var(--red); }
+
+  .kpi-pct {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── Progress Bar ── */
+  .progress-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .progress-title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .progress-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--green);
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .progress-bar .seg-ok {
+    background: var(--green);
+    transition: width 0.8s ease;
+  }
+
+  .progress-bar .seg-redirect {
+    background: var(--amber);
+    transition: width 0.8s ease;
+  }
+
+  .progress-bar .seg-missing {
+    background: var(--red);
+    opacity: 0.4;
+    transition: width 0.8s ease;
+  }
+
+  .progress-legend {
+    display: flex;
+    gap: 24px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .legend-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .legend-dot.ok { background: var(--green); }
+  .legend-dot.redirect { background: var(--amber); }
+  .legend-dot.missing { background: var(--red); opacity: 0.5; }
+
+  /* ── Charts Row ── */
+  .charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+  }
+
+  .chart-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 40px;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+  }
+
+  .bar-label {
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bar-track {
+    height: 20px;
+    background: var(--surface-2);
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s ease;
+    display: flex;
+    align-items: center;
+  }
+
+  .bar-fill.ok { background: var(--green-bg); border: 1px solid var(--green-border); }
+  .bar-fill.redirect { background: var(--amber-bg); border: 1px solid var(--amber-border); }
+  .bar-fill.missing { background: var(--red-bg); border: 1px solid var(--red-border); }
+
+  .bar-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: right;
+  }
+
+  /* ── Donut ── */
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .donut-svg {
+    width: 100px;
+    height: 100px;
+    transform: rotate(-90deg);
+    flex-shrink: 0;
+  }
+
+  .donut-svg circle {
+    fill: none;
+    stroke-width: 10;
+    cx: 50;
+    cy: 50;
+    r: 40;
+  }
+
+  .donut-bg { stroke: var(--surface-2); }
+  .donut-slice { transition: stroke-dashoffset 0.8s ease; }
+
+  .donut-labels {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .donut-label-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .donut-label-item .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .donut-label-item .val {
+    font-family: 'DM Mono', monospace;
+    color: var(--text);
+    margin-left: auto;
+    padding-left: 12px;
+  }
+
+  /* ── Filter / Controls ── */
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-group {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .filter-btn {
+    background: var(--surface);
+    border: none;
+    color: var(--text-muted);
+    padding: 8px 14px;
+    font-size: 12px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    border-right: 1px solid var(--border);
+    transition: all 0.15s;
+  }
+
+  .filter-btn:last-child { border-right: none; }
+  .filter-btn:hover { background: var(--surface-2); color: var(--text); }
+  .filter-btn.active { background: var(--surface-2); color: var(--text); box-shadow: inset 0 -2px 0 var(--accent); }
+
+  .search-input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    width: 280px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text-dim); }
+
+  .result-count {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+    margin-left: auto;
+  }
+
+  /* ── Table ── */
+  .table-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .table-section-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .table-section-title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 10px 16px;
+    background: var(--surface-2);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  thead th:hover { color: var(--text); }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+
+  tbody tr:hover { background: rgba(255, 255, 255, 0.02); }
+  tbody tr:last-child { border-bottom: none; }
+
+  td {
+    padding: 10px 16px;
+    vertical-align: top;
+  }
+
+  .cell-path {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    word-break: break-all;
+    max-width: 320px;
+  }
+
+  .cell-title {
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+  }
+
+  .status-badge.ok {
+    background: var(--green-bg);
+    color: var(--green);
+    border: 1px solid var(--green-border);
+  }
+
+  .status-badge.redirect {
+    background: var(--amber-bg);
+    color: var(--amber);
+    border: 1px solid var(--amber-border);
+  }
+
+  .status-badge.missing {
+    background: var(--red-bg);
+    color: var(--red);
+    border: 1px solid var(--red-border);
+  }
+
+  .lang-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--surface-2);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    text-transform: uppercase;
+  }
+
+  .arrow-cell {
+    color: var(--text-dim);
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .table-scroll {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+
+  .table-scroll::-webkit-scrollbar { width: 6px; }
+  .table-scroll::-webkit-scrollbar-track { background: var(--surface); }
+  .table-scroll::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+  .empty-new { color: var(--red); opacity: 0.6; font-style: italic; }
+
+  /* ── Section breakdown ── */
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 6px;
+  }
+
+  .section-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .section-chip:hover { border-color: var(--border-light); }
+  .section-chip .name { color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px; }
+  .section-chip .cnt { color: var(--text-dim); }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-in {
+    animation: fadeUp 0.4s ease forwards;
+    opacity: 0;
+  }
+
+  .delay-1 { animation-delay: 0.05s; }
+  .delay-2 { animation-delay: 0.1s; }
+  .delay-3 { animation-delay: 0.15s; }
+  .delay-4 { animation-delay: 0.2s; }
+  .delay-5 { animation-delay: 0.25s; }
+  .delay-6 { animation-delay: 0.3s; }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .charts-row { grid-template-columns: 1fr; }
+    .main { padding: 20px 16px; }
+    .header { padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo-mark"></div>
+    <h1>Microvista<span>URL-Migrationsstatus</span></h1>
+  </div>
+  <div class="header-right">
+    <div class="header-badge">WP &rarr; Astro</div>
+    <div>Stand: 02.03.2026</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- KPI Cards -->
+  <div class="kpi-row" id="kpis"></div>
+
+  <!-- Progress -->
+  <div class="progress-section animate-in delay-2" id="progress-section"></div>
+
+  <!-- Charts -->
+  <div class="charts-row" id="charts-row"></div>
+
+  <!-- Table -->
+  <div class="controls" id="controls"></div>
+  <div class="table-section animate-in delay-6">
+    <div class="table-section-header">
+      <div class="table-section-title">URL-Mapping Details</div>
+      <div id="table-count" class="result-count"></div>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead id="thead"></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const DATA=[{"o":"/","t":"page","l":"de","n":"/","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Industrielle Computertomographie Dienstleister für Exzellenz"},{"o":"/agb","t":"page","l":"de","n":"/agb","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"AGB"},{"o":"/beitraege","t":"post","l":"de","n":"/magazin","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L8: /beitraege/ -> /magazin","x":"Redirect target exists in new sitemap.","ti":"Blog | Zerstörungsfreie Prüfung mit industrieller CT"},{"o":"/beitraege/3d-ct-auswertung","t":"post","l":"de","n":"/magazin/3d-ct-auswertung","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"3D CT Auswertung mit KI: Revolution in der Qualitätskontrolle von Hochleistungsmotoren"},{"o":"/beitraege/3d-ct-metall-pruefung-waermemanagement","t":"post","l":"de","n":"/magazin/3d-ct-metall-pruefung-waermemanagement","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Hochleistungsmotoren: Moderne 3D CT Prüfung für Bauteile"},{"o":"/beitraege/5-beliebte-zerstoerungsfreie-pruefverfahren-in-der-automobilindustrie","t":"post","l":"de","n":"/magazin/5-beliebte-zerstoerungsfreie-pruefverfahren-in-der-automobilindustrie","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Moderne zerstörungsfreie Prüfverfahren im Vergleich"},{"o":"/beitraege/ablauf-industrielle-ct-pruefung","t":"post","l":"de","n":"/magazin/ablauf-industrielle-ct-pruefung","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Industrielle CT-Prüfung im Labor: Ablauf in 7 Schritten"},{"o":"/beitraege/archaeologie-mobiles-ct","t":"post","l":"de","n":"/magazin/archaeologie-mobiles-ct","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Risikoarmes Scannen von Fundstücken durch mobiles CT"},{"o":"/beitraege/ausschuss-automobilindustrie-mit-zerstoerungsfreier-pruefung-minimieren","t":"post","l":"de","n":"/magazin/ausschuss-automobilindustrie-mit-zerstoerungsfreier-pruefung-minimieren","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Ausschuss in der Automobilindustrie mit ZfP minimieren"},{"o":"/beitraege/ct-container-long-vs-compact","t":"post","l":"de","n":"/magazin/ct-container-long-vs-compact","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"CT-Container: Long vs. Compact – ScanExpress im Vergleich"},{"o":"/beitraege/ct-inspektion-serienstart-whitepaper","t":"post","l":"de","n":"/magazin/ct-inspektion-serienstart-whitepaper","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Temporäre CT Inspektion für Serienanläufe"},{"o":"/beitraege/effiziente-fehleranalyse-express-service","t":"post","l":"de","n":"/magazin/effiziente-fehleranalyse-express-service","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Express-Service zur Fehleranalyse gesperrter Lose | Schnell & präzise"},{"o":"/beitraege/einblicke-in-trends-marktentwicklung-und-innovationen","t":"post","l":"de","n":"/magazin/einblicke-in-trends-marktentwicklung-und-innovationen","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Einblicke in Trends, Marktentwicklung und Innovationen"},{"o":"/beitraege/endspurt-nun-auch-beim-mobilen-ct-container","t":"post","l":"de","n":"/magazin/endspurt-nun-auch-beim-mobilen-ct-container","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Endspurt nun auch beim mobilen CT Container"},{"o":"/beitraege/erste-testscans-mit-dem-mobilen-ct","t":"post","l":"de","n":"/magazin/erste-testscans-mit-dem-mobilen-ct","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Erste Testscans mit dem mobilen CT"},{"o":"/beitraege/erster-kundeneinsatz-des-scanexpress","t":"post","l":"de","n":"/magazin/erster-kundeneinsatz-des-scanexpress","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"1. Kundeneinsatz vom ScanExpress dem mobilen industriellen CT"},{"o":"/beitraege/industrielle-ct-die-beste-methode-fuer-zerstoerungsfreie-pruefung-von-gussteilen","t":"post","l":"de","n":"/magazin/industrielle-ct-die-beste-methode-fuer-zerstoerungsfreie-pruefung-von-gussteilen","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Die beste Methode für die zerstörungsfreie Prüfung von Gussteilen"},{"o":"/beitraege/industrielle-ct-zur-prufung-additiv-gefertigter-bauteile","t":"post","l":"de","n":"/magazin/industrielle-ct-zur-prufung-additiv-gefertigter-bauteile","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Prüfung von additiver Fertigung mit CT"},{"o":"/beitraege/industrielle-ct-zylinderkopfpruefung","t":"post","l":"de","n":"/magazin/industrielle-ct-zylinderkopfpruefung","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Industrielle CT-Zylinderkopfprüfung: Präzise Fehlererkennung für maximale Produktqualität"},{"o":"/beitraege/industrielle-rontgenprufung-vs-industrielle-computertomographie","t":"post","l":"de","n":"/magazin/industrielle-rontgenprufung-vs-industrielle-computertomographie","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Industrielle Röntgenprüfung vs. Industrielle Computertomographie"},{"o":"/beitraege/innovative-methode-zur-auswertung-von-hairpin-stator-scans","t":"post","l":"de","n":"/magazin/innovative-methode-zur-auswertung-von-hairpin-stator-scans","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Innovative Methode zur Auswertung von Hairpin Stator Scans"},{"o":"/beitraege/inspecthub","t":"post","l":"de","n":"/magazin/inspecthub","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Effiziente & sichere Cloud-Lösung für Ihre Serienprüfung"},{"o":"/beitraege/microvista-erneut-zertifiziert","t":"post","l":"de","n":"/magazin/microvista-erneut-zertifiziert","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Microvista erneut zertifiziert"},{"o":"/beitraege/mobiler-industrieller-computertomograph","t":"post","l":"de","n":"/magazin/mobiler-industrieller-computertomograph","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"ScanExpress 2.0: mobiler industrieller Computertomograph"},{"o":"/beitraege/mobiles-ct-auf-der-zielgeraden","t":"post","l":"de","n":"/magazin/mobiles-ct-auf-der-zielgeraden","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Neue Webseite mit Blog, Newsletter uvm."},{"o":"/beitraege/mobiles-ct-bei-der-vdi-tagung-giesstechnik-im-motorenbau","t":"post","l":"de","n":"/magazin/mobiles-ct-bei-der-vdi-tagung-giesstechnik-im-motorenbau","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Mobiles CT bei der VDI-Tagung Gießtechnik im Motorenbau"},{"o":"/beitraege/mobiles-ct-und-container-vereint-der-scanexpress-ist-fast-fertig","t":"post","l":"de","n":"/magazin/mobiles-ct-und-container-vereint-der-scanexpress-ist-fast-fertig","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Mobiles CT & Container vereint – der SCANEXPRESS (fast) fertig"},{"o":"/beitraege/mobiles-industrielles-ct-auf-der-zielgeraden","t":"post","l":"de","n":"/magazin/mobiles-industrielles-ct-auf-der-zielgeraden","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Mobiles industrielles CT auf der Zielgeraden"},{"o":"/beitraege/palaeontologie-trifft-industrielle-ct","t":"post","l":"de","n":"/magazin/palaeontologie-trifft-industrielle-ct","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Paläontologie trifft industrielle CT: 3D-Blick in Fossilien"},{"o":"/beitraege/ppf-verfahren-optimierung-potenzialfreisetzung-durch-industrielle-ct-pruefung","t":"post","l":"de","n":"/magazin/ppf-verfahren-optimierung-potenzialfreisetzung-durch-industrielle-ct-pruefung","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"PPF-Verfahren Optimierung: Potentialfreisetzung mit industrielle CT"},{"o":"/beitraege/qualitaetssicherung-pharmaindustrie","t":"post","l":"de","n":"/magazin/qualitaetssicherung-pharmaindustrie","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Zerstörungsfreie Qualitätssicherung in der Pharmaindustrie"},{"o":"/beitraege/scanexpress-eingetroffen","t":"post","l":"de","n":"/magazin/scanexpress-eingetroffen","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"SCANEXPRESS eingetroffen!"},{"o":"/beitraege/scanexpress-wie-funktioniert-das-mobile-ct","t":"post","l":"de","n":"/magazin/scanexpress-wie-funktioniert-das-mobile-ct","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"SCANEXPRESS - Wie funktioniert das mobile CT?"},{"o":"/beitraege/update-schnellere-ct-scans-hoehere-aufloesung-laminografie","t":"post","l":"de","n":"/magazin/update-schnellere-ct-scans-hoehere-aufloesung-laminografie","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Update: Schnellere CT-Scans, höhere Auflösung & Laminografie"},{"o":"/beitraege/wanddickenmessung-im-uberblick","t":"post","l":"de","n":"/magazin/wanddickenmessung-im-uberblick","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Moderne Möglichkeiten zur Wanddickenmessung im Überblick"},{"o":"/beitraege/zerstorungfreie-prufung-von-leichtmetallguss","t":"post","l":"de","n":"/magazin/zerstorungfreie-prufung-von-leichtmetallguss","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Leichtmetallguss zerstörungsfrei prüfen mit CT"},{"o":"/beitraege/zerstorungsfreie-prufung-von-batteriesystemen","t":"post","l":"de","n":"/magazin/zerstorungsfreie-prufung-von-batteriesystemen","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Zerstörungsfreie Prüfung von Batteriesystemen"},{"o":"/beitraege/zerstorungsfreie-prufung-von-eisenguss","t":"post","l":"de","n":"/magazin/zerstorungsfreie-prufung-von-eisenguss","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Zerstörungsfreie Prüfung von Eisenguss mit industrieller CT"},{"o":"/beitraege/zfp-automobilindustrie","t":"post","l":"de","n":"/magazin/zfp-automobilindustrie","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L7: /beitraege/* -> /magazin/:splat","x":"Redirect target exists in new sitemap.","ti":"Zerstörungsfreie Prüfung für die Automobilindustrie"},{"o":"/bonusprogramm","t":"page","l":"de","n":"/bonusprogramm","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Bonusprogramm für zerstörungsfreie Prüfdienstleistungen"},{"o":"/cookie-richtlinie-eu","t":"page","l":"de","n":"/datenschutz","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L55: /cookie-richtlinie-eu/ -> /datenschutz","x":"Redirect target exists in new sitemap.","ti":"Cookie-Richtlinie (EU)"},{"o":"/datenschutzerklaerung","t":"page","l":"de","n":"/datenschutz","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L54: /datenschutzerklaerung/ -> /datenschutz","x":"Redirect target exists in new sitemap.","ti":"Datenschutzerklärung"},{"o":"/en/cad-target-actual-comparison","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"High-speed CAD target/actual comparison with industrial CT"},{"o":"/en/certificates","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Certificates"},{"o":"/en/contact","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Contact for NDT with industrial CT"},{"o":"/en/cookie-policy","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Cookie Policy"},{"o":"/en/data-privacy","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Data privacy statement"},{"o":"/en/drive-efficiency-eliminate-scrap-see-the-power-of-mobile-industrial-ct","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Drive Efficiency, Eliminate Scrap: Power of the Mobile Industrial CT"},{"o":"/en/employees","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Get to know the Microvista team!"},{"o":"/en/environmental-alliance-saxony-anhalt","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"lEnvironmental alliance Saxony-Anhalt"},{"o":"/en/general-terms-and-conditions","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"General Terms and Conditions"},{"o":"/en/imprint","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Imprint"},{"o":"/en/industrial-computed-tomography/faq-2","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"FAQ| Industrial computed tomography"},{"o":"/en/industrial-computed-tomography/inspection-tasks","t":"pruefaufgabe","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Testing tasks for industrial computed tomography"},{"o":"/en/industrial-computed-tomography/inspection-tasks/assembly-and-joining-inspection","t":"pruefaufgabe","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Fast assembly & joining control with industrial CT"},{"o":"/en/industrial-computed-tomography/inspection-tasks/burr-core-residues-and-chips","t":"pruefaufgabe","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Fast CT inspection for burrs, core residues & chips"},{"o":"/en/industrial-computed-tomography/inspection-tasks/initial-sample-inspection-report","t":"pruefaufgabe","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Initial Sample Inspection Report"},{"o":"/en/industrial-computed-tomography/inspection-tasks/porosity-analysis","t":"pruefaufgabe","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Automatic porosity analysis with industrial CT"},{"o":"/en/industrial-computed-tomography/inspection-tasks/quality-assurance-for-hairpin-stators","t":"pruefaufgabe","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Quality assurance for hairpin stators"},{"o":"/en/industrial-computed-tomography/inspection-tasks/reverse-engineerin","t":"pruefaufgabe","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Reverse engineering of complex components with CT"},{"o":"/en/industrial-computed-tomography/inspection-tasks/wall-thickness-measurement","t":"pruefaufgabe","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Measuring wall thicknesses with industrial CT"},{"o":"/en/industrial-computed-tomography/services","t":"dienstleistung","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Industrial computed tomography services"},{"o":"/en/industrial-computed-tomography/services/ct-data-analysis","t":"dienstleistung","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"CT data evaluation"},{"o":"/en/industrial-computed-tomography/services/ct-laboratory","t":"dienstleistung","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"CT laboratory for external quality control"},{"o":"/en/measuring-geometric-tolerances-gdt-methods-and-procedures","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Measuring Geometric Tolerances | GD&T Methods & ISO 1101"},{"o":"/en/media-library","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Media library Microvista GmbH – industrial CT"},{"o":"/en/news-center","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"News Center Microvista GmbH - industrial CT"},{"o":"/en/non-destructive-weld-testing-methods-procedures-and-techniques","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Weld Testing Methods: A Complete Overview"},{"o":"/en/posts","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"News blog | Non-destructive testing with industrial CT"},{"o":"/en/posts/3d-ct-analysis-with-ai","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"3D CT analysis with AI: revolution in the quality control of high-performance engines"},{"o":"/en/posts/3d-ct-metal-testing-components","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"High-performance engines: 3D CT metal testing for components"},{"o":"/en/posts/5-popular-methods-for-non-destructive-testing","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"5 Popular NDT Methods in the Automotive Industry"},{"o":"/en/posts/7-steps-of-industrial-ct-testing","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"7 Steps of Industrial CT-Testing"},{"o":"/en/posts/arrival-of-the-mobile-ct","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Arrival of the mobile CT"},{"o":"/en/posts/ct-container-long-vs-compact-2","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Worldwide Unique Industrial CT Containers: A Comparison of the Different ScanExpress Versions"},{"o":"/en/posts/ct-for-pharma","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Non-destructive quality assurance in the pharmaceutical industry"},{"o":"/en/posts/efficient-failure-analysis-for-blocked-batches-fast-decisions-with-our-express-service","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Express Failure Analysis for Blocked Batches | Fast Industrial Inspection"},{"o":"/en/posts/final-spurt-now-also-for-the-mobile-ct-container","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Final spurt now also for the mobile CT Container"},{"o":"/en/posts/first-customer-use-of-the-scanexpress","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"First customer use of the ScanExpress - the mobile industrial CT"},{"o":"/en/posts/first-test-scans-with-the-mobile-ct","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"First test scans with the mobile CT"},{"o":"/en/posts/hairpin-stator-crown","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Innovative Method for evaluating Hairpin Stators"},{"o":"/en/posts/industrial-ct-cylinder-head-inspection","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"CT cylinder head inspection: A method for identifying issues and ensuring product quality"},{"o":"/en/posts/industrial-ct-for-testing-additively-manufactured-components","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Non Destructive Testing Of Additively Manufactured Components"},{"o":"/en/posts/industrial-ct-the-best-method-for-non-destructive-testing-of-casting-parts","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"The best method for non-destructive testing of casting parts"},{"o":"/en/posts/industrial-x-ray-inspection-vs-industrial-computed-tomography","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Industrial X-ray inspection vs. industrial computed tomography"},{"o":"/en/posts/insights-into-trends-market-development-and-technological-innovations","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Insights into trends, market development and technological innovations"},{"o":"/en/posts/inspecthub-cloudsolution","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Efficient, transparent, secure: Cloud solution for your serial testing"},{"o":"/en/posts/microvista-certified-once-again","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Microvista certified once again"},{"o":"/en/posts/minimise-rejects-in-the-automotive-industry-with-non-destructive-testing","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Minimise rejects in the automotive industry with NDT"},{"o":"/en/posts/mobile-ct-at-the-vdi-conference-on-casting-technology-in-engine-construction","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Mobile CT at the VDI conference on casting technology in engine construction"},{"o":"/en/posts/mobile-ct-container-united-the-scanexpress-almost-ready","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"CT & container united - the SCANEXPRESS (almost) finished"},{"o":"/en/posts/mobile-industrial-ct-compact","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"ScanExpress 2.0: mobile industrial CT scanner"},{"o":"/en/posts/mobile-industrial-ct-on-the-home-straight","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Mobile industrial CT on the home straight"},{"o":"/en/posts/ndt-for-the-automotive-industry","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Non-destructive testing for the automotive industry"},{"o":"/en/posts/ndt-of-light-metal-castings","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Non Destructive Testing Of Light Metal Castings"},{"o":"/en/posts/new-website-with-blog-newsletter-etc","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"New website with blog, newsletter, etc."},{"o":"/en/posts/non-destructive-testing-of-battery-systems","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Non Destructive Testing of Battery Systems"},{"o":"/en/posts/non-destructive-testing-of-cast-iron","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Non Destructive Testing Of Iron Castings"},{"o":"/en/posts/palaeontology-meets-industrial-ct","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Palaeontology meets industrial CT: a 3D view of fossils"},{"o":"/en/posts/ppf-process-optimisation-industrial-ct-testing","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"PPF process optimisation through industrial CT testing"},{"o":"/en/posts/scanexpress-how-does-the-mobile-ct-work","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"SCANEXPRESS - How does the mobile CT work?"},{"o":"/en/posts/scanning-artifacts-with-low-risk-using-mobile-industrial-ct","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Scanning artifacts with low risk using mobile industrial CT"},{"o":"/en/posts/temporary-ct-inspection-series-start-ups","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Temporary CT inspection for series start-ups"},{"o":"/en/posts/update-faster-ct-scans-higher-resolution-laminography","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Update: Faster CT scans, higher resolution & laminography"},{"o":"/en/posts/wall-thickness-measurement-your-options-at-a-glance","t":"post","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Wall thickness measurement: Your options at a glance"},{"o":"/en/press-releases","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Press releases"},{"o":"/en/presse-en/microvista-gmbh-strengthens-management-team-dr-robin-hohne-and-prof-dr-lutz-hagner-form-dual-leadership","t":"press","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Microvista GmbH stärkt Führungsteam: Dr. Robin Höhne und Prof. Dr. Lutz Hagner bilden Doppelspitze"},{"o":"/en/questionnaire","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Improve quality control? This questionnaire gives the answer"},{"o":"/en/registration-live-demo-scanexpress","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Registration for live showcase: Mobile CT container"},{"o":"/en/research-development","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Promotion of research & development"},{"o":"/en/reward-program","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Reward program for non-destructive testing services"},{"o":"/en/serial-testing","t":"page","l":"en","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Non-destructive serial testing fast & automated"},{"o":"/end-of-line-test","t":"page","l":"de","n":"/end-of-line-test","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"End of Line Test mit CT-Prüftechnik | Qualitätssicherung"},{"o":"/forschung-entwicklung","t":"page","l":"de","n":"/forschung-entwicklung","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Förderung von Forschung & Entwicklung"},{"o":"/fr/clause-de-non-responsabilite","t":"page","l":"fr","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Clause de non-responsabilité"},{"o":"/fr/declaration-de-confidentialite-ue","t":"page","l":"fr","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Déclaration de confidentialité (UE)"},{"o":"/fr/impression","t":"page","l":"fr","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Impression"},{"o":"/fr/politique-en-matiere-de-cookies","t":"page","l":"fr","n":"","m":"no_mapping","s":"","v":"no","r":"","x":"No redirect rule matched old path.","ti":"Politique en matière de cookies"},{"o":"/fragebogen","t":"page","l":"de","n":"/fragebogen","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Qualitätskontrolle verbessern? Dieser Fragebogen gibt die Antwort"},{"o":"/impressum","t":"page","l":"de","n":"/impressum","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Impressum"},{"o":"/industrielle-computertomographie/dienstleistungen","t":"dienstleistung","l":"de","n":"/industrielle-computertomographie/dienstleistungen","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Dienstleister mit moderner industrieller CT Messtechnik"},{"o":"/industrielle-computertomographie/dienstleistungen/ct-datenauswertung","t":"dienstleistung","l":"de","n":"/industrielle-computertomographie/dienstleistungen/ct-datenauswertung","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"CT-Datenauswertung"},{"o":"/industrielle-computertomographie/dienstleistungen/ct-labor","t":"dienstleistung","l":"de","n":"/industrielle-computertomographie/dienstleistungen/ct-labor","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"CT Labor für externe Qualitätskontrolle"},{"o":"/industrielle-computertomographie/dienstleistungen/scanexpress-mobiles-industrielles-ct","t":"dienstleistung","l":"de","n":"/industrielle-computertomographie/dienstleistungen/scanexpress-mobiles-industrielles-ct","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Mobile industrielle CT-Lösung zum Mieten SCANEXPRESS"},{"o":"/industrielle-computertomographie/faq","t":"page","l":"de","n":"/industrielle-computertomographie/faq","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"FAQ| Industrielle Computertomographie"},{"o":"/industrielle-computertomographie/prufaufgaben","t":"pruefaufgabe","l":"de","n":"/industrielle-computertomographie/prufaufgaben","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Prüfaufgaben für industrielle Computertomographie"},{"o":"/industrielle-computertomographie/prufaufgaben/3d-vermessung","t":"pruefaufgabe","l":"de","n":"/industrielle-computertomographie/prufaufgaben/3d-vermessung","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Moderne 3D Vermessung von Bauteilen | Optisch, taktil & CT"},{"o":"/industrielle-computertomographie/prufaufgaben/cad-soll-ist-vergleich","t":"pruefaufgabe","l":"de","n":"/industrielle-computertomographie/prufaufgaben/cad-soll-ist-vergleich","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Highspeed CAD Soll-Ist-Vergleich mit industrieller CT"},{"o":"/industrielle-computertomographie/prufaufgaben/erstmusterpruefbericht","t":"pruefaufgabe","l":"de","n":"/industrielle-computertomographie/prufaufgaben/erstmusterpruefbericht","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Erstmusterprüfbericht (EMPB) nach VDA | Erstbemusterung Microvista"},{"o":"/industrielle-computertomographie/prufaufgaben/form-und-lagetoleranzen","t":"pruefaufgabe","l":"de","n":"/industrielle-computertomographie/prufaufgaben/form-und-lagetoleranzen","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Form- und Lagetoleranzen messen | Methoden & ISO 1101"},{"o":"/industrielle-computertomographie/prufaufgaben/grat-kernreste-spaene","t":"pruefaufgabe","l":"de","n":"/industrielle-computertomographie/prufaufgaben/grat-kernreste-spaene","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Schnelle CT-Prüfung auf Grat, Kernreste & Späne"},{"o":"/industrielle-computertomographie/prufaufgaben/laminographie","t":"pruefaufgabe","l":"de","n":"/industrielle-computertomographie/prufaufgaben/laminographie","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Laminographie: Zerstörungsfrei flache Bauteile prüfen"},{"o":"/industrielle-computertomographie/prufaufgaben/messung-wandstaerken","t":"pruefaufgabe","l":"de","n":"/industrielle-computertomographie/prufaufgaben/messung-wandstaerken","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Messung von Wandstärken mit industrieller CT"},{"o":"/industrielle-computertomographie/prufaufgaben/montage-fugekontrolle","t":"pruefaufgabe","l":"de","n":"/industrielle-computertomographie/prufaufgaben/montage-fugekontrolle","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Schnelle Montage- & Fügekontrolle mit industrieller CT"},{"o":"/industrielle-computertomographie/prufaufgaben/porositatsanalyse","t":"pruefaufgabe","l":"de","n":"/industrielle-computertomographie/prufaufgaben/porositatsanalyse","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Automatische Porositätsanalyse mit industrieller CT"},{"o":"/industrielle-computertomographie/prufaufgaben/qualitatssicherung-bei-hairpin-statoren","t":"pruefaufgabe","l":"de","n":"/pruefaufgaben/hairpin-stator-pruefung","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L20: /industrielle-computertomographie/prufaufgaben/qualitatssicherung-bei-hairpin-statoren/ -> /pruefaufgaben/hairpin-stator-pruefung","x":"Redirect target exists in new sitemap.","ti":"Qualitätssicherung bei Hairpin Statoren"},{"o":"/industrielle-computertomographie/prufaufgaben/reverse-engineering","t":"pruefaufgabe","l":"de","n":"/industrielle-computertomographie/prufaufgaben/reverse-engineering","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Reverse Engineering von komplexen Bauteilen mit CT"},{"o":"/industrielle-computertomographie/prufaufgaben/schweissnahtpruefung","t":"pruefaufgabe","l":"de","n":"/industrielle-computertomographie/prufaufgaben/schweissnahtpruefung","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Zerstörungsfreie Schweißnahtprüfung Überblick über Verfahren"},{"o":"/kontakt","t":"page","l":"de","n":"/kontakt","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Kontakt aufnehmen für ZfP mit industrieller CT"},{"o":"/live-demo-scanexpress","t":"page","l":"de","n":"/live-demo-scanexpress","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Anmeldung Live-Showcase: Mobiler industrieller CT-Container"},{"o":"/mediathek","t":"page","l":"de","n":"/mediathek","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Mediathek Microvista GmbH - industrielle CT"},{"o":"/newsletter","t":"page","l":"de","n":"/newsletter","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Newsletter"},{"o":"/newsroom","t":"page","l":"de","n":"/newsroom","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Newsroom Microvista GmbH - industrielle CT"},{"o":"/presse/mobiles-ct-system-direkt-vor-ort","t":"press","l":"de","n":"/newsroom","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L11: /presse/* -> /newsroom","x":"Redirect target exists in new sitemap.","ti":"Microvista erweitert internationale Präsenz mit mobilem CT-System ScanExpress"},{"o":"/presse/promovierter-ingenieur-ergaenzt-unternehmensgruender-in-gemeinsamer-geschaeftsfuehrung-fuehrungsteam-legt-fokus-auf-mobile-ct-technologie-und-ki-gestuetzte-loesungen","t":"press","l":"de","n":"/newsroom","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L11: /presse/* -> /newsroom","x":"Redirect target exists in new sitemap.","ti":"Microvista GmbH stärkt Führungsteam: Dr. Robin Höhne und Prof. Dr. Lutz Hagner bilden Doppelspitze"},{"o":"/presse/qualitaetskontrolle-die-zur-produktion-rollt-flexibel-mietbares-ct-system","t":"press","l":"de","n":"/newsroom","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L11: /presse/* -> /newsroom","x":"Redirect target exists in new sitemap.","ti":"Der ScanExpress 2.0: Die neue Version des ersten mobilen industriellen CT"},{"o":"/presse/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort","t":"press","l":"de","n":"/newsroom","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L11: /presse/* -> /newsroom","x":"Redirect target exists in new sitemap.","ti":"Weltweit erstes mobiles industrielles CT: Deutsches Tech-Unternehmen zeigt KI-gestütztes Prüfsystem live"},{"o":"/pressemitteilungen","t":"page","l":"de","n":"/pressemitteilungen","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Pressemitteilungen Microvista GmbH - industrielle CT"},{"o":"/pruefung-additiv-gefertigter-bauteile","t":"page","l":"de","n":"/branchen/additive-fertigung","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L42: /pruefung-additiv-gefertigter-bauteile/ -> /branchen/additive-fertigung","x":"Redirect target exists in new sitemap.","ti":"Prüfung additiv gefertigter Bauteile mit industrieller CT"},{"o":"/team","t":"page","l":"de","n":"/team","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Lerne das Microvista Team kennen!"},{"o":"/test","t":"page","l":"de","n":"/","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L58: /test/ -> /","x":"Redirect target exists in new sitemap.","ti":"Industrielle Computertomographie Dienstleister für Exzellenz"},{"o":"/umweltallianz-sachen-anhalt","t":"page","l":"de","n":"/zertifizierungen","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L56: /umweltallianz-sachen-anhalt/ -> /zertifizierungen","x":"Redirect target exists in new sitemap.","ti":"Umweltallianz Sachsen-Anhalt"},{"o":"/zerstoerungsfreie-pruefung-automobilindustrie","t":"page","l":"de","n":"/branchen/automotive","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L38: /zerstoerungsfreie-pruefung-automobilindustrie/ -> /branchen/automotive","x":"Redirect target exists in new sitemap.","ti":"Zerstörungsfreie Prüfung für die Automobilindustrie"},{"o":"/zerstoerungsfreie-pruefung-batteriesystemen","t":"page","l":"de","n":"/branchen/e-mobilitaet","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L41: /zerstoerungsfreie-pruefung-batteriesystemen/ -> /branchen/e-mobilitaet","x":"Redirect target exists in new sitemap.","ti":"Zerstörungsfreie Prüfung von Batteriesystemen"},{"o":"/zerstoerungsfreie-pruefung-leichtmetallguss","t":"page","l":"de","n":"/branchen/leichtmetallguss","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L39: /zerstoerungsfreie-pruefung-leichtmetallguss/ -> /branchen/leichtmetallguss","x":"Redirect target exists in new sitemap.","ti":"Zerstörungsfreie Prüfung von Leichtmetallguss mit CT| Microvista"},{"o":"/zerstoerungsfreie-serienpruefung","t":"page","l":"de","n":"/zerstoerungsfreie-serienpruefung","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Zerstörungsfreie Serienprüfung schnell & automatisiert"},{"o":"/zerstoerungsfreie-werkstoffpruefung","t":"page","l":"de","n":"/branchen/werkstoffpruefung","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L44: /zerstoerungsfreie-werkstoffpruefung/ -> /branchen/werkstoffpruefung","x":"Redirect target exists in new sitemap.","ti":"Zerstörungsfreie Werkstoffprüfung: Verfahren, Normen & CT"},{"o":"/zerstorungsfreie-prufung-von-eisenguss","t":"page","l":"de","n":"/branchen/eisenguss","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L40: /zerstorungsfreie-prufung-von-eisenguss/ -> /branchen/eisenguss","x":"Redirect target exists in new sitemap.","ti":"Zerstörungsfreie Prüfung von Eisenguss"},{"o":"/zertifizierungen","t":"page","l":"de","n":"/zertifizierungen","m":"direct_200","s":"200","v":"yes","r":"","x":"Path exists directly in new sitemap.","ti":"Zertifizierungen"},{"o":"/zfp-archaeologie","t":"page","l":"de","n":"/branchen/archaeologie","m":"redirect_301_in_sitemap","s":"301","v":"yes","r":"L43: /zfp-archaeologie/ -> /branchen/archaeologie","x":"Redirect target exists in new sitemap.","ti":"Zerstörungsfreie Prüfung in der Archäologie"}];
+
+// ── State ──
+let activeStatus = 'all';
+let activeLang = 'all';
+let searchTerm = '';
+
+function statusOf(d) {
+  if (d.m === 'direct_200') return 'ok';
+  if (d.m === 'redirect_301_in_sitemap') return 'redirect';
+  return 'missing';
+}
+
+function filtered() {
+  return DATA.filter(d => {
+    if (activeStatus !== 'all' && statusOf(d) !== activeStatus) return false;
+    if (activeLang !== 'all' && d.l !== activeLang) return false;
+    if (searchTerm) {
+      const q = searchTerm.toLowerCase();
+      return d.o.toLowerCase().includes(q) || d.n.toLowerCase().includes(q) || d.ti.toLowerCase().includes(q);
+    }
+    return true;
+  });
+}
+
+const total = DATA.length;
+const okCount = DATA.filter(d => d.m === 'direct_200').length;
+const redirCount = DATA.filter(d => d.m === 'redirect_301_in_sitemap').length;
+const missCount = DATA.filter(d => d.m === 'no_mapping').length;
+const mapped = okCount + redirCount;
+const mappedPct = ((mapped / total) * 100).toFixed(1);
+
+// ── KPI Cards ──
+document.getElementById('kpis').innerHTML = `
+  <div class="kpi-card total animate-in delay-1">
+    <div class="kpi-label">Gesamt URLs</div>
+    <div class="kpi-value">${total}</div>
+    <div class="kpi-pct">alte WordPress-Seiten</div>
+  </div>
+  <div class="kpi-card ok animate-in delay-2">
+    <div class="kpi-label">Direkt (200)</div>
+    <div class="kpi-value">${okCount}</div>
+    <div class="kpi-pct">${((okCount/total)*100).toFixed(1)}% — Pfad identisch</div>
+  </div>
+  <div class="kpi-card redirect animate-in delay-3">
+    <div class="kpi-label">Redirect (301)</div>
+    <div class="kpi-value">${redirCount}</div>
+    <div class="kpi-pct">${((redirCount/total)*100).toFixed(1)}% — umgeleitet</div>
+  </div>
+  <div class="kpi-card missing animate-in delay-4">
+    <div class="kpi-label">Ohne Mapping</div>
+    <div class="kpi-value">${missCount}</div>
+    <div class="kpi-pct">${((missCount/total)*100).toFixed(1)}% — Handlung nötig</div>
+  </div>
+`;
+
+// ── Progress Bar ──
+document.getElementById('progress-section').innerHTML = `
+  <div class="progress-header">
+    <div class="progress-title">Migrations-Fortschritt</div>
+    <div class="progress-pct">${mappedPct}% abgedeckt</div>
+  </div>
+  <div class="progress-bar">
+    <div class="seg-ok" style="width:${(okCount/total)*100}%"></div>
+    <div class="seg-redirect" style="width:${(redirCount/total)*100}%"></div>
+    <div class="seg-missing" style="width:${(missCount/total)*100}%"></div>
+  </div>
+  <div class="progress-legend">
+    <span><span class="legend-dot ok"></span>Direkt (${okCount})</span>
+    <span><span class="legend-dot redirect"></span>301 Redirect (${redirCount})</span>
+    <span><span class="legend-dot missing"></span>Kein Mapping (${missCount})</span>
+  </div>
+`;
+
+// ── Charts ──
+// By Language
+const langs = {};
+DATA.forEach(d => { langs[d.l] = langs[d.l] || {ok:0,redirect:0,missing:0}; langs[d.l][statusOf(d)]++; });
+
+// By Content Type
+const types = {};
+DATA.forEach(d => { types[d.t] = types[d.t] || {ok:0,redirect:0,missing:0}; types[d.t][statusOf(d)]++; });
+
+// By Section (first path segment)
+const sections = {};
+DATA.forEach(d => {
+  const seg = d.o.split('/').filter(Boolean)[0] || '/';
+  sections[seg] = sections[seg] || {total:0,ok:0,redirect:0,missing:0};
+  sections[seg].total++;
+  sections[seg][statusOf(d)]++;
+});
+
+function makeStackedBars(groups, maxVal) {
+  return Object.entries(groups).sort((a,b) => {
+    const ta = a[1].ok + a[1].redirect + a[1].missing;
+    const tb = b[1].ok + b[1].redirect + b[1].missing;
+    return tb - ta;
+  }).map(([label, v]) => {
+    const tot = v.ok + v.redirect + v.missing;
+    const okW = (v.ok / maxVal) * 100;
+    const rW = (v.redirect / maxVal) * 100;
+    const mW = (v.missing / maxVal) * 100;
+    return `<div class="bar-row">
+      <div class="bar-label">${label}</div>
+      <div class="bar-track">
+        <div class="bar-fill ok" style="width:${okW}%"></div>
+        <div class="bar-fill redirect" style="width:${rW}%"></div>
+        <div class="bar-fill missing" style="width:${mW}%"></div>
+      </div>
+      <div class="bar-count">${tot}</div>
+    </div>`;
+  }).join('');
+}
+
+const maxLang = Math.max(...Object.values(langs).map(v => v.ok + v.redirect + v.missing));
+const maxType = Math.max(...Object.values(types).map(v => v.ok + v.redirect + v.missing));
+
+// Donut for missing breakdown
+const missingByLang = {};
+DATA.filter(d => d.m === 'no_mapping').forEach(d => { missingByLang[d.l] = (missingByLang[d.l]||0)+1; });
+
+const circumference = 2 * Math.PI * 40;
+const donutColors = {en: '#60a5fa', de: 'var(--text-dim)', fr: '#a78bfa'};
+let donutOffset = 0;
+const donutSlices = Object.entries(missingByLang).sort((a,b) => b[1]-a[1]).map(([lang, count]) => {
+  const pct = count / missCount;
+  const dash = circumference * pct;
+  const gap = circumference - dash;
+  const slice = `<circle class="donut-slice" stroke="${donutColors[lang]||'#666'}" stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${-donutOffset}" cx="50" cy="50" r="40"/>`;
+  donutOffset += dash;
+  return slice;
+});
+
+document.getElementById('charts-row').innerHTML = `
+  <div class="chart-card animate-in delay-3">
+    <div class="chart-title">Nach Sprache</div>
+    <div class="bar-chart">${makeStackedBars(langs, maxLang)}</div>
+  </div>
+  <div class="chart-card animate-in delay-4">
+    <div class="chart-title">Nach Inhaltstyp</div>
+    <div class="bar-chart">${makeStackedBars(types, maxType)}</div>
+  </div>
+  <div class="chart-card animate-in delay-5">
+    <div class="chart-title">Fehlende nach Sprache</div>
+    <div class="donut-wrap">
+      <svg class="donut-svg" viewBox="0 0 100 100">
+        <circle class="donut-bg" cx="50" cy="50" r="40"/>
+        ${donutSlices.join('')}
+      </svg>
+      <div class="donut-labels">
+        ${Object.entries(missingByLang).sort((a,b)=>b[1]-a[1]).map(([lang,count]) =>
+          `<div class="donut-label-item">
+            <div class="dot" style="background:${donutColors[lang]||'#666'}"></div>
+            <span>${lang.toUpperCase()}</span>
+            <span class="val">${count}</span>
+          </div>`
+        ).join('')}
+      </div>
+    </div>
+  </div>
+`;
+
+// ── Controls ──
+document.getElementById('controls').innerHTML = `
+  <div class="filter-group" id="status-filter">
+    <button class="filter-btn active" data-v="all">Alle</button>
+    <button class="filter-btn" data-v="ok">200</button>
+    <button class="filter-btn" data-v="redirect">301</button>
+    <button class="filter-btn" data-v="missing">Fehlt</button>
+  </div>
+  <div class="filter-group" id="lang-filter">
+    <button class="filter-btn active" data-v="all">Alle</button>
+    <button class="filter-btn" data-v="de">DE</button>
+    <button class="filter-btn" data-v="en">EN</button>
+    <button class="filter-btn" data-v="fr">FR</button>
+  </div>
+  <input type="text" class="search-input" id="search" placeholder="Pfad oder Titel suchen...">
+`;
+
+document.getElementById('thead').innerHTML = `<tr>
+  <th>Status</th>
+  <th>Sprache</th>
+  <th>Alter Pfad</th>
+  <th></th>
+  <th>Neuer Pfad</th>
+  <th>Titel</th>
+  <th>Typ</th>
+</tr>`;
+
+function renderTable() {
+  const rows = filtered();
+  document.getElementById('table-count').textContent = `${rows.length} von ${total} URLs`;
+  document.getElementById('tbody').innerHTML = rows.map(d => {
+    const st = statusOf(d);
+    const statusLabel = st === 'ok' ? '200' : st === 'redirect' ? '301' : 'fehlt';
+    return `<tr>
+      <td><span class="status-badge ${st}">${statusLabel}</span></td>
+      <td><span class="lang-badge">${d.l}</span></td>
+      <td class="cell-path">${d.o}</td>
+      <td class="arrow-cell">${d.n ? '&rarr;' : ''}</td>
+      <td class="cell-path">${d.n || '<span class="empty-new">kein Ziel</span>'}</td>
+      <td class="cell-title" title="${d.ti}">${d.ti}</td>
+      <td><span class="lang-badge">${d.t}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Event Listeners ──
+document.getElementById('status-filter').addEventListener('click', e => {
+  if (!e.target.matches('.filter-btn')) return;
+  document.querySelectorAll('#status-filter .filter-btn').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  activeStatus = e.target.dataset.v;
+  renderTable();
+});
+
+document.getElementById('lang-filter').addEventListener('click', e => {
+  if (!e.target.matches('.filter-btn')) return;
+  document.querySelectorAll('#lang-filter .filter-btn').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  activeLang = e.target.dataset.v;
+  renderTable();
+});
+
+document.getElementById('search').addEventListener('input', e => {
+  searchTerm = e.target.value;
+  renderTable();
+});
+
+renderTable();
+</script>
+</body>
+</html>
