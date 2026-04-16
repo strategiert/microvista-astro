@@ -97,6 +97,23 @@
 }
 
 /* =========================================
+   THEME: NEUTRAL (Standard/Homepage)
+   ========================================= */
+
+[data-theme="neutral"] {
+  --primary: #32285b;
+  --primary-light: #4a3d7a;
+  --accent: #ee7711;
+  --accent-light: #ff9933;
+  --background: #ffffff;
+  --surface: #f1f5f9;
+  --surface-hover: #e2e8f0;
+  --text: #1e1b2e;
+  --text-muted: #475569;
+  --border: #e2e8f0;
+}
+
+/* =========================================
    THEME: LABOR (Welt 1)
    ========================================= */
 
