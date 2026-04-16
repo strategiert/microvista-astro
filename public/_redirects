@@ -57,13 +57,9 @@
 /zerstoerungsfreie-werkstoffpruefung/ /branchen/werkstoffpruefung 301
 
 # Sonstige Seiten DE
-/bonusprogramm/ /bonusprogramm 301
-/fragebogen/ /fragebogen 301
-/forschung-entwicklung/ /forschung-entwicklung 301
-/live-demo-scanexpress/ /live-demo-scanexpress 301
-/mediathek/ /mediathek 301
-/pressemitteilungen/ /pressemitteilungen 301
-/zerstoerungsfreie-serienpruefung/ /zerstoerungsfreie-serienpruefung 301
+# HINWEIS: Keine self-referencing trailing-slash Redirects (/x/ → /x) hier!
+# Astros trailingSlash: 'never' erledigt das automatisch.
+# Self-Redirects in _redirects → CF fügt Ziel zur exclude-Liste hinzu → Worker bypassed → 404!
 /datenschutzerklaerung/ /datenschutz 301
 /cookie-richtlinie-eu/ /datenschutz 301
 /umweltallianz-sachen-anhalt/ /zertifizierungen 301
