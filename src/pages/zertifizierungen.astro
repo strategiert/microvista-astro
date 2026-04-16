@@ -2,58 +2,78 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
 import { loadStaticPage } from '../lib/load-static-page';
-import { type Locale } from '../i18n/translations';
+import { localePath, type Locale } from '../i18n/translations';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
 const content = await loadStaticPage('zertifizierungen', locale);
 
-const labels = {
-  de: {
-    title: 'Zertifizierungen',
-    description: 'Microvista Zertifizierungen — ISO 9001, ISO 17025, EN 9100.'
-  },
-  en: {
-    title: 'Certifications',
-    description: 'Microvista certifications — ISO 9001, ISO 17025, EN 9100.'
-  },
-  fr: {
-    title: 'Certifications',
-    description: 'Certifications Microvista — ISO 9001, ISO 17025, EN 9100.'
-  },
-  es: {
-    title: 'Certificaciones',
-    description: 'Certificaciones de Microvista — ISO 9001, ISO 17025, EN 9100.'
-  },
-  it: {
-    title: 'Certificazioni',
-    description: 'Certificazioni Microvista — ISO 9001, ISO 17025, EN 9100.'
-  }
-}[locale] || {
-  title: 'Zertifizierungen',
-  description: 'Microvista Zertifizierungen — ISO 9001, ISO 17025, EN 9100.'
-};
+let articleContent = content || '';
+if (content) {
+  const h2Index = content.indexOf('<h2');
+  if (h2Index > -1) articleContent = content.substring(h2Index);
+}
+
+const t = {
+  de: { title: 'Zertifizierungen | Microvista', description: 'Microvista Zertifizierungen — ISO 9001, IAQG Mitglied, Umweltallianz Sachsen-Anhalt.', h1: 'Zertifizierungen', lead: 'Qualität und Kompetenz, die zertifiziert ist — ISO 9001, IAQG-Mitgliedschaft und weitere Auszeichnungen.', cta: 'Kontakt aufnehmen' },
+  en: { title: 'Certifications | Microvista', description: 'Microvista certifications — ISO 9001, IAQG member.', h1: 'Certifications', lead: 'Certified quality and competence — ISO 9001, IAQG membership and more.', cta: 'Get in Touch' },
+  fr: { title: 'Certifications | Microvista', description: 'Certifications Microvista.', h1: 'Certifications', lead: 'Qualité et compétence certifiées.', cta: 'Nous contacter' },
+  es: { title: 'Certificaciones | Microvista', description: 'Certificaciones de Microvista.', h1: 'Certificaciones', lead: 'Calidad y competencia certificadas.', cta: 'Contactar' },
+  it: { title: 'Certificazioni | Microvista', description: 'Certificazioni Microvista.', h1: 'Certificazioni', lead: 'Qualità e competenza certificate.', cta: 'Contattaci' },
+}[locale] || { title: 'Certifications | Microvista', description: 'Microvista certifications.', h1: 'Certifications', lead: 'Certified quality and competence.', cta: 'Get in Touch' };
 ---
 
-<BaseLayout title={labels.title} description={labels.description}>
+<BaseLayout title={t.title} description={t.description}>
   <Header slot="header" />
 
-  <div class="certs-page">
+  <section class="page-hero">
     <div class="container">
-      <Breadcrumbs items={[{ label: labels.title }]} />
-      <article class="certs-content" set:html={content} />
+      <h1>{t.h1}</h1>
+      <p class="page-lead">{t.lead}</p>
     </div>
-  </div>
+  </section>
+
+  <section class="page-article">
+    <div class="container">
+      <div class="page-body" set:html={articleContent} />
+    </div>
+  </section>
+
+  <section class="page-cta">
+    <div class="container">
+      <div class="page-cta-box">
+        <h2>{t.cta}</h2>
+        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.cta}</a>
+      </div>
+    </div>
+  </section>
 
   <Footer slot="footer" />
 </BaseLayout>
 
 <style>
-  .certs-page { padding-bottom: var(--space-16); }
-  .certs-content { max-width: 800px; margin: 0 auto; padding: var(--space-8) 0; }
-  .certs-content :global(h1) { font-size: var(--text-4xl); margin-bottom: var(--space-8); }
-  .certs-content :global(h2) { margin-top: var(--space-8); margin-bottom: var(--space-4); }
-  .certs-content :global(p) { line-height: 1.8; margin-bottom: var(--space-4); }
-  .certs-content :global(img) { max-width: 200px; margin: var(--space-4) var(--space-4) var(--space-4) 0; }
+  .page-hero { background: linear-gradient(145deg, #32285b 0%, #1c1535 100%); color: white; padding: var(--space-20) 0 var(--space-16); }
+  .page-hero h1 { font-family: var(--font-heading); font-size: var(--text-5xl); color: white; margin-bottom: var(--space-5); line-height: 1.1; text-transform: uppercase; }
+  @media (max-width: 768px) { .page-hero h1 { font-size: var(--text-4xl); } }
+  .page-lead { font-size: var(--text-xl); color: rgba(255,255,255,0.72); max-width: 680px; line-height: 1.7; }
+
+  .page-article { padding: var(--space-16) 0 var(--space-20); background: white; }
+  .page-body { max-width: 860px; margin: 0 auto; }
+  .page-body :global(h2) { font-size: var(--text-3xl); font-family: var(--font-heading); color: #32285b; margin-top: var(--space-16); margin-bottom: var(--space-5); padding-left: var(--space-4); border-left: 4px solid #ee7711; line-height: 1.25; }
+  .page-body :global(h2:first-child) { margin-top: 0; }
+  .page-body :global(h3) { font-size: var(--text-2xl); font-family: var(--font-heading); color: #32285b; margin-top: var(--space-10); margin-bottom: var(--space-4); }
+  .page-body :global(p) { font-size: var(--text-base); line-height: 1.85; margin-bottom: var(--space-5); color: #374151; }
+  .page-body :global(strong) { font-weight: 700; color: #32285b; }
+  .page-body :global(img) { max-width: 200px; margin: var(--space-4) var(--space-4) var(--space-4) 0; }
+  .page-body :global(a) { color: #ee7711; text-decoration: underline; text-decoration-color: rgba(238,119,17,0.35); text-underline-offset: 3px; }
+  .page-body :global(a:hover) { color: #c85e00; }
+  .page-body :global(ul) { padding-left: var(--space-6); margin-bottom: var(--space-5); }
+  .page-body :global(li) { line-height: 1.75; margin-bottom: var(--space-2); color: #374151; }
+  .page-body :global(ul > li::marker) { color: #ee7711; }
+
+  .page-cta { padding: var(--space-20) 0; background: #f5f3ff; }
+  .page-cta-box { max-width: 560px; margin: 0 auto; text-align: center; background: white; padding: var(--space-12) var(--space-10); border-radius: var(--radius-2xl); box-shadow: 0 8px 40px rgba(50,40,91,0.12); }
+  .page-cta-box h2 { color: #32285b; font-family: var(--font-heading); font-size: var(--text-3xl); margin-bottom: var(--space-6); }
+  .btn-lg { padding: var(--space-4) var(--space-10); font-size: var(--text-lg); }
 </style>

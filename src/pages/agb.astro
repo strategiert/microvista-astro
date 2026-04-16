@@ -2,40 +2,58 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
 import { loadStaticPage } from '../lib/load-static-page';
 import { type Locale } from '../i18n/translations';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
 const content = await loadStaticPage('agb', locale);
 
-const labels = {
-  de: { title: 'AGB', description: 'Allgemeine Geschäftsbedingungen der Microvista GmbH' },
-  en: { title: 'Terms and Conditions', description: 'General terms and conditions of Microvista GmbH' },
-  fr: { title: 'Conditions générales', description: 'Conditions générales de Microvista GmbH' },
-  es: { title: 'Términos y condiciones', description: 'Términos y condiciones de Microvista GmbH' },
-  it: { title: 'Termini e condizioni', description: 'Termini e condizioni di Microvista GmbH' }
-}[locale] || { title: 'AGB', description: 'Allgemeine Geschäftsbedingungen der Microvista GmbH' };
+let articleContent = content || '';
+if (content) {
+  const h2Index = content.indexOf('<h2');
+  if (h2Index > -1) articleContent = content.substring(h2Index);
+}
+
+const t = {
+  de: { title: 'AGB | Microvista', description: 'Allgemeine Geschäftsbedingungen der Microvista GmbH.', h1: 'Allgemeine Geschäftsbedingungen' },
+  en: { title: 'Terms & Conditions | Microvista', description: 'General terms and conditions of Microvista GmbH.', h1: 'Terms & Conditions' },
+  fr: { title: 'Conditions générales | Microvista', description: 'Conditions générales de Microvista GmbH.', h1: 'Conditions générales' },
+  es: { title: 'Términos y condiciones | Microvista', description: 'Términos y condiciones de Microvista GmbH.', h1: 'Términos y condiciones' },
+  it: { title: 'Termini e condizioni | Microvista', description: 'Termini e condizioni di Microvista GmbH.', h1: 'Termini e condizioni' },
+}[locale] || { title: 'Terms & Conditions | Microvista', description: 'General terms and conditions.', h1: 'Terms & Conditions' };
 ---
 
-<BaseLayout title={labels.title} description={labels.description}>
+<BaseLayout title={t.title} description={t.description}>
   <Header slot="header" />
 
-  <div class="legal-page">
+  <section class="legal-hero">
     <div class="container">
-      <Breadcrumbs items={[{ label: labels.title }]} />
-      <article class="legal-content" set:html={content} />
+      <h1>{t.h1}</h1>
     </div>
-  </div>
+  </section>
+
+  <section class="legal-article">
+    <div class="container">
+      <div class="legal-body" set:html={articleContent} />
+    </div>
+  </section>
 
   <Footer slot="footer" />
 </BaseLayout>
 
 <style>
-  .legal-page { padding-bottom: var(--space-16); }
-  .legal-content { max-width: 800px; margin: 0 auto; padding: var(--space-8) 0; }
-  .legal-content :global(h1) { margin-bottom: var(--space-8); }
-  .legal-content :global(h2) { margin-top: var(--space-8); margin-bottom: var(--space-4); }
-  .legal-content :global(p), .legal-content :global(li) { line-height: 1.8; margin-bottom: var(--space-4); }
-  .legal-content :global(ol), .legal-content :global(ul) { padding-left: var(--space-6); }
+  .legal-hero { background: #32285b; color: white; padding: var(--space-16) 0 var(--space-12); }
+  .legal-hero h1 { font-family: var(--font-heading); font-size: var(--text-4xl); color: white; line-height: 1.1; text-transform: uppercase; }
+
+  .legal-article { padding: var(--space-12) 0 var(--space-20); background: white; }
+  .legal-body { max-width: 800px; margin: 0 auto; }
+  .legal-body :global(h2) { font-size: var(--text-2xl); font-family: var(--font-heading); color: #32285b; margin-top: var(--space-12); margin-bottom: var(--space-4); padding-left: var(--space-4); border-left: 3px solid #ee7711; }
+  .legal-body :global(h2:first-child) { margin-top: 0; }
+  .legal-body :global(h3) { font-size: var(--text-xl); font-family: var(--font-heading); color: #32285b; margin-top: var(--space-8); margin-bottom: var(--space-3); }
+  .legal-body :global(p) { font-size: var(--text-base); line-height: 1.85; margin-bottom: var(--space-4); color: #374151; }
+  .legal-body :global(strong) { font-weight: 700; color: #32285b; }
+  .legal-body :global(a) { color: #ee7711; text-decoration: underline; text-underline-offset: 3px; }
+  .legal-body :global(a:hover) { color: #c85e00; }
+  .legal-body :global(ul), .legal-body :global(ol) { padding-left: var(--space-6); margin-bottom: var(--space-4); }
+  .legal-body :global(li) { line-height: 1.75; margin-bottom: var(--space-2); color: #374151; }
 </style>
