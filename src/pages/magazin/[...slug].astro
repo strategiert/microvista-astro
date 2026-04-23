@@ -2,7 +2,7 @@
 /**
  * Magazin Artikel - Editorial Redesign
  */
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import { localePath, type Locale } from '../../i18n/translations';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
@@ -10,15 +10,17 @@ import Footer from '../../components/layout/Footer.astro';
 import ArticleCard from '../../components/sections/ArticleCard.astro';
 import SchemaOrg from '../../components/seo/SchemaOrg.astro';
 import { articleSchema } from '../../components/seo/schemas';
-
-const { slug } = Astro.params;
-const posts = await getCollection('magazin');
-const post = posts.find(p => p.slug === slug || p.slug === `de/${slug}` || p.slug === `en/${slug}`);
-if (!post) return Astro.redirect('/magazin');
-const { Content } = await render(post);
+import { getLocalizedMagazin, findLocalizedMagazinPost, stripLocalePrefix } from '../../lib/magazin';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect(lp('/magazin'));
+const post = await findLocalizedMagazinPost(slug, locale);
+if (!post) return Astro.redirect(lp('/magazin'));
+const posts = await getLocalizedMagazin(locale);
+const { Content } = await render(post);
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://microvista.de';
 
 const ui = {
@@ -102,7 +104,7 @@ const catColors = categoryColors[post.data.category] || categoryColors['technolo
 const schema = articleSchema({
   title: post.data.title,
   description: post.data.description,
-  url: `${siteUrl}/magazin/${post.slug}`,
+  url: articleUrl,
   image: post.data.image?.src ? `${siteUrl}${post.data.image.src}` : `${siteUrl}/images/og-default.jpg`,
   publishDate: post.data.publishDate,
   modifiedDate: post.data.updateDate,
@@ -115,6 +117,8 @@ const relatedPosts = posts
   .slice(0, 3);
 
 const readingTime = Math.ceil(post.data.description.length / 200) + 3;
+const canonicalSlug = stripLocalePrefix(post.slug);
+const articleUrl = `${siteUrl}${lp('/magazin')}/${canonicalSlug}`;
 ---
 
 <BaseLayout
@@ -175,13 +179,13 @@ const readingTime = Math.ceil(post.data.description.length / 200) + 3;
             
             <div class="share-buttons">
               <span class="share-label">{ui.share}:</span>
-              <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${siteUrl}/magazin/${post.slug}`)}`} 
+              <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleUrl)}`}
                  target="_blank" rel="noopener" class="share-btn" aria-label="LinkedIn">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                 </svg>
               </a>
-              <a href={`mailto:?subject=${encodeURIComponent(post.data.title)}&body=${encodeURIComponent(`${siteUrl}/magazin/${post.slug}`)}`} 
+              <a href={`mailto:?subject=${encodeURIComponent(post.data.title)}&body=${encodeURIComponent(articleUrl)}`}
                  class="share-btn" aria-label="Email">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -243,7 +247,7 @@ const readingTime = Math.ceil(post.data.description.length / 200) + 3;
               category={related.data.category}
               categoryLabel={categoryLabels[related.data.category] || related.data.category}
               publishDate={related.data.publishDate}
-              slug={related.slug.replace(/^de\/|^en\//, '')}
+              slug={stripLocalePrefix(related.slug)}
               locale={locale}
               readMoreText={ui.back.includes('Magazin') ? 'Weiterlesen' : 'Read more'}
             />

@@ -14,9 +14,9 @@ function getDynamicSitemapUrls() {
   const siteUrl = 'https://microvista.de';
   const urls = [];
 
-  // Blog-Posts: src/content/magazin/de/*.mdx + src/content/magazin/en/*.mdx
+  // Blog-Posts: src/content/magazin/{de,en,fr,es,it}/*.mdx
   const magazinBase = join(root, 'src', 'content', 'magazin');
-  for (const lang of ['de', 'en']) {
+  for (const lang of ['de', 'en', 'fr', 'es', 'it']) {
     try {
       const files = readdirSync(join(magazinBase, lang));
       for (const file of files) {

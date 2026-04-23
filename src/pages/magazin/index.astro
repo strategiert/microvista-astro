@@ -8,22 +8,14 @@ import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ArticleCard from '../../components/sections/ArticleCard.astro';
 import FeaturedArticle from '../../components/sections/FeaturedArticle.astro';
-import { getCollection } from 'astro:content';
 import { localePath, type Locale } from '../../i18n/translations';
+import { getLocalizedMagazin, stripLocalePrefix } from '../../lib/magazin';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
-const preferredContentLocale = locale === 'de' ? 'de' : 'en';
 
-// Alle Magazin-Artikel laden
-const allPosts = await getCollection('magazin', ({ data }) => !data.draft);
-
-const localizedPosts = allPosts.filter((post) => {
-  if (preferredContentLocale === 'de') {
-    return !post.id.startsWith('en/');
-  }
-  return post.id.startsWith('en/');
-});
+// Magazin-Artikel mit Sprach-Fallback laden (FR/ES/IT → EN → DE)
+const localizedPosts = await getLocalizedMagazin(locale);
 
 // Nach Datum sortieren (neueste zuerst)
 const posts = localizedPosts.sort((a, b) =>
@@ -222,7 +214,7 @@ const categoryColors: Record<string, string> = {
                   category={post.data.category}
                   categoryLabel={t.categoryLabels[post.data.category as keyof typeof t.categoryLabels] || post.data.category}
                   publishDate={post.data.publishDate}
-                  slug={post.slug.replace(/^de\/|^en\//, '')}
+                  slug={stripLocalePrefix(post.slug)}
                   locale={locale}
                   readMoreText={t.readMore}
                   featured={true}
@@ -248,7 +240,7 @@ const categoryColors: Record<string, string> = {
                   category={post.data.category}
                   categoryLabel={t.categoryLabels[post.data.category as keyof typeof t.categoryLabels] || post.data.category}
                   publishDate={post.data.publishDate}
-                  slug={post.slug.replace(/^de\/|^en\//, '')}
+                  slug={stripLocalePrefix(post.slug)}
                   locale={locale}
                   readMoreText={t.readMore}
                 />

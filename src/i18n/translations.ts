@@ -11,7 +11,7 @@ const localeSet = new Set<string>(allLocales);
 
 function parseEnabledLocales(raw: string | undefined): Locale[] {
   if (!raw?.trim()) {
-    return ['de', 'en'];
+    return [...allLocales];
   }
 
   const parsed = raw
@@ -20,7 +20,7 @@ function parseEnabledLocales(raw: string | undefined): Locale[] {
     .filter((value): value is Locale => localeSet.has(value));
 
   if (parsed.length === 0) {
-    return ['de', 'en'];
+    return [...allLocales];
   }
 
   if (!parsed.includes(defaultLocale)) {

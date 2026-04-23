@@ -7,12 +7,11 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/layout/Header.astro';
 import Footer from '../../../components/layout/Footer.astro';
 import ArticleCard from '../../../components/sections/ArticleCard.astro';
-import { getCollection } from 'astro:content';
 import { localePath, type Locale } from '../../../i18n/translations';
+import { getLocalizedMagazin, stripLocalePrefix } from '../../../lib/magazin';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
-const preferredContentLocale = locale === 'de' ? 'de' : 'en';
 
 const { category } = Astro.params;
 
@@ -21,22 +20,14 @@ if (!category || !validCategories.includes(category)) {
   return Astro.redirect(lp('/magazin'));
 }
 
-// Alle Artikel laden und nach Kategorie filtern
-const allPosts = await getCollection('magazin', ({ data }) => !data.draft);
-const localizedPosts = allPosts.filter((post) => {
-  if (preferredContentLocale === 'de') return !post.id.startsWith('en/');
-  return post.id.startsWith('en/');
-});
+// Artikel mit Sprach-Fallback laden und nach Kategorie filtern
+const localizedPosts = await getLocalizedMagazin(locale);
 const posts = localizedPosts
   .filter(post => post.data.category === category)
   .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime());
 
-// Alle Kategorien für Filter-Nav
-const allCategoryPosts = allPosts.filter((post) => {
-  if (preferredContentLocale === 'de') return !post.id.startsWith('en/');
-  return post.id.startsWith('en/');
-});
-const allCategories = [...new Set(allCategoryPosts.map(p => p.data.category))];
+// Alle Kategorien für Filter-Nav (aus derselben localisierten Liste)
+const allCategories = [...new Set(localizedPosts.map(p => p.data.category))];
 
 // SEO + UI Texte pro Kategorie und Sprache
 const categoryContent = {
@@ -195,7 +186,7 @@ const categoryColors: Record<string, string> = {
                 category={post.data.category}
                 categoryLabel={labels[post.data.category] || post.data.category}
                 publishDate={post.data.publishDate}
-                slug={post.slug.replace(/^de\/|^en\//, '')}
+                slug={stripLocalePrefix(post.slug)}
                 locale={locale}
                 readMoreText={ui.readMore}
               />
