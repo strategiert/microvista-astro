@@ -81,39 +81,21 @@
     }
 
     .shell {
-      width: min(calc(100% - 36px), var(--max-width));
+      width: min(calc(100% - 44px), 1280px);
       margin: 0 auto;
-    }
-
-    .concept-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 18px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(50, 40, 91, 0.08);
-      box-shadow: var(--shadow-sm);
-      color: var(--mv-gray-700);
-      font-size: 0.92rem;
-    }
-
-    .concept-tag strong {
-      color: var(--mv-violet);
     }
 
     .header {
       position: sticky;
-      top: 12px;
+      top: 10px;
       z-index: 30;
-      margin-top: 18px;
+      margin-top: 12px;
     }
 
     .header-shell {
       position: relative;
-      padding: 16px 18px;
-      border-radius: 26px;
+      padding: 14px 16px;
+      border-radius: 22px;
       border: 1px solid rgba(50, 40, 91, 0.08);
       background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(18px);
@@ -123,7 +105,7 @@
     .header-row {
       display: grid;
       grid-template-columns: auto 1fr auto;
-      gap: 16px;
+      gap: 14px;
       align-items: center;
     }
 
@@ -135,7 +117,7 @@
     }
 
     .brand img {
-      height: 34px;
+      height: 28px;
       width: auto;
     }
 
@@ -147,19 +129,19 @@
     .brand-copy strong {
       font-family: "Antonio", sans-serif;
       letter-spacing: 0.02em;
-      font-size: 1.3rem;
+      font-size: 1.15rem;
       line-height: 1;
     }
 
     .brand-copy span {
       color: var(--mv-gray-500);
-      font-size: 0.82rem;
+      font-size: 0.76rem;
     }
 
     .header-center {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       min-width: 0;
     }
 
@@ -174,7 +156,7 @@
       border: 1px solid transparent;
       background: transparent;
       color: var(--mv-gray-700);
-      padding: 10px 14px;
+      padding: 9px 12px;
       border-radius: 999px;
       cursor: pointer;
       transition: all 180ms ease;
@@ -189,11 +171,11 @@
 
     .command-trigger {
       flex: 1;
-      min-width: 280px;
+      min-width: 240px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
+      gap: 10px;
+      padding: 9px 12px;
       border-radius: 999px;
       border: 1px solid rgba(142, 191, 214, 0.9);
       background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%);
@@ -229,12 +211,12 @@
 
     .command-copy strong {
       color: var(--mv-violet);
-      font-size: 0.98rem;
+      font-size: 0.9rem;
     }
 
     .command-copy span {
       color: var(--mv-gray-500);
-      font-size: 0.84rem;
+      font-size: 0.78rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -242,11 +224,11 @@
 
     .command-kbd {
       margin-left: auto;
-      padding: 6px 10px;
+      padding: 6px 9px;
       border-radius: 999px;
       background: var(--mv-violet);
       color: var(--mv-white);
-      font-size: 0.74rem;
+      font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.04em;
     }
@@ -258,17 +240,17 @@
     }
 
     .lang-pill {
-      padding: 10px 12px;
+      padding: 9px 11px;
       border-radius: 999px;
       border: 1px solid rgba(50, 40, 91, 0.08);
       background: #ffffff;
       color: var(--mv-gray-700);
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 700;
     }
 
     .cta-pill {
-      padding: 11px 16px;
+      padding: 10px 14px;
       border-radius: 999px;
       border: none;
       background: linear-gradient(135deg, var(--mv-orange) 0%, #ff9a3d 100%);
@@ -280,11 +262,11 @@
 
     .mega-panel {
       position: absolute;
-      left: 18px;
-      right: 18px;
-      top: calc(100% + 12px);
-      padding: 26px;
-      border-radius: 28px;
+      left: 12px;
+      right: 12px;
+      top: calc(100% + 10px);
+      padding: 22px;
+      border-radius: 24px;
       border: 1px solid rgba(50, 40, 91, 0.08);
       background: rgba(255, 255, 255, 0.98);
       box-shadow: var(--shadow-lg);
@@ -304,8 +286,8 @@
       display: flex;
       align-items: end;
       justify-content: space-between;
-      gap: 18px;
-      margin-bottom: 22px;
+      gap: 14px;
+      margin-bottom: 18px;
     }
 
     .panel-kicker {
@@ -320,17 +302,17 @@
     .panel-head h2 {
       margin: 0;
       font-family: "Antonio", sans-serif;
-      font-size: clamp(2rem, 3vw, 3.2rem);
+      font-size: clamp(1.6rem, 2.4vw, 2.5rem);
       line-height: 0.98;
       letter-spacing: 0.01em;
     }
 
     .panel-head p {
-      margin: 12px 0 0;
-      max-width: 700px;
+      margin: 10px 0 0;
+      max-width: 620px;
       color: var(--mv-gray-700);
-      font-size: 1rem;
-      line-height: 1.55;
+      font-size: 0.94rem;
+      line-height: 1.5;
     }
 
     .panel-note {
@@ -342,18 +324,18 @@
     .panel-grid {
       display: grid;
       grid-template-columns: 1.25fr 0.9fr;
-      gap: 18px;
+      gap: 14px;
     }
 
     .problem-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      gap: 12px;
     }
 
     .problem-tile {
-      padding: 18px;
-      border-radius: 24px;
+      padding: 16px;
+      border-radius: 20px;
       border: 1px solid rgba(50, 40, 91, 0.08);
       background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
       box-shadow: var(--shadow-sm);
@@ -421,7 +403,7 @@
     .problem-tile h3 {
       margin: 0 0 8px;
       font-family: "Antonio", sans-serif;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       line-height: 1.05;
       letter-spacing: 0.01em;
     }
@@ -430,7 +412,7 @@
       margin: 0 0 14px;
       color: var(--mv-gray-700);
       line-height: 1.5;
-      font-size: 0.96rem;
+      font-size: 0.9rem;
     }
 
     .tag-row {
@@ -450,8 +432,8 @@
     }
 
     .side-card {
-      padding: 18px;
-      border-radius: 24px;
+      padding: 16px;
+      border-radius: 20px;
       background: linear-gradient(160deg, var(--mv-violet) 0%, var(--mv-violet-dark) 100%);
       color: var(--mv-white);
       box-shadow: var(--shadow-md);
@@ -460,7 +442,7 @@
     .side-card h3 {
       margin: 0 0 12px;
       font-family: "Antonio", sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.35rem;
       line-height: 1;
       letter-spacing: 0.01em;
     }
@@ -468,7 +450,8 @@
     .side-card p {
       margin: 0 0 10px;
       color: rgba(255, 255, 255, 0.82);
-      line-height: 1.5;
+      line-height: 1.45;
+      font-size: 0.92rem;
     }
 
     .step-list {
@@ -533,7 +516,7 @@
     }
 
     .hero {
-      padding: 76px 0 24px;
+      padding: 44px 0 18px;
     }
 
     .hero-grid {
@@ -553,7 +536,7 @@
     }
 
     .hero-card {
-      padding: 34px;
+      padding: 28px;
     }
 
     .hero-kicker {
@@ -579,7 +562,7 @@
     .hero-card h1 {
       margin: 0 0 16px;
       font-family: "Antonio", sans-serif;
-      font-size: clamp(3rem, 6vw, 5.8rem);
+      font-size: clamp(2.4rem, 4.8vw, 4.6rem);
       line-height: 0.92;
       letter-spacing: 0.01em;
     }
@@ -592,8 +575,8 @@
       margin: 0 0 20px;
       max-width: 670px;
       color: var(--mv-gray-700);
-      font-size: 1.05rem;
-      line-height: 1.64;
+      font-size: 0.98rem;
+      line-height: 1.56;
     }
 
     .hero-actions {
@@ -636,13 +619,13 @@
     }
 
     .info-card {
-      padding: 22px;
+      padding: 18px;
     }
 
     .info-card h2 {
       margin: 0 0 12px;
       font-family: "Antonio", sans-serif;
-      font-size: 2.1rem;
+      font-size: 1.75rem;
       line-height: 1;
       letter-spacing: 0.01em;
     }
@@ -687,8 +670,8 @@
     }
 
     .mini-command {
-      padding: 16px;
-      border-radius: 24px;
+      padding: 14px;
+      border-radius: 20px;
       background: linear-gradient(160deg, var(--mv-cyan-soft) 0%, #ffffff 100%);
       border: 1px solid rgba(0, 160, 210, 0.12);
     }
@@ -696,7 +679,7 @@
     .mini-command h3 {
       margin: 0 0 10px;
       font-family: "Antonio", sans-serif;
-      font-size: 1.7rem;
+      font-size: 1.4rem;
       line-height: 1;
     }
 
@@ -725,7 +708,7 @@
     }
 
     .section {
-      padding: 18px 0 82px;
+      padding: 12px 0 64px;
     }
 
     .section-head {
@@ -733,13 +716,13 @@
       align-items: end;
       justify-content: space-between;
       gap: 24px;
-      margin-bottom: 22px;
+      margin-bottom: 18px;
     }
 
     .section-head h2 {
       margin: 0;
       font-family: "Antonio", sans-serif;
-      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
       line-height: 0.96;
       letter-spacing: 0.01em;
     }
@@ -754,14 +737,14 @@
     .challenge-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
+      gap: 12px;
     }
 
     .challenge-card {
       display: grid;
       gap: 16px;
-      padding: 22px;
-      border-radius: 26px;
+      padding: 18px;
+      border-radius: 22px;
       border: 1px solid rgba(50, 40, 91, 0.08);
       background: rgba(255, 255, 255, 0.95);
       box-shadow: var(--shadow-sm);
@@ -770,7 +753,7 @@
     .challenge-card h3 {
       margin: 0;
       font-family: "Antonio", sans-serif;
-      font-size: 1.65rem;
+      font-size: 1.4rem;
       line-height: 1;
       letter-spacing: 0.01em;
     }
@@ -802,18 +785,18 @@
       margin-top: 18px;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
+      gap: 12px;
     }
 
     .flow-card {
-      padding: 20px;
+      padding: 18px;
     }
 
     .flow-card strong {
       display: block;
       margin-bottom: 8px;
       font-family: "Antonio", sans-serif;
-      font-size: 1.55rem;
+      font-size: 1.3rem;
       line-height: 1;
       letter-spacing: 0.01em;
     }
@@ -825,7 +808,7 @@
     }
 
     .footer-callout {
-      padding: 0 0 70px;
+      padding: 0 0 52px;
     }
 
     .footer-box {
@@ -833,8 +816,8 @@
       grid-template-columns: 1fr auto;
       gap: 16px;
       align-items: center;
-      padding: 24px 26px;
-      border-radius: 28px;
+      padding: 20px 22px;
+      border-radius: 22px;
       background: linear-gradient(135deg, rgba(50, 40, 91, 0.98) 0%, rgba(36, 27, 70, 0.98) 100%);
       color: var(--mv-white);
       box-shadow: var(--shadow-lg);
@@ -843,7 +826,7 @@
     .footer-box h2 {
       margin: 0 0 10px;
       font-family: "Antonio", sans-serif;
-      font-size: 2.2rem;
+      font-size: 1.8rem;
       line-height: 1;
       letter-spacing: 0.01em;
     }
@@ -1201,7 +1184,7 @@
       }
 
       .hero {
-        padding-top: 56px;
+        padding-top: 28px;
       }
 
       .mega-panel {
@@ -1217,13 +1200,6 @@
   </style>
 </head>
 <body>
-  <div class="shell">
-    <div class="concept-tag">
-      <strong>Live concept</strong>
-      <span>Signal Hub mischt Command Palette und problemorientiertes Mega Menu in der Microvista-Farbwelt.</span>
-    </div>
-  </div>
-
   <header class="header">
     <div class="shell header-shell" id="header-shell">
       <div class="header-row">
@@ -2239,7 +2215,6 @@
 
     renderResults();
     updatePreview(items[0]);
-    openPanel("problems");
   </script>
 </body>
 </html>
