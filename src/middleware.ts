@@ -77,6 +77,7 @@ function getEnRedirect(basePath: string): string | null {
     '/registration-live-demo-scanexpress': '/en/live-demo-scanexpress',
     '/non-destructive-weld-testing-methods-procedures-and-techniques': '/en/pruefaufgaben/schweissnahtpruefung',
     '/measuring-geometric-tolerances-gdt-methods-and-procedures': '/en/pruefaufgaben/form-und-lagetoleranzen',
+    '/end-of-line-testing-using-industrial-ct': '/en/end-of-line-test',
   };
   return EXACT[normalized] ?? null;
 }
@@ -91,6 +92,8 @@ function getFrRedirect(basePath: string): string | null {
     '/clause-de-non-responsabilite': '/datenschutz',
     '/politique-en-matiere-de-cookies': '/datenschutz',
     '/scanexpress-ct-industriel-mobile': '/dienstleistungen/scanexpress',
+    '/services-en-metrologie-3d': '/fr/pruefaufgaben/3d-vermessung',
+    '/test-de-fin-de-ligne-par-ct-une-securite-supplementaire-au-demarrage-moins-de-risques-sur-le-terrain': '/fr/end-of-line-test',
   };
   return EXACT[normalized] ?? null;
 }

@@ -66,6 +66,12 @@
 /end-of-line-test/ /serie 301
 /test/ / 301
 
+# Lücken aus docs/sitemap-abgleich.md (WP-Legacy-Seiten ohne Ersatz)
+/3d-messtechnik-dienstleister/ /pruefaufgaben/3d-vermessung 301
+/express-inspektion-buchen/ /express-ct-inspektion 301
+/qualitaetssicherung-additive-fertigung/ /branchen/additive-fertigung 301
+/qualitatsmanagement-medizinprodukte/ /branchen/medizintechnik 301
+
 # Fehlende Seiten → Redirects
 /labor/kontakt /kontakt 301
 /serie/kontakt /kontakt 301
