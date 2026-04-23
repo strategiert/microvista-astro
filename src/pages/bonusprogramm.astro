@@ -12,7 +12,7 @@ const content = await loadStaticPageRaw('bonusprogramm', locale);
 const labels = {
   de: {
     title: 'Empfehlungsprogramm',
-    description: 'Empfehlungsprogramm von Microvista für industrielles CT, CT-Labor, Bauteilprüfung und Qualitätssicherung.',
+    description: 'Empfehlungsprogramm von Microvista: 1.000 € persönliche Prämie für erfolgreiche Empfehlungen rund um industrielles CT, CT-Labor und Bauteilprüfung.',
     breadcrumb: 'Empfehlungsprogramm'
   },
   en: {
@@ -37,7 +37,7 @@ const labels = {
   }
 }[locale] || {
   title: 'Empfehlungsprogramm',
-  description: 'Empfehlungsprogramm von Microvista für industrielle CT-Dienstleistungen.',
+  description: 'Empfehlungsprogramm von Microvista mit persönlicher Prämie für erfolgreiche Empfehlungen im industriellen CT.',
   breadcrumb: 'Empfehlungsprogramm'
 };
 ---
@@ -287,6 +287,49 @@ const labels = {
     color: var(--text-muted);
   }
 
+  .static-content :global(.bonus-section--benefits) {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    backdrop-filter: none;
+  }
+
+  .static-content :global(.bonus-benefits) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .static-content :global(.bonus-benefit-card),
+  .static-content :global(.bonus-why-card) {
+    padding: var(--space-5);
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 247, 252, 0.98));
+    border: 1px solid rgba(50, 40, 91, 0.08);
+    box-shadow: 0 18px 48px rgba(16, 24, 40, 0.08);
+  }
+
+  .static-content :global(.bonus-benefit-card__value) {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: var(--space-3);
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radius-full);
+    background: rgba(238, 119, 17, 0.1);
+    color: var(--mv-orange);
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    line-height: 1;
+  }
+
+  .static-content :global(.bonus-benefit-card h3),
+  .static-content :global(.bonus-why-card h3) {
+    margin: 0 0 var(--space-2);
+    font-size: clamp(1.45rem, 2.4vw, 1.85rem);
+    line-height: 1.05;
+    color: var(--primary);
+  }
+
   .static-content :global(.bonus-section) {
     padding: var(--space-8);
     border-radius: 32px;
@@ -298,6 +341,20 @@ const labels = {
   .static-content :global(.bonus-section--trust),
   .static-content :global(.bonus-section--reward) {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(236, 246, 250, 0.9));
+  }
+
+  .static-content :global(.bonus-section--why) {
+    background: linear-gradient(180deg, rgba(50, 40, 91, 0.98), rgba(40, 56, 99, 0.96));
+  }
+
+  .static-content :global(.bonus-section--why .bonus-section__head h2),
+  .static-content :global(.bonus-section--why .bonus-section__head p),
+  .static-content :global(.bonus-section--why .bonus-eyebrow) {
+    color: white;
+  }
+
+  .static-content :global(.bonus-section--why .bonus-eyebrow) {
+    background: rgba(255, 255, 255, 0.12);
   }
 
   .static-content :global(.bonus-section__head) {
@@ -434,8 +491,22 @@ const labels = {
     gap: var(--space-4);
   }
 
+  .static-content :global(.bonus-signal-grid--compact) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
   .static-content :global(.bonus-section--signals .bonus-signal-card) {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(249, 250, 251, 0.96));
+  }
+
+  .static-content :global(.bonus-why-grid) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .static-content :global(.bonus-section--why .bonus-why-card) {
+    background: rgba(255, 255, 255, 0.98);
   }
 
   .static-content :global(.bonus-reward-layout) {
@@ -518,6 +589,8 @@ const labels = {
     }
 
     .static-content :global(.bonus-steps),
+    .static-content :global(.bonus-benefits),
+    .static-content :global(.bonus-why-grid),
     .static-content :global(.bonus-signal-grid),
     .static-content :global(.bonus-review-grid) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -540,6 +613,8 @@ const labels = {
     }
 
     .static-content :global(.bonus-steps),
+    .static-content :global(.bonus-benefits),
+    .static-content :global(.bonus-why-grid),
     .static-content :global(.bonus-signal-grid),
     .static-content :global(.bonus-review-grid) {
       grid-template-columns: 1fr;
