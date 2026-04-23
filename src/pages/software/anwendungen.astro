@@ -1,0 +1,156 @@
+---
+import SoftwareSubpageLayout from '../../layouts/SoftwareSubpageLayout.astro';
+import { localePath, type Locale } from '../../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (p: string) => localePath(p, locale);
+
+const c = {
+  de: {
+    title: 'InspectVista Anwendungen — 8 Praxisbeispiele der CT-Auswertung | Microvista',
+    description: 'Wofür die InspectVista CT-Software eingesetzt wird: Batterie-Elektroden, Laserschweißnähte, Lötfügungen, Statorwandstärken, Pumpenmontage, Bearbeitungsflächen, Laserauftragschweißen, Wassermantel-Kernreste.',
+    eyebrow: 'Anwendungsbeispiele',
+    headline: 'Wofür InspectVista in der Praxis eingesetzt wird',
+    lead: 'Acht konkrete Auswertungsszenarien aus Automotive, E-Mobilität und industrieller Fertigung — jeweils mit Fehlerbild und Auswirkung auf das Bauteil.',
+    casesTitle: 'Acht Fehlerbilder, die InspectVista automatisch erkennt',
+    related: 'Passende Prüfaufgaben im Detail',
+    cases: [
+      {
+        img: '/images/software/Elektrodenfehler-in-Batterien-visualisiert-in-CT-Software.webp',
+        title: 'Elektroden-Fehler in Batterien',
+        text: 'Gefaltete oder verschobene Elektroden in Lithium-Ionen-Zellen werden vor dem Einbau erkannt. So werden thermisches Durchgehen und Batteriebrände zuverlässig verhindert.',
+        link: { href: '/branchen/e-mobilitaet', label: 'Branche: E-Mobilität' },
+      },
+      {
+        img: '/images/software/Hairpin-mit-Poren-3D.webp',
+        title: 'Poren in Laserschweißnähten',
+        text: 'Zu große Poren reduzieren die mechanische Festigkeit der Fügung. InspectVista klassifiziert Porenvolumen automatisch — kritisch z. B. bei Hairpin-Statoren.',
+        link: { href: '/pruefaufgaben/schweissnahtpruefung', label: 'Prüfaufgabe: Schweißnahtprüfung' },
+      },
+      {
+        img: '/images/software/Kuehlbleche-mit-fehlerhaften-Loetfuegungen.webp',
+        title: 'Fehlerhafte Lötfügungen in Kühlplatten',
+        text: 'Unzureichende Lötstellen behindern den Kühlmittelumlauf und führen zu lokalen Überhitzungen. Automatische Flächenerkennung zeigt nicht angebundene Bereiche sofort.',
+        link: { href: '/pruefaufgaben/montage-fuegekontrolle', label: 'Prüfaufgabe: Montage- & Fügekontrolle' },
+      },
+      {
+        img: '/images/software/Zu-duenne-Wandstaerke.webp',
+        title: 'Schwankende Wandstärken im Statorgehäuse',
+        text: 'Zu dünne Wandstärken können zu Durchbrüchen und Feldausfällen führen. InspectVista misst präzise über das gesamte Volumen und visualisiert Abweichungen farblich.',
+        link: { href: '/pruefaufgaben/wanddickenmessung', label: 'Prüfaufgabe: Wanddickenmessung' },
+      },
+      {
+        img: '/images/software/Auswertung-CT-einer-Pumpe.webp',
+        title: 'Montagefehler bei einer Pumpe',
+        text: 'Fehlmontierte Bauteile innerhalb einer Pumpe führen zu Feldausfällen. Der CAD-Soll-Ist-Vergleich deckt Abweichungen gegenüber der Montagevorschrift auf.',
+        link: { href: '/pruefaufgaben/cad-soll-ist-vergleich', label: 'Prüfaufgabe: CAD Soll-/Ist-Vergleich' },
+      },
+      {
+        img: '/images/software/CT-Auswertung-von-Bearbeitungsflaechen.webp',
+        title: 'Poren in Bearbeitungsflächen',
+        text: 'Poren in Dichtflächen führen zu Produktionsausschuss oder späterer Leckage. Die Porositätsanalyse erkennt kritische Regionen vor der Endbearbeitung.',
+        link: { href: '/pruefaufgaben/porositaetsanalyse', label: 'Prüfaufgabe: Porositätsanalyse' },
+      },
+      {
+        img: '/images/software/Software-CT-zeigt-Lichtbogen-additiv-gefertigt-mit-Poren.webp',
+        title: 'Poren beim Laserauftragschweißen',
+        text: 'Strukturelle Schwächen reduzieren die Haltbarkeit hoch belasteter additiv gefertigter Bauteile. Automatische 3D-Auswertung zeigt Porengröße und -verteilung.',
+        link: { href: '/branchen/additive-fertigung', label: 'Branche: Additive Fertigung' },
+      },
+      {
+        img: '/images/software/Kernreste-im-Wassermantel-veranschaulicht-in-der-CT-Software.webp',
+        title: 'Kernreste im Wassermantel',
+        text: 'Kernreste und Kanalversperrungen in Motorblöcken können zu lokaler Überhitzung führen. InspectVista erkennt Hohlraum-Blockaden inkl. Position und Volumen.',
+        link: { href: '/pruefaufgaben/grat-kernreste-spaene', label: 'Prüfaufgabe: Grat, Kernreste & Späne' },
+      },
+    ],
+  },
+  en: {
+    title: 'InspectVista Applications — 8 Real-World CT Inspection Cases | Microvista',
+    description: 'Where the InspectVista CT software is used: battery electrodes, laser weld seams, solder joints, stator wall thickness, pump assembly, machining surfaces, laser cladding, water-jacket core residues.',
+    eyebrow: 'Application examples',
+    headline: 'What InspectVista is used for in practice',
+    lead: 'Eight concrete evaluation scenarios from automotive, e-mobility and industrial manufacturing — each with defect type and component impact.',
+    casesTitle: 'Eight defect types InspectVista detects automatically',
+    related: 'Related inspection tasks',
+    cases: [
+      {
+        img: '/images/software/Elektrodenfehler-in-Batterien-visualisiert-in-CT-Software.webp',
+        title: 'Electrode faults in batteries',
+        text: 'Folded or displaced electrodes in lithium-ion cells are detected before assembly. Prevents thermal runaway and battery fires reliably.',
+        link: { href: '/branchen/e-mobilitaet', label: 'Industry: E-Mobility' },
+      },
+      {
+        img: '/images/software/Hairpin-mit-Poren-3D.webp',
+        title: 'Pores in laser welds',
+        text: 'Oversized pores reduce the mechanical strength of the joint. InspectVista classifies pore volume automatically — critical e.g. for hairpin stators.',
+        link: { href: '/pruefaufgaben/schweissnahtpruefung', label: 'Inspection task: Weld seam' },
+      },
+      {
+        img: '/images/software/Kuehlbleche-mit-fehlerhaften-Loetfuegungen.webp',
+        title: 'Faulty solder joints in cooling plates',
+        text: 'Insufficient solder joints block coolant circulation and cause local overheating. Automatic area detection reveals unbonded regions immediately.',
+        link: { href: '/pruefaufgaben/montage-fuegekontrolle', label: 'Inspection task: Assembly & joining' },
+      },
+      {
+        img: '/images/software/Zu-duenne-Wandstaerke.webp',
+        title: 'Fluctuating wall thickness in stator housings',
+        text: 'Insufficient wall thickness can cause breakthroughs and field failures. InspectVista measures precisely across the entire volume and visualizes deviations in color.',
+        link: { href: '/pruefaufgaben/wanddickenmessung', label: 'Inspection task: Wall thickness' },
+      },
+      {
+        img: '/images/software/Auswertung-CT-einer-Pumpe.webp',
+        title: 'Installation error in a pump',
+        text: 'Incorrectly mounted components inside a pump cause field failures. CAD nominal/actual comparison reveals deviations from the assembly specification.',
+        link: { href: '/pruefaufgaben/cad-soll-ist-vergleich', label: 'Inspection task: CAD comparison' },
+      },
+      {
+        img: '/images/software/CT-Auswertung-von-Bearbeitungsflaechen.webp',
+        title: 'Pores in machining surfaces',
+        text: 'Pores in sealing surfaces cause scrap production or later leakage. Porosity analysis detects critical regions before final machining.',
+        link: { href: '/pruefaufgaben/porositaetsanalyse', label: 'Inspection task: Porosity analysis' },
+      },
+      {
+        img: '/images/software/Software-CT-zeigt-Lichtbogen-additiv-gefertigt-mit-Poren.webp',
+        title: 'Pores during laser cladding',
+        text: 'Structural weaknesses reduce the durability of additively manufactured parts under heavy load. Automatic 3D evaluation shows pore size and distribution.',
+        link: { href: '/branchen/additive-fertigung', label: 'Industry: Additive manufacturing' },
+      },
+      {
+        img: '/images/software/Kernreste-im-Wassermantel-veranschaulicht-in-der-CT-Software.webp',
+        title: 'Core residues in water jackets',
+        text: 'Core residues and duct blockages in engine blocks cause local overheating. InspectVista detects cavity blockages incl. position and volume.',
+        link: { href: '/pruefaufgaben/grat-kernreste-spaene', label: 'Inspection task: Burr, core residues & chips' },
+      },
+    ],
+  },
+};
+const t = c[locale as keyof typeof c] || c.en;
+---
+
+<SoftwareSubpageLayout
+  slug="anwendungen"
+  title={t.title}
+  description={t.description}
+  heroEyebrow={t.eyebrow}
+  heroHeadline={t.headline}
+  heroLead={t.lead}
+>
+  <section class="sw-block">
+    <div class="sw-container">
+      <h2>{t.casesTitle}</h2>
+      <div class="sw-grid-3" style="margin-top:2rem">
+        {t.cases.map(uc => (
+          <article class="sw-card">
+            <img src={uc.img} alt={uc.title} loading="lazy" width="600" height="360" />
+            <h3>{uc.title}</h3>
+            <p>{uc.text}</p>
+            <a href={lp(uc.link.href)} style="font-family:'Antonio',sans-serif; font-size:.8125rem; letter-spacing:.05em; text-transform:uppercase; margin-top:auto;">
+              {uc.link.label} →
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</SoftwareSubpageLayout>

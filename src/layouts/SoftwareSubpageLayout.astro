@@ -1,0 +1,149 @@
+---
+/**
+ * Gemeinsames Layout für /software/* Unterseiten.
+ * Rendert Header, Hero, Sibling-Nav, Footer + CTA.
+ */
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { localePath, type Locale } from '../i18n/translations';
+import '../styles/software-sub.css';
+
+interface Props {
+  slug: 'funktionsweise' | 'anwendungen' | 'vorteile' | 'einfuehrung' | 'preise';
+  title: string;
+  description: string;
+  heroEyebrow?: string;
+  heroHeadline: string;
+  heroLead: string;
+}
+
+const { slug, title, description, heroEyebrow, heroHeadline, heroLead } = Astro.props;
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (p: string) => localePath(p, locale);
+
+const siblingLabels: Record<Locale, Record<string, string>> = {
+  de: {
+    overview: 'Übersicht',
+    funktionsweise: 'Funktionsweise',
+    anwendungen: 'Anwendungen',
+    vorteile: 'Vorteile',
+    einfuehrung: 'Einführung',
+    preise: 'Preise & Lizenz',
+    toSoftware: 'InspectVista Software',
+    ctaTitle: 'Individuelle Beratung gewünscht?',
+    ctaText: 'Wir melden uns innerhalb von 24 Stunden.',
+    ctaBtn: 'Kostenfreies Gespräch anfragen',
+  },
+  en: {
+    overview: 'Overview',
+    funktionsweise: 'How it works',
+    anwendungen: 'Applications',
+    vorteile: 'Benefits',
+    einfuehrung: 'Onboarding',
+    preise: 'Pricing',
+    toSoftware: 'InspectVista Software',
+    ctaTitle: 'Want an individual consultation?',
+    ctaText: 'We respond within 24 hours.',
+    ctaBtn: 'Request a free call',
+  },
+  fr: {
+    overview: 'Vue d’ensemble',
+    funktionsweise: 'Fonctionnement',
+    anwendungen: 'Applications',
+    vorteile: 'Avantages',
+    einfuehrung: 'Mise en service',
+    preise: 'Tarifs',
+    toSoftware: 'Logiciel InspectVista',
+    ctaTitle: 'Besoin d’un conseil personnalisé ?',
+    ctaText: 'Nous revenons vers vous sous 24 heures.',
+    ctaBtn: 'Demander un échange gratuit',
+  },
+  es: {
+    overview: 'Resumen',
+    funktionsweise: 'Funcionamiento',
+    anwendungen: 'Aplicaciones',
+    vorteile: 'Ventajas',
+    einfuehrung: 'Implantación',
+    preise: 'Precios',
+    toSoftware: 'Software InspectVista',
+    ctaTitle: '¿Desea un asesoramiento individual?',
+    ctaText: 'Respondemos en menos de 24 horas.',
+    ctaBtn: 'Solicitar una llamada gratuita',
+  },
+  it: {
+    overview: 'Panoramica',
+    funktionsweise: 'Funzionamento',
+    anwendungen: 'Applicazioni',
+    vorteile: 'Vantaggi',
+    einfuehrung: 'Implementazione',
+    preise: 'Prezzi',
+    toSoftware: 'Software InspectVista',
+    ctaTitle: 'Desiderate una consulenza su misura?',
+    ctaText: 'Rispondiamo entro 24 ore.',
+    ctaBtn: 'Richiedere una consulenza gratuita',
+  },
+};
+const L = siblingLabels[locale] ?? siblingLabels.en;
+
+const siblings = [
+  { key: 'overview', href: '/software' },
+  { key: 'funktionsweise', href: '/software/funktionsweise' },
+  { key: 'anwendungen', href: '/software/anwendungen' },
+  { key: 'vorteile', href: '/software/vorteile' },
+  { key: 'einfuehrung', href: '/software/einfuehrung' },
+  { key: 'preise', href: '/software/preise' },
+] as const;
+---
+
+<BaseLayout title={title} description={description}>
+  <Header slot="header" />
+
+  <main class="sw-sub">
+    <!-- Hero -->
+    <section class="sw-hero-sub">
+      <div class="sw-container">
+        <a href={lp('/software')} class="sw-crumb">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+          {L.toSoftware}
+        </a>
+        {heroEyebrow && <div style="font-family:'Antonio',sans-serif; font-size:.75rem; letter-spacing:.15em; text-transform:uppercase; color:#00a0d2; margin-bottom:.5rem;">{heroEyebrow}</div>}
+        <h1>{heroHeadline}</h1>
+        <p class="sw-lead">{heroLead}</p>
+      </div>
+    </section>
+
+    <!-- Slot: Seitenspezifischer Content -->
+    <slot />
+
+    <!-- CTA -->
+    <section class="sw-block">
+      <div class="sw-container">
+        <div class="sw-cta-box">
+          <div>
+            <h3>{L.ctaTitle}</h3>
+            <p style="margin:.25rem 0 0; color: rgba(255,255,255,.7);">{L.ctaText}</p>
+          </div>
+          <a class="sw-btn-primary" href={lp('/kontakt')}>{L.ctaBtn}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sibling-Navigation -->
+    <nav class="sw-sibling-nav" aria-label="InspectVista Unterseiten">
+      <div class="sw-container">
+        <h4>{L.toSoftware}</h4>
+        <div class="sw-sibling-grid">
+          {siblings.map(s => (
+            <a
+              href={lp(s.href)}
+              aria-current={s.key === slug ? 'page' : undefined}
+            >{L[s.key as keyof typeof L]}</a>
+          ))}
+        </div>
+      </div>
+    </nav>
+  </main>
+
+  <Footer slot="footer" />
+</BaseLayout>

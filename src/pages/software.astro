@@ -135,6 +135,16 @@ const content = {
     ctaSubline: 'Software-Beratung oder Cloud-Auswertung – wir melden uns innerhalb von 24 Stunden.',
     cta1: 'Software anfragen',
     cta2: 'Cloud-Auswertung testen',
+
+    moreTitle: 'Mehr zur InspectVista CT-Software',
+    moreSubline: 'Details zu Funktionsweise, Einsatzgebieten, Vorteilen, Einführung und Lizenzmodell.',
+    more: [
+      { title: 'Funktionsweise', text: 'Die vier Module — Registrierung, ROI, Prüfaufgaben-Ausführung, Ergebnisausgabe.', href: '/software/funktionsweise' },
+      { title: 'Anwendungen', text: 'Acht Praxisbeispiele: Batterie, Stator, Kühlplatte, Pumpe, Schweißnähte u. v. m.', href: '/software/anwendungen' },
+      { title: 'Vorteile', text: 'Drei Herausforderungen, fünf technische Vorteile, sechs messbare Ergebnisse.', href: '/software/vorteile' },
+      { title: 'Einführung', text: 'Vier Schritte: Bedarfsanalyse, Validierung, Integration, Reifeprozess.', href: '/software/einfuehrung' },
+      { title: 'Preise & Lizenz', text: 'Transparente Jahreslizenz — alle Module, Updates und Support inklusive.', href: '/software/preise' },
+    ],
   },
 
   en: {
@@ -260,6 +270,16 @@ const content = {
     ctaSubline: 'Software consultation or cloud evaluation – we respond within 24 hours.',
     cta1: 'Request Software',
     cta2: 'Test Cloud Evaluation',
+
+    moreTitle: 'More about InspectVista CT software',
+    moreSubline: 'Details on functionality, applications, benefits, onboarding and licensing.',
+    more: [
+      { title: 'How it works', text: 'The four modules — registration, ROI, inspection task execution, result output.', href: '/software/funktionsweise' },
+      { title: 'Applications', text: 'Eight real-world examples: battery, stator, cooling plate, pump, welds and more.', href: '/software/anwendungen' },
+      { title: 'Benefits', text: 'Three challenges, five technical advantages, six measurable outcomes.', href: '/software/vorteile' },
+      { title: 'Onboarding', text: 'Four steps: needs analysis, validation, integration, maturity process.', href: '/software/einfuehrung' },
+      { title: 'Pricing', text: 'Transparent annual license — all modules, updates and support included.', href: '/software/preise' },
+    ],
   },
 };
 
@@ -457,6 +477,25 @@ const t = content[locale as keyof typeof content] || content.en || content.de;
           alt="CT-Techniker am industriellen CT-System von Microvista"
           loading="lazy"
         />
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 7b. Mehr erfahren (Sub-Pages) ──────────────── -->
+  <section class="sw-section" style="background: var(--sw-surface);">
+    <div class="sw-container">
+      <div class="sw-section-head sw-center">
+        <h2>{t.moreTitle}</h2>
+        <p class="sw-muted">{t.moreSubline}</p>
+      </div>
+      <div class="sw-more-grid">
+        {t.more.map((m: any) => (
+          <a href={lp(m.href)} class="sw-more-card">
+            <h3>{m.title}</h3>
+            <p>{m.text}</p>
+            <span class="sw-more-arrow">→</span>
+          </a>
+        ))}
       </div>
     </div>
   </section>
@@ -877,4 +916,46 @@ const t = content[locale as keyof typeof content] || content.en || content.de;
   }
   .sw-cta-text p { color: var(--sw-muted-color); font-size: 1.0625rem; margin: 0; }
   .sw-cta-btns { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+  /* ─── Mehr erfahren Grid ─── */
+  .sw-more-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .sw-more-card {
+    position: relative;
+    display: block;
+    padding: 1.5rem;
+    background: var(--sw-bg);
+    border: 1px solid var(--sw-border);
+    border-radius: 0.875rem;
+    text-decoration: none;
+    transition: all 200ms ease;
+    min-height: 160px;
+  }
+  .sw-more-card:hover { border-color: var(--sw-cyan); transform: translateY(-2px); }
+  .sw-more-card h3 {
+    font-family: 'Antonio', sans-serif;
+    font-size: 1.0625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--sw-text);
+    margin: 0 0 0.625rem;
+  }
+  .sw-more-card p {
+    color: var(--sw-muted-color);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+  .sw-more-arrow {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    color: var(--sw-cyan);
+    font-size: 1.25rem;
+    transition: transform 150ms ease;
+  }
+  .sw-more-card:hover .sw-more-arrow { transform: translateX(4px); }
 </style>

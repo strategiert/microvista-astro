@@ -1,0 +1,105 @@
+---
+import SoftwareSubpageLayout from '../../layouts/SoftwareSubpageLayout.astro';
+import type { Locale } from '../../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+
+const c = {
+  de: {
+    title: 'InspectVista Preise & Lizenz — transparente Jahreslizenz | Microvista',
+    description: 'Wie InspectVista lizenziert wird: Jahreslizenz inklusive aller Module, kostenfreie Updates, kostenfreier Telefon-Support und Sonderanpassungen als Einmalleistung ohne laufende Zusatzkosten.',
+    eyebrow: 'Preise & Lizenz',
+    headline: 'Transparente Kosten — keine versteckten Gebühren',
+    lead: 'InspectVista wird als Jahreslizenz angeboten. Eine Rechnung pro Jahr — inklusive aller Software-Module, Updates und Support. Individuelle Anpassungen sind einmalige Leistungen ohne laufende Kosten.',
+
+    whatIsIncluded: 'Was in der Jahreslizenz enthalten ist',
+    included: [
+      'Das Basis-Modul mit allen wichtigen Funktionen — Registrierung, ROI, Prüfaufgaben, Ergebnisausgabe',
+      'Kostenfreie Software-Updates über die gesamte Vertragslaufzeit',
+      'Regelmäßige Erweiterungen — neue Prüfverfahren werden ohne Aufpreis bereitgestellt',
+      'Kostenfreier Telefon-Support rund um die Uhr bei produktionskritischen Problemen',
+      'Schnelle Einarbeitung dank intuitiver Bedienung — kein mehrtägiges Training erforderlich',
+      'Rundum-Sorglos-Paket: eine Rechnung pro Jahr, keine Zusatzkosten während der Laufzeit',
+    ],
+
+    customizationTitle: 'Individuelle Anpassungen',
+    customizationText: 'Benötigen Sie ein Prüfverfahren, das noch nicht im Standard enthalten ist? Oder eine spezifische Integration in Ihr MES? Solche Anpassungen bieten wir als einmalige Entwicklungs-Leistung an — transparent kalkuliert, mit fixem Angebot vor Projektstart. Nach Abnahme werden die Sonderfunktionen Teil Ihrer Lizenz und sind in zukünftigen Updates automatisch enthalten.',
+
+    pricingTitle: 'Wie Ihr Angebot zustande kommt',
+    pricingSteps: [
+      'Kostenfreies Erstgespräch: Bauteile, Prüfaufgaben und geplanter Scan-Durchsatz klären',
+      'Microvista erstellt ein maßgeschneidertes Angebot — Preis richtet sich nach Modul-Umfang und Stückzahl',
+      'Proof-of-Concept optional: Wir werten ein Referenz-Scan-Set aus, Sie sehen das Ergebnis vor dem Kauf',
+      'Vertragsabschluss und Einführung gemäß Ihrer Roadmap (siehe „Einführung")',
+    ],
+
+    ctaNote: 'Preis auf Anfrage — das Gespräch kostet Sie nichts.',
+  },
+  en: {
+    title: 'InspectVista Pricing & License — Transparent Annual License | Microvista',
+    description: 'How InspectVista is licensed: annual license including all modules, free updates, free phone support, and customization as one-time service without recurring costs.',
+    eyebrow: 'Pricing & License',
+    headline: 'Transparent costs — no hidden fees',
+    lead: 'InspectVista is offered as an annual license. One invoice per year — including all software modules, updates, and support. Individual customization is a one-time service without ongoing costs.',
+
+    whatIsIncluded: 'What the annual license includes',
+    included: [
+      'The base module with all essential functions — registration, ROI, inspection tasks, result output',
+      'Free software updates throughout the entire contract period',
+      'Regular enhancements — new inspection methods provided at no extra charge',
+      'Free 24/7 phone support for production-critical issues',
+      'Fast onboarding thanks to intuitive operation — no multi-day training required',
+      'All-round carefree package: one invoice per year, no additional costs during the term',
+    ],
+
+    customizationTitle: 'Individual customization',
+    customizationText: 'Need an inspection method not yet included in the standard? Or a specific MES integration? Such adaptations are offered as a one-time development service — transparently costed, with a fixed quote before project start. After acceptance, these custom features become part of your license and are automatically included in future updates.',
+
+    pricingTitle: 'How your quote is created',
+    pricingSteps: [
+      'Free initial call: clarify parts, inspection tasks, and planned scan throughput',
+      'Microvista creates a tailored quote — price depends on module scope and volume',
+      'Optional proof-of-concept: we evaluate a reference scan set, you see the result before buying',
+      'Contract and onboarding according to your roadmap (see "Onboarding")',
+    ],
+
+    ctaNote: 'Price on request — the call costs you nothing.',
+  },
+};
+const t = c[locale as keyof typeof c] || c.en;
+---
+
+<SoftwareSubpageLayout
+  slug="preise"
+  title={t.title}
+  description={t.description}
+  heroEyebrow={t.eyebrow}
+  heroHeadline={t.headline}
+  heroLead={t.lead}
+>
+  <section class="sw-block">
+    <div class="sw-container">
+      <h2>{t.whatIsIncluded}</h2>
+      <ul class="sw-check" style="max-width:820px; margin-top:1.5rem">
+        {t.included.map(i => <li>{i}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sw-block">
+    <div class="sw-container">
+      <h2>{t.customizationTitle}</h2>
+      <p style="max-width:820px">{t.customizationText}</p>
+    </div>
+  </section>
+
+  <section class="sw-block">
+    <div class="sw-container">
+      <h2>{t.pricingTitle}</h2>
+      <ol style="max-width:820px; margin-top:1rem; padding-left:1.25rem; display:flex; flex-direction:column; gap:.75rem;">
+        {t.pricingSteps.map(s => <li style="color: #ece9ff; line-height:1.7;">{s}</li>)}
+      </ol>
+      <p style="margin-top:1.5rem; color:#00a0d2; font-family:'Antonio',sans-serif; letter-spacing:.05em;">{t.ctaNote}</p>
+    </div>
+  </section>
+</SoftwareSubpageLayout>

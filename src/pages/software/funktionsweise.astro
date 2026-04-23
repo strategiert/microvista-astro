@@ -1,0 +1,148 @@
+---
+import SoftwareSubpageLayout from '../../layouts/SoftwareSubpageLayout.astro';
+import type { Locale } from '../../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+
+const c = {
+  de: {
+    title: 'InspectVista Funktionsweise — Modularer CT-Auswertungsprozess | Microvista',
+    description: 'Wie InspectVista CT-Daten auswertet: Registrierung, Region-of-Interest, Prüfaufgaben-Ausführung und konfigurierbare Ergebnisausgabe — vollautomatisch, reproduzierbar.',
+    eyebrow: 'Funktionsweise',
+    headline: 'Wie InspectVista Ihre CT-Daten auswertet',
+    lead: 'InspectVista ist ein modulares CT-Software-System. Vier aufeinander aufbauende Module bringen Sie vom rekonstruierten CT-Scan zur automatisierten, revisionssicheren Prüfentscheidung.',
+    modulesTitle: 'Vier Module — ein Auswertungsprozess',
+    modulesLead: 'Die Module lassen sich einzeln konfigurieren oder als Gesamtkette ausführen. Kein manueller Eingriff zwischen den Schritten.',
+    modules: [
+      {
+        nr: '1',
+        icon: '/images/software/Piktogramm-CT-Software-Registrierung.webp',
+        title: 'Registrierung',
+        text: 'Das Registrierungs-Modul richtet die CT-Daten am Referenzmodell (z. B. CAD) aus. Ergebnis: jedes Bauteil liegt lagerichtig im Koordinatensystem der Prüfung — unabhängig von Positionstoleranzen im Scan.',
+      },
+      {
+        nr: '2',
+        icon: '/images/software/Piktogramm-CT-Software-Bestimmung-der-Region-of-Interest.webp',
+        title: 'Region-of-Interest (ROI)',
+        text: 'Definieren Sie präzise den Bauteilbereich, auf den die Analyse fokussiert wird. Mehrere ROIs pro Scan sind möglich — z. B. alle kritischen Schweißnähte an einem Stator.',
+      },
+      {
+        nr: '3',
+        icon: '/images/software/Piktogramm-CT-Software-Ausfuehrung-Inspektionsaufgabe.webp',
+        title: 'Ausführung der Prüfaufgabe',
+        text: 'Das Ausführungs-Modul führt Muster- und Flächenerkennung, Porositäts-, Wanddicken- oder Defektanalyse im ROI durch — gegen einen konfigurierten Fehlerkatalog mit definierten Toleranzen.',
+      },
+      {
+        nr: '4',
+        icon: '/images/software/Piktogramm-CT-Software-Einstellung-der-Ergebnisausgabe.webp',
+        title: 'Konfiguration der Ergebnisausgabe',
+        text: 'Automatische Berichtserstellung, Archivierung und Eingriffsgrenzen-Monitoring. Integrierbar in MES, ERP oder hauseigene QS-Systeme.',
+      },
+    ],
+    processTitle: 'Der vollständige Ablauf auf einen Blick',
+    processImageAlt: 'Prozessdiagramm: Computertomographie-Software Auswertungsablauf',
+    technicalTitle: 'Technische Grundlagen',
+    technicalItems: [
+      'Arbeitet mit rekonstruierten Standard-Scan-Daten aller gängigen CT-Systeme',
+      'Keine Neu-Rekonstruktion nötig — direkte Weiterverarbeitung der bestehenden Volumendaten',
+      'Parallelisierte GPU-Auswertung für kurze Zykluszeiten',
+      'Browser-basierte Bedienung — keine Installation am Arbeitsplatz',
+      'MES-Anbindung über REST-API und Datenexport-Schnittstellen',
+      'Reproduzierbare IO/NIO-Klassifizierung mit Audit-Trail',
+    ],
+  },
+  en: {
+    title: 'InspectVista How It Works — Modular CT Evaluation Process | Microvista',
+    description: 'How InspectVista evaluates CT data: registration, region-of-interest, inspection task execution and configurable result output — fully automated and reproducible.',
+    eyebrow: 'How it works',
+    headline: 'How InspectVista evaluates your CT data',
+    lead: 'InspectVista is a modular CT software system. Four consecutive modules take you from the reconstructed CT scan to an automated, audit-proof inspection decision.',
+    modulesTitle: 'Four modules — one evaluation pipeline',
+    modulesLead: 'Modules can be configured individually or executed as a complete chain. No manual intervention required between steps.',
+    modules: [
+      {
+        nr: '1',
+        icon: '/images/software/Piktogramm-CT-Software-Registrierung.webp',
+        title: 'Registration',
+        text: 'The registration module aligns CT data to the reference model (e.g. CAD). Result: every part is positioned correctly in the inspection coordinate system — independent of scan position tolerances.',
+      },
+      {
+        nr: '2',
+        icon: '/images/software/Piktogramm-CT-Software-Bestimmung-der-Region-of-Interest.webp',
+        title: 'Region of Interest (ROI)',
+        text: 'Precisely define the component area where analysis is focused. Multiple ROIs per scan are possible — e.g. all critical weld seams on one stator.',
+      },
+      {
+        nr: '3',
+        icon: '/images/software/Piktogramm-CT-Software-Ausfuehrung-Inspektionsaufgabe.webp',
+        title: 'Inspection Task Execution',
+        text: 'Executes pattern recognition, surface analysis, porosity, wall-thickness and defect analysis inside the ROI — against a configured defect catalog with defined tolerances.',
+      },
+      {
+        nr: '4',
+        icon: '/images/software/Piktogramm-CT-Software-Einstellung-der-Ergebnisausgabe.webp',
+        title: 'Configuration of Result Output',
+        text: 'Automatic report generation, archiving and intervention-limit monitoring. Integrates with MES, ERP or your own quality management systems.',
+      },
+    ],
+    processTitle: 'The complete workflow at a glance',
+    processImageAlt: 'Process diagram: Computed tomography software evaluation process',
+    technicalTitle: 'Technical foundations',
+    technicalItems: [
+      'Works with standard reconstructed scan data from all common CT systems',
+      'No re-reconstruction required — direct processing of existing volumetric data',
+      'Parallelized GPU evaluation for short cycle times',
+      'Browser-based operation — no installation at the workstation',
+      'MES integration via REST API and data export interfaces',
+      'Reproducible pass/fail classification with audit trail',
+    ],
+  },
+};
+const t = c[locale as keyof typeof c] || c.en;
+---
+
+<SoftwareSubpageLayout
+  slug="funktionsweise"
+  title={t.title}
+  description={t.description}
+  heroEyebrow={t.eyebrow}
+  heroHeadline={t.headline}
+  heroLead={t.lead}
+>
+  <section class="sw-block">
+    <div class="sw-container">
+      <h2>{t.modulesTitle}</h2>
+      <p style="max-width:720px">{t.modulesLead}</p>
+      <div class="sw-grid-2" style="margin-top:2rem">
+        {t.modules.map(m => (
+          <article class="sw-card">
+            <div class="sw-card-icon"><img src={m.icon} alt="" width="40" height="40" loading="lazy" /></div>
+            <h3>{m.nr}. {m.title}</h3>
+            <p>{m.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sw-block">
+    <div class="sw-container">
+      <h2>{t.processTitle}</h2>
+      <img
+        src="/images/software/Computed-tomography-software-evaluation-process.webp"
+        alt={t.processImageAlt}
+        loading="lazy"
+        style="max-width:900px; width:100%; height:auto; margin-top:1rem; border-radius:.75rem; border:1px solid rgba(255,255,255,.08);"
+      />
+    </div>
+  </section>
+
+  <section class="sw-block">
+    <div class="sw-container">
+      <h2>{t.technicalTitle}</h2>
+      <ul class="sw-check" style="max-width:780px">
+        {t.technicalItems.map(item => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+</SoftwareSubpageLayout>

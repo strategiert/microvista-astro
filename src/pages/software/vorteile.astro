@@ -1,0 +1,175 @@
+---
+import SoftwareSubpageLayout from '../../layouts/SoftwareSubpageLayout.astro';
+import type { Locale } from '../../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+
+const c = {
+  de: {
+    title: 'InspectVista Vorteile — CT-Auswertung automatisieren | Microvista',
+    description: 'Was InspectVista besser macht: GPU-Parallelisierung, MES-Integration, Browser-Bedienung ohne CT-Vorkenntnisse, messbare Effizienzgewinne und Kostenreduktion in der Serienprüfung.',
+    eyebrow: 'Vorteile',
+    headline: 'Warum InspectVista schneller, günstiger und sicherer ist',
+    lead: 'Drei Herausforderungen bei der CT-Auswertung, fünf technische Vorteile der InspectVista-Software und sechs konkrete Ergebnisse für Ihr Unternehmen.',
+
+    challengeTitle: 'Die drei Herausforderungen manueller CT-Auswertung',
+    challenges: [
+      {
+        title: 'Zeitdruck',
+        text: 'Manuelle Auswertung von CT-Daten bei Bauteilserien ist teuer und zeitaufwendig. Wartezeiten auf Prüfergebnisse verzögern Freigaben und Produktionsentscheidungen.',
+      },
+      {
+        title: 'Fehlende Werkzeuge',
+        text: 'Spezialisierte CT-Software für effiziente Datenanalyse ist selten verfügbar. Standard-Tools sind ineffizient und decken komplexe Prüfaufgaben nicht ab.',
+      },
+      {
+        title: 'Menschliche Fehler',
+        text: 'Repetitive manuelle Prüfungen erhöhen das Risiko von Auswertungsfehlern. Fehlklassifizierungen verursachen Qualitätsprobleme bis hin zu Rückrufen.',
+      },
+    ],
+
+    advantagesTitle: 'Fünf technische Vorteile von InspectVista',
+    advantages: [
+      {
+        title: 'Unlimitierte GPU-Nutzung',
+        text: 'Optimale Ressourcennutzung inklusive Parallelisierung ermöglicht sehr kurze Zykluszeiten bei minimalem Hardware-Aufwand. Auch Big-Data-Scans skalieren auf Standard-Server-Hardware.',
+      },
+      {
+        title: 'Integrierbar in nahezu jedes System',
+        text: 'Der modulare Aufbau erlaubt eine einfache und schnelle Implementierung im CT-System und nutzt eine Datenschnittstelle zum MES/ERP. Keine proprietäre Infrastruktur nötig.',
+      },
+      {
+        title: 'Bedienung ohne CT-Vorkenntnisse',
+        text: 'Dank der aussagekräftigen Ergebnisanzeige und intuitiven Bedienung ist keine Spezialist:innen-Einarbeitung erforderlich. Fachpersonal aus der Produktion kann die Auswertung direkt nutzen.',
+      },
+      {
+        title: 'Nutzt Standard-Rekonstruktionsdaten',
+        text: 'Die Prüfsoftware arbeitet mit rekonstruierten Standard-Scan-Daten und ist damit kompatibel zu allen gängigen CT-Systemen. Keine neue Hardware, keine zusätzliche Rekonstruktion.',
+      },
+      {
+        title: 'Keine Installation erforderlich',
+        text: 'Einfache Bedienung über den Browser. Keine Software-Verteilung, keine Client-Wartung, keine IT-seitige Freigabe an jedem Arbeitsplatz.',
+      },
+    ],
+
+    outcomesTitle: 'Sechs messbare Ergebnisse für Ihr Unternehmen',
+    outcomes: [
+      { title: 'Schnelle Entscheidungen', text: 'Durch die automatisierte CT-Auswertung reagieren Sie sofort auf Ergebnisse und halten die Produktionslinie in Bewegung.' },
+      { title: 'Entlastetes Team', text: 'Ihr Personal konzentriert sich auf höherwertige Aufgaben statt auf repetitive Sichtprüfungen. Weniger Ermüdung, weniger Fehler.' },
+      { title: 'Wettbewerbsvorteil', text: 'Sie setzen mit moderner Technologie neue Standards in Ihrer Branche — und positionieren sich als Qualitätsführer.' },
+      { title: 'Effizienzsteigerung', text: 'Die industrielle CT-Auswertung wird um ein Vielfaches beschleunigt. Sie gewinnen wertvolle Zeit in Entwicklung und Serie.' },
+      { title: 'Kostenreduktion', text: 'Automatisierte Prozesse reduzieren laufende Betriebskosten und vermeiden teure Nacharbeit von Ausschussteilen.' },
+      { title: 'Qualitätsverbesserung', text: 'Fehler werden reproduzierbar und früh erkannt. Sie optimieren Ihren Prozess mit datenbasierten Entscheidungen statt Stichproben.' },
+    ],
+  },
+  en: {
+    title: 'InspectVista Benefits — Automate CT Evaluation | Microvista',
+    description: 'What makes InspectVista better: GPU parallelization, MES integration, browser operation without CT expertise, measurable efficiency gains and cost reduction in serial inspection.',
+    eyebrow: 'Benefits',
+    headline: 'Why InspectVista is faster, cheaper and safer',
+    lead: 'Three challenges of CT evaluation, five technical advantages of InspectVista and six concrete outcomes for your company.',
+
+    challengeTitle: 'Three challenges of manual CT evaluation',
+    challenges: [
+      {
+        title: 'Time pressure',
+        text: 'Manual evaluation of CT data for component series is expensive and time-consuming. Waiting for results delays approvals and production decisions.',
+      },
+      {
+        title: 'Missing tools',
+        text: 'Specialized CT software for efficient data analysis is rarely available. Standard tools are inefficient and do not cover complex inspection tasks.',
+      },
+      {
+        title: 'Human errors',
+        text: 'Repetitive manual inspection increases the risk of evaluation errors. Misclassification causes quality problems up to recalls.',
+      },
+    ],
+
+    advantagesTitle: 'Five technical advantages of InspectVista',
+    advantages: [
+      {
+        title: 'Unlimited GPU usage',
+        text: 'Optimal resource utilization incl. parallelization enables very short cycle times with minimal hardware. Even big-data scans scale on standard server hardware.',
+      },
+      {
+        title: 'Integrates with almost any system',
+        text: 'Modular design allows simple and fast integration into the CT system and uses a data interface to MES/ERP. No proprietary infrastructure required.',
+      },
+      {
+        title: 'Operable without CT expertise',
+        text: 'Meaningful result visualization and intuitive operation make specialist training unnecessary. Production staff can use the evaluation directly.',
+      },
+      {
+        title: 'Works with standard reconstruction data',
+        text: 'The inspection software works with standard reconstructed scan data and is compatible with all common CT systems. No new hardware, no extra reconstruction.',
+      },
+      {
+        title: 'No installation required',
+        text: 'Simple browser-based operation. No software deployment, no client maintenance, no IT approval at every workstation.',
+      },
+    ],
+
+    outcomesTitle: 'Six measurable outcomes for your company',
+    outcomes: [
+      { title: 'Fast decisions', text: 'Automated CT evaluation lets you react immediately to results and keeps the production line moving.' },
+      { title: 'Relieved team', text: 'Your staff focus on high-value tasks instead of repetitive visual checks. Less fatigue, fewer errors.' },
+      { title: 'Competitive advantage', text: 'Modern technology sets new standards in your industry — positioning you as a quality leader.' },
+      { title: 'Increased efficiency', text: 'Industrial CT evaluation is accelerated many times over. You gain valuable time in development and series production.' },
+      { title: 'Cost reduction', text: 'Automated processes reduce running costs and avoid expensive rework on scrap parts.' },
+      { title: 'Quality improvement', text: 'Errors are detected reproducibly and early. You optimize your process with data-driven decisions instead of spot checks.' },
+    ],
+  },
+};
+const t = c[locale as keyof typeof c] || c.en;
+---
+
+<SoftwareSubpageLayout
+  slug="vorteile"
+  title={t.title}
+  description={t.description}
+  heroEyebrow={t.eyebrow}
+  heroHeadline={t.headline}
+  heroLead={t.lead}
+>
+  <section class="sw-block">
+    <div class="sw-container">
+      <h2>{t.challengeTitle}</h2>
+      <div class="sw-grid-3" style="margin-top:1.5rem">
+        {t.challenges.map(ch => (
+          <article class="sw-card">
+            <h3>{ch.title}</h3>
+            <p>{ch.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sw-block">
+    <div class="sw-container">
+      <h2>{t.advantagesTitle}</h2>
+      <div class="sw-grid-2" style="margin-top:1.5rem">
+        {t.advantages.map(a => (
+          <article class="sw-card">
+            <h3>{a.title}</h3>
+            <p>{a.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sw-block">
+    <div class="sw-container">
+      <h2>{t.outcomesTitle}</h2>
+      <div class="sw-grid-3" style="margin-top:1.5rem">
+        {t.outcomes.map(o => (
+          <article class="sw-card">
+            <h3>{o.title}</h3>
+            <p>{o.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</SoftwareSubpageLayout>

@@ -1,0 +1,137 @@
+---
+import SoftwareSubpageLayout from '../../layouts/SoftwareSubpageLayout.astro';
+import type { Locale } from '../../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+
+const c = {
+  de: {
+    title: 'InspectVista Einführung — 4 Schritte zur automatisierten CT-Auswertung | Microvista',
+    description: 'So führt Microvista InspectVista bei Ihnen ein: Bedarfsanalyse, Validierung gegen Referenzdaten, nahtlose Integration in Ihre Prozesslandschaft und Reifeprozess mit Erfolgsmessung.',
+    eyebrow: 'Einführung',
+    headline: 'Vier Schritte zur automatisierten CT-Auswertung',
+    lead: 'Wir führen InspectVista gemeinsam mit Ihnen ein — nicht als fertige Software von der Stange, sondern als individuell validiertes Prüfsystem. Der gesamte Prozess ist in vier klar definierte Schritte unterteilt.',
+
+    stepsTitle: 'Ihre Roadmap zum Erfolg in der CT-Auswertung',
+    stepsLead: 'Die Schritte laufen aufeinander auf. Jede Phase hat klare Deliverables, bevor die nächste beginnt.',
+    steps: [
+      {
+        nr: '1',
+        title: 'Individuelle Bedarfsanalyse',
+        text: 'Wir besprechen Ihre spezifischen Anforderungen: welche Bauteile, welche Prüfaufgaben, welche Stückzahlen, welche Toleranzen und Normen. Dann prüfen wir, welche Module des InspectVista-Baukastens auf Sie zugeschnitten werden müssen.',
+        deliverable: 'Deliverable: Anforderungs-Spezifikation und Modul-Roadmap.',
+      },
+      {
+        nr: '2',
+        title: 'Validierung der CT-Software',
+        text: 'Der Abgleich mit Referenzdaten sichert, dass User-Anforderungen und Intended-Use erfüllt werden. Wir scannen Referenzbauteile, vergleichen Auswertungsergebnisse manuell und automatisiert und dokumentieren die Übereinstimmung.',
+        deliverable: 'Deliverable: Validierungs-Report mit reproduzierbaren Kennwerten.',
+      },
+      {
+        nr: '3',
+        title: 'Nahtlose Integration',
+        text: 'Schnelle, aufwandsarme Einbettung in Ihre Prozesslandschaft. Beispiele: Übernahme Ihres Berichts-Konzepts, Nutzung einer Schnittstelle zu Ihrem MES, Anbindung an bestehende Freigabe-Workflows.',
+        deliverable: 'Deliverable: produktives System in Ihrer Umgebung.',
+      },
+      {
+        nr: '4',
+        title: 'Reifeprozess mit Erfolgsmessung',
+        text: 'Prüfprogramme sind nur so gut wie die bei Erstellung bekannten Anforderungen. Wir begleiten den Reifeprozess, messen Trefferquoten, justieren nach und passen Parameter an neue Bauteil-Varianten an.',
+        deliverable: 'Deliverable: stabiler Produktivbetrieb mit dokumentierten KPIs.',
+      },
+    ],
+
+    expectTitle: 'Was Sie von uns erwarten können',
+    expectItems: [
+      'Ein fester Ansprechpartner bei Microvista über den gesamten Einführungszeitraum',
+      'Transparente Zeit- und Budgetplanung mit fixen Meilensteinen',
+      'Training Ihres Teams vor der produktiven Nutzung — online oder vor Ort',
+      'Dokumentation in Deutsch und Englisch, auf Wunsch weitere Sprachen',
+      'Kostenfreier Telefon-Support während der Einführung und im laufenden Betrieb',
+    ],
+  },
+  en: {
+    title: 'InspectVista Onboarding — 4 Steps to Automated CT Evaluation | Microvista',
+    description: 'How Microvista implements InspectVista: needs analysis, validation against reference data, seamless integration into your process landscape and maturity process with performance measurement.',
+    eyebrow: 'Onboarding',
+    headline: 'Four steps to automated CT evaluation',
+    lead: 'We implement InspectVista together with you — not as off-the-shelf software, but as an individually validated inspection system. The process is divided into four clearly defined steps.',
+
+    stepsTitle: 'Your roadmap to CT-evaluation success',
+    stepsLead: 'Steps build on each other. Each phase has clear deliverables before the next begins.',
+    steps: [
+      {
+        nr: '1',
+        title: 'Individual needs analysis',
+        text: 'We discuss your specific requirements: which parts, which inspection tasks, which volumes, which tolerances and standards. Then we identify which InspectVista modules need to be tailored to you.',
+        deliverable: 'Deliverable: requirements specification and module roadmap.',
+      },
+      {
+        nr: '2',
+        title: 'Validation of the CT software',
+        text: 'Comparison with reference data ensures that user requirements and intended use are met. We scan reference parts, compare manual and automated evaluations and document the agreement.',
+        deliverable: 'Deliverable: validation report with reproducible metrics.',
+      },
+      {
+        nr: '3',
+        title: 'Seamless integration',
+        text: 'Fast, low-effort embedding into your process landscape. Examples: adopting your reporting concept, using an interface to your MES, connecting to existing approval workflows.',
+        deliverable: 'Deliverable: productive system in your environment.',
+      },
+      {
+        nr: '4',
+        title: 'Maturity process with performance measurement',
+        text: 'Inspection programs are only as good as the requirements known when they are created. We accompany the maturity process, measure hit rates, fine-tune and adapt parameters to new part variants.',
+        deliverable: 'Deliverable: stable production operation with documented KPIs.',
+      },
+    ],
+
+    expectTitle: 'What you can expect from us',
+    expectItems: [
+      'A dedicated contact at Microvista throughout the entire onboarding period',
+      'Transparent timeline and budget planning with fixed milestones',
+      'Training for your team before production use — online or on-site',
+      'Documentation in German and English, additional languages on request',
+      'Free phone support during onboarding and ongoing operation',
+    ],
+  },
+};
+const t = c[locale as keyof typeof c] || c.en;
+---
+
+<SoftwareSubpageLayout
+  slug="einfuehrung"
+  title={t.title}
+  description={t.description}
+  heroEyebrow={t.eyebrow}
+  heroHeadline={t.headline}
+  heroLead={t.lead}
+>
+  <section class="sw-block">
+    <div class="sw-container">
+      <h2>{t.stepsTitle}</h2>
+      <p style="max-width:720px">{t.stepsLead}</p>
+      <div style="display:flex; flex-direction:column; gap:1rem; margin-top:2rem">
+        {t.steps.map(s => (
+          <article class="sw-step">
+            <div class="sw-step-nr">{s.nr}</div>
+            <div>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+              <p style="margin:.5rem 0 0; color: rgba(255,255,255,.55); font-size:.875rem; font-style:italic;">{s.deliverable}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sw-block">
+    <div class="sw-container">
+      <h2>{t.expectTitle}</h2>
+      <ul class="sw-check" style="max-width:780px">
+        {t.expectItems.map(item => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+</SoftwareSubpageLayout>
