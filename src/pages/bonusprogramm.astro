@@ -11,38 +11,38 @@ const content = await loadStaticPage('bonusprogramm', locale);
 
 const labels = {
   de: {
-    title: 'Bonusprogramm',
-    description: 'Bonusprogramm von Microvista für industrielle CT-Dienstleistungen.',
-    breadcrumb: 'Bonusprogramm'
+    title: 'Empfehlungsprogramm',
+    description: 'Empfehlungsprogramm von Microvista für industrielles CT, CT-Labor, Bauteilprüfung und Qualitätssicherung.',
+    breadcrumb: 'Empfehlungsprogramm'
   },
   en: {
-    title: 'Reward Program',
-    description: 'Microvista reward program for industrial CT services.',
-    breadcrumb: 'Reward Program'
+    title: 'Referral Program',
+    description: 'Microvista referral program for industrial CT services and quality assurance.',
+    breadcrumb: 'Referral Program'
   },
   fr: {
-    title: 'Programme bonus',
-    description: 'Programme bonus Microvista pour les services CT industriels.',
-    breadcrumb: 'Programme bonus'
+    title: 'Programme de recommandation',
+    description: 'Programme de recommandation Microvista pour les services CT industriels.',
+    breadcrumb: 'Programme de recommandation'
   },
   es: {
-    title: 'Programa de bonificación',
-    description: 'Programa de bonificación de Microvista para servicios CT industriales.',
-    breadcrumb: 'Programa'
+    title: 'Programa de recomendación',
+    description: 'Programa de recomendación de Microvista para servicios CT industriales.',
+    breadcrumb: 'Programa de recomendación'
   },
   it: {
-    title: 'Programma bonus',
-    description: 'Programma bonus Microvista per servizi CT industriali.',
-    breadcrumb: 'Programma bonus'
+    title: 'Programma referral',
+    description: 'Programma referral Microvista per servizi CT industriali.',
+    breadcrumb: 'Programma referral'
   }
 }[locale] || {
-  title: 'Bonusprogramm',
-  description: 'Bonusprogramm von Microvista für industrielle CT-Dienstleistungen.',
-  breadcrumb: 'Bonusprogramm'
+  title: 'Empfehlungsprogramm',
+  description: 'Empfehlungsprogramm von Microvista für industrielle CT-Dienstleistungen.',
+  breadcrumb: 'Empfehlungsprogramm'
 };
 ---
 
-<BaseLayout title={labels.title} description={labels.description}>
+<BaseLayout title={labels.title} description={labels.description} theme="labor">
   <Header slot="header" />
 
   <div class="static-page">
@@ -58,11 +58,507 @@ const labels = {
 </BaseLayout>
 
 <style>
-  .static-page { padding-bottom: var(--space-16); }
-  .static-content { max-width: 900px; margin: 0 auto; padding: var(--space-8) 0; }
-  .static-content :global(h1) { font-size: var(--text-4xl); margin-bottom: var(--space-8); }
-  .static-content :global(h2) { margin-top: var(--space-8); margin-bottom: var(--space-4); }
-  .static-content :global(h3) { margin-top: var(--space-6); margin-bottom: var(--space-3); }
-  .static-content :global(p) { line-height: 1.8; margin-bottom: var(--space-4); }
-  .static-content :global(img) { max-width: 100%; height: auto; border-radius: var(--radius-xl); }
+  .static-page {
+    padding-bottom: var(--space-20);
+    background:
+      radial-gradient(circle at top left, rgba(142, 191, 214, 0.24), transparent 34%),
+      linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  }
+
+  .static-content {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: var(--space-4) 0 var(--space-12);
+  }
+
+  .static-content :global(*) {
+    box-sizing: border-box;
+  }
+
+  .static-content :global(.bonus-hero),
+  .static-content :global(.bonus-section),
+  .static-content :global(.bonus-footnote) {
+    margin-bottom: var(--space-8);
+  }
+
+  .static-content :global(.bonus-hero) {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: var(--space-10);
+    align-items: center;
+    padding: var(--space-10);
+    border-radius: 32px;
+    background:
+      linear-gradient(135deg, rgba(50, 40, 91, 0.98), rgba(43, 69, 110, 0.94)),
+      var(--mv-violet);
+    color: white;
+    box-shadow: 0 28px 80px rgba(50, 40, 91, 0.18);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .static-content :global(.bonus-hero::after) {
+    content: '';
+    position: absolute;
+    inset: auto -10% -30% auto;
+    width: 340px;
+    height: 340px;
+    background: radial-gradient(circle, rgba(0, 160, 210, 0.28), transparent 70%);
+    pointer-events: none;
+  }
+
+  .static-content :global(.bonus-hero__copy),
+  .static-content :global(.bonus-hero__visual) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .static-content :global(.bonus-eyebrow) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+    padding: 0.45rem 0.85rem;
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.12);
+    color: inherit;
+  }
+
+  .static-content :global(.bonus-hero h1) {
+    margin: 0 0 var(--space-4);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 0.98;
+    color: white;
+  }
+
+  .static-content :global(.bonus-subheadline) {
+    margin: 0 0 var(--space-4);
+    font-size: clamp(1.2rem, 2vw, 1.55rem);
+    font-weight: 700;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.94);
+  }
+
+  .static-content :global(.bonus-hero p),
+  .static-content :global(.bonus-section p),
+  .static-content :global(.bonus-faq-item p) {
+    line-height: 1.72;
+  }
+
+  .static-content :global(.bonus-hero p) {
+    max-width: 62ch;
+    margin: 0 0 var(--space-5);
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  .static-content :global(.bonus-cta-row),
+  .static-content :global(.bonus-contact-actions) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .static-content :global(.bonus-button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.35rem;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform var(--transition-base), box-shadow var(--transition-base), background var(--transition-base), color var(--transition-base);
+  }
+
+  .static-content :global(.bonus-button:hover) {
+    transform: translateY(-2px);
+  }
+
+  .static-content :global(.bonus-button--primary) {
+    background: var(--mv-orange);
+    color: white;
+    box-shadow: 0 14px 30px rgba(238, 119, 17, 0.28);
+  }
+
+  .static-content :global(.bonus-button--primary:hover) {
+    background: var(--mv-orange-hover);
+  }
+
+  .static-content :global(.bonus-button--secondary) {
+    border: 1px solid rgba(50, 40, 91, 0.12);
+    background: white;
+    color: var(--primary);
+  }
+
+  .static-content :global(.bonus-button--secondary:hover) {
+    box-shadow: var(--shadow-md);
+  }
+
+  .static-content :global(.bonus-hero .bonus-button--secondary) {
+    border-color: rgba(255, 255, 255, 0.26);
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+  }
+
+  .static-content :global(.bonus-meta) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+
+  .static-content :global(.bonus-meta span),
+  .static-content :global(.bonus-company-list span) {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.8rem;
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .static-content :global(.bonus-meta span) {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .static-content :global(.bonus-hero__visual) {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .static-content :global(.bonus-hero__visual img) {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    object-fit: cover;
+    border-radius: 24px;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.24);
+  }
+
+  .static-content :global(.bonus-reward-card),
+  .static-content :global(.bonus-google-card),
+  .static-content :global(.bonus-highlight-card),
+  .static-content :global(.bonus-contact-card),
+  .static-content :global(.bonus-step),
+  .static-content :global(.bonus-signal-card),
+  .static-content :global(.bonus-review-card),
+  .static-content :global(.bonus-faq-item) {
+    border-radius: 24px;
+    background: white;
+    box-shadow: 0 18px 48px rgba(16, 24, 40, 0.08);
+  }
+
+  .static-content :global(.bonus-reward-card) {
+    max-width: 320px;
+    margin-left: auto;
+    padding: var(--space-5);
+    color: var(--primary);
+  }
+
+  .static-content :global(.bonus-reward-card__kicker),
+  .static-content :global(.bonus-highlight-card__label) {
+    display: block;
+    margin-bottom: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mv-cyan);
+  }
+
+  .static-content :global(.bonus-reward-card strong),
+  .static-content :global(.bonus-highlight-card strong) {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    line-height: 1;
+    color: var(--primary);
+  }
+
+  .static-content :global(.bonus-reward-card p),
+  .static-content :global(.bonus-highlight-card p),
+  .static-content :global(.bonus-highlight-card small) {
+    margin: var(--space-3) 0 0;
+    color: var(--text-muted);
+  }
+
+  .static-content :global(.bonus-section) {
+    padding: var(--space-8);
+    border-radius: 32px;
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(50, 40, 91, 0.08);
+    backdrop-filter: blur(10px);
+  }
+
+  .static-content :global(.bonus-section--trust),
+  .static-content :global(.bonus-section--reward) {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(236, 246, 250, 0.9));
+  }
+
+  .static-content :global(.bonus-section__head) {
+    margin-bottom: var(--space-6);
+    max-width: 760px;
+  }
+
+  .static-content :global(.bonus-section__head--left) {
+    margin-bottom: 0;
+  }
+
+  .static-content :global(.bonus-section h2) {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(2rem, 4vw, 3.15rem);
+    line-height: 1.02;
+    color: var(--primary);
+  }
+
+  .static-content :global(.bonus-section h3) {
+    margin: 0 0 var(--space-2);
+    font-size: clamp(1.35rem, 2.5vw, 1.8rem);
+    color: var(--primary);
+  }
+
+  .static-content :global(.bonus-section p) {
+    margin: 0;
+    color: var(--text-muted);
+  }
+
+  .static-content :global(.bonus-trust-grid) {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.85fr) minmax(0, 1.15fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .static-content :global(.bonus-google-card) {
+    display: flex;
+    gap: var(--space-4);
+    align-items: center;
+    padding: var(--space-5);
+    text-decoration: none;
+    color: inherit;
+    background: linear-gradient(135deg, rgba(50, 40, 91, 0.98), rgba(68, 53, 125, 0.96));
+  }
+
+  .static-content :global(.bonus-google-card img) {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+  }
+
+  .static-content :global(.bonus-google-card strong) {
+    display: block;
+    font-size: var(--text-2xl);
+    color: white;
+    margin-bottom: 0.15rem;
+  }
+
+  .static-content :global(.bonus-google-card span) {
+    display: block;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .static-content :global(.bonus-company-list) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-4);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(50, 40, 91, 0.08);
+  }
+
+  .static-content :global(.bonus-company-list span) {
+    background: rgba(142, 191, 214, 0.14);
+    color: var(--primary);
+    border: 1px solid rgba(0, 160, 210, 0.14);
+  }
+
+  .static-content :global(.bonus-review-grid) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .static-content :global(.bonus-review-card) {
+    overflow: hidden;
+  }
+
+  .static-content :global(.bonus-review-card img) {
+    width: 100%;
+    aspect-ratio: 5 / 3;
+    object-fit: cover;
+    border-radius: 0;
+  }
+
+  .static-content :global(.bonus-review-card figcaption) {
+    padding: var(--space-4);
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .static-content :global(.bonus-steps) {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .static-content :global(.bonus-step),
+  .static-content :global(.bonus-signal-card) {
+    padding: var(--space-5);
+    border: 1px solid rgba(50, 40, 91, 0.08);
+  }
+
+  .static-content :global(.bonus-step__number) {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: var(--space-4);
+    border-radius: 50%;
+    background: rgba(0, 160, 210, 0.12);
+    color: var(--mv-cyan);
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    line-height: 1;
+  }
+
+  .static-content :global(.bonus-signal-grid) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .static-content :global(.bonus-section--signals .bonus-signal-card) {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(249, 250, 251, 0.96));
+  }
+
+  .static-content :global(.bonus-reward-layout) {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  .static-content :global(.bonus-highlight-card) {
+    padding: var(--space-6);
+    border: 1px solid rgba(238, 119, 17, 0.16);
+    background: linear-gradient(180deg, #fff5ea, #ffffff);
+  }
+
+  .static-content :global(.bonus-contact-card) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-6);
+    align-items: center;
+    padding: var(--space-6);
+    background: linear-gradient(135deg, rgba(50, 40, 91, 0.97), rgba(34, 57, 91, 0.95));
+    color: white;
+  }
+
+  .static-content :global(.bonus-contact-card h2),
+  .static-content :global(.bonus-contact-card p),
+  .static-content :global(.bonus-contact-card .bonus-eyebrow) {
+    color: white;
+  }
+
+  .static-content :global(.bonus-contact-card p) {
+    max-width: 58ch;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .static-content :global(.bonus-faq-list) {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .static-content :global(.bonus-faq-item) {
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid rgba(50, 40, 91, 0.08);
+  }
+
+  .static-content :global(.bonus-faq-item summary) {
+    cursor: pointer;
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    color: var(--primary);
+    list-style: none;
+  }
+
+  .static-content :global(.bonus-faq-item summary::-webkit-details-marker) {
+    display: none;
+  }
+
+  .static-content :global(.bonus-faq-item[open] summary) {
+    margin-bottom: var(--space-3);
+  }
+
+  .static-content :global(.bonus-footnote) {
+    padding: 0 var(--space-2);
+    text-align: center;
+  }
+
+  .static-content :global(.bonus-footnote p) {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  @media (max-width: 1024px) {
+    .static-content :global(.bonus-hero),
+    .static-content :global(.bonus-trust-grid),
+    .static-content :global(.bonus-reward-layout),
+    .static-content :global(.bonus-contact-card) {
+      grid-template-columns: 1fr;
+    }
+
+    .static-content :global(.bonus-steps),
+    .static-content :global(.bonus-signal-grid),
+    .static-content :global(.bonus-review-grid) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .static-content :global(.bonus-reward-card) {
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .static-content {
+      padding-bottom: var(--space-8);
+    }
+
+    .static-content :global(.bonus-hero),
+    .static-content :global(.bonus-section) {
+      padding: var(--space-5);
+      border-radius: 24px;
+    }
+
+    .static-content :global(.bonus-steps),
+    .static-content :global(.bonus-signal-grid),
+    .static-content :global(.bonus-review-grid) {
+      grid-template-columns: 1fr;
+    }
+
+    .static-content :global(.bonus-hero__visual img) {
+      min-height: 220px;
+    }
+
+    .static-content :global(.bonus-contact-actions) {
+      width: 100%;
+    }
+
+    .static-content :global(.bonus-button) {
+      width: 100%;
+    }
+
+    .static-content :global(.bonus-faq-item summary) {
+      font-size: var(--text-lg);
+    }
+  }
 </style>

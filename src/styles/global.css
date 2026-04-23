@@ -2,8 +2,8 @@
    MICROVISTA DESIGN SYSTEM
    ========================================= */
 
-/* Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Antonio:wght@400;500;600;700&family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+/* Fonts werden über BaseLayout als <link rel="preload"> + stylesheet geladen —
+   NICHT mehr als @import hier (render-blocking CSS). */
 
 /* =========================================
    CSS CUSTOM PROPERTIES

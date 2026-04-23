@@ -3,11 +3,44 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
-import { loadStaticPage } from '../lib/load-static-page';
-import { type Locale } from '../i18n/translations';
+import { loadStaticPage, loadStaticPageRaw } from '../lib/load-static-page';
+import { localePath, type Locale } from '../i18n/translations';
+import { faqSchema, breadcrumbSchema } from '../components/seo/schemas';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
 const content = await loadStaticPage('faq', locale);
+const raw = await loadStaticPageRaw('faq', locale);
+
+// FAQ-Markdown parsen: Q&A sind als aufeinanderfolgende Absätze nach "## Was Kunden häufig fragen:".
+// Frage = Absatz der auf "?" endet. Antwort = alle folgenden Absätze bis zur nächsten Frage.
+function extractFaqs(md: string): { question: string; answer: string }[] {
+  const start = md.search(/^##\s/m);
+  const body = start >= 0 ? md.slice(start) : md;
+  const lines = body.split(/\n{2,}/).map(l => l.trim()).filter(Boolean);
+  const faqs: { question: string; answer: string }[] = [];
+  let current: { question: string; answer: string } | null = null;
+  for (const line of lines) {
+    if (line.startsWith('#')) continue;
+    if (/\?\s*$/.test(line) && !line.startsWith('-') && !line.startsWith('*') && line.length < 200) {
+      if (current) faqs.push(current);
+      current = { question: line.replace(/\s+/g, ' '), answer: '' };
+    } else if (current) {
+      current.answer += (current.answer ? ' ' : '') + line.replace(/\n/g, ' ').replace(/\s+/g, ' ');
+    }
+  }
+  if (current && current.answer) faqs.push(current);
+  return faqs.slice(0, 20);
+}
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://microvista.de';
+const faqs = extractFaqs(raw);
+const pageSchemas: object[] = [
+  breadcrumbSchema([
+    { name: 'Home', url: `${siteUrl}${localePath('/', locale)}` },
+    { name: 'FAQ', url: `${siteUrl}${localePath('/faq', locale)}` },
+  ]),
+];
+if (faqs.length) pageSchemas.push(faqSchema(faqs));
 
 const labels = {
   de: {
@@ -42,7 +75,7 @@ const labels = {
 };
 ---
 
-<BaseLayout title={labels.title} description={labels.description}>
+<BaseLayout title={labels.title} description={labels.description} schema={pageSchemas}>
   <Header slot="header" />
 
   <div class="faq-page">

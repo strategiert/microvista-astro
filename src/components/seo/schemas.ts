@@ -4,15 +4,59 @@
 
 export const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": ["Organization", "LocalBusiness"],
+  "@id": "https://microvista.de/#organization",
   "name": "Microvista GmbH",
+  "legalName": "Microvista GmbH",
   "url": "https://microvista.de",
-  "logo": "https://microvista.de/images/logo.png",
-  "description": "Industrielle Computertomographie für Labor und Serie. Anywhere. Anytime. Fast.",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://microvista.de/images/logos/2013-08-microvista_Logo_RGB-7.png",
+    "width": 705,
+    "height": 399
+  },
+  "image": "https://microvista.de/images/og-default.jpg",
+  "description": "Industrielle Computertomographie für Labor und Serie. ISO 9001 und ISO 17025 zertifiziert. Automatisierte CT-Auswertung mit InspectVista.",
+  "slogan": "GET YOUR INSPECTION DONE – Anywhere. Anytime. Fast.",
   "address": {
     "@type": "PostalAddress",
+    "streetAddress": "Am Münchenfelde 12",
+    "postalCode": "38889",
+    "addressLocality": "Blankenburg",
+    "addressRegion": "Sachsen-Anhalt",
     "addressCountry": "DE"
   },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 51.791,
+    "longitude": 10.959
+  },
+  "telephone": "+49-3944-950-36",
+  "email": "vertrieb@microvista.de",
+  "hasCredential": [
+    { "@type": "EducationalOccupationalCredential", "name": "ISO 9001" },
+    { "@type": "EducationalOccupationalCredential", "name": "ISO 17025" }
+  ],
+  "knowsAbout": [
+    "Industrielle Computertomographie",
+    "Zerstörungsfreie Prüfung",
+    "Erstmusterprüfung",
+    "Hairpin-Stator-Prüfung",
+    "Porositätsanalyse",
+    "CAD Soll-Ist-Vergleich",
+    "Reverse Engineering",
+    "Mobile CT"
+  ],
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "telephone": "+49-3944-950-36",
+      "email": "vertrieb@microvista.de",
+      "contactType": "sales",
+      "areaServed": ["DE", "EU"],
+      "availableLanguage": ["de", "en", "fr", "es", "it"]
+    }
+  ],
   "sameAs": [
     "https://www.linkedin.com/company/microvista"
   ]
@@ -96,6 +140,8 @@ export function serviceSchema(options: {
   description: string;
   url: string;
   image?: string;
+  serviceType?: string;
+  areaServed?: string[];
 }) {
   return {
     "@context": "https://schema.org",
@@ -103,10 +149,42 @@ export function serviceSchema(options: {
     "name": options.name,
     "description": options.description,
     "url": options.url,
-    "provider": {
-      "@type": "Organization",
-      "name": "Microvista"
-    },
+    "provider": { "@id": "https://microvista.de/#organization" },
+    "areaServed": options.areaServed ?? ["DE", "AT", "CH", "EU"],
+    ...(options.serviceType && { "serviceType": options.serviceType }),
     ...(options.image && { "image": options.image })
+  };
+}
+
+export function softwareApplicationSchema(options: {
+  name: string;
+  description: string;
+  url: string;
+  image?: string;
+  featureList?: string[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": options.name,
+    "applicationCategory": "BusinessApplication",
+    "applicationSubCategory": "Industrial CT Evaluation Software",
+    "operatingSystem": "Web Browser",
+    "description": options.description,
+    "url": options.url,
+    "provider": { "@id": "https://microvista.de/#organization" },
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "EUR",
+      "price": "0",
+      "priceSpecification": {
+        "@type": "PriceSpecification",
+        "price": "0",
+        "priceCurrency": "EUR",
+        "description": "Preis auf Anfrage — Jahreslizenz mit allen Modulen, Updates und Support inklusive."
+      }
+    },
+    ...(options.image && { "image": options.image }),
+    ...(options.featureList && { "featureList": options.featureList })
   };
 }

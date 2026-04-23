@@ -284,12 +284,39 @@ const content = {
 };
 
 const t = content[locale as keyof typeof content] || content.en || content.de;
+
+// Schema.org: SoftwareApplication für InspectVista
+import { softwareApplicationSchema } from '../components/seo/schemas';
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://microvista.de';
+const softwareSchema = softwareApplicationSchema({
+  name: 'InspectVista',
+  description: t.seoDesc,
+  url: `${siteUrl}${lp('/software')}`,
+  image: `${siteUrl}/images/logos/Microvista-InspectVista-Logo-2025-colored-02.png`,
+  featureList: [
+    'Vollautomatische CT-Datenauswertung',
+    'Laminografie / LayerScan',
+    '5× schnellere Scan-Zyklen',
+    '10× höhere Bildauflösung',
+    'Q-Gate Qualitätskontrolle',
+    'MES-Integration',
+    'Browser-basierte Bedienung',
+    'CAD Soll-Ist-Vergleich',
+    'Wanddickenmessung',
+    'Porositätsanalyse',
+    'Rissprüfung',
+    'Montage- und Fügekontrolle',
+    'Hairpin-Stator-Prüfung',
+    'Schweißnahtprüfung',
+  ],
+});
 ---
 
 <BaseLayout
   title={t.seoTitle}
   description={t.seoDesc}
   theme="neutral"
+  schema={softwareSchema}
 >
   <Header slot="header" />
 

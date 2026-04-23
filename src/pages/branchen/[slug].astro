@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import { localePath, type Locale } from '../../i18n/translations';
+import { serviceSchema, breadcrumbSchema } from '../../components/seo/schemas';
 
 const { slug } = Astro.params;
 const branchen = await getCollection('branchen');
@@ -18,9 +19,31 @@ if (!branche) {
 const data = branche.data;
 const accentColor = '#32285b';
 const related = branchen.filter(b => b.id !== slug).slice(0, 3);
+
+// Schema.org: Service + Breadcrumb
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://microvista.de';
+const brancheUrl = `${siteUrl}${lp(`/branchen/${slug}`)}`;
+const pageSchemas = [
+  serviceSchema({
+    name: data.name,
+    description: data.description,
+    url: brancheUrl,
+    image: `${siteUrl}/images/branchen/${slug}.jpg`,
+    serviceType: 'Industrielle Computertomographie',
+  }),
+  breadcrumbSchema([
+    { name: 'Home', url: `${siteUrl}${lp('/')}` },
+    { name: 'Branchen', url: `${siteUrl}${lp('/branchen')}` },
+    { name: data.name, url: brancheUrl },
+  ]),
+];
 ---
 
-<BaseLayout title={data.seo?.title || `${data.name} | Microvista`} description={data.seo?.description || data.description}>
+<BaseLayout
+  title={data.seo?.title || `${data.name} | Microvista`}
+  description={data.seo?.description || data.description}
+  schema={pageSchemas}
+>
   <Header slot="header" />
 
   <main class="branche-page">
