@@ -1,0 +1,57 @@
+PAGE: N/A
+URL: https://www.microvista.de/industrielle-computertomographie/prufaufgaben/messung-wandstaerken/
+================================================================================
+
+=== UEBERSCHRIFTEN ===
+[H1] MESSUNG DER WANDSTÄRKE MIT INDUSTRIELLER CT
+[H2] Messung von Wandstärken bei komplexen Geometrien
+[H2] Kritische Abweichungen identifizieren
+[H3] Wandstärkenmessung für Serien oder einzelne Bauteile
+
+=== BILDER ===
+  ALT: Abweichung beim Messen der Wandstärke im CT-Bild
+  SRC: https://www.microvista.de/wp-content/plugins/wp-fastest-cache-premium/pro/images/blank.gif
+
+
+=== FLIESSTEXT ===
+„Schneller & weiter“ – dieses Motto wird sowohl bei Elektrofahrzeugen als auch bei Verbrennern verfolgt. Geringes Teilgewicht mit gleichzeitig hoher mechanischer Festigkeit ist gefordert.
+
+Komplexe Geometrien sind die Folge. Diese führen jedoch die meisten Prüfverfahren an Ihre Grenzen. Optische & taktile Messverfahren funktionieren nur, wenn die Wände freizugänglich sind. Bei der Ultraschall- oder Röntgenprüfung darf es keine Überlagerung geben, damit eine korrekte Messung von Wandstärken möglich ist. Industrielle CT überwindet diese Grenzen & macht eine Messung von Wandstärken bei komplizierten Geometrien möglich.
+
+Um die Robustheit von großen Stückzahlen sicherzustellen, führt Microvista eine vollautomatische & wirtschaftliche Messung der Wandstärke an vorgegebenen Punkten bei jedem Bauteil durch. NIO-Bauteile können durch eine Echtzeit-Auswertung sofort aussortiert werden. Die Prüfung kann an Ihrer Produktionsstätte mit einermobilen CT-Lösungoder überIhr CT via Clouderfolgen. Alternativ können Sie Microvista Ihre Bauteile auch zusenden. Microvista führt imhauseigenen CT-Laborsowohl Serien-  als auch Einzelteilprüfungen durch.Falls es schnell gehen muss, kann eine Express Option für die Einzelteilprüfung gebucht werden.
+
+Starke Schwankungen der Wandstärke bei einem Statorgehäuse
+
+Die blauen Führungslinien geben den Soll-Bereich für die Wanddicke vor. Eine zu dünne Wandstärke wie im Bild kann im Feld zu einem Durchbruch führen. Dieser hätte zur Folge, dass das Elektrofahrzeug nach kurzer Zeit liegen bleibt.
+
+Eine Qualitätskontrolle mit CT verhindert, dass zu dünne Wanddicken unerkannt bleiben.
+
+Soll-Ist-Analyse
+
+
+=== LISTEN ===
+Liste ():
+  - Optionen verwalten
+  - Dienste verwalten
+  - Verwalten von {vendor_count}-Lieferanten
+  - Lese mehr über diese Zwecke
+
+Liste ():
+  - {title}
+  - {title}
+  - {title}
+
+
+=== FAQ / TOGGLES ===
+(keine FAQs gefunden)
+
+=== CTAs / BUTTONS ===
+  [Express-Inspektionbuchen] -> https://www.microvista.de/kontakt/
+  [Express-Inspektionbuchen] -> 
+  [Express-Inspektionbuchen] -> 
+  [Gratis-Beratungsichern] -> https://www.microvista.de/kontakt/
+  [Gratis-Beratungsichern] -> 
+  [Gratis-Beratungsichern] -> 
+  [Gratis-Beratungsichern] -> https://www.microvista.de/kontakt/
+  [Gratis-Beratungsichern] -> 
+  [Gratis-Beratungsichern] -> 

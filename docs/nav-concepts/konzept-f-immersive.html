@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konzept F — Immersive Navigation (Cinematic Cards)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   KONZEPT F — IMMERSIVE CINEMATIC NAVIGATION
+   Full-bleed Karten, große Typografie, Film-ähnliche Dramaturgie
+   Ästhetik: Cinematic, Editorial, High-Contrast
+   ═══════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --mv-black: #050505;
+  --mv-charcoal: #111111;
+  --mv-dark: #1a1a1a;
+  --mv-navy: #0a1628;
+  --mv-accent: #ff4d00;
+  --mv-accent-glow: rgba(255,77,0,0.4);
+  --mv-white: #ffffff;
+  --mv-offwhite: #f5f5f5;
+  --mv-gray: #888888;
+  --font-display: 'Bebas Neue', Impact, sans-serif;
+  --font-body: 'Manrope', system-ui, sans-serif;
+  --transition: 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--mv-white);
+  background: var(--mv-black);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ─── Concept Label ─── */
+.concept-label {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: var(--mv-accent); color: var(--mv-black);
+  font-family: var(--font-body); font-size: 11px;
+  font-weight: 700; letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  mix-blend-mode: difference;
+}
+.concept-label span { opacity: 0.7; }
+
+/* ─── Header ─── */
+.header {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 24px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  mix-blend-mode: difference;
+}
+
+/* Logo */
+.logo {
+  display: flex; align-items: center; gap: 16px;
+  text-decoration: none; color: var(--mv-white);
+}
+.logo-mark {
+  width: 48px; height: 48px;
+  border: 2px solid currentColor;
+  display: grid; place-items: center;
+}
+.logo-mark::before {
+  content: ''; width: 12px; height: 12px;
+  background: currentColor;
+}
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 28px; letter-spacing: 0.1em;
+}
+
+/* Nav Trigger */
+.nav-trigger {
+  display: flex; align-items: center; gap: 16px;
+  cursor: pointer;
+  padding: 12px;
+  transition: all var(--transition-fast);
+}
+.nav-trigger-text {
+  font-family: var(--font-body);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+}
+.nav-trigger-icon {
+  width: 48px; height: 48px;
+  border: 1px solid currentColor;
+  display: grid; place-items: center;
+  position: relative;
+}
+.nav-trigger-icon span {
+  display: block; width: 24px; height: 2px;
+  background: currentColor;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+.nav-trigger-icon span::before,
+.nav-trigger-icon span::after {
+  content: ''; position: absolute;
+  width: 100%; height: 100%;
+  background: currentColor;
+  transition: all var(--transition-fast);
+}
+.nav-trigger-icon span::before { top: -8px; }
+.nav-trigger-icon span::after { top: 8px; }
+
+.nav-trigger:hover .nav-trigger-icon span::before { transform: translateX(4px); }
+.nav-trigger:hover .nav-trigger-icon span::after { transform: translateX(-4px); }
+
+/* ═══════════════════════════════════════════════════════════════
+   FULL-SCREEN IMMERSIVE MENU
+   ═══════════════════════════════════════════════════════════════ */
+.immersive-menu {
+  position: fixed; inset: 0;
+  background: var(--mv-black);
+  z-index: 2000;
+  opacity: 0; visibility: hidden;
+  transition: all 800ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+.immersive-menu.open {
+  opacity: 1; visibility: visible;
+}
+
+.menu-close {
+  position: absolute; top: 24px; right: 48px;
+  display: flex; align-items: center; gap: 16px;
+  cursor: pointer;
+  padding: 12px;
+  z-index: 100;
+  color: var(--mv-white);
+}
+.menu-close-text {
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+}
+.menu-close-icon {
+  width: 48px; height: 48px;
+  border: 1px solid currentColor;
+  display: grid; place-items: center;
+  font-size: 24px;
+  transition: transform var(--transition-fast);
+}
+.menu-close:hover .menu-close-icon {
+  transform: rotate(90deg);
+}
+
+/* Menu Content Grid */
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;
+}
+
+/* Left: Navigation Links */
+.menu-nav {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 120px 80px;
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.menu-link {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 8vw, 120px);
+  line-height: 1;
+  color: var(--mv-white);
+  text-decoration: none;
+  padding: 20px 0;
+  position: relative;
+  opacity: 0.4;
+  transition: all var(--transition);
+  display: flex; align-items: center; gap: 32px;
+}
+.menu-link::before {
+  content: ''; width: 0; height: 4px;
+  background: var(--mv-accent);
+  transition: width var(--transition);
+}
+.menu-link:hover,
+.menu-link.active {
+  opacity: 1;
+  padding-left: 40px;
+}
+.menu-link:hover::before,
+.menu-link.active::before {
+  width: 60px;
+}
+
+.menu-link-index {
+  font-family: var(--font-body);
+  font-size: 14px; font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--mv-accent);
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all var(--transition);
+}
+.menu-link:hover .menu-link-index,
+.menu-link.active .menu-link-index {
+  opacity: 1; transform: translateX(0);
+}
+
+/* Right: Preview Cards */
+.menu-preview {
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-card {
+  position: absolute; inset: 0;
+  opacity: 0; visibility: hidden;
+  transition: all var(--transition);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 80px;
+}
+.preview-card.active {
+  opacity: 1; visibility: visible;
+}
+
+/* Card Backgrounds */
+.preview-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(
+    to top,
+    var(--mv-black) 0%,
+    rgba(5,5,5,0.8) 40%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+
+.card-bg {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%) contrast(1.2);
+  transition: all var(--transition);
+}
+.preview-card:hover .card-bg {
+  filter: grayscale(0%) contrast(1);
+  transform: scale(1.05);
+}
+
+/* Generated abstract backgrounds */
+.preview-card:nth-child(1) .card-bg {
+  background: 
+    radial-gradient(ellipse at 30% 70%, rgba(255,77,0,0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 30%, rgba(100,50,200,0.2) 0%, transparent 50%),
+    linear-gradient(135deg, #0a1628 0%, #1a0a28 100%);
+}
+.preview-card:nth-child(2) .card-bg {
+  background: 
+    radial-gradient(ellipse at 50% 50%, rgba(255,77,0,0.2) 0%, transparent 60%),
+    repeating-linear-gradient(45deg, #0a0a0a 0px, #0a0a0a 2px, #151515 2px, #151515 4px);
+}
+.preview-card:nth-child(3) .card-bg {
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0,150,255,0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255,77,0,0.2) 0%, transparent 50%),
+    linear-gradient(180deg, #0a1628 0%, #050505 100%);
+}
+.preview-card:nth-child(4) .card-bg {
+  background: 
+    conic-gradient(from 0deg at 50% 50%, rgba(255,77,0,0.1) 0deg, transparent 60deg, transparent 300deg, rgba(255,77,0,0.1) 360deg),
+    radial-gradient(circle at 50% 50%, #0a1628 0%, #050505 100%);
+}
+.preview-card:nth-child(5) .card-bg {
+  background: 
+    repeating-radial-gradient(circle at 50% 50%, transparent 0, transparent 20px, rgba(255,77,0,0.05) 20px, rgba(255,77,0,0.05) 21px),
+    linear-gradient(135deg, #050505 0%, #0a0a0a 100%);
+}
+
+.card-content {
+  position: relative; z-index: 2;
+  transform: translateY(40px);
+  opacity: 0;
+  transition: all var(--transition);
+}
+.preview-card.active .card-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.card-label {
+  font-family: var(--font-body);
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--mv-accent);
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 56px);
+  line-height: 1;
+  margin-bottom: 24px;
+}
+
+.card-desc {
+  font-size: 16px; line-height: 1.7;
+  color: var(--mv-gray);
+  max-width: 400px;
+  margin-bottom: 32px;
+}
+
+.card-cta {
+  display: inline-flex; align-items: center; gap: 16px;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--mv-white);
+  text-decoration: none;
+  padding: 20px 32px;
+  border: 1px solid var(--mv-white);
+  transition: all var(--transition-fast);
+}
+.card-cta:hover {
+  background: var(--mv-accent);
+  border-color: var(--mv-accent);
+  gap: 24px;
+}
+
+/* Sub-links grid */
+.card-sublinks {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 48px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.sublink {
+  font-size: 14px; font-weight: 500;
+  color: var(--mv-gray);
+  text-decoration: none;
+  padding: 12px 0;
+  transition: all var(--transition-fast);
+  display: flex; align-items: center; gap: 12px;
+}
+.sublink::before {
+  content: '→'; opacity: 0; transition: all var(--transition-fast);
+}
+.sublink:hover {
+  color: var(--mv-white);
+  padding-left: 8px;
+}
+.sublink:hover::before {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MINI MEGA MENU (for quick access)
+   ═══════════════════════════════════════════════════════════════ */
+.mini-menu-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  z-index: 1500;
+  opacity: 0; visibility: hidden;
+  transition: all 500ms ease;
+}
+.mini-menu-overlay.visible {
+  opacity: 1; visibility: visible;
+}
+
+.mini-menu {
+  position: absolute; top: 100px; right: 48px;
+  width: 400px;
+  background: var(--mv-charcoal);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 40px;
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: all 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mini-menu-overlay.visible .mini-menu {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.mini-menu-title {
+  font-family: var(--font-display);
+  font-size: 24px; letter-spacing: 0.05em;
+  margin-bottom: 32px;
+}
+
+.mini-link {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  color: var(--mv-gray);
+  text-decoration: none;
+  font-size: 14px; font-weight: 500;
+  transition: all var(--transition-fast);
+}
+.mini-link:hover {
+  color: var(--mv-white);
+  padding-left: 12px;
+}
+.mini-link-arrow {
+  opacity: 0; transform: translateX(-10px);
+  transition: all var(--transition-fast);
+}
+.mini-link:hover .mini-link-arrow {
+  opacity: 1; transform: translateX(0);
+}
+
+/* ─── Hero Demo ─── */
+.hero {
+  height: 100vh;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center;
+  padding: 48px;
+  position: relative;
+}
+
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(255,77,0,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 30% 100%, rgba(100,50,200,0.1) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative; z-index: 1;
+}
+
+.hero-badge {
+  display: inline-block;
+  border: 1px solid var(--mv-accent);
+  color: var(--mv-accent);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  padding: 12px 24px;
+  margin-bottom: 48px;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(60px, 12vw, 180px);
+  line-height: 0.9;
+  margin-bottom: 32px;
+  letter-spacing: 0.02em;
+}
+
+.hero h1 span {
+  display: block;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--mv-white);
+}
+
+.hero p {
+  font-size: 18px; line-height: 1.8;
+  color: var(--mv-gray);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.hero-cta {
+  margin-top: 48px;
+  display: inline-flex; align-items: center; gap: 16px;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--mv-white);
+  text-decoration: none;
+  padding: 24px 40px;
+  background: var(--mv-accent);
+  transition: all var(--transition-fast);
+}
+.hero-cta:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px var(--mv-accent-glow);
+}
+
+/* ─── Info Box ─── */
+.info-box {
+  max-width: 800px; margin: 0 auto; padding: 120px 48px;
+}
+.info-box-inner {
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 48px;
+}
+.info-box-inner h3 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  margin-bottom: 24px;
+  letter-spacing: 0.05em;
+}
+.info-box-inner p {
+  font-size: 16px; color: var(--mv-gray);
+  line-height: 1.8;
+}
+.info-label {
+  display: inline-block;
+  background: var(--mv-accent);
+  color: var(--mv-black);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 8px 16px;
+  margin-bottom: 24px;
+}
+
+/* ─── Dummy content ─── */
+.dummy-section {
+  height: 60vh;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+</style>
+</head>
+<body>
+
+<div class="concept-label">Konzept F — <span>Immersive</span></div>
+
+<!-- Header -->
+<header class="header">
+  <a href="#" class="logo">
+    <div class="logo-mark"></div>
+    <span class="logo-text">MICROVISTA</span>
+  </a>
+
+  <div class="nav-trigger" id="menu-trigger">
+    <span class="nav-trigger-text">Menü</span>
+    <div class="nav-trigger-icon"><span></span></div>
+  </div>
+</header>
+
+<!-- Full-Screen Immersive Menu -->
+<div class="immersive-menu" id="immersive-menu">
+  <div class="menu-close" id="menu-close">
+    <span class="menu-close-text">Schließen</span>
+    <div class="menu-close-icon">×</div>
+  </div>
+
+  <div class="menu-grid">
+    <!-- Left: Nav Links -->
+    <nav class="menu-nav">
+      <a href="#" class="menu-link active" data-preview="0">
+        <span class="menu-link-index">01</span>
+        Leistungen
+      </a>
+      <a href="#" class="menu-link" data-preview="1">
+        <span class="menu-link-index">02</span>
+        Branchen
+      </a>
+      <a href="#" class="menu-link" data-preview="2">
+        <span class="menu-link-index">03</span>
+        Software
+      </a>
+      <a href="#" class="menu-link" data-preview="3">
+        <span class="menu-link-index">04</span>
+        Wissen
+      </a>
+      <a href="#" class="menu-link" data-preview="4">
+        <span class="menu-link-index">05</span>
+        Kontakt
+      </a>
+    </nav>
+
+    <!-- Right: Preview Cards -->
+    <div class="menu-preview">
+      <!-- Preview 0: Leistungen -->
+      <div class="preview-card active">
+        <div class="card-bg"></div>
+        <div class="card-content">
+          <div class="card-label">Alle Services</div>
+          <h2 class="card-title">INDUSTRIELLE CT-PRÜFUNG</h2>
+          <p class="card-desc">Vom Einzelbauteil bis zur Serienproduktion — wir decken den gesamten Lebenszyklus Ihrer Produkte ab.</p>
+          <a href="#" class="card-cta">Alle Leistungen →</a>
+          
+          <div class="card-sublinks">
+            <a href="#" class="sublink">Erstmusterprüfung</a>
+            <a href="#" class="sublink">Schadensanalyse</a>
+            <a href="#" class="sublink">Reverse Engineering</a>
+            <a href="#" class="sublink">Inline-CT</a>
+            <a href="#" class="sublink">100% Prüfung</a>
+            <a href="#" class="sublink">KI-Automatisierung</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview 1: Branchen -->
+      <div class="preview-card">
+        <div class="card-bg"></div>
+        <div class="card-content">
+          <div class="card-label">14 Branchen</div>
+          <h2 class="card-title">BRANCHENSPEZIFISCHE LÖSUNGEN</h2>
+          <p class="card-desc">Automotive, Aerospace, Medizintechnik und mehr. Wir sprechen die Sprache Ihrer Industrie.</p>
+          <a href="#" class="card-cta">Branchen entdecken →</a>
+          
+          <div class="card-sublinks">
+            <a href="#" class="sublink">Automotive</a>
+            <a href="#" class="sublink">Aerospace</a>
+            <a href="#" class="sublink">Medizintechnik</a>
+            <a href="#" class="sublink">Elektromobilität</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview 2: Software -->
+      <div class="preview-card">
+        <div class="card-bg"></div>
+        <div class="card-content">
+          <div class="card-label">InspectVista</div>
+          <h2 class="card-title">SOFTWARE & PLATTFORM</h2>
+          <p class="card-desc">Unsere proprietäre Software für CT-Auswertung, KI-gestützte Analyse und Cloud-Kollaboration.</p>
+          <a href="#" class="card-cta">Software erkunden →</a>
+          
+          <div class="card-sublinks">
+            <a href="#" class="sublink">InspectVista Pro</a>
+            <a href="#" class="sublink">InspectHub Cloud</a>
+            <a href="#" class="sublink">API & Integration</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview 3: Wissen -->
+      <div class="preview-card">
+        <div class="card-bg"></div>
+        <div class="card-content">
+          <div class="card-label">Magazin & Wiki</div>
+          <h2 class="card-title">WISSEN & INSIGHTS</h2>
+          <p class="card-desc">Fachartikel, Case Studies, Glossar und aktuelle Trends aus der industriellen CT-Prüfung.</p>
+          <a href="#" class="card-cta">Wissen entdecken →</a>
+          
+          <div class="card-sublinks">
+            <a href="#" class="sublink">Magazin</a>
+            <a href="#" class="sublink">Wiki / Glossar</a>
+            <a href="#" class="sublink">Prüfaufgaben</a>
+            <a href="#" class="sublink">Case Studies</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview 4: Kontakt -->
+      <div class="preview-card">
+        <div class="card-bg"></div>
+        <div class="card-content">
+          <div class="card-label">24h Express</div>
+          <h2 class="card-title">KONTAKT & ANFRAGE</h2>
+          <p class="card-desc">Rufen Sie uns an, schreiben Sie uns — oder senden Sie direkt Ihr Bauteil zur Express-Analyse.</p>
+          <a href="#" class="card-cta">Anfrage starten →</a>
+          
+          <div class="card-sublinks">
+            <a href="#" class="sublink">+49 2473 9275-0</a>
+            <a href="#" class="sublink">info@microvista.de</a>
+            <a href="#" class="sublink">Bauteil einsenden</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">Konzept F — Immersive Navigation</div>
+    <h1>
+      CINEMATIC
+      <span>NAVIGATION</span>
+    </h1>
+    <p>Full-screen Overlay mit großer Typografie, Hover-aktivierten Preview-Karten und filmähnlicher Dramaturgie. Klicken Sie oben rechts auf „Menü".</p>
+    <a href="#" class="hero-cta">Menü öffnen →</a>
+  </div>
+</section>
+
+<!-- Info -->
+<div class="info-box">
+  <div class="info-box-inner">
+    <div class="info-label">Konzept F</div>
+    <h3>Immersive Full-Screen Navigation</h3>
+    <p>Die Navigation öffnet sich als Fullscreen-Overlay über die komplette Seite. Links riesige, edle Typografie für die Hauptpunkte mit Index-Nummern. Rechts eine Preview-Karte, die sich beim Hover über die Links ändert. Jede Karte hat einen generativen abstrakten Hintergrund, der beim Hover Farbe annimmt (Grayscale → Color). Unter den Hauptlinks: Sublinks als Grid. Das gesamte Interface nutzt mix-blend-mode: difference für den Header, damit er auf allen Hintergründen sichtbar bleibt.</p>
+  </div>
+</div>
+
+<div class="dummy-section"></div>
+
+<script>
+const menuTrigger = document.getElementById('menu-trigger');
+const menuClose = document.getElementById('menu-close');
+const immersiveMenu = document.getElementById('immersive-menu');
+const menuLinks = document.querySelectorAll('.menu-link');
+const previewCards = document.querySelectorAll('.preview-card');
+const heroCta = document.querySelector('.hero-cta');
+
+function openMenu() {
+  immersiveMenu.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+  immersiveMenu.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+menuTrigger.addEventListener('click', openMenu);
+menuClose.addEventListener('click', closeMenu);
+heroCta.addEventListener('click', (e) => {
+  e.preventDefault();
+  openMenu();
+});
+
+// Link hover changes preview
+menuLinks.forEach(link => {
+  link.addEventListener('mouseenter', () => {
+    const index = link.dataset.preview;
+    
+    // Update active link
+    menuLinks.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    
+    // Update preview card
+    previewCards.forEach((card, i) => {
+      card.classList.toggle('active', i === parseInt(index));
+    });
+  });
+});
+
+// ESC to close
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeMenu();
+});
+</script>
+
+</body>
+</html>

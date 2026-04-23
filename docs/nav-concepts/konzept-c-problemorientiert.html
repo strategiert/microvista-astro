@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konzept C - Problemorientiert | Microvista</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #00253d;
+            --navy-light: #0a3a5c;
+            --navy-dark: #001a2b;
+            --orange: #f07020;
+            --orange-light: #ff8a45;
+            --cyan: #3dd8e0;
+            --cyan-light: #6ee5eb;
+            --violet: #7c5cb5;
+            --violet-light: #9a7fd1;
+            --white: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-orange: 0 10px 40px -10px rgba(240, 112, 32, 0.3);
+            --transition-fast: 150ms ease;
+            --transition-base: 250ms ease;
+            --transition-slow: 350ms ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background: var(--navy);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--white);
+            text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--orange), var(--cyan));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            color: var(--gray-300);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.active {
+            color: var(--orange);
+            background: rgba(240, 112, 32, 0.1);
+        }
+
+        .nav-link svg {
+            width: 16px;
+            height: 16px;
+            transition: transform var(--transition-fast);
+        }
+
+        .nav-item:hover .nav-link svg {
+            transform: rotate(180deg);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--orange);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--orange-light);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-orange);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid var(--gray-400);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--white);
+        }
+
+        /* Mega Menu */
+        .mega-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            width: 800px;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            padding: 32px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-base);
+            pointer-events: none;
+            margin-top: 8px;
+        }
+
+        .mega-menu::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid var(--white);
+        }
+
+        .nav-item:hover .mega-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: all;
+        }
+
+        .mega-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .mega-menu-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-400);
+            margin-bottom: 16px;
+        }
+
+        .mega-menu-list {
+            list-style: none;
+        }
+
+        .mega-menu-item {
+            margin-bottom: 8px;
+        }
+
+        .mega-menu-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+        }
+
+        .mega-menu-link:hover {
+            background: var(--gray-100);
+            color: var(--navy);
+        }
+
+        .mega-menu-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--cyan), var(--violet));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .mega-menu-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mega-menu-label {
+            font-weight: 600;
+            font-size: 0.9375rem;
+        }
+
+        .mega-menu-desc {
+            font-size: 0.8125rem;
+            color: var(--gray-500);
+        }
+
+        /* Industries Mega Menu */
+        .mega-menu-industries {
+            width: 900px;
+        }
+
+        .industries-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .industry-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--gray-50);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--gray-700);
+            transition: all var(--transition-fast);
+            border: 1px solid transparent;
+        }
+
+        .industry-card:hover {
+            background: var(--white);
+            border-color: var(--cyan);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .industry-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--navy), var(--violet));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .industry-name {
+            font-weight: 600;
+            font-size: 0.9375rem;
+        }
+
+        /* Wissen Mega Menu */
+        .mega-menu-wissen {
+            width: 700px;
+        }
+
+        .wissen-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .wissen-card {
+            padding: 20px;
+            background: linear-gradient(135deg, var(--gray-50), var(--white));
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            color: var(--gray-700);
+            transition: all var(--transition-fast);
+            border: 1px solid var(--gray-200);
+            text-align: center;
+        }
+
+        .wissen-card:hover {
+            border-color: var(--orange);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .wissen-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 12px;
+            background: linear-gradient(135deg, var(--orange), var(--cyan));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .wissen-card:nth-child(2) .wissen-icon {
+            background: linear-gradient(135deg, var(--cyan), var(--violet));
+        }
+
+        .wissen-card:nth-child(3) .wissen-icon {
+            background: linear-gradient(135deg, var(--violet), var(--orange));
+        }
+
+        .wissen-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+
+        .wissen-count {
+            font-size: 0.8125rem;
+            color: var(--gray-500);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, var(--navy-dark) 100%);
+            padding: 140px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(61, 216, 224, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(124, 92, 181, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 60% 80%, rgba(240, 112, 32, 0.06) 0%, transparent 45%);
+            pointer-events: none;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 48px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(240, 112, 32, 0.2);
+            color: var(--orange);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            color: var(--white);
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+
+        .hero-title span {
+            background: linear-gradient(90deg, var(--orange), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-300);
+            line-height: 1.6;
+        }
+
+        /* Problem Cards Section */
+        .problems-section {
+            padding: 0 0 80px;
+            background: linear-gradient(180deg, var(--navy) 0%, var(--gray-50) 100%);
+        }
+
+        .problems-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-top: -40px;
+        }
+
+        .problem-card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--transition-base);
+            cursor: pointer;
+            border: 1px solid var(--gray-200);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-xl), var(--shadow-orange);
+            border-color: var(--orange);
+        }
+
+        .problem-header {
+            padding: 24px;
+            position: relative;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .problem-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.95;
+        }
+
+        .problem-card:nth-child(1) .problem-header::before {
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--navy) 100%);
+        }
+
+        .problem-card:nth-child(2) .problem-header::before {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--violet) 100%);
+        }
+
+        .problem-card:nth-child(3) .problem-header::before {
+            background: linear-gradient(135deg, var(--violet) 0%, var(--cyan) 100%);
+        }
+
+        .problem-card:nth-child(4) .problem-header::before {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--orange) 100%);
+        }
+
+        .problem-header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .problem-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .problem-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 16px;
+        }
+
+        .problem-title {
+            font-size: 1.125rem;
+            color: var(--white);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .problem-body {
+            padding: 20px;
+        }
+
+        .problem-services {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .service-tag {
+            padding: 6px 12px;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            border-radius: 50px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+
+        .problem-card:hover .service-tag {
+            background: rgba(240, 112, 32, 0.1);
+            color: var(--orange);
+        }
+
+        .problem-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-200);
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 0.9375rem;
+            transition: all var(--transition-fast);
+        }
+
+        .problem-card:hover .problem-action {
+            background: var(--orange);
+            color: var(--white);
+        }
+
+        .problem-action svg {
+            width: 18px;
+            height: 18px;
+            transition: transform var(--transition-fast);
+        }
+
+        .problem-card:hover .problem-action svg {
+            transform: translateX(4px);
+        }
+
+        /* Value Props Section */
+        .value-section {
+            padding: 80px 0;
+            background: var(--gray-50);
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 2.25rem;
+            color: var(--navy);
+            margin-bottom: 12px;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--gray-500);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .value-card {
+            text-align: center;
+            padding: 32px;
+        }
+
+        .value-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--cyan), var(--violet));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .value-card:nth-child(2) .value-icon {
+            background: linear-gradient(135deg, var(--orange), var(--cyan));
+        }
+
+        .value-card:nth-child(3) .value-icon {
+            background: linear-gradient(135deg, var(--violet), var(--orange));
+        }
+
+        .value-title {
+            font-size: 1.25rem;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .value-desc {
+            color: var(--gray-500);
+            font-size: 0.9375rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--navy);
+            padding: 64px 0 32px;
+            color: var(--gray-300);
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--white);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .footer-desc {
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            color: var(--gray-400);
+        }
+
+        .footer-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            color: var(--white);
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-list {
+            list-style: none;
+        }
+
+        .footer-item {
+            margin-bottom: 12px;
+        }
+
+        .footer-link {
+            color: var(--gray-400);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            transition: color var(--transition-fast);
+        }
+
+        .footer-link:hover {
+            color: var(--cyan);
+        }
+
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-copyright {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-300);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+
+        .social-link:hover {
+            background: var(--orange);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            padding: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .mobile-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--white);
+            transition: all var(--transition-fast);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .problems-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .nav {
+                display: none;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .header-actions .btn-secondary {
+                display: none;
+            }
+
+            .mega-menu,
+            .mega-menu-industries,
+            .mega-menu-wissen {
+                display: none;
+            }
+
+            .value-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .problems-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 1.75rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .problem-card {
+            animation: fadeInUp 0.6s ease backwards;
+        }
+
+        .problem-card:nth-child(1) { animation-delay: 0.1s; }
+        .problem-card:nth-child(2) { animation-delay: 0.2s; }
+        .problem-card:nth-child(3) { animation-delay: 0.3s; }
+        .problem-card:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-main">
+                <a href="#" class="logo">
+                    <div class="logo-icon">M</div>
+                    <span>Microvista</span>
+                </a>
+
+                <nav class="nav">
+                    <div class="nav-item">
+                        <a class="nav-link">
+                            Lösungen
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </a>
+                        <div class="mega-menu">
+                            <div class="mega-menu-grid">
+                                <div>
+                                    <h4 class="mega-menu-title">CT-Leistungen</h4>
+                                    <ul class="mega-menu-list">
+                                        <li class="mega-menu-item">
+                                            <a href="#" class="mega-menu-link">
+                                                <div class="mega-menu-icon">🔍</div>
+                                                <div class="mega-menu-text">
+                                                    <span class="mega-menu-label">3D-CT-Analyse</span>
+                                                    <span class="mega-menu-desc">Hochauflösende Volumenvisualisierung</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="mega-menu-item">
+                                            <a href="#" class="mega-menu-link">
+                                                <div class="mega-menu-icon">⚙️</div>
+                                                <div class="mega-menu-text">
+                                                    <span class="mega-menu-label">Porositätsanalyse</span>
+                                                    <span class="mega-menu-desc">DIN EN ISO 16949 konform</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="mega-menu-item">
+                                            <a href="#" class="mega-menu-link">
+                                                <div class="mega-menu-icon">📐</div>
+                                                <div class="mega-menu-text">
+                                                    <span class="mega-menu-label">Wanddickenanalyse</span>
+                                                    <span class="mega-menu-desc">Präzise Messung komplexer Geometrien</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="mega-menu-title">Anwendungen</h4>
+                                    <ul class="mega-menu-list">
+                                        <li class="mega-menu-item">
+                                            <a href="#" class="mega-menu-link">
+                                                <div class="mega-menu-icon">🔧</div>
+                                                <div class="mega-menu-text">
+                                                    <span class="mega-menu-label">Reverse Engineering</span>
+                                                    <span class="mega-menu-desc">CAD-Modelle aus CT-Daten</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="mega-menu-item">
+                                            <a href="#" class="mega-menu-link">
+                                                <div class="mega-menu-icon">⚡</div>
+                                                <div class="mega-menu-text">
+                                                    <span class="mega-menu-label">First Article Inspection</span>
+                                                    <span class="mega-menu-desc">Erstprüfung nach VDA/AIAG</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="mega-menu-item">
+                                            <a href="#" class="mega-menu-link">
+                                                <div class="mega-menu-icon">🛡️</div>
+                                                <div class="mega-menu-text">
+                                                    <span class="mega-menu-label">Schadensanalyse</span>
+                                                    <span class="mega-menu-desc">Wurzelursachenanalyse</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-item">
+                        <a class="nav-link">
+                            Branchen
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </a>
+                        <div class="mega-menu mega-menu-industries">
+                            <h4 class="mega-menu-title">Branchenlösungen</h4>
+                            <div class="industries-grid">
+                                <a href="#" class="industry-card">
+                                    <div class="industry-icon">🚗</div>
+                                    <span class="industry-name">Automotive</span>
+                                </a>
+                                <a href="#" class="industry-card">
+                                    <div class="industry-icon">✈️</div>
+                                    <span class="industry-name">Aerospace</span>
+                                </a>
+                                <a href="#" class="industry-card">
+                                    <div class="industry-icon">🏥</div>
+                                    <span class="industry-name">Medizintechnik</span>
+                                </a>
+                                <a href="#" class="industry-card">
+                                    <div class="industry-icon">🔋</div>
+                                    <span class="industry-name">Elektromobilität</span>
+                                </a>
+                                <a href="#" class="industry-card">
+                                    <div class="industry-icon">⚙️</div>
+                                    <span class="industry-name">Maschinenbau</span>
+                                </a>
+                                <a href="#" class="industry-card">
+                                    <div class="industry-icon">🔥</div>
+                                    <span class="industry-name">Gießerei</span>
+                                </a>
+                                <a href="#" class="industry-card">
+                                    <div class="industry-icon">🖨️</div>
+                                    <span class="industry-name">3D-Druck</span>
+                                </a>
+                                <a href="#" class="industry-card">
+                                    <div class="industry-icon">💊</div>
+                                    <span class="industry-name">Pharma</span>
+                                </a>
+                                <a href="#" class="industry-card">
+                                    <div class="industry-icon">🔬</div>
+                                    <span class="industry-name">Forschung</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-item">
+                        <a class="nav-link">
+                            Wissen
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </a>
+                        <div class="mega-menu mega-menu-wissen">
+                            <h4 class="mega-menu-title">Wissensressourcen</h4>
+                            <div class="wissen-grid">
+                                <a href="#" class="wissen-card">
+                                    <div class="wissen-icon">📚</div>
+                                    <h4 class="wissen-title">Magazin</h4>
+                                    <p class="wissen-count">72 Artikel</p>
+                                </a>
+                                <a href="#" class="wissen-card">
+                                    <div class="wissen-icon">📖</div>
+                                    <h4 class="wissen-title">Wiki / Glossar</h4>
+                                    <p class="wissen-count">150+ Einträge</p>
+                                </a>
+                                <a href="#" class="wissen-card">
+                                    <div class="wissen-icon">🧪</div>
+                                    <h4 class="wissen-title">Prüfaufgaben</h4>
+                                    <p class="wissen-count">12 Verfahren</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="#" class="nav-link">Über uns</a>
+                    <a href="#" class="nav-link">Karriere</a>
+                </nav>
+
+                <div class="header-actions">
+                    <a href="#" class="btn btn-secondary">Kontakt</a>
+                    <a href="#" class="btn btn-primary">Angebot anfordern</a>
+                    <button class="mobile-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>💡</span>
+                    Konzept C – Problemorientiert
+                </div>
+                <h1 class="hero-title">
+                    Welches Problem lösen<br>wir <span>gemeinsam?</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Wählen Sie Ihre Herausforderung – wir zeigen Ihnen den passenden Lösungsweg mit industrial CT-Technologie.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Cards Section -->
+    <section class="problems-section">
+        <div class="problems-container">
+            <div class="problems-grid">
+                <!-- Problem Card 1 -->
+                <div class="problem-card">
+                    <div class="problem-header">
+                        <div class="problem-header-content">
+                            <span class="problem-badge">Labor</span>
+                            <div class="problem-icon">🔍</div>
+                            <h3 class="problem-title">Neues Bauteil freigeben?</h3>
+                        </div>
+                    </div>
+                    <div class="problem-body">
+                        <div class="problem-services">
+                            <span class="service-tag">First Article Inspection</span>
+                            <span class="service-tag">Form- & Lagetoleranzen</span>
+                            <span class="service-tag">Vergleich mit CAD</span>
+                            <span class="service-tag">Materialprüfung</span>
+                        </div>
+                    </div>
+                    <div class="problem-action">
+                        Lösung entdecken
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Problem Card 2 -->
+                <div class="problem-card">
+                    <div class="problem-header">
+                        <div class="problem-header-content">
+                            <span class="problem-badge">Serie</span>
+                            <div class="problem-icon">⚙️</div>
+                            <h3 class="problem-title">Serienqualität sichern?</h3>
+                        </div>
+                    </div>
+                    <div class="problem-body">
+                        <div class="problem-services">
+                            <span class="service-tag">Porositätsanalyse</span>
+                            <span class="service-tag">Inline-CT</span>
+                            <span class="service-tag">Statistische Prozesskontrolle</span>
+                            <span class="service-tag">Qualitätsdokumentation</span>
+                        </div>
+                    </div>
+                    <div class="problem-action">
+                        Lösung entdecken
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Problem Card 3 -->
+                <div class="problem-card">
+                    <div class="problem-header">
+                        <div class="problem-header-content">
+                            <span class="problem-badge">Beides</span>
+                            <div class="problem-icon">⚠️</div>
+                            <h3 class="problem-title">Ausfall oder Reklamation?</h3>
+                        </div>
+                    </div>
+                    <div class="problem-body">
+                        <div class="problem-services">
+                            <span class="service-tag">Schadensanalyse</span>
+                            <span class="service-tag">Rissdetektion</span>
+                            <span class="service-tag">Wurzelursachenanalyse</span>
+                            <span class="service-tag">Beweissicherung</span>
+                        </div>
+                    </div>
+                    <div class="problem-action">
+                        Lösung entdecken
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Problem Card 4 -->
+                <div class="problem-card">
+                    <div class="problem-header">
+                        <div class="problem-header-content">
+                            <span class="problem-badge">Labor</span>
+                            <div class="problem-icon">📐</div>
+                            <h3 class="problem-title">Bauteil digitalisieren?</h3>
+                        </div>
+                    </div>
+                    <div class="problem-body">
+                        <div class="problem-services">
+                            <span class="service-tag">Reverse Engineering</span>
+                            <span class="service-tag">CAD-Modellerstellung</span>
+                            <span class="service-tag">Volumenvisualisierung</span>
+                            <span class="service-tag">3D-Druck-Vorbereitung</span>
+                        </div>
+                    </div>
+                    <div class="problem-action">
+                        Lösung entdecken
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Proposition Section -->
+    <section class="value-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">Warum Microvista?</h2>
+                <p class="section-subtitle">Präzision, Geschwindigkeit und Expertise – Ihr Partner für industrielle CT-Prüfung</p>
+            </div>
+            <div class="value-grid">
+                <div class="value-card">
+                    <div class="value-icon">⚡</div>
+                    <h3 class="value-title">Schnelle Ergebnisse</h3>
+                    <p class="value-desc">Beratung innerhalb von 24h, erste Ergebnisse in 48-72h. Express-Service verfügbar.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🎯</div>
+                    <h3 class="value-title">Präzise Messungen</h3>
+                    <p class="value-desc">Messunsicherheit bis zu 3 µm, ISO 17025 akkreditiert, DIN EN ISO 16949 konform.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🤝</div>
+                    <h3 class="value-title">Persönliche Beratung</h3>
+                    <p class="value-desc">Dedizierter Ansprechpartner, maßgeschneiderte Lösungen, langfristige Partnerschaft.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-icon">M</div>
+                        <span>Microvista</span>
+                    </div>
+                    <p class="footer-desc">
+                        Ihr Partner für industrielle Computertomographie. Präzise Messungen, schnelle Ergebnisse, persönliche Betreuung.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="footer-title">Leistungen</h4>
+                    <ul class="footer-list">
+                        <li class="footer-item"><a href="#" class="footer-link">3D-CT-Analyse</a></li>
+                        <li class="footer-item"><a href="#" class="footer-link">Porositätsanalyse</a></li>
+                        <li class="footer-item"><a href="#" class="footer-link">Wanddickenanalyse</a></li>
+                        <li class="footer-item"><a href="#" class="footer-link">Reverse Engineering</a></li>
+                        <li class="footer-item"><a href="#" class="footer-link">Schadensanalyse</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Unternehmen</h4>
+                    <ul class="footer-list">
+                        <li class="footer-item"><a href="#" class="footer-link">Über uns</a></li>
+                        <li class="footer-item"><a href="#" class="footer-link">Karriere</a></li>
+                        <li class="footer-item"><a href="#" class="footer-link">Standorte</a></li>
+                        <li class="footer-item"><a href="#" class="footer-link">Qualität</a></li>
+                        <li class="footer-item"><a href="#" class="footer-link">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Kontakt</h4>
+                    <ul class="footer-list">
+                        <li class="footer-item"><a href="#" class="footer-link">info@microvista.de</a></li>
+                        <li class="footer-item"><a href="#" class="footer-link">+49 123 456789</a></li>
+                        <li class="footer-item"><a href="#" class="footer-link">Live-Chat</a></li>
+                        <li class="footer-item"><a href="#" class="footer-link">Angebot anfordern</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copyright">© 2026 Microvista GmbH. Alle Rechte vorbehalten.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link" title="LinkedIn">in</a>
+                    <a href="#" class="social-link" title="YouTube">▶</a>
+                    <a href="#" class="social-link" title="X">𝕏</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mega Menu Interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                const megaMenu = item.querySelector('.mega-menu');
+                const navLink = item.querySelector('.nav-link');
+                
+                if (megaMenu && navLink) {
+                    // Show menu on mouseenter
+                    item.addEventListener('mouseenter', function() {
+                        navLink.classList.add('active');
+                    });
+                    
+                    // Hide menu on mouseleave
+                    item.addEventListener('mouseleave', function() {
+                        navLink.classList.remove('active');
+                    });
+                    
+                    // Handle click for touch devices
+                    navLink.addEventListener('click', function(e) {
+                        // If it's a touch device and menu is not visible, prevent default
+                        if (window.matchMedia('(pointer: coarse)').matches) {
+                            if (!item.classList.contains('menu-open')) {
+                                e.preventDefault();
+                                // Close other menus
+                                navItems.forEach(otherItem => {
+                                    otherItem.classList.remove('menu-open');
+                                });
+                                item.classList.add('menu-open');
+                            }
+                        }
+                    });
+                }
+            });
+            
+            // Close menus when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.nav-item')) {
+                    navItems.forEach(item => {
+                        item.classList.remove('menu-open');
+                        const navLink = item.querySelector('.nav-link');
+                        if (navLink) {
+                            navLink.classList.remove('active');
+                        }
+                    });
+                }
+            });
+            
+            // Problem card interactions
+            const problemCards = document.querySelectorAll('.problem-card');
+            
+            problemCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Add click tracking or navigation logic here
+                    console.log('Problem card clicked:', this.querySelector('.problem-title').textContent);
+                });
+                
+                // Add keyboard accessibility
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+                
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+            
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId !== '#') {
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            e.preventDefault();
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // Header scroll effect
+            let lastScroll = 0;
+            const header = document.querySelector('.header');
+            
+            window.addEventListener('scroll', function() {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll > 100) {
+                    header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
+                } else {
+                    header.style.boxShadow = '';
+                }
+                
+                lastScroll = currentScroll;
+            }, { passive: true });
+            
+            // Intersection Observer for fade-in animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe value cards
+            document.querySelectorAll('.value-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konzept G - Signal Hub | Microvista</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #07121d;
+  --bg-soft: #0b1a28;
+  --surface: rgba(10, 23, 35, 0.78);
+  --surface-strong: #102336;
+  --surface-stronger: #132b40;
+  --panel: rgba(250, 252, 255, 0.96);
+  --panel-soft: rgba(255, 255, 255, 0.86);
+  --ink: #f5f8fc;
+  --ink-dim: #9fb1c3;
+  --ink-muted: #6c8095;
+  --copy: #163047;
+  --copy-dim: #547088;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.18);
+  --orange: #f07020;
+  --cyan: #3dd8e0;
+  --mint: #8ff3c0;
+  --violet: #8d75d8;
+  --fog: rgba(255, 255, 255, 0.06);
+  --shadow-lg: 0 28px 90px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 18px 40px rgba(0, 0, 0, 0.18);
+  --radius-xs: 10px;
+  --radius-sm: 14px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --content: 1400px;
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --ease: 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-display);
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 18% 18%, rgba(61, 216, 224, 0.14), transparent 24%),
+    radial-gradient(circle at 84% 8%, rgba(240, 112, 32, 0.18), transparent 22%),
+    radial-gradient(circle at 82% 72%, rgba(143, 243, 192, 0.12), transparent 26%),
+    linear-gradient(180deg, #07111b 0%, #091726 48%, #07121d 100%);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.8), transparent 82%);
+  pointer-events: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+.shell {
+  width: min(calc(100% - 48px), var(--content));
+  margin: 0 auto;
+}
+
+.header {
+  position: sticky;
+  top: 16px;
+  z-index: 40;
+}
+
+.header-shell {
+  position: relative;
+  border: 1px solid var(--line);
+  background: rgba(6, 16, 27, 0.78);
+  backdrop-filter: blur(18px);
+  border-radius: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.header-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: 16px 18px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: #07121d;
+  background: linear-gradient(135deg, var(--orange), var(--mint));
+  box-shadow: 0 10px 28px rgba(240, 112, 32, 0.28);
+}
+
+.logo-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.logo-title {
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.logo-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-trigger {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink-dim);
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color var(--ease), background var(--ease), color var(--ease), transform var(--ease);
+}
+
+.nav-trigger:hover,
+.nav-trigger.active {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--line);
+  transform: translateY(-1px);
+}
+
+.command-trigger {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: border-color var(--ease), transform var(--ease), background var(--ease);
+}
+
+.command-trigger:hover {
+  border-color: rgba(61, 216, 224, 0.45);
+  background: linear-gradient(180deg, rgba(61, 216, 224, 0.08), rgba(255, 255, 255, 0.03));
+}
+
+.command-leading {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #07121d;
+  background: linear-gradient(135deg, var(--cyan), var(--mint));
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.command-copy {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  text-align: left;
+}
+
+.command-copy strong {
+  font-size: 0.92rem;
+  font-weight: 650;
+  color: var(--ink);
+}
+
+.command-copy span {
+  font-size: 0.78rem;
+  color: var(--ink-dim);
+}
+
+.command-kbd {
+  margin-left: auto;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lang-pill,
+.cta-pill {
+  border-radius: 999px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+}
+
+.lang-pill {
+  background: transparent;
+  color: var(--ink-dim);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cta-pill {
+  border: none;
+  color: #07121d;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--orange), #ff9f56);
+  box-shadow: 0 14px 34px rgba(240, 112, 32, 0.3);
+  cursor: pointer;
+}
+
+.mega-panel {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: calc(100% + 12px);
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(251, 253, 255, 0.98), rgba(244, 249, 255, 0.98));
+  color: var(--copy);
+  box-shadow: var(--shadow-lg);
+  padding: 26px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity var(--ease), transform var(--ease), visibility var(--ease);
+}
+
+.mega-panel.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.panel-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.panel-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--copy-dim);
+  margin-bottom: 10px;
+}
+
+.panel-kicker::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: rgba(22, 48, 71, 0.25);
+}
+
+.panel-head h2 {
+  font-size: clamp(1.55rem, 1.3vw + 1.1rem, 2.2rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.panel-head p {
+  max-width: 560px;
+  color: var(--copy-dim);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.panel-aside-note {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--copy-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.problem-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 0.95fr;
+  gap: 22px;
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.problem-tile {
+  border: 1px solid rgba(22, 48, 71, 0.1);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(237, 245, 252, 0.96));
+  border-radius: 22px;
+  padding: 18px;
+  cursor: pointer;
+  transition: transform var(--ease), box-shadow var(--ease), border-color var(--ease);
+  text-align: left;
+}
+
+.problem-tile:hover {
+  transform: translateY(-4px);
+  border-color: rgba(61, 216, 224, 0.45);
+  box-shadow: 0 18px 36px rgba(22, 48, 71, 0.12);
+}
+
+.problem-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.problem-code {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--copy-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.problem-world {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(61, 216, 224, 0.13);
+  color: #0a5d72;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.problem-world.serie {
+  background: rgba(240, 112, 32, 0.12);
+  color: #a3501b;
+}
+
+.problem-world.both {
+  background: rgba(141, 117, 216, 0.12);
+  color: #5f48ae;
+}
+
+.problem-tile h3 {
+  font-size: 1.18rem;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+
+.problem-tile p {
+  color: var(--copy-dim);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(16, 35, 54, 0.08);
+  color: var(--copy);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.route-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.route-card,
+.industry-card,
+.knowledge-card {
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(12, 31, 47, 0.96), rgba(9, 23, 36, 0.96));
+  color: var(--ink);
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.route-card h3,
+.industry-card h3,
+.knowledge-card h3 {
+  font-size: 1.02rem;
+  letter-spacing: -0.03em;
+  margin-bottom: 10px;
+}
+
+.route-list {
+  display: grid;
+  gap: 10px;
+}
+
+.route-line {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.route-line:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.route-index {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(61, 216, 224, 0.14);
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.route-copy strong {
+  display: block;
+  font-size: 0.92rem;
+  margin-bottom: 4px;
+}
+
+.route-copy span {
+  color: var(--ink-dim);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.panel-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.shortcut-chip {
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-dim);
+}
+
+.two-column-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.industry-list,
+.knowledge-list {
+  display: grid;
+  gap: 10px;
+}
+
+.plain-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.plain-row:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.plain-row strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.plain-row span {
+  color: var(--ink-dim);
+  font-size: 0.84rem;
+}
+
+.plain-pill {
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--mint);
+}
+
+.hero {
+  padding: 72px 0 32px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 26px;
+  align-items: start;
+}
+
+.hero-copy {
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  border-radius: 30px;
+  padding: 34px;
+  box-shadow: var(--shadow-md);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-dim);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.hero-copy h1 {
+  font-size: clamp(2.8rem, 5vw, 5.4rem);
+  line-height: 0.94;
+  letter-spacing: -0.06em;
+  margin-bottom: 16px;
+}
+
+.hero-copy h1 em {
+  font-style: normal;
+  color: var(--mint);
+}
+
+.hero-copy p {
+  max-width: 660px;
+  color: var(--ink-dim);
+  font-size: 1.02rem;
+  line-height: 1.72;
+  margin-bottom: 26px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero-button {
+  border: none;
+  cursor: pointer;
+  padding: 14px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  transition: transform var(--ease), box-shadow var(--ease), background var(--ease);
+}
+
+.hero-button.primary {
+  color: #07121d;
+  background: linear-gradient(135deg, var(--cyan), var(--mint));
+  box-shadow: 0 18px 34px rgba(61, 216, 224, 0.24);
+}
+
+.hero-button.secondary {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--line);
+}
+
+.hero-button:hover {
+  transform: translateY(-2px);
+}
+
+.hero-side {
+  display: grid;
+  gap: 16px;
+}
+
+.status-card,
+.mini-command {
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(14px);
+  padding: 20px;
+}
+
+.status-card h2,
+.mini-command h2 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  letter-spacing: -0.03em;
+}
+
+.status-list {
+  display: grid;
+  gap: 10px;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 0;
+  border-top: 1px solid var(--line);
+}
+
+.status-row:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.status-row strong {
+  display: block;
+  margin-bottom: 3px;
+}
+
+.status-row span {
+  color: var(--ink-dim);
+  font-size: 0.82rem;
+}
+
+.status-badge {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(143, 243, 192, 0.14);
+  color: var(--mint);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.mini-command-surface {
+  display: grid;
+  gap: 12px;
+  border-radius: 22px;
+  background: rgba(7, 18, 29, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px;
+}
+
+.mini-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--ink-dim);
+  font-size: 0.92rem;
+}
+
+.mini-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mini-pills span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(61, 216, 224, 0.1);
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.section {
+  padding: 18px 0 72px;
+}
+
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.section-head h2 {
+  font-size: clamp(1.8rem, 2vw, 2.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+
+.section-head p {
+  max-width: 560px;
+  color: var(--ink-dim);
+  line-height: 1.65;
+}
+
+.challenge-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.challenge-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 26px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(10, 24, 39, 0.92));
+  padding: 22px;
+  display: grid;
+  gap: 16px;
+  box-shadow: var(--shadow-md);
+}
+
+.challenge-card::after {
+  content: "";
+  position: absolute;
+  inset: auto 16px 16px auto;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(61, 216, 224, 0.24), transparent 72%);
+  pointer-events: none;
+}
+
+.challenge-number {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.challenge-card h3 {
+  font-size: 1.22rem;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.challenge-card p {
+  color: var(--ink-dim);
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+.challenge-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.challenge-cta {
+  margin-top: auto;
+  justify-self: start;
+  padding: 11px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color var(--ease), transform var(--ease), background var(--ease);
+}
+
+.challenge-cta:hover {
+  transform: translateY(-1px);
+  border-color: rgba(61, 216, 224, 0.38);
+  background: rgba(61, 216, 224, 0.08);
+}
+
+.hybrid-strip {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.hybrid-step {
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 18px;
+}
+
+.hybrid-step strong {
+  display: block;
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+  letter-spacing: -0.03em;
+}
+
+.hybrid-step p {
+  color: var(--ink-dim);
+  line-height: 1.58;
+  font-size: 0.92rem;
+}
+
+.footer-note {
+  padding: 0 0 80px;
+}
+
+.footer-card {
+  border-radius: 28px;
+  border: 1px solid var(--line);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(61, 216, 224, 0.05));
+  padding: 26px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.footer-card p {
+  color: var(--ink-dim);
+  max-width: 780px;
+  line-height: 1.64;
+}
+
+.footer-tag {
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--mint);
+}
+
+.palette-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 88px 24px 24px;
+  background: rgba(4, 10, 18, 0.72);
+  backdrop-filter: blur(18px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--ease), visibility var(--ease);
+  z-index: 70;
+}
+
+.palette-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.palette {
+  width: min(1180px, calc(100% - 20px));
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  background: linear-gradient(180deg, rgba(7, 18, 29, 0.98), rgba(9, 22, 34, 0.98));
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-12px) scale(0.98);
+  transition: transform var(--ease);
+}
+
+.palette-overlay.visible .palette {
+  transform: translateY(0) scale(1);
+}
+
+.palette-top {
+  padding: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.palette-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.palette-input-wrap label {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(61, 216, 224, 0.18), rgba(143, 243, 192, 0.18));
+  color: var(--mint);
+  font-family: var(--font-mono);
+}
+
+.palette-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.24rem;
+}
+
+.palette-input::placeholder {
+  color: var(--ink-muted);
+}
+
+.palette-esc {
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink-dim);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+}
+
+.palette-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 4px 0;
+}
+
+.filter-pill {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-dim);
+  padding: 9px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color var(--ease), background var(--ease), color var(--ease);
+}
+
+.filter-pill.active,
+.filter-pill:hover {
+  color: var(--ink);
+  border-color: rgba(61, 216, 224, 0.32);
+  background: rgba(61, 216, 224, 0.08);
+}
+
+.palette-body {
+  display: grid;
+  grid-template-columns: 1.1fr 0.78fr;
+  min-height: 560px;
+}
+
+.palette-results {
+  border-right: 1px solid var(--line);
+  max-height: 560px;
+  overflow-y: auto;
+}
+
+.result-group {
+  padding: 12px 18px 0;
+}
+
+.result-group-title {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-muted);
+  margin-bottom: 10px;
+}
+
+.result-list {
+  display: grid;
+  gap: 10px;
+  padding-bottom: 12px;
+}
+
+.result-item {
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  padding: 14px 14px 14px 16px;
+  border-radius: 22px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color var(--ease), background var(--ease), transform var(--ease);
+}
+
+.result-item:hover,
+.result-item.selected {
+  border-color: rgba(61, 216, 224, 0.24);
+  background: rgba(61, 216, 224, 0.08);
+}
+
+.result-glyph {
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--mint);
+}
+
+.result-copy strong {
+  display: block;
+  font-size: 0.97rem;
+  margin-bottom: 5px;
+}
+
+.result-copy span {
+  display: block;
+  color: var(--ink-dim);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.result-badge {
+  align-self: start;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink-dim);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.palette-preview {
+  padding: 24px;
+  display: grid;
+  align-content: start;
+  gap: 18px;
+}
+
+.preview-card {
+  border-radius: 26px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  padding: 22px;
+}
+
+.preview-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-muted);
+}
+
+.preview-kicker::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.preview-card h3 {
+  font-size: 1.55rem;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.preview-card p {
+  color: var(--ink-dim);
+  line-height: 1.62;
+}
+
+.preview-route {
+  display: grid;
+  gap: 10px;
+}
+
+.preview-stat {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.preview-stat:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.preview-stat strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.preview-stat span {
+  color: var(--ink-dim);
+  font-size: 0.84rem;
+}
+
+.preview-pill {
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--mint);
+  white-space: nowrap;
+}
+
+.empty-state {
+  padding: 28px 18px 18px;
+  color: var(--ink-dim);
+}
+
+.empty-state h3 {
+  font-size: 1.08rem;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 1180px) {
+  .header-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .header-center {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+  }
+
+  .hero-grid,
+  .challenge-grid,
+  .hybrid-strip,
+  .problem-layout,
+  .palette-body,
+  .two-column-panel,
+  .footer-card {
+    grid-template-columns: 1fr;
+  }
+
+  .palette-results {
+    max-height: 380px;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 760px) {
+  .shell {
+    width: min(calc(100% - 28px), var(--content));
+  }
+
+  .header {
+    top: 10px;
+  }
+
+  .header-shell {
+    border-radius: 20px;
+  }
+
+  .header-inner {
+    padding: 14px;
+  }
+
+  .hero {
+    padding-top: 54px;
+  }
+
+  .hero-copy,
+  .status-card,
+  .mini-command,
+  .challenge-card,
+  .hybrid-step,
+  .footer-card,
+  .mega-panel,
+  .preview-card {
+    border-radius: 22px;
+  }
+
+  .problem-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .challenge-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .palette-overlay {
+    padding: 16px;
+  }
+
+  .palette {
+    width: 100%;
+  }
+
+  .mega-panel {
+    left: 10px;
+    right: 10px;
+    padding: 18px;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="shell header-shell" id="header-shell">
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <span class="logo-mark">M</span>
+        <span class="logo-copy">
+          <strong class="logo-title">Microvista</strong>
+          <span class="logo-subtitle">Signal Hub navigation</span>
+        </span>
+      </a>
+
+      <div class="header-center">
+        <nav class="nav">
+          <button class="nav-trigger" data-panel="problems">Leistungen</button>
+          <button class="nav-trigger" data-panel="industries">Branchen</button>
+          <button class="nav-trigger" data-panel="knowledge">Wissen</button>
+        </nav>
+
+        <button class="command-trigger" id="command-trigger" type="button">
+          <span class="command-leading">S</span>
+          <span class="command-copy">
+            <strong>Problem, Verfahren oder Branche suchen</strong>
+            <span>Search-first fuer Menschen, die noch nicht wissen, welche Seite sie brauchen</span>
+          </span>
+          <span class="command-kbd">Ctrl K</span>
+        </button>
+      </div>
+
+      <div class="header-actions">
+        <button class="lang-pill" type="button">DE</button>
+        <button class="cta-pill" type="button">Beratung</button>
+      </div>
+    </div>
+
+    <div class="mega-panel" id="panel-problems">
+      <div class="panel-head">
+        <div>
+          <div class="panel-kicker">Problem-first mega panel</div>
+          <h2>Start mit der Herausforderung, nicht mit der Seitenstruktur</h2>
+          <p>Die erste Ebene bleibt problemorientiert wie in Konzept C. Der Unterschied: Jede Karte schickt den Nutzer direkt in dieselbe Suchlogik wie die Command Palette aus Konzept E.</p>
+        </div>
+        <div class="panel-aside-note">Hover, Click oder Ctrl K</div>
+      </div>
+
+      <div class="problem-layout">
+        <div class="problem-grid">
+          <button class="problem-tile" type="button" data-query="erstmuster pruefung" data-filter="problem">
+            <div class="problem-meta">
+              <span class="problem-code">P-01</span>
+              <span class="problem-world">Labor</span>
+            </div>
+            <h3>Neues Bauteil freigeben?</h3>
+            <p>Vom ersten CT-Scan bis zum normgerechten Erstbericht. Der Nutzer denkt in Risiko und Freigabe, nicht in Menuebegriffen.</p>
+            <div class="tag-row">
+              <span class="tag">Erstmusterpruefung</span>
+              <span class="tag">Wanddicke</span>
+              <span class="tag">Reverse Engineering</span>
+            </div>
+          </button>
+
+          <button class="problem-tile" type="button" data-query="serienqualitaet inline ct" data-filter="problem">
+            <div class="problem-meta">
+              <span class="problem-code">P-02</span>
+              <span class="problem-world serie">Serie</span>
+            </div>
+            <h3>Serienqualitaet absichern?</h3>
+            <p>Bei grossen Stueckzahlen braucht der Nutzer direkte Pfade zu Inline-CT, 100-Prozent-Pruefung und automatisierter Auswertung.</p>
+            <div class="tag-row">
+              <span class="tag">Inline-CT</span>
+              <span class="tag">100% Pruefung</span>
+              <span class="tag">KI-Auswertung</span>
+            </div>
+          </button>
+
+          <button class="problem-tile" type="button" data-query="reklamation schadensanalyse ursache" data-filter="problem">
+            <div class="problem-meta">
+              <span class="problem-code">P-03</span>
+              <span class="problem-world both">Beides</span>
+            </div>
+            <h3>Ausfall, Reklamation oder Chargensperre?</h3>
+            <p>Hier muss die Navigation sofort in Ursachenanalyse, Defektbilder und den passenden Eskalationspfad springen.</p>
+            <div class="tag-row">
+              <span class="tag">Schadensanalyse</span>
+              <span class="tag">Defektanalyse</span>
+              <span class="tag">Express</span>
+            </div>
+          </button>
+
+          <button class="problem-tile" type="button" data-query="cad soll ist digitalisieren" data-filter="problem">
+            <div class="problem-meta">
+              <span class="problem-code">P-04</span>
+              <span class="problem-world">Labor</span>
+            </div>
+            <h3>Geometrie, Soll-Ist oder Digitalisierung?</h3>
+            <p>Technische Fragen bleiben sichtbar, aber die Suche verbindet sie mit Branchenbezug, Datenlage und weiterfuehrendem Wissen.</p>
+            <div class="tag-row">
+              <span class="tag">CAD Soll-Ist</span>
+              <span class="tag">Reverse Engineering</span>
+              <span class="tag">Messbericht</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="route-stack">
+          <div class="route-card">
+            <h3>Was dieser Hybrid besser macht</h3>
+            <div class="route-list">
+              <div class="route-line">
+                <div class="route-index">01</div>
+                <div class="route-copy">
+                  <strong>Problemkarten fuer Orientierung</strong>
+                  <span>Die erste Entscheidung ist kundenlogisch und visuell entdeckbar.</span>
+                </div>
+              </div>
+              <div class="route-line">
+                <div class="route-index">02</div>
+                <div class="route-copy">
+                  <strong>Command Palette fuer Beschleunigung</strong>
+                  <span>Wer schnell ist oder mehrere Begriffe kennt, springt direkt in die Suche.</span>
+                </div>
+              </div>
+              <div class="route-line">
+                <div class="route-index">03</div>
+                <div class="route-copy">
+                  <strong>Ein Datensatz, zwei Einstiege</strong>
+                  <span>Karten, Suchtreffer und Preview greifen auf dieselbe Logik zurueck statt doppelt gepflegt zu werden.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="route-card">
+            <h3>Direktstart</h3>
+            <div class="panel-shortcuts">
+              <span class="shortcut-chip">Ctrl K - Suche</span>
+              <span class="shortcut-chip">Express anfragen</span>
+              <span class="shortcut-chip">Branche filtern</span>
+              <span class="shortcut-chip">Case Study finden</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" id="panel-industries">
+      <div class="panel-head">
+        <div>
+          <div class="panel-kicker">Industry layer</div>
+          <h2>Branchen bleiben sichtbare Abkuerzung, nicht Sackgasse</h2>
+          <p>Die Branchenebene ist kein isoliertes Menue mehr. Jeder Brancheneintrag kann spaeter in der Suche mit Problemen und Verfahren gekreuzt werden.</p>
+        </div>
+        <div class="panel-aside-note">Crosslinks statt Silos</div>
+      </div>
+
+      <div class="two-column-panel">
+        <div class="industry-card">
+          <h3>Hauefige Branchen</h3>
+          <div class="industry-list">
+            <div class="plain-row">
+              <div>
+                <strong>Automotive</strong>
+                <span>Hairpin, Leichtmetallguss, Serienqualitaet, Reklamationen</span>
+              </div>
+              <span class="plain-pill">Serie</span>
+            </div>
+            <div class="plain-row">
+              <div>
+                <strong>E-Mobilitaet</strong>
+                <span>Batteriemodule, Schweissungen, Inline-CT, Defektmuster</span>
+              </div>
+              <span class="plain-pill">Hot</span>
+            </div>
+            <div class="plain-row">
+              <div>
+                <strong>Medizintechnik</strong>
+                <span>Freigabe, Dokumentation, Materialintegritaet, Nachweisbarkeit</span>
+              </div>
+              <span class="plain-pill">Labor</span>
+            </div>
+            <div class="plain-row">
+              <div>
+                <strong>Additive Fertigung</strong>
+                <span>Porositaet, Geometrieabweichung, Innenstruktur, Reverse Engineering</span>
+              </div>
+              <span class="plain-pill">Hybrid</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="route-card">
+          <h3>Signal-Ansatz</h3>
+          <div class="route-list">
+            <div class="route-line">
+              <div class="route-index">A</div>
+              <div class="route-copy">
+                <strong>Branche + Problem</strong>
+                <span>"Automotive + Reklamation" wird in der Suche sofort relevanter als eine nackte Branchenliste.</span>
+              </div>
+            </div>
+            <div class="route-line">
+              <div class="route-index">B</div>
+              <div class="route-copy">
+                <strong>Branche + Verfahren</strong>
+                <span>Auch Fachbegriffe wie "Hairpin" oder "Wanddickenanalyse" bleiben direkt adressierbar.</span>
+              </div>
+            </div>
+            <div class="route-line">
+              <div class="route-index">C</div>
+              <div class="route-copy">
+                <strong>Preview statt Blindflug</strong>
+                <span>Jeder Treffer zeigt einen empfohlenen Route-Typ, damit vor dem Klick klar ist, wohin der Pfad fuehrt.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mega-panel" id="panel-knowledge">
+      <div class="panel-head">
+        <div>
+          <div class="panel-kicker">Knowledge layer</div>
+          <h2>Wissen wird zum Beschleuniger fuer Entscheidungen</h2>
+          <p>Magazin, Wiki und Case Studies haengen nicht lose daneben. Die Suchlogik kann sie als Kontextfutter zu jeder Herausforderung einblenden.</p>
+        </div>
+        <div class="panel-aside-note">Learn while navigating</div>
+      </div>
+
+      <div class="two-column-panel">
+        <div class="knowledge-card">
+          <h3>Ressourcen im Problemkontext</h3>
+          <div class="knowledge-list">
+            <div class="plain-row">
+              <div>
+                <strong>Wiki</strong>
+                <span>Begriffe wie Porositaet, Wanddicke oder Erstmusterpruefbericht schnell erklaert</span>
+              </div>
+              <span class="plain-pill">Lexikon</span>
+            </div>
+            <div class="plain-row">
+              <div>
+                <strong>Case Studies</strong>
+                <span>Zeigt, welche Route bei realen Bauteilen funktioniert hat</span>
+              </div>
+              <span class="plain-pill">Proof</span>
+            </div>
+            <div class="plain-row">
+              <div>
+                <strong>Magazin</strong>
+                <span>Laengere Einordnung fuer Nutzer, die noch zwischen Verfahren vergleichen</span>
+              </div>
+              <span class="plain-pill">Learn</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="route-card">
+          <h3>Warum das im Hybrid wichtig ist</h3>
+          <div class="route-list">
+            <div class="route-line">
+              <div class="route-index">01</div>
+              <div class="route-copy">
+                <strong>Keine Sackgassen</strong>
+                <span>Wer keine direkte Conversion will, bekommt trotzdem den naechsten sinnvollen Schritt.</span>
+              </div>
+            </div>
+            <div class="route-line">
+              <div class="route-index">02</div>
+              <div class="route-copy">
+                <strong>Vertrauen vor Angebot</strong>
+                <span>Gerade bei komplexer CT-Pruefung kann Kontext der Ausloeser fuer die Beratung sein.</span>
+              </div>
+            </div>
+            <div class="route-line">
+              <div class="route-index">03</div>
+              <div class="route-copy">
+                <strong>Suchergebnisse mit Tiefe</strong>
+                <span>Die Palette kann neben Service- und Branchenresultaten auch passende Lernobjekte einstreuen.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="shell hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">Konzept G - Signal Hub</div>
+        <h1>Suche zuerst. <em>Denke in Problemen.</em></h1>
+        <p>Diese Mischung aus Konzept E und C verbindet zwei Modi: ein entdeckbares, problemorientiertes Mega-Menue fuer den ersten Einstieg und eine schnelle Command Palette fuer Nutzer, die schon Fachbegriffe, Branchen oder konkrete Pruefaufgaben kennen.</p>
+        <div class="hero-actions">
+          <button class="hero-button primary" type="button" id="hero-open-palette">Palette oeffnen</button>
+          <button class="hero-button secondary" type="button" id="hero-open-panel">Problem-Panel zeigen</button>
+        </div>
+      </div>
+
+      <div class="hero-side">
+        <div class="status-card">
+          <h2>Die Hybrid-Regeln</h2>
+          <div class="status-list">
+            <div class="status-row">
+              <div>
+                <strong>Problem vor Sitemap</strong>
+                <span>Fruehe Orientierung fuer Nutzer ohne Microvista-Vokabular</span>
+              </div>
+              <span class="status-badge">C</span>
+            </div>
+            <div class="status-row">
+              <div>
+                <strong>Suche vor Drilldown</strong>
+                <span>Schneller Wechsel in Direktnavigation fuer erfahrene Nutzer</span>
+              </div>
+              <span class="status-badge">E</span>
+            </div>
+            <div class="status-row">
+              <div>
+                <strong>Ein Datenmodell</strong>
+                <span>Treffer, Karten und Preview nutzen dieselbe Relevanzlogik</span>
+              </div>
+              <span class="status-badge">G</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-command">
+          <h2>Search-first Signal</h2>
+          <div class="mini-command-surface">
+            <div class="mini-input">/ reklamation statorgehaeuse porositaet</div>
+            <div class="mini-pills">
+              <span>Problem</span>
+              <span>Branche</span>
+              <span>Wissen</span>
+              <span>Express</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Vier Einstiege</div>
+          <h2>Problemkarten bleiben prominent und triggern sofort die Suche</h2>
+        </div>
+        <p>So bleibt das Menue fuer Erstbesucher intuitiv. Gleichzeitig bekommt jede Karte schon Suchbegriffe und Folgepfade mit, statt nur auf eine starre Unterseite zu zeigen.</p>
+      </div>
+
+      <div class="challenge-grid">
+        <article class="challenge-card">
+          <div class="challenge-number">Signal 01</div>
+          <h3>Bauteil freigeben</h3>
+          <p>Fuer Nutzer, die ein neues Teil absichern wollen und zwischen Erstmuster, Messbericht und Reverse Engineering pendeln.</p>
+          <div class="challenge-meta">
+            <span class="tag">Labor</span>
+            <span class="tag">Erstmusterpruefung</span>
+          </div>
+          <button class="challenge-cta" type="button" data-query="erstmusterpruefung freigabe" data-filter="problem">In Palette oeffnen</button>
+        </article>
+
+        <article class="challenge-card">
+          <div class="challenge-number">Signal 02</div>
+          <h3>Serienfehler verhindern</h3>
+          <p>Fuer Serienverantwortliche, die ohne Umweg zu Inline-CT, 100-Prozent-Pruefung und KI-Auswertung wollen.</p>
+          <div class="challenge-meta">
+            <span class="tag">Serie</span>
+            <span class="tag">Inline-CT</span>
+          </div>
+          <button class="challenge-cta" type="button" data-query="serienfehler inline ct" data-filter="problem">In Palette oeffnen</button>
+        </article>
+
+        <article class="challenge-card">
+          <div class="challenge-number">Signal 03</div>
+          <h3>Ursache finden</h3>
+          <p>Wenn Reklamation, Defekt oder Chargensperre schon akut sind, muss die Navigation auf Eskalation und Klarheit getrimmt sein.</p>
+          <div class="challenge-meta">
+            <span class="tag">Express</span>
+            <span class="tag">Schadensanalyse</span>
+          </div>
+          <button class="challenge-cta" type="button" data-query="schadensanalyse chargensperre" data-filter="problem">In Palette oeffnen</button>
+        </article>
+
+        <article class="challenge-card">
+          <div class="challenge-number">Signal 04</div>
+          <h3>Geometrie verstehen</h3>
+          <p>Technische Nutzer koennen direkt ueber CAD Soll-Ist, Wanddicke oder Materialkombinationen in den passenden Kontext springen.</p>
+          <div class="challenge-meta">
+            <span class="tag">Messung</span>
+            <span class="tag">Soll-Ist</span>
+          </div>
+          <button class="challenge-cta" type="button" data-query="cad soll ist wanddicke" data-filter="problem">In Palette oeffnen</button>
+        </article>
+      </div>
+
+      <div class="hybrid-strip">
+        <div class="hybrid-step">
+          <strong>1. Entdecken</strong>
+          <p>Das Mega-Menue stellt Probleme ueber Menuehierarchie. Das ist die staerkste Eigenschaft von Konzept C.</p>
+        </div>
+        <div class="hybrid-step">
+          <strong>2. Praezisieren</strong>
+          <p>Jeder Einstieg kann die Command Palette mit vorgefuellter Suchanfrage oeffnen. Das ist die staerkste Eigenschaft von Konzept E.</p>
+        </div>
+        <div class="hybrid-step">
+          <strong>3. Entscheiden</strong>
+          <p>Die Preview macht sichtbar, ob der Nutzer eher auf Service, Branche, Wissen oder Aktion landen wird.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="footer-note">
+    <div class="shell">
+      <div class="footer-card">
+        <div>
+          <div class="eyebrow">Fazit</div>
+          <p>Der Hybrid ist weder pure Developer-Navigation noch reines Karten-Menue. Er funktioniert fuer Erstbesucher, die in Problemen denken, und fuer erfahrene Nutzer, die direkt nach Hairpin, Porositaet oder Erstmusterpruefung suchen. Genau diese Spannweite wirkt fuer Microvista realistischer als ein extremer Ein-Modus-Ansatz.</p>
+        </div>
+        <div class="footer-tag">Command x Problem</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="palette-overlay" id="palette-overlay" aria-hidden="true">
+  <div class="palette" role="dialog" aria-modal="true" aria-label="Signal palette">
+    <div class="palette-top">
+      <div class="palette-input-wrap">
+        <label for="palette-input">/</label>
+        <input id="palette-input" class="palette-input" type="text" placeholder="Problem, Verfahren, Branche oder Ressource suchen" autocomplete="off">
+        <span class="palette-esc">Esc</span>
+      </div>
+      <div class="palette-filters" id="palette-filters">
+        <button class="filter-pill active" type="button" data-filter="all">Alle</button>
+        <button class="filter-pill" type="button" data-filter="problem">Probleme</button>
+        <button class="filter-pill" type="button" data-filter="leistung">Leistungen</button>
+        <button class="filter-pill" type="button" data-filter="branche">Branchen</button>
+        <button class="filter-pill" type="button" data-filter="wissen">Wissen</button>
+        <button class="filter-pill" type="button" data-filter="aktion">Aktionen</button>
+      </div>
+    </div>
+
+    <div class="palette-body">
+      <div class="palette-results" id="palette-results"></div>
+      <aside class="palette-preview">
+        <div class="preview-card">
+          <div class="preview-kicker" id="preview-kicker">Signal preview</div>
+          <h3 id="preview-title">Startpunkt waehlen</h3>
+          <p id="preview-desc">Waehle links einen Treffer oder beginne mit einer Suche. Die rechte Seite zeigt, warum der Treffer in diesem Hybrid Sinn ergibt.</p>
+        </div>
+
+        <div class="preview-card">
+          <div class="preview-kicker">Empfohlene Route</div>
+          <div class="preview-route" id="preview-route">
+            <div class="preview-stat">
+              <div>
+                <strong>Modus</strong>
+                <span>Problemkarte oder Suchtreffer</span>
+              </div>
+              <span class="preview-pill">Hybrid</span>
+            </div>
+            <div class="preview-stat">
+              <div>
+                <strong>Naechster Schritt</strong>
+                <span>Kontext erhalten, dann beraten oder weiterlesen</span>
+              </div>
+              <span class="preview-pill">Preview</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<script>
+const items = [
+  {
+    id: "p1",
+    title: "Neues Bauteil freigeben",
+    desc: "Fuehrt zu Erstmusterpruefung, Messbericht und Reverse Engineering.",
+    category: "problem",
+    badge: "Labor",
+    glyph: "P1",
+    keywords: ["freigabe", "erstmuster", "bericht", "soll ist", "messung", "neues bauteil"],
+    reason: "Perfekt fuer Nutzer, die noch kein Verfahren nennen koennen, aber ein Freigabeproblem haben.",
+    route: "Problemkarte -> Erstmusterpruefung -> Messbericht -> Beratung",
+    next: "Passende Labor-Leistungen priorisieren",
+    mode: "Problemorientiert"
+  },
+  {
+    id: "p2",
+    title: "Serienqualitaet absichern",
+    desc: "Baut die Route zu Inline-CT, 100% Pruefung und KI-Auswertung auf.",
+    category: "problem",
+    badge: "Serie",
+    glyph: "P2",
+    keywords: ["serie", "inline", "stueckzahl", "ki", "100", "qualitaet"],
+    reason: "Nimmt die Business-Frage ernst, bevor sie in einen Servicebegriff uebersetzt wird.",
+    route: "Problemkarte -> Inline-CT -> KI-Auswertung -> Demo",
+    next: "Serienpfad mit Performance und Automatisierung zeigen",
+    mode: "Problemorientiert"
+  },
+  {
+    id: "p3",
+    title: "Reklamation oder Ausfall analysieren",
+    desc: "Leitet Defektanalyse, Schadensanalyse und Expresspfade ein.",
+    category: "problem",
+    badge: "Express",
+    glyph: "P3",
+    keywords: ["reklamation", "ausfall", "schaden", "ursache", "charge", "defekt"],
+    reason: "Akute Probleme brauchen keine Menuesprache, sondern schnelle Einordnung und Eskalation.",
+    route: "Problemkarte -> Schadensanalyse -> Express-Beratung",
+    next: "Schnelle Sofortwege und Case Studies einblenden",
+    mode: "Problemorientiert"
+  },
+  {
+    id: "p4",
+    title: "Geometrie und Soll-Ist klaeren",
+    desc: "Bringt CAD Soll-Ist, Wanddickenmessung und Reverse Engineering zusammen.",
+    category: "problem",
+    badge: "Messung",
+    glyph: "P4",
+    keywords: ["cad", "soll ist", "wanddicke", "geometrie", "digitalisieren", "reverse engineering"],
+    reason: "Technische Fragen bleiben sichtbar, werden aber in den passenden Kontext uebersetzt.",
+    route: "Problemkarte -> CAD Soll-Ist -> Reverse Engineering -> Wissen",
+    next: "Tiefe Messpfade mit technischem Kontext anbieten",
+    mode: "Problemorientiert"
+  },
+  {
+    id: "l1",
+    title: "Erstmusterpruefung",
+    desc: "Normgerechte Freigabe und Messbericht fuer neue Bauteile.",
+    category: "leistung",
+    badge: "Labor",
+    glyph: "L1",
+    keywords: ["erstmuster", "freigabe", "bericht", "labor"],
+    reason: "Kommt sowohl ueber direkte Suche als auch ueber Problem P1 stark nach oben.",
+    route: "Leistung -> Formular -> Beratung",
+    next: "CTA fuer Anfrage oder Bauteileinsendung",
+    mode: "Search-first"
+  },
+  {
+    id: "l2",
+    title: "Inline-CT",
+    desc: "CT direkt in oder nah an der Serie fuer schnelle Rueckkopplung.",
+    category: "leistung",
+    badge: "Serie",
+    glyph: "L2",
+    keywords: ["inline", "serie", "automatisierung", "prozess", "linie"],
+    reason: "Ein klassischer Treffer fuer Nutzer mit klarer Fachsprache oder Serienkontext.",
+    route: "Leistung -> Demo -> Architekturgespraech",
+    next: "Serien-Use-Case und KI-Auswertung mitziehen",
+    mode: "Search-first"
+  },
+  {
+    id: "l3",
+    title: "Schadensanalyse",
+    desc: "Wurzelursachenanalyse fuer Reklamationen, Ausfaelle und Abweichungen.",
+    category: "leistung",
+    badge: "Express",
+    glyph: "L3",
+    keywords: ["schadensanalyse", "ursache", "reklamation", "ausfall", "charge"],
+    reason: "Wird in diesem Hybrid sowohl als Service als auch als akuter Problemloeser sichtbar.",
+    route: "Leistung -> Expresskontakt -> Fallaufnahme",
+    next: "Dringlichkeit und Dokumentation in den Vordergrund setzen",
+    mode: "Hybrid"
+  },
+  {
+    id: "l4",
+    title: "CAD Soll-Ist Vergleich",
+    desc: "Geometrieabweichungen schnell identifizieren und dokumentieren.",
+    category: "leistung",
+    badge: "Messung",
+    glyph: "L4",
+    keywords: ["cad", "soll", "ist", "vergleich", "messung", "geometrie"],
+    reason: "Wird fuer technische Nutzer direkt gefunden, aber auch aus Problem P4 gespeist.",
+    route: "Leistung -> Messdetails -> Projektbriefing",
+    next: "Messbegriffe und Reverse Engineering verknuepfen",
+    mode: "Hybrid"
+  },
+  {
+    id: "b1",
+    title: "Automotive",
+    desc: "Hairpin, Leichtmetallguss und Serienqualitaet mit CT absichern.",
+    category: "branche",
+    badge: "Branche",
+    glyph: "B1",
+    keywords: ["automotive", "hairpin", "stator", "guss", "serienqualitaet"],
+    reason: "Branchen resultieren nicht isoliert, sondern werden mit Problem- und Servicepfaden verflochten.",
+    route: "Branche -> Problemfilter -> Leistung",
+    next: "Case Studies und typische Defekte zeigen",
+    mode: "Search-first"
+  },
+  {
+    id: "b2",
+    title: "E-Mobilitaet",
+    desc: "Batteriemodule, Schweissungen und E-Motor-Komponenten im Fokus.",
+    category: "branche",
+    badge: "Branche",
+    glyph: "B2",
+    keywords: ["e mobilitaet", "batterie", "hairpin", "schweissung", "stator"],
+    reason: "Hilft Nutzern mit Branchenbezug, die noch zwischen mehreren Pruefaufgaben schwanken.",
+    route: "Branche -> relevante Probleme -> Beratung",
+    next: "Branchenspezifische Herausforderungen sichtbar machen",
+    mode: "Search-first"
+  },
+  {
+    id: "w1",
+    title: "Wiki: Porositaetsanalyse",
+    desc: "Erklaert Begriffe, Vorgehen und Auswertung fuer poroese Strukturen.",
+    category: "wissen",
+    badge: "Wiki",
+    glyph: "W1",
+    keywords: ["wiki", "porositaet", "wissen", "lexikon", "definition"],
+    reason: "Im Hybrid ist Wissen kein Nebenschauplatz, sondern Teil der Entscheidungshilfe.",
+    route: "Wissen -> Fachbegriff -> passende Leistung",
+    next: "Technisches Verstaendnis vor Conversion aufbauen",
+    mode: "Knowledge assist"
+  },
+  {
+    id: "w2",
+    title: "Case Study: Hairpin-Stator",
+    desc: "Zeigt, wie CT in der E-Mobilitaet fuer Schweissnaht- und Defektkontrolle eingesetzt wird.",
+    category: "wissen",
+    badge: "Case Study",
+    glyph: "W2",
+    keywords: ["case study", "hairpin", "stator", "e mobilitaet", "wissen"],
+    reason: "Praxisbelege helfen besonders dann, wenn Problem und Branche bereits bekannt sind.",
+    route: "Wissen -> Proof -> Demo",
+    next: "Vertrauen mit realem Use Case staerken",
+    mode: "Knowledge assist"
+  },
+  {
+    id: "a1",
+    title: "Express-Beratung anfragen",
+    desc: "Schnellster Weg fuer akute Reklamationen oder gesperrte Chargen.",
+    category: "aktion",
+    badge: "Aktion",
+    glyph: "A1",
+    keywords: ["express", "beratung", "anfrage", "rueckruf", "sofort"],
+    reason: "Aktionen muessen in der Suche auftauchen, wenn Intention klar conversion-lastig ist.",
+    route: "Aktion -> Kontakt -> Rueckruf",
+    next: "Konversion ohne Umweg moeglich machen",
+    mode: "Search-first"
+  },
+  {
+    id: "a2",
+    title: "Demo fuer Serienpruefung",
+    desc: "Direkter Einstieg fuer Nutzer, die bereits ueber Inline-CT oder KI-Automatisierung sprechen.",
+    category: "aktion",
+    badge: "Aktion",
+    glyph: "A2",
+    keywords: ["demo", "serie", "inline", "ki", "meeting"],
+    reason: "Wenn Suchintention klar ist, sollte das Menue nicht mit Struktur bremsen.",
+    route: "Aktion -> Demo -> Architekturgespraech",
+    next: "Schneller in den Vertriebsdialog kommen",
+    mode: "Search-first"
+  }
+];
+
+const groupLabels = {
+  problem: "Probleme",
+  leistung: "Leistungen",
+  branche: "Branchen",
+  wissen: "Wissen",
+  aktion: "Aktionen"
+};
+
+const paletteOverlay = document.getElementById("palette-overlay");
+const paletteInput = document.getElementById("palette-input");
+const paletteResults = document.getElementById("palette-results");
+const previewKicker = document.getElementById("preview-kicker");
+const previewTitle = document.getElementById("preview-title");
+const previewDesc = document.getElementById("preview-desc");
+const previewRoute = document.getElementById("preview-route");
+const filterButtons = Array.from(document.querySelectorAll(".filter-pill"));
+const commandTrigger = document.getElementById("command-trigger");
+const heroOpenPalette = document.getElementById("hero-open-palette");
+const heroOpenPanel = document.getElementById("hero-open-panel");
+const headerShell = document.getElementById("header-shell");
+const navTriggers = Array.from(document.querySelectorAll(".nav-trigger"));
+const panels = {
+  problems: document.getElementById("panel-problems"),
+  industries: document.getElementById("panel-industries"),
+  knowledge: document.getElementById("panel-knowledge")
+};
+
+let activeFilter = "all";
+let filteredItems = items.slice();
+let selectedIndex = 0;
+let activePanel = null;
+let closeTimer = null;
+
+function updatePreview(item) {
+  if (!item) {
+    previewKicker.textContent = "Signal preview";
+    previewTitle.textContent = "Startpunkt waehlen";
+    previewDesc.textContent = "Waehle links einen Treffer oder beginne mit einer Suche. Die rechte Seite zeigt, warum der Treffer in diesem Hybrid Sinn ergibt.";
+    previewRoute.innerHTML = `
+      <div class="preview-stat">
+        <div>
+          <strong>Modus</strong>
+          <span>Problemkarte oder Suchtreffer</span>
+        </div>
+        <span class="preview-pill">Hybrid</span>
+      </div>
+      <div class="preview-stat">
+        <div>
+          <strong>Naechster Schritt</strong>
+          <span>Kontext erhalten, dann beraten oder weiterlesen</span>
+        </div>
+        <span class="preview-pill">Preview</span>
+      </div>
+    `;
+    return;
+  }
+
+  previewKicker.textContent = `${groupLabels[item.category]} - ${item.mode}`;
+  previewTitle.textContent = item.title;
+  previewDesc.textContent = item.reason;
+  previewRoute.innerHTML = `
+    <div class="preview-stat">
+      <div>
+        <strong>Route</strong>
+        <span>${item.route}</span>
+      </div>
+      <span class="preview-pill">${item.badge}</span>
+    </div>
+    <div class="preview-stat">
+      <div>
+        <strong>Naechster Schritt</strong>
+        <span>${item.next}</span>
+      </div>
+      <span class="preview-pill">${item.mode}</span>
+    </div>
+  `;
+}
+
+function renderResults() {
+  const query = paletteInput.value.trim().toLowerCase();
+
+  filteredItems = items.filter((item) => {
+    const filterMatch = activeFilter === "all" || item.category === activeFilter;
+    const textBlob = [item.title, item.desc, item.badge, ...item.keywords].join(" ").toLowerCase();
+    const queryMatch = query === "" || textBlob.includes(query);
+    return filterMatch && queryMatch;
+  });
+
+  if (!filteredItems.length) {
+    paletteResults.innerHTML = `
+      <div class="empty-state">
+        <h3>Keine Treffer fuer diese Kombination</h3>
+        <p>Versuche einen Problembegriff wie "Reklamation", ein Verfahren wie "Inline-CT" oder eine Branche wie "Automotive".</p>
+      </div>
+    `;
+    updatePreview(null);
+    return;
+  }
+
+  const grouped = filteredItems.reduce((acc, item) => {
+    if (!acc[item.category]) acc[item.category] = [];
+    acc[item.category].push(item);
+    return acc;
+  }, {});
+
+  paletteResults.innerHTML = Object.keys(groupLabels)
+    .filter((key) => grouped[key]?.length)
+    .map((key) => `
+      <section class="result-group">
+        <div class="result-group-title">${groupLabels[key]}</div>
+        <div class="result-list">
+          ${grouped[key].map((item) => `
+            <button class="result-item" type="button" data-id="${item.id}">
+              <span class="result-glyph">${item.glyph}</span>
+              <span class="result-copy">
+                <strong>${item.title}</strong>
+                <span>${item.desc}</span>
+              </span>
+              <span class="result-badge">${item.badge}</span>
+            </button>
+          `).join("")}
+        </div>
+      </section>
+    `).join("");
+
+  selectedIndex = 0;
+  bindResultInteractions();
+  highlightSelection();
+}
+
+function bindResultInteractions() {
+  const resultButtons = Array.from(document.querySelectorAll(".result-item"));
+
+  resultButtons.forEach((button, index) => {
+    button.addEventListener("mouseenter", () => {
+      selectedIndex = index;
+      highlightSelection();
+    });
+
+    button.addEventListener("click", () => {
+      const item = filteredItems.find((entry) => entry.id === button.dataset.id);
+      if (!item) return;
+      paletteInput.value = item.title;
+      updatePreview(item);
+    });
+  });
+}
+
+function highlightSelection() {
+  const resultButtons = Array.from(document.querySelectorAll(".result-item"));
+  resultButtons.forEach((button, index) => {
+    button.classList.toggle("selected", index === selectedIndex);
+  });
+
+  const selectedItem = filteredItems[selectedIndex];
+  updatePreview(selectedItem);
+  resultButtons[selectedIndex]?.scrollIntoView({ block: "nearest" });
+}
+
+function openPalette(query = "", filter = activeFilter) {
+  closeAllPanels();
+  activeFilter = filter;
+  filterButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.filter === activeFilter);
+  });
+  paletteOverlay.classList.add("visible");
+  paletteOverlay.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  paletteInput.value = query;
+  renderResults();
+  requestAnimationFrame(() => paletteInput.focus());
+}
+
+function closePalette() {
+  paletteOverlay.classList.remove("visible");
+  paletteOverlay.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+function closeAllPanels() {
+  activePanel = null;
+  Object.values(panels).forEach((panel) => panel.classList.remove("open"));
+  navTriggers.forEach((trigger) => trigger.classList.remove("active"));
+}
+
+function openPanel(name) {
+  if (!panels[name]) return;
+  activePanel = name;
+  Object.entries(panels).forEach(([key, panel]) => {
+    panel.classList.toggle("open", key === name);
+  });
+  navTriggers.forEach((trigger) => {
+    trigger.classList.toggle("active", trigger.dataset.panel === name);
+  });
+}
+
+commandTrigger.addEventListener("click", () => openPalette());
+heroOpenPalette.addEventListener("click", () => openPalette());
+heroOpenPanel.addEventListener("click", () => openPanel("problems"));
+
+filterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    activeFilter = button.dataset.filter;
+    filterButtons.forEach((pill) => pill.classList.remove("active"));
+    button.classList.add("active");
+    renderResults();
+  });
+});
+
+paletteInput.addEventListener("input", renderResults);
+
+document.addEventListener("keydown", (event) => {
+  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+    event.preventDefault();
+    if (paletteOverlay.classList.contains("visible")) {
+      closePalette();
+    } else {
+      openPalette();
+    }
+  }
+
+  if (event.key === "Escape") {
+    closePalette();
+    closeAllPanels();
+  }
+
+  if (!paletteOverlay.classList.contains("visible")) return;
+
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    selectedIndex = (selectedIndex + 1) % filteredItems.length;
+    highlightSelection();
+  }
+
+  if (event.key === "ArrowUp") {
+    event.preventDefault();
+    selectedIndex = (selectedIndex - 1 + filteredItems.length) % filteredItems.length;
+    highlightSelection();
+  }
+
+  if (event.key === "Enter" && filteredItems.length) {
+    event.preventDefault();
+    const item = filteredItems[selectedIndex];
+    paletteInput.value = item.title;
+    updatePreview(item);
+  }
+});
+
+paletteOverlay.addEventListener("click", (event) => {
+  if (event.target === paletteOverlay) closePalette();
+});
+
+navTriggers.forEach((trigger) => {
+  trigger.addEventListener("mouseenter", () => {
+    if (window.matchMedia("(pointer: fine)").matches) {
+      clearTimeout(closeTimer);
+      openPanel(trigger.dataset.panel);
+    }
+  });
+
+  trigger.addEventListener("click", () => {
+    if (activePanel === trigger.dataset.panel) {
+      closeAllPanels();
+    } else {
+      openPanel(trigger.dataset.panel);
+    }
+  });
+});
+
+headerShell.addEventListener("mouseleave", () => {
+  if (!window.matchMedia("(pointer: fine)").matches) return;
+  closeTimer = setTimeout(closeAllPanels, 120);
+});
+
+headerShell.addEventListener("mouseenter", () => {
+  clearTimeout(closeTimer);
+});
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".header-shell")) {
+    closeAllPanels();
+  }
+});
+
+document.querySelectorAll("[data-query]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const query = button.dataset.query || "";
+    const filter = button.dataset.filter || "all";
+    openPalette(query, filter);
+  });
+});
+
+renderResults();
+updatePreview(filteredItems[0]);
+</script>
+
+</body>
+</html>

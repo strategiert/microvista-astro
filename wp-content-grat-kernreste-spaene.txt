@@ -1,0 +1,50 @@
+PAGE: N/A
+URL: https://www.microvista.de/industrielle-computertomographie/prufaufgaben/grat-kernreste-spaene/
+================================================================================
+
+=== UEBERSCHRIFTEN ===
+[H1] PRÜFUNG AUF GRAT, KERNRESTE & SPÄNE MIT INDUSTRIELLER CT
+[H2] Schwer zugängliche Kavitäten auf Grat, Kernreste & Späne prüfen
+[H3] Vorteile gegenüber anderen CT-Anbietern
+
+=== BILDER ===
+  ALT: Restsand-Verteilung im Wasserraum - Grat, Kernreste und Späne im CT-Bild
+  SRC: https://www.microvista.de/wp-content/plugins/wp-fastest-cache-premium/pro/images/blank.gif
+
+
+=== FLIESSTEXT ===
+Hohe Anforderungen an die Bauteilsauberkeit wie beispielsweise in der Automobilindustrie verlangen, dass „Überbleibsel“ wie Grat, Kernreste & Späne ausnahms- und restlos entfernt werden. Falls Bauteile beispielsweise nicht richtig entgratet wurden, kann dies beispielsweise zu Verstopfungen führen, welche Fehlfunktion oder Beschädigungen zur Folge haben können.
+
+Industrielle Computertomographie macht eine Prüfung auf das Vorhandensein von Sand- bzw. Kernresten, größerer Späne und Grat durch Kernbruch in Gussteilen möglich. Der Vorteil von CT ist in diesem Fall, dassschwer zugänglichen Kavitäten im Inneren inspiziert werden können. Bei Grat kann sogar die Quantität des Verschlusses automatisch ermittelt werden.
+
+Große Bauteile & schwerdurchstrahlbare Materialien stellen für die Computertomographen von Microvista nicht zwangsläufig ein Hindernis dar. Zusätzlich ist es möglich hohe Stückzahlen vollautomatisch & wirtschaftlich zu prüfen.  Die Inspektion kann an Ihrer Produktionsstätte mit einermobilen CT-Lösungoder überIhr CT via Clouderfolgen. Alternativ können Sie Microvista IhreBauteile auch zusenden. Serien-  wie auch Einzelteilprüfungen sind möglich. Mit der Auswahl derExpress-Inspektion können Sie Einzelteile priorisiert prüfen lassen.
+
+Restsand-Verteilung im Wasserraum
+
+
+=== LISTEN ===
+Liste ():
+  - Optionen verwalten
+  - Dienste verwalten
+  - Verwalten von {vendor_count}-Lieferanten
+  - Lese mehr über diese Zwecke
+
+Liste ():
+  - {title}
+  - {title}
+  - {title}
+
+
+=== FAQ / TOGGLES ===
+(keine FAQs gefunden)
+
+=== CTAs / BUTTONS ===
+  [Express-Inspektionbuchen] -> https://www.microvista.de/kontakt/
+  [Express-Inspektionbuchen] -> 
+  [Express-Inspektionbuchen] -> 
+  [Gratis-Beratungsichern] -> https://www.microvista.de/kontakt/
+  [Gratis-Beratungsichern] -> 
+  [Gratis-Beratungsichern] -> 
+  [Gratis-Beratungsichern] -> https://www.microvista.de/kontakt/
+  [Gratis-Beratungsichern] -> 
+  [Gratis-Beratungsichern] -> 

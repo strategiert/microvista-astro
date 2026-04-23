@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konzept D — Spatial Navigation (3D Depth Layering)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   KONZEPT D — SPATIAL NAVIGATION
+   3D Depth Layering mit visueller Hierarchie durch Z-Tiefen
+   Ästhetik: Tech-Spatial, architektonisch, räumlich
+   ═══════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --mv-navy: #001a2e;
+  --mv-navy-light: #0a2540;
+  --mv-blue: #0066cc;
+  --mv-accent: #ff6b35;
+  --mv-cyan: #00d4aa;
+  --mv-violet: #7c3aed;
+  --mv-gold: #f59e0b;
+  --mv-white: #ffffff;
+  --mv-gray-50: #f8fafc;
+  --mv-gray-100: #f1f5f9;
+  --mv-gray-200: #e2e8f0;
+  --mv-gray-400: #94a3b8;
+  --mv-gray-600: #475569;
+  --mv-gray-800: #1e293b;
+  --mv-dark: #0f172a;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --transition: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--mv-gray-800);
+  background: var(--mv-gray-50);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ─── Concept Label ─── */
+.concept-label {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: var(--mv-navy); color: var(--mv-white);
+  font-family: var(--font-display); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 12px 20px; border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 20px 60px rgba(0,26,46,0.4);
+}
+.concept-label span { color: var(--mv-cyan); }
+
+/* ─── Header ─── */
+.header {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px);
+  position: sticky; top: 0; z-index: 1000;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.header-inner {
+  max-width: 1600px; margin: 0 auto; padding: 0 48px;
+  display: flex; align-items: center; height: 76px;
+  justify-content: space-between;
+}
+
+/* Logo */
+.logo {
+  display: flex; align-items: center; gap: 14px;
+  text-decoration: none; color: var(--mv-navy);
+}
+.logo-mark {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, var(--mv-navy) 0%, var(--mv-blue) 100%);
+  border-radius: var(--radius-md);
+  display: grid; place-items: center;
+  position: relative; overflow: hidden;
+}
+.logo-mark::before {
+  content: ''; position: absolute;
+  width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.9);
+  border-radius: 50%;
+}
+.logo-mark::after {
+  content: ''; position: absolute;
+  width: 6px; height: 6px; background: var(--mv-accent);
+  border-radius: 50%;
+}
+.logo-text {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 22px; letter-spacing: -0.02em;
+}
+
+/* Nav */
+.main-nav { display: flex; align-items: center; gap: 8px; }
+.nav-item {
+  position: relative; padding: 0 20px; height: 76px;
+  display: flex; align-items: center; cursor: pointer;
+  font-family: var(--font-display);
+  font-size: 14px; font-weight: 500; color: var(--mv-gray-600);
+  transition: all var(--transition);
+  text-decoration: none; letter-spacing: -0.01em;
+  border-radius: var(--radius-sm);
+}
+.nav-item:hover { color: var(--mv-navy); background: rgba(0,0,0,0.02); }
+.nav-item.active { color: var(--mv-navy); }
+
+.nav-item .chevron {
+  width: 14px; height: 14px; margin-left: 6px;
+  transition: transform var(--transition);
+  opacity: 0.4;
+}
+.nav-item:hover .chevron { transform: rotate(180deg); opacity: 0.8; }
+
+/* Active indicator pill */
+.nav-item::after {
+  content: ''; position: absolute; bottom: 16px;
+  left: 50%; transform: translateX(-50%) scale(0);
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--mv-accent);
+  transition: transform var(--transition);
+}
+.nav-item:hover::after,
+.nav-item.active::after { transform: translateX(-50%) scale(1); }
+
+/* Header right */
+.header-right { display: flex; align-items: center; gap: 16px; }
+.lang-btn {
+  color: var(--mv-gray-400); font-family: var(--font-display);
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  cursor: pointer; padding: 8px 14px;
+  border: 1px solid var(--mv-gray-200); border-radius: var(--radius-sm);
+  background: transparent; transition: all var(--transition);
+}
+.lang-btn:hover { border-color: var(--mv-gray-400); color: var(--mv-gray-800); }
+
+.header-cta {
+  background: var(--mv-navy); color: var(--mv-white);
+  border: none; padding: 12px 24px; border-radius: var(--radius-sm);
+  font-family: var(--font-display); font-size: 13px; font-weight: 600;
+  cursor: pointer; letter-spacing: -0.01em;
+  transition: all var(--transition);
+  position: relative; overflow: hidden;
+}
+.header-cta::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--mv-accent), var(--mv-gold));
+  opacity: 0; transition: opacity var(--transition);
+}
+.header-cta:hover::before { opacity: 1; }
+.header-cta span { position: relative; z-index: 1; }
+
+/* ═══════════════════════════════════════════════════════════════
+   SPATIAL MEGA MENU — 3D Depth Layers
+   ═══════════════════════════════════════════════════════════════ */
+.mega-overlay {
+  position: fixed; inset: 0;
+  background: rgba(15,23,42,0.4);
+  backdrop-filter: blur(12px);
+  opacity: 0; visibility: hidden;
+  transition: all 500ms ease; z-index: 998;
+}
+.mega-overlay.visible { opacity: 1; visibility: visible; }
+
+.mega-panel {
+  position: absolute; top: 76px; left: 0; right: 0;
+  background: var(--mv-white);
+  opacity: 0; visibility: hidden;
+  transform: translateY(-20px) scale(0.98);
+  transform-origin: top center;
+  transition: all var(--transition);
+  z-index: 999;
+  box-shadow: 
+    0 4px 6px -1px rgba(0,0,0,0.05),
+    0 10px 15px -3px rgba(0,0,0,0.08),
+    0 25px 50px -12px rgba(0,0,0,0.15);
+  border-bottom: 1px solid var(--mv-gray-200);
+}
+.mega-panel.visible {
+  opacity: 1; visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* ─── Layer 1: Primary Navigation ─── */
+.mega-spatial {
+  display: grid;
+  grid-template-columns: 320px 1fr 280px;
+  min-height: 520px;
+}
+
+/* Left: Context Layer */
+.spatial-context {
+  background: var(--mv-gray-50);
+  border-right: 1px solid var(--mv-gray-200);
+  padding: 40px 32px;
+  display: flex; flex-direction: column;
+}
+
+.context-label {
+  font-family: var(--font-display); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--mv-gray-400);
+  margin-bottom: 24px;
+}
+
+.world-selector {
+  display: flex; flex-direction: column; gap: 12px;
+  margin-bottom: 40px;
+}
+
+.world-option {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px; border-radius: var(--radius-md);
+  background: var(--mv-white);
+  border: 2px solid transparent;
+  cursor: pointer; text-decoration: none;
+  transition: all var(--transition);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.world-option:hover,
+.world-option.active {
+  border-color: var(--mv-accent);
+  transform: translateX(8px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+.world-option.active { background: var(--mv-navy); }
+.world-option.active .world-name,
+.world-option.active .world-desc { color: var(--mv-white); }
+
+.world-icon {
+  width: 48px; height: 48px; border-radius: var(--radius-sm);
+  display: grid; place-items: center; font-size: 20px;
+  flex-shrink: 0;
+}
+.world-icon.labor { background: linear-gradient(135deg, #7c3aed, #a78bfa); }
+.world-icon.serie { background: linear-gradient(135deg, #0066cc, #38bdf8); }
+
+.world-info { flex: 1; }
+.world-name {
+  font-family: var(--font-display); font-size: 15px;
+  font-weight: 600; color: var(--mv-navy);
+  margin-bottom: 4px;
+}
+.world-desc {
+  font-size: 12px; color: var(--mv-gray-400);
+  line-height: 1.4;
+}
+
+/* Quick Links */
+.quick-links-title {
+  font-family: var(--font-display); font-size: 12px;
+  font-weight: 600; color: var(--mv-gray-600);
+  margin-bottom: 16px;
+}
+.quick-links {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.quick-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: var(--radius-sm);
+  color: var(--mv-gray-600); text-decoration: none;
+  font-size: 13px; font-weight: 500;
+  transition: all var(--transition);
+}
+.quick-link:hover {
+  background: var(--mv-white);
+  color: var(--mv-navy);
+  transform: translateX(4px);
+}
+.quick-link-arrow {
+  margin-left: auto; opacity: 0; transition: all var(--transition);
+}
+.quick-link:hover .quick-link-arrow { opacity: 1; }
+
+/* Center: Content Layer (Depth 2) */
+.spatial-content {
+  padding: 40px 48px;
+  display: flex; flex-direction: column;
+  background: var(--mv-white);
+}
+
+.content-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 32px; padding-bottom: 24px;
+  border-bottom: 1px solid var(--mv-gray-100);
+}
+.content-title {
+  font-family: var(--font-display); font-size: 28px;
+  font-weight: 700; color: var(--mv-navy);
+  letter-spacing: -0.02em;
+}
+.content-meta {
+  font-size: 13px; color: var(--mv-gray-400);
+}
+
+/* Service Grid with Depth */
+.service-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px; flex: 1;
+}
+
+.service-card {
+  position: relative; border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--mv-white);
+  border: 1px solid var(--mv-gray-200);
+  cursor: pointer; text-decoration: none;
+  transition: all var(--transition);
+  display: flex; flex-direction: column;
+}
+.service-card:hover {
+  border-color: transparent;
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 20px 40px -10px rgba(0,0,0,0.12),
+    0 0 0 1px rgba(0,0,0,0.05);
+}
+
+.service-visual {
+  height: 140px; position: relative; overflow: hidden;
+}
+.service-visual::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(0,102,204,0.1) 0%, 
+    rgba(124,58,237,0.1) 100%);
+}
+.service-visual::after {
+  content: ''; position: absolute; inset: 0;
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 50%),
+    repeating-linear-gradient(
+      45deg,
+      transparent, transparent 10px,
+      rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px
+    );
+}
+
+/* Dynamic backgrounds per card */
+.service-card:nth-child(1) .service-visual { background: linear-gradient(135deg, #0a2540 0%, #1e3a5f 100%); }
+.service-card:nth-child(2) .service-visual { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); }
+.service-card:nth-child(3) .service-visual { background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); }
+.service-card:nth-child(4) .service-visual { background: linear-gradient(135deg, #1e3a5f 0%, #0c4a6e 100%); }
+.service-card:nth-child(5) .service-visual { background: linear-gradient(135deg, #3b0764 0%, #581c87 100%); }
+.service-card:nth-child(6) .service-visual { background: linear-gradient(135deg, #7c2d12 0%, #9a3412 100%); }
+
+.service-icon {
+  position: absolute; top: 16px; left: 16px;
+  width: 44px; height: 44px; border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  display: grid; place-items: center;
+  font-size: 20px; z-index: 2;
+}
+
+.service-badge {
+  position: absolute; top: 16px; right: 16px;
+  font-family: var(--font-display); font-size: 10px;
+  font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 6px 12px;
+  border-radius: 100px; z-index: 2;
+}
+.service-badge.labor { background: rgba(124,58,237,0.9); color: white; }
+.service-badge.serie { background: rgba(0,102,204,0.9); color: white; }
+
+.service-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+.service-name {
+  font-family: var(--font-display); font-size: 17px;
+  font-weight: 600; color: var(--mv-navy);
+  margin-bottom: 8px; letter-spacing: -0.01em;
+}
+.service-desc {
+  font-size: 13px; color: var(--mv-gray-400);
+  line-height: 1.6; flex: 1;
+}
+.service-cta {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 16px; padding-top: 16px;
+  border-top: 1px solid var(--mv-gray-100);
+  font-family: var(--font-display); font-size: 12px;
+  font-weight: 600; color: var(--mv-accent);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.service-card:hover .service-cta { color: var(--mv-navy); }
+
+/* Right: Action Layer (Depth 3) */
+.spatial-actions {
+  background: linear-gradient(180deg, var(--mv-navy) 0%, var(--mv-navy-light) 100%);
+  padding: 40px 32px;
+  display: flex; flex-direction: column;
+  color: var(--mv-white);
+}
+
+.action-header {
+  font-family: var(--font-display); font-size: 12px;
+  font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; color: rgba(255,255,255,0.4);
+  margin-bottom: 24px;
+}
+
+.action-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-md);
+  padding: 24px; margin-bottom: 16px;
+  cursor: pointer; transition: all var(--transition);
+}
+.action-card:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+  transform: translateY(-4px);
+}
+
+.action-icon {
+  width: 48px; height: 48px; border-radius: var(--radius-sm);
+  background: var(--mv-accent);
+  display: grid; place-items: center;
+  font-size: 24px; margin-bottom: 16px;
+}
+
+.action-title {
+  font-family: var(--font-display); font-size: 16px;
+  font-weight: 600; margin-bottom: 8px;
+}
+.action-desc {
+  font-size: 13px; color: rgba(255,255,255,0.5);
+  line-height: 1.5;
+}
+
+.contact-block {
+  margin-top: auto; padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.contact-block h4 {
+  font-family: var(--font-display); font-size: 14px;
+  font-weight: 600; margin-bottom: 8px;
+}
+.contact-block p {
+  font-size: 13px; color: rgba(255,255,255,0.5);
+  margin-bottom: 16px; line-height: 1.5;
+}
+.contact-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 20px; border-radius: var(--radius-sm);
+  background: var(--mv-accent); color: var(--mv-white);
+  font-family: var(--font-display); font-size: 13px;
+  font-weight: 600; text-decoration: none;
+  transition: all var(--transition);
+}
+.contact-cta:hover {
+  background: var(--mv-gold); gap: 14px;
+}
+
+/* ─── Branchen Spatial ─── */
+.branchen-spatial {
+  display: grid; grid-template-columns: 1fr 400px;
+  min-height: 480px;
+}
+
+.branchen-visual {
+  background: linear-gradient(135deg, var(--mv-navy) 0%, var(--mv-blue) 100%);
+  padding: 48px;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.branchen-visual::before {
+  content: ''; position: absolute; inset: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255,107,53,0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0,212,170,0.2) 0%, transparent 40%);
+}
+
+.branchen-visual-content { position: relative; z-index: 1; }
+.branchen-visual h2 {
+  font-family: var(--font-display); font-size: 42px;
+  font-weight: 700; color: var(--mv-white);
+  margin-bottom: 16px; letter-spacing: -0.02em;
+}
+.branchen-visual p {
+  font-size: 16px; color: rgba(255,255,255,0.7);
+  max-width: 400px; line-height: 1.6; margin-bottom: 32px;
+}
+
+.branchen-stats {
+  display: flex; gap: 40px;
+}
+.stat-item h3 {
+  font-family: var(--font-display); font-size: 36px;
+  font-weight: 700; color: var(--mv-accent);
+}
+.stat-item p {
+  font-size: 13px; color: rgba(255,255,255,0.5);
+  margin: 0;
+}
+
+.branchen-grid-compact {
+  padding: 32px;
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 12px; align-content: start;
+  background: var(--mv-white);
+}
+
+.branchen-item-compact {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px; border-radius: var(--radius-sm);
+  background: var(--mv-gray-50);
+  border: 1px solid var(--mv-gray-100);
+  cursor: pointer; text-decoration: none;
+  transition: all var(--transition);
+}
+.branchen-item-compact:hover {
+  background: var(--mv-white);
+  border-color: var(--mv-accent);
+  transform: scale(1.03);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+.branchen-item-icon {
+  width: 40px; height: 40px; border-radius: var(--radius-sm);
+  background: var(--mv-navy); display: grid; place-items: center;
+  font-size: 18px;
+}
+.branchen-item-name {
+  font-family: var(--font-display); font-size: 14px;
+  font-weight: 600; color: var(--mv-navy);
+}
+
+/* ─── Hero Demo ─── */
+.hero {
+  max-width: 1200px; margin: 0 auto; padding: 100px 48px 60px;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--mv-navy), var(--mv-blue));
+  color: var(--mv-white); font-family: var(--font-display);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 10px 20px; border-radius: 100px; margin-bottom: 32px;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: 56px; line-height: 1.05;
+  color: var(--mv-navy); margin-bottom: 24px;
+  font-weight: 700; letter-spacing: -0.03em;
+}
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--mv-accent), var(--mv-gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p {
+  font-size: 18px; color: var(--mv-gray-400);
+  line-height: 1.7; max-width: 600px; margin: 0 auto;
+}
+
+/* ─── Info Box ─── */
+.info-box {
+  max-width: 1200px; margin: 40px auto; padding: 0 48px;
+}
+.info-box-inner {
+  background: linear-gradient(135deg, var(--mv-navy), var(--mv-navy-light));
+  border-radius: var(--radius-lg); padding: 40px 48px;
+  display: flex; gap: 24px; align-items: flex-start;
+  color: var(--mv-white);
+}
+.info-box-inner h3 {
+  font-family: var(--font-display); font-size: 20px;
+  font-weight: 600; margin-bottom: 12px;
+}
+.info-box-inner p {
+  font-size: 14px; color: rgba(255,255,255,0.6);
+  line-height: 1.7;
+}
+.info-icon {
+  width: 56px; height: 56px; border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.1);
+  color: var(--mv-accent);
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-size: 24px;
+  font-weight: 700; flex-shrink: 0;
+}
+
+/* ─── Dummy content ─── */
+.dummy-content {
+  max-width: 1200px; margin: 0 auto; padding: 40px 48px;
+  min-height: 60vh;
+}
+.dummy-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+.dummy-card {
+  height: 320px; border-radius: var(--radius-md);
+  background: var(--mv-white);
+  border: 1px solid var(--mv-gray-200);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+</style>
+</head>
+<body>
+
+<div class="concept-label">Konzept D — <span>Spatial Navigation</span></div>
+
+<!-- Header -->
+<header class="header" id="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark"></div>
+      <span class="logo-text">Microvista</span>
+    </a>
+
+    <nav class="main-nav">
+      <a class="nav-item" data-menu="leistungen">
+        Leistungen
+        <svg class="chevron" viewBox="0 0 14 14" fill="none"><path d="M3 5.5L7 9.5L11 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </a>
+      <a class="nav-item" data-menu="branchen">
+        Branchen
+        <svg class="chevron" viewBox="0 0 14 14" fill="none"><path d="M3 5.5L7 9.5L11 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </a>
+      <a class="nav-item" href="#">Software</a>
+      <a class="nav-item" href="#">Magazin</a>
+      <a class="nav-item" href="#">Wiki</a>
+      <a class="nav-item" href="#">Über uns</a>
+    </nav>
+
+    <div class="header-right">
+      <button class="lang-btn">DE</button>
+      <button class="header-cta"><span>Kontakt</span></button>
+    </div>
+  </div>
+
+  <!-- Mega: Leistungen — Spatial -->
+  <div class="mega-panel" id="mega-leistungen">
+    <div class="mega-spatial">
+      <!-- Layer 1: Context -->
+      <div class="spatial-context">
+        <div class="context-label">Bereich wählen</div>
+        <div class="world-selector">
+          <a href="#" class="world-option active">
+            <div class="world-icon labor">🔬</div>
+            <div class="world-info">
+              <div class="world-name">Labor & Erstmuster</div>
+              <div class="world-desc">Einzelprüfung & Analyse</div>
+            </div>
+          </a>
+          <a href="#" class="world-option">
+            <div class="world-icon serie">⚙️</div>
+            <div class="world-info">
+              <div class="world-name">Serienprüfung</div>
+              <div class="world-desc">Inline-CT & Automation</div>
+            </div>
+          </a>
+        </div>
+
+        <div class="quick-links-title">Schnellzugriff</div>
+        <div class="quick-links">
+          <a href="#" class="quick-link">
+            <span>📄</span> Prüfberichte
+            <span class="quick-link-arrow">→</span>
+          </a>
+          <a href="#" class="quick-link">
+            <span>⏱️</span> Express-Service
+            <span class="quick-link-arrow">→</span>
+          </a>
+          <a href="#" class="quick-link">
+            <span>💬</span> Termin vereinbaren
+            <span class="quick-link-arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Layer 2: Content -->
+      <div class="spatial-content">
+        <div class="content-header">
+          <div class="content-title">Unsere Leistungen</div>
+          <div class="content-meta">6 Services • Labor & Serie</div>
+        </div>
+
+        <div class="service-grid">
+          <a href="#" class="service-card">
+            <div class="service-visual">
+              <div class="service-icon">🔍</div>
+              <span class="service-badge labor">Labor</span>
+            </div>
+            <div class="service-body">
+              <div class="service-name">Erstmusterprüfung</div>
+              <div class="service-desc">Vollständige CT-Analyse Ihrer Prototypen mit detailliertem Prüfbericht.</div>
+              <div class="service-cta">Mehr erfahren →</div>
+            </div>
+          </a>
+
+          <a href="#" class="service-card">
+            <div class="service-visual">
+              <div class="service-icon">⚠️</div>
+              <span class="service-badge labor">Labor</span>
+            </div>
+            <div class="service-body">
+              <div class="service-name">Schadensanalyse</div>
+              <div class="service-desc">Zerstörungsfreie Fehleranalyse bei Reklamationen und Ausfällen.</div>
+              <div class="service-cta">Mehr erfahren →</div>
+            </div>
+          </a>
+
+          <a href="#" class="service-card">
+            <div class="service-visual">
+              <div class="service-icon">📐</div>
+              <span class="service-badge labor">Labor</span>
+            </div>
+            <div class="service-body">
+              <div class="service-name">Reverse Engineering</div>
+              <div class="service-desc">3D-Digitalisierung und Rekonstruktion ohne CAD-Daten.</div>
+              <div class="service-cta">Mehr erfahren →</div>
+            </div>
+          </a>
+
+          <a href="#" class="service-card">
+            <div class="service-visual">
+              <div class="service-icon">🏭</div>
+              <span class="service-badge serie">Serie</span>
+            </div>
+            <div class="service-body">
+              <div class="service-name">Inline-CT</div>
+              <div class="service-desc">CT-Prüfung direkt in Ihrer Produktionslinie — Taktzeit-optimiert.</div>
+              <div class="service-cta">Mehr erfahren →</div>
+            </div>
+          </a>
+
+          <a href="#" class="service-card">
+            <div class="service-visual">
+              <div class="service-icon">✓</div>
+              <span class="service-badge serie">Serie</span>
+            </div>
+            <div class="service-body">
+              <div class="service-name">100% Prüfung</div>
+              <div class="service-desc">Lückenlose Qualitätskontrolle jedes einzelnen Bauteils.</div>
+              <div class="service-cta">Mehr erfahren →</div>
+            </div>
+          </a>
+
+          <a href="#" class="service-card">
+            <div class="service-visual">
+              <div class="service-icon">🤖</div>
+              <span class="service-badge serie">Serie</span>
+            </div>
+            <div class="service-body">
+              <div class="service-name">KI-Automatisierung</div>
+              <div class="service-desc">ML-gestützte Auswertung für schnellere Ergebnisse.</div>
+              <div class="service-cta">Mehr erfahren →</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Layer 3: Actions -->
+      <div class="spatial-actions">
+        <div class="action-header">Aktionen</div>
+        
+        <div class="action-card">
+          <div class="action-icon">📤</div>
+          <div class="action-title">Bauteil einsenden</div>
+          <div class="action-desc">Senden Sie uns Ihr Bauteil zur Analyse</div>
+        </div>
+
+        <div class="action-card">
+          <div class="action-icon">📊</div>
+          <div class="action-title">Bericht anfordern</div>
+          <div class="action-desc">Beispiel-Prüfbericht erhalten</div>
+        </div>
+
+        <div class="contact-block">
+          <h4>Direkter Kontakt</h4>
+          <p>Montag–Freitag<br>8:00–17:00 Uhr</p>
+          <a href="#" class="contact-cta">Anrufen →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mega: Branchen — Spatial -->
+  <div class="mega-panel" id="mega-branchen">
+    <div class="branchen-spatial">
+      <div class="branchen-visual">
+        <div class="branchen-visual-content">
+          <h2>14 Branchen.<br>Eine Lösung.</h2>
+          <p>Von Automotive bis Pharma — wir kennen die spezifischen Prüfanforderungen Ihrer Industrie.</p>
+          <div class="branchen-stats">
+            <div class="stat-item">
+              <h3>14+</h3>
+              <p>Branchen</p>
+            </div>
+            <div class="stat-item">
+              <h3>500+</h3>
+              <p>Kunden</p>
+            </div>
+            <div class="stat-item">
+              <h3>25J</h3>
+              <p>Erfahrung</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branchen-grid-compact">
+        <a href="#" class="branchen-item-compact">
+          <div class="branchen-item-icon">🚗</div>
+          <span class="branchen-item-name">Automotive</span>
+        </a>
+        <a href="#" class="branchen-item-compact">
+          <div class="branchen-item-icon">✈️</div>
+          <span class="branchen-item-name">Aerospace</span>
+        </a>
+        <a href="#" class="branchen-item-compact">
+          <div class="branchen-item-icon">⚕️</div>
+          <span class="branchen-item-name">Medizintechnik</span>
+        </a>
+        <a href="#" class="branchen-item-compact">
+          <div class="branchen-item-icon">⚡</div>
+          <span class="branchen-item-name">Elektromobilität</span>
+        </a>
+        <a href="#" class="branchen-item-compact">
+          <div class="branchen-item-icon">🔧</div>
+          <span class="branchen-item-name">Maschinenbau</span>
+        </a>
+        <a href="#" class="branchen-item-compact">
+          <div class="branchen-item-icon">🏭</div>
+          <span class="branchen-item-name">Gießerei</span>
+        </a>
+        <a href="#" class="branchen-item-compact">
+          <div class="branchen-item-icon">🖨️</div>
+          <span class="branchen-item-name">3D-Druck</span>
+        </a>
+        <a href="#" class="branchen-item-compact">
+          <div class="branchen-item-icon">💊</div>
+          <span class="branchen-item-name">Pharma</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="mega-overlay" id="mega-overlay"></div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">Konzept D — Spatial Navigation</div>
+  <h1>Navigation mit <em>räumlicher Tiefe</em></h1>
+  <p>Drei Ebenen statt einer flachen Liste: Kontext (Welten), Content (Services) und Actions (Schnellzugriffe). Jede Ebene schwebt visuell auf ihrer eigenen Z-Tiefe.</p>
+</section>
+
+<!-- Info -->
+<div class="info-box">
+  <div class="info-box-inner">
+    <div class="info-icon">D</div>
+    <div>
+      <h3>Konzept D — So funktioniert es</h3>
+      <p>Das Megamenü nutzt ein 3-Spalten-Layout mit räumlicher Tiefenwirkung. Links die Kontext-Ebene mit Welt-Auswahl (Labor/Serie) und Schnelllinks. In der Mitte die Content-Ebene mit 6 Service-Karten in einem Grid — jede mit eigenem Farbverlauf und Hover-Animation. Rechts die Action-Ebene mit dunklem Hintergrund für Call-to-Actions und Kontakt. Bei „Branchen" dominiert ein großes Hero-Visual links mit Statistiken, rechts ein kompaktes Grid.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Dummy content -->
+<div class="dummy-content">
+  <div class="dummy-grid">
+    <div class="dummy-card"></div>
+    <div class="dummy-card"></div>
+    <div class="dummy-card"></div>
+  </div>
+</div>
+
+<script>
+const navItems = document.querySelectorAll('.nav-item[data-menu]');
+const overlay = document.getElementById('mega-overlay');
+const header = document.getElementById('header');
+let activeMenu = null;
+let closeTimeout = null;
+
+function openMenu(menuId) {
+  clearTimeout(closeTimeout);
+  if (activeMenu && activeMenu !== menuId) {
+    document.getElementById('mega-' + activeMenu)?.classList.remove('visible');
+  }
+  const panel = document.getElementById('mega-' + menuId);
+  if (!panel) return;
+  panel.classList.add('visible');
+  overlay.classList.add('visible');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector(`[data-menu="${menuId}"]`)?.classList.add('active');
+  activeMenu = menuId;
+}
+
+function closeAllMenus(immediate) {
+  const doClose = () => {
+    document.querySelectorAll('.mega-panel').forEach(p => p.classList.remove('visible'));
+    overlay.classList.remove('visible');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    activeMenu = null;
+  };
+  if (immediate) doClose();
+  else closeTimeout = setTimeout(doClose, 200);
+}
+
+navItems.forEach(item => {
+  item.addEventListener('mouseenter', () => openMenu(item.dataset.menu));
+});
+
+document.querySelectorAll('.mega-panel').forEach(panel => {
+  panel.addEventListener('mouseenter', () => clearTimeout(closeTimeout));
+  panel.addEventListener('mouseleave', () => closeAllMenus());
+});
+
+header.addEventListener('mouseleave', () => closeAllMenus());
+overlay.addEventListener('click', () => closeAllMenus(true));
+</script>
+
+</body>
+</html>

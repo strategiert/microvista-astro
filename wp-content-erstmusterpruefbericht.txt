@@ -1,0 +1,296 @@
+PAGE: N/A
+URL: https://www.microvista.de/industrielle-computertomographie/prufaufgaben/erstmusterpruefbericht/
+================================================================================
+
+=== UEBERSCHRIFTEN ===
+[H1] ERSTMUSTERPRÜFBERICHT (EMPB)
+[H2] Was ist ein Erstmusterprüfbericht (EMPB)?
+[H2] Bedeutung des EMPB in der Automobilindustrie
+[H2] Erstmusterprüfbericht nach VDA und PPAP
+[H2] Wann ist ein Erstmusterprüfbericht erforderlich?
+[H2] Erstellung eines Erstmusterprüfberichts – Schritt für Schritt
+[H2] Industrielle CT für die Erstmusterprüfung – Die Vorteile
+[H2] Microvista Services für Ihren Erstmusterprüfbericht
+[H2] EMPB mit Microvista
+[H2] Kontaktieren Sie uns jetzt!
+[H2] Häufig gestellte Fragen (FAQ)
+[H3] Zentrale Funktionen des Erstmusterprüfberichts:
+[H3] Warum ist der EMPB so wichtig?
+[H3] VDA Band 2 (Produktionsprozess- und Produktfreigabe)
+[H3] PPAP (Production Part Approval Process)
+[H3] VDA und PPAP im Vergleich
+[H3] Typische Anforderungen für einen EMPB:
+[H3] Ablauf der EMPB-Erstellung:
+[H3] Herausforderungen bei der Erstellung
+[H3] Warum CT für Erstmusterprüfberichte?
+[H3] Typische CT-Prüfungen für EMPB
+[H3] Besondere Vorgaben nach VDA für CT-Prüfungen
+[H3] 1. CT-Laborprüfung – Full-Service für Ihre Erstmuster
+[H3] 2. Cloud-Auswertung – Für Kunden mit eigenem CT
+[H3] 3. Mobiles CT (ScanExpress) – Das Labor kommt zu Ihnen
+[H3] Was kostet ein Erstmusterprüfbericht mit CT?
+[H3] Wie lange dauert die Erstellung eines EMPB?
+[H3] Ist industrielle CT für VDA Band 2 zugelassen?
+[H3] Können auch große Bauteile geprüft werden?
+[H3] Welche Branchen nutzen Ihre EMPB-Services?
+
+=== BILDER ===
+
+=== FLIESSTEXT ===
+Der Serienstart Ihres neuen Produkts steht bevor – doch ohne ordnungsgemäßen Erstmusterprüfbericht (EMPB) droht die Produktfreigabe zu scheitern.In der Automobilindustrie und bei anspruchsvollen Lieferanten ist derEMPB nach VDA Band 2oder PPAP unverzichtbar: Er dokumentiert, dass Ihr Produkt alle Qualitätsanforderungen erfüllt und unter realistischen Bedingungen gefertigt wurde.
+
+Microvista unterstützt Sie bei der Erstellung von Erstmusterprüfberichten mit zerstörungsfreier industrieller Computertomographie – präzise, normkonform und schnell. Ob CT-Laborprüfung,Cloud-Auswertungodermobiles CTdirekt bei Ihnen vor Ort: Wir sichern Ihre Freigabe nach VDA-Standard.
+
+ISO 9001:2015zertifiziert
+
+VDA- undPPAP-konform
+
+Express-Service(<3 Tage)
+
+Über 10 JahreErfahrung
+
+EinErstmusterprüfbericht (EMPB)ist ein standardisiertes Dokument zur Produktfreigabe, das im Rahmen desProduction Part Approval Process (PPAP)oder nachVDA Band 2(Verband der Automobilindustrie) erstellt wird. Der EMPB dient als Nachweis, dass ein Lieferant die Anforderungen an das Produkt verstanden hat und in der Lage ist, dieses Produkt in die Serienfertigung unter realen Produktionsbedingungen zu überführen.
+
+Dokumentation der Produktqualität:Der Erstmusterprüfbericht dokumentiert alle relevanten Prüfergebnisse, Messungen und Analysen der ersten Teile aus dem Produktionsprozess. Er enthält Informationen zu Maßen, Toleranzen, Materialeigenschaften und funktionalen Merkmalen.
+
+Nachweis der Konformität:Mit dem EMPB weist der Lieferant nach, dass das Bauteil oder die Baugruppe alle Spezifikationen, Zeichnungen und Qualitätsanforderungen des Kunden erfüllt. Dies schließt auch die Einhaltung von Normen wie IATF 16949, ISO 9001 oder branchenspezifischen Standards ein.
+
+Transparenz zwischen Kunde und Lieferant:Der Erstmusterprüfbericht wird dem Kunden zur Prüfung vorgelegt und schafft Vertrauen. Er zeigt, dass die Fertigung unter den Vorgaben des Kunden durchgeführt wurde und reproduzierbar ist.
+
+Freigabe für Serienfertigung:Erst nach erfolgreicher Prüfung und Freigabe des EMPB durch den Kunden darf der Lieferant mit der Serienproduktion beginnen. Der Erstmusterprüfbericht hält somit den Übergang vom Erstmuster zur Serie fest.
+
+In der Automobilindustrie spielt der Erstmusterprüfbericht eine zentrale Rolle im Qualitätsmanagement. Fahrzeugkomponenten unterliegen höchsten Sicherheits- und Qualitätsstandards – bereits kleine Abweichungen können zu Funktionsstörungen, Rückrufen oder Sicherheitsrisiken führen.
+
+Sicherstellung der Produktqualität:Der EMPB stellt sicher, dass jedes Bauteil – vom Zylinderkopf über Hairpin-Statoren bis zu Batteriesystemen – exakt den Spezifikationen entspricht, bevor es in Fahrzeugen verbaut wird.
+
+Rückverfolgbarkeit:Jeder Erstmusterprüfbericht dokumentiert den gesamten Bemusterungsprozess. Im Fall von Qualitätsproblemen lässt sich nachvollziehen, welche Tests durchgeführt wurden und ob alle Anforderungen erfüllt waren.
+
+Lieferantenqualifikation:Neue Lieferanten oder Unterlieferanten müssen durch Erstmusterprüfberichte nachweisen, dass sie die geforderten Qualitätsstandards erfüllen. Dies ist Voraussetzung für die Aufnahme in die Lieferkette.
+
+Kostenreduktion:Durch frühzeitig erkannte Fehler im Produktionsprozess verhindert der EMPB teure Nachbesserungen, Ausschuss oder Produktionsstillstände in der Serienfertigung.
+
+Compliance:Die Einhaltung von Standards wie VDA Band 2, PPAP (nach AIAG) oder IATF 16949 ist für Zulieferer der Automobilindustrie verpflichtend. Der Erstmusterprüfbericht dokumentiert diese Compliance gegenüber OEMs.
+
+Je nach Region und Kunde gibt es unterschiedliche Standards für die Erstbemusterung. Die beiden wichtigsten sindVDA Band 2(Europa) undPPAP(Nordamerika).
+
+Der VDA Band 2 ist der europäische Standard für die Produktfreigabe, herausgegeben vom Verband der Automobilindustrie. Er definiert den Prozess der PPF (Produktionsprozess- und Produktfreigabe) und beschreibt, welche Nachweise ein Lieferant erbringen muss.
+
+Inhalte eines Erstmusterprüfberichts nach VDA:
+
+Der PPAP ist der nordamerikanische Standard, entwickelt von der AIAG (Automotive Industry Action Group). Er ist dem VDA Band 2 ähnlich, unterscheidet sich jedoch in Detailtiefe und Dokumentationsumfang.
+
+PPAP-Level (1-5):Je nach Risiko und Kundenanforderung wird ein PPAP-Level festgelegt. Level 3 (am häufigsten) erfordert einen vollständigen Erstmusterprüfbericht mit allen Messprotokollen und Nachweisen.
+
+Beide Standards verfolgen dasselbe Ziel: die Sicherstellung, dass der Lieferant fähig ist, Produkte in gleichbleibender Qualität zu fertigen. Der EMPB nach VDA ist in Europa üblich, während nordamerikanische Kunden meist PPAP verlangen. Insgesamt ist der Erstmusterprüfbericht in beiden Systemen das zentrale Dokument zur Produktfreigabe.
+
+Ein Erstmusterprüfbericht muss in verschiedenen Situationen angefertigt werden – nicht nur bei Neuteilen, sondern auch bei Änderungen am Produkt oder Produktionsprozess.
+
+Die Erstbemusterung wird so lange wiederholt, bis alle Anforderungen erfüllt sind. Der Erstmusterprüfbericht kann der Lieferant erst dann beim Kunden einreichen, wenn sämtliche Prüfmerkmale innerhalb der Toleranzen liegen und alle Nachweise vollständig vorliegen.
+
+Die Erstellung von Erstmusterprüfberichten folgt einem klar definierten Prozess, um Vollständigkeit und Nachvollziehbarkeit zu gewährleisten.
+
+Komplexe Geometrien:Viele moderne Bauteile (z. B. bionische Strukturen, additive Fertigung) sind mit konventionellen Methoden schwer messbar. Hier bietet industrielle CT entscheidende Vorteile.
+
+Innenliegende Merkmale:Schweißnähte, Lötstellen, Klebungen oder Porositäten im Inneren von Bauteilen sind äußerlich nicht sichtbar. Ohne zerstörungsfreie Prüfung müssten Erstmuster zerschnitten werden – ein kostspieliger und zeitaufwändiger Prozess.
+
+Zeitdruck:Verzögerungen bei der EMPB-Erstellung können den gesamten Serienstart gefährden. Express-Services und effiziente Prüfverfahren sind daher entscheidend.
+
+Die industrielle Computertomographie (CT) revolutioniert die Erstbemusterung. Microvista bietet CT-Prüfungen, die weit über klassische Messverfahren hinausgehen und einen vollständigen3D-Einblick in jedes Bauteilermöglichen.
+
+Der VDA Band 2 erkenntindustrielle CT als Prüfverfahrenausdrücklich an, wenn folgende Anforderungen erfüllt sind:
+
+Microvista erfüllt alle VDA-Anforderungen und ist ISO 9001:2015 zertifiziert – Ihre Garantie für normkonforme Erstmusterprüfberichte.
+
+Senden Sie Ihre Bauteile oder Baugruppen an unser ISO-zertifiziertes CT-Labor. Unsere Experten übernehmen Scan, Auswertung und Berichterstellung.
+
+Technische Daten:
+
+Sie besitzen bereits ein industrielles CT? Nutzen Sie unseren Cloud-Service für professionelle Auswertung Ihrer Scan-Daten.
+
+So funktioniert’s:
+
+Das weltweit einzige mobile industrielle CT-System wird direkt an Ihrem Produktionsstandort aufgestellt. Ideal für umfangreiche Erstbemusterungen oder Serien-Vorstarts.
+
+Microvista bietet drei flexible Service-Modelle, die perfekt auf die Anforderungen der Erstbemusterung zugeschnitten sind. Wählen Sie die Lösung, die am besten zu Ihrem Projekt passt.
+
+Der Erstmusterprüfbericht (EMPB) ist das zentrale Dokument für die Produktfreigabe nach VDA Band 2 oder PPAP. Er dokumentiert, dass Ihr Produkt alle Qualitätsanforderungen erfüllt und unter realen Produktionsbedingungen gefertigt werden kann.
+
+Microvista unterstützt Sie bei der Erstellung Ihres EMPB mit:
+
+Stehen Sie vor einer Erstbemusterung? Benötigen Sie einen Erstmusterprüfbericht für Ihren Kunden? Kontaktieren Sie unsere Experten für eine kostenlose Beratung und erfahren Sie, wie Microvista Ihre Produktfreigabe beschleunigt.
+
+📞 +49 3944 950-50📧 vertrieb@microvista.de🌐 www.microvista.de
+
+Die Kosten variieren je nach Bauteilgröße, Komplexität und Prüfumfang. Für ein typisches 200-mm-Bauteil mit Porositätsanalyse beginnen die Preise bei 125 € für Einzelprüfungen. Kontaktieren Sie uns für ein individuelles Angebot.
+
+Standardlieferzeit: 14 Tage. Bemusterungen: <3 Tage. Express-Option: <24 Stunden verfügbar.
+
+Ja, industrielle CT ist als Prüfverfahren im VDA Band 2 anerkannt, sofern alle metrologischen Anforderungen (Kalibrierung, Prozessfähigkeit, Messunsicherheit) erfüllt sind – was bei Microvista garantiert ist.
+
+Ja, unser CT-Labor prüft Bauteile bis 715 mm Durchmesser und 1600 mm Länge. Für noch größere Komponenten bieten wir mobile CT-Lösungen an.
+
+Hauptsächlich Automobilindustrie, E-Mobilität, Gießereien, Luftfahrt und Medizintechnik – überall dort, wo höchste Qualitätsanforderungen gelten.
+
+
+=== LISTEN ===
+Liste ():
+  - Deckblatt mit Stammdaten (Lieferant, Kunde, Teilenummer, Zeichnungsstand)
+  - Maßblätter mit allen Prüfmerkmalen und Toleranzen
+  - Messprotokolle (taktile Messung, optische Messung, CT-Auswertung)
+  - Materialprüfzeugnisse
+  - Prozessnachweis (FMEA, Prüfplan, Produktionslenkungsplan)
+  - Erstmusterprüfung innerer Strukturen (z. B. Porositätsanalyse, Schweißnahtprüfung)
+
+Liste (elementor-icon-list-items):
+  - Vorserien- und Neuteile:Bei der Entwicklung neuer Bauteile oder Baugruppen ist eine Erstbemusterung zwingend erforderlich, um die Serienreife zu dokumentieren.
+  - Neuer Lieferant oder Unterlieferant:Wechselt ein Kunde den Lieferanten für ein bestehendes Bauteil, muss der neue Lieferant durch einen EMPB nachweisen, dass er die Qualitätsanforderungen erfüllt.
+  - Materialwechsel:Änderungen am Werkstoff (z. B. von Aluminium auf Magnesium) erfordern eine erneute Erstmusterprüfung, da sich Materialeigenschaften auf Funktion und Haltbarkeit auswirken.
+  - Angepasste Fertigungsverfahren:Modifikationen an Produktionsprozessen wie Klebungen, Lötungen, Schweißungen oder Gießverfahren machen einen neuen Erstmusterprüfbericht notwendig.
+  - Einsatz neuer Produktionswerkzeuge und -Mittel:Neue Spritzgießwerkzeuge, Druckgussformen oder CNC-Programme können Abweichungen erzeugen.
+  - Verlagerung des Produktionsstandortes:Wird die Fertigung an einen anderen Standort verlagert, ist eine neue Erstbemusterung erforderlich.
+  - Längeres Aussetzen der Fertigung:Nach längeren Produktionspausen (häufig >2 Jahre) kann der Kunde eine erneute Bemusterung verlangen.
+  - Korrekturmaßnahmen nach Qualitätsproblemen:Treten in der Serienproduktion Fehler auf, muss ein aktualisierter EMPB die Wirksamkeit der Maßnahmen belegen.
+
+Liste ():
+  - Klärung der Kundenanforderungen (VDA oder PPAP, Level, Umfang)
+  - Festlegung der Prüfmerkmale basierend auf Zeichnung und Spezifikation
+  - Auswahl geeigneter Prüfverfahren (taktil, optisch, CT)
+
+Liste ():
+  - Fertigung der ersten Teile im Serienprozess (nicht im Prototypenbau)
+  - Dokumentation aller Produktionsparameter
+  - Einhaltung der realen Produktionsbedingungen
+
+Liste ():
+  - Dimensionale Messungen (Maße, Toleranzen, Geometrie)
+  - Materialprüfungen (Zugfestigkeit, Härte, chemische Zusammensetzung)
+  - Funktionsprüfungen (Dichtheit, Belastbarkeit, Lebensdauer)
+  - Zerstörungsfreie Prüfung mit industrieller CT (Porositätsanalyse, Wandstärkenmessung, innere Defekte)
+
+Liste ():
+  - Erstmusterprüfbericht erstellen mit allen Messergebnissen
+  - Erstellung von Prüfprotokollen, Maßblättern und Nachweisdokumenten
+  - Ergänzung durch Prozessnachweise (FMEA, Kontrollpläne)
+  - Zusammenstellung aller erforderlichen Anlagen
+
+Liste ():
+  - Vorlage des vollständigen EMPB beim Kunden
+  - Prüfung durch Qualitätsmanagement des Kunden
+  - Bei Abweichungen: Nachbesserung und erneute Bemusterung
+  - Nach erfolgreicher Prüfung: Freigabe für Serienfertigung
+
+Liste (elementor-icon-list-items):
+  - Zerstörungsfreie Prüfung:Das Erstmuster bleibt intakt und kann nach der Prüfung weiterverwendet werden
+  - Vollständige 3D-Analyse:Jede innere Struktur wird erfasst – von Porositäten über Schweißnahtfehler bis zu Wandstärkenabweichungen
+  - Prüfung des gesamten Bauteils:CT prüft das komplette Volumen auf Fehlerhaftigkeit
+  - Messung komplexer Geometrien:Hinterschnitte, Hohlräume, filigrane Strukturen – CAD-Soll-Ist-Vergleiche inklusive
+  - Prüfung von Verbindungen:Lötungen, Klebungen und Schweißungen werden auf Poren, Lunker und Anbindungsfehler untersucht
+  - Falschfarbenbilder:3D-Visualisierungen zeigen geometrische Abweichungen farbcodiert
+  - VDA-konforme Dokumentation:Alle CT-Prüfergebnisse werden normkonform dokumentiert
+  - Schnelle Ergebnisse:Express-Service mit Ergebnissen in unter 3 Tagen
+
+Liste (elementor-icon-list-items):
+  - Porositätsanalyse bei Gussteilen (Aluminium, Magnesium, Eisen)
+  - Wandstärkenmessung bei dünnwandigen Komponenten (E-Motor-Gehäuse, Zylinderköpfe)
+  - Schweißnahtprüfung bei Hairpin-Statoren (über 200.000 erfolgreich geprüft)
+  - Montage- und Fügekontrolle bei Baugruppen (Pumpen, Ventile, Batteriesysteme)
+  - CAD-Soll-Ist-Vergleich für dimensionale Freigabe
+  - Defekterkennung (Risse, Lunker, Einschlüsse, Kernreste, Grat, Späne)
+
+Liste ():
+  - Kalibrierung und Rückverfolgbarkeit der Messmittel
+  - Prozessfähigkeitsnachweis (Gage R&R)
+  - Dokumentation der CT-Parameter (Voxelgröße, Scanparameter, Auswertungsalgorithmus)
+  - Angabe von Messunsicherheiten
+
+Liste ():
+  - Einmalige Erstbemusterungen
+  - Komplexe Bauteile mit hohen Anforderungen
+  - Kunden ohne eigenes CT-Equipment
+
+Liste ():
+  - Max. Einhüllkreis: 715 mm
+  - Max. Länge: 1600 mm
+  - Max. Gewicht: 100 kg
+  - Räumliche Auflösung: 0,02 bis 1 mm
+  - Messgenauigkeit: ±0,025 mm
+
+Liste ():
+  - Standard: 14 Tage
+  - Bemusterung: <3 Tage
+  - Express: <24 Stunden (+30% Aufpreis)
+
+Liste ():
+  - Sie scannen Ihre Erstmuster mit Ihrem eigenen CT
+  - Upload der rekonstruierten CT-Daten in die Microvista Secure Cloud
+  - KI-gestützte automatische Auswertung nach Ihren Vorgaben
+  - Ergebnisübermittlung als Prüfbericht und Daten
+
+Liste ():
+  - Enorme Zeitersparnis durch Automatisierung
+  - Meist <24 Stunden Bearbeitungszeit
+  - Kein manueller Auswertungsaufwand
+  - VDA- und PPAP-konforme Berichte
+
+Liste ():
+  - Große oder empfindliche Erstmuster (Transport riskant)
+  - Umfangreiche Bemusterung vor Serienstart
+  - SOP-Freigaben (Start of Production)
+  - Temporäre CT-Inspektion während Produktionsanlauf
+
+Liste ():
+  - ScanExpress Long:Max. Hüllkreis 798 mm, max. Höhe 1802 mm
+  - ScanExpress Compact:Platzsparend für beengte Produktionsumgebungen
+
+Liste ():
+  - Kein Transportrisiko für wertvolle Erstmuster
+  - Sofortige Prüfergebnisse vor Ort
+  - Flexible Mietdauer (Minimum 1 Monat)
+  - Vollautomatische KI-gestützte Auswertung
+  - 24/7-Support durch Microvista-Experten
+
+Liste ():
+  - Zerstörungsfreier industrieller CT– für vollständige 3D-Analyse
+  - VDA- und PPAP-konformer Dokumentation– normgerechte Prüfberichte
+  - Express-Service– Ergebnisse in <3 Tagen
+  - Drei flexiblen Service-Modellen– Labor, Cloud oder mobiles CT
+  - ISO 9001:2015 Zertifizierung– garantierte Prozessqualität
+  - Über 10 Jahren Erfahrung– Experten für Automobilindustrie und Zulieferer
+
+Liste ():
+  - Optionen verwalten
+  - Dienste verwalten
+  - Verwalten von {vendor_count}-Lieferanten
+  - Lese mehr über diese Zwecke
+
+Liste ():
+  - {title}
+  - {title}
+  - {title}
+
+
+=== FAQ / TOGGLES ===
+(keine FAQs gefunden)
+
+=== CTAs / BUTTONS ===
+  [Express-Inspektionbuchen] -> https://www.microvista.de/kontakt/
+  [Express-Inspektionbuchen] -> 
+  [Express-Inspektionbuchen] -> 
+  [Gratis-Beratungsichern] -> https://www.microvista.de/kontakt/
+  [Gratis-Beratungsichern] -> 
+  [Gratis-Beratungsichern] -> 
+  [Mehr zur CT-Laborprüfung] -> https://www.microvista.de/industrielle-computertomographie/dienstleistungen/ct-labor/
+  [Mehr zur CT-Laborprüfung] -> 
+  [Mehr zur CT-Laborprüfung] -> 
+  [Mehr zur Cloud-Auswertung] -> https://www.microvista.de/industrielle-computertomographie/dienstleistungen/ct-datenauswertung/
+  [Mehr zur Cloud-Auswertung] -> 
+  [Mehr zur Cloud-Auswertung] -> 
+  [Mehr zum mobilen CT] -> https://www.mobile-ct.eu
+  [Mehr zum mobilen CT] -> 
+  [Mehr zum mobilen CT] -> 
+  [Gratis-Beratung sichern] -> https://www.microvista.de/kontakt/
+  [Gratis-Beratung sichern] -> 
+  [Gratis-Beratung sichern] -> 
+  [Express-Inspektion buchen] -> https://www.microvista.de/kontakt/
+  [Express-Inspektion buchen] -> 
+  [Express-Inspektion buchen] -> 

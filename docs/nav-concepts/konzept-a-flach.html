@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konzept A — Flache Navigation (Microvista Edition)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   MICROVISTA DESIGN SYSTEM
+   ═══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --mv-navy: #00253d;
+  --mv-navy-light: #0a3d62;
+  --mv-blue: #0066cc;
+  --mv-accent: #f07020;
+  --mv-accent-hover: #d85e12;
+  --mv-violet: #7c5cb5;
+  --mv-violet-light: #9b7fd4;
+  --mv-cyan: #3dd8e0;
+  --mv-white: #ffffff;
+  --mv-gray-50: #f8fafc;
+  --mv-gray-100: #f1f5f9;
+  --mv-gray-200: #e2e8f0;
+  --mv-gray-300: #cbd5e1;
+  --mv-gray-400: #94a3b8;
+  --mv-gray-500: #64748b;
+  --mv-gray-600: #475569;
+  --mv-gray-700: #334155;
+  --mv-gray-800: #1e293b;
+  --mv-gray-900: #0f172a;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --transition: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--mv-gray-800);
+  background: var(--mv-white);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+/* ─── Concept Label ─── */
+.concept-label {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: var(--mv-navy); color: var(--mv-white);
+  font-family: var(--font-display); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 12px 20px; border-radius: 100px;
+  box-shadow: var(--shadow-xl);
+}
+.concept-label span { color: var(--mv-accent); }
+
+/* ─── Top Bar ─── */
+.topbar {
+  background: var(--mv-navy);
+  color: var(--mv-gray-400);
+  font-size: 13px;
+  padding: 10px 0;
+}
+.topbar-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 48px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.topbar a { color: var(--mv-gray-300); text-decoration: none; transition: color var(--transition); }
+.topbar a:hover { color: var(--mv-white); }
+.topbar-links { display: flex; gap: 32px; align-items: center; }
+.topbar-links a { display: flex; align-items: center; gap: 8px; }
+.lang-switch { display: flex; gap: 4px; }
+.lang-switch a {
+  padding: 4px 10px; border-radius: var(--radius-sm);
+  font-weight: 600; font-size: 12px; text-transform: uppercase;
+  color: var(--mv-gray-400); transition: all var(--transition);
+}
+.lang-switch a.active { background: rgba(255,255,255,0.15); color: var(--mv-white); }
+.lang-switch a:hover:not(.active) { color: var(--mv-white); }
+
+/* ─── Main Header ─── */
+.header {
+  background: var(--mv-white);
+  border-bottom: 1px solid var(--mv-gray-200);
+  position: sticky; top: 0; z-index: 1000;
+  box-shadow: var(--shadow-sm);
+}
+.header-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 48px;
+  display: flex; align-items: center; height: 80px;
+  justify-content: space-between;
+}
+
+/* Logo */
+.logo {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; color: var(--mv-navy);
+}
+.logo-mark {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--mv-navy) 0%, var(--mv-navy-light) 100%);
+  border-radius: var(--radius-md);
+  display: grid; place-items: center;
+  position: relative;
+}
+.logo-mark::before {
+  content: ''; position: absolute; width: 18px; height: 18px;
+  border: 2.5px solid white; border-radius: 50%; opacity: 0.9;
+}
+.logo-mark::after {
+  content: ''; position: absolute; width: 6px; height: 6px;
+  background: var(--mv-accent); border-radius: 50%;
+}
+.logo-text {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 24px; letter-spacing: -0.02em;
+  color: var(--mv-navy);
+}
+
+/* Navigation */
+.main-nav { display: flex; align-items: center; gap: 8px; }
+.nav-item {
+  position: relative; padding: 0 20px; height: 80px;
+  display: flex; align-items: center; cursor: pointer;
+  font-family: var(--font-display); font-size: 15px;
+  font-weight: 500; color: var(--mv-gray-600);
+  transition: all var(--transition);
+  text-decoration: none; letter-spacing: -0.01em;
+}
+.nav-item:hover { color: var(--mv-navy); }
+.nav-item::after {
+  content: ''; position: absolute; bottom: 0; left: 20px; right: 20px;
+  height: 3px; background: var(--mv-accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--transition);
+  border-radius: 3px 3px 0 0;
+}
+.nav-item:hover::after,
+.nav-item.active::after { transform: scaleX(1); }
+
+.nav-item .chevron {
+  width: 16px; height: 16px; margin-left: 6px;
+  transition: transform var(--transition);
+  opacity: 0.5;
+}
+.nav-item:hover .chevron { transform: rotate(180deg); opacity: 1; }
+
+/* CTA Button */
+.header-cta {
+  background: var(--mv-accent); color: var(--mv-white);
+  border: none; padding: 12px 28px; border-radius: var(--radius-md);
+  font-family: var(--font-display); font-size: 14px; font-weight: 600;
+  cursor: pointer; letter-spacing: -0.01em;
+  transition: all var(--transition);
+  box-shadow: 0 4px 14px rgba(240,112,32,0.3);
+}
+.header-cta:hover { 
+  background: var(--mv-accent-hover); 
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(240,112,32,0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MEGA MENU PANEL
+   ═══════════════════════════════════════════════════════════════ */
+.mega-overlay {
+  position: fixed; inset: 0; top: 0;
+  background: rgba(2,6,23,0.4);
+  backdrop-filter: blur(8px);
+  opacity: 0; visibility: hidden;
+  transition: all 400ms ease;
+  z-index: 998;
+}
+.mega-overlay.visible { opacity: 1; visibility: visible; }
+
+.mega-panel {
+  position: absolute; top: 80px; left: 0; right: 0;
+  background: var(--mv-white);
+  border-top: 3px solid var(--mv-accent);
+  box-shadow: var(--shadow-xl);
+  opacity: 0; visibility: hidden;
+  transform: translateY(-12px);
+  transition: all var(--transition);
+  z-index: 999;
+}
+.mega-panel.visible {
+  opacity: 1; visibility: visible;
+  transform: translateY(0);
+}
+
+.mega-inner {
+  max-width: 1400px; margin: 0 auto;
+  padding: 48px;
+}
+
+.mega-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+/* ─── Service Cards ─── */
+.service-card {
+  position: relative; border-radius: var(--radius-lg);
+  overflow: hidden; cursor: pointer;
+  background: var(--mv-white);
+  border: 1px solid var(--mv-gray-200);
+  transition: all var(--transition);
+  text-decoration: none; color: inherit;
+  display: block;
+  box-shadow: var(--shadow-sm);
+}
+.service-card:hover {
+  border-color: transparent;
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-xl);
+}
+
+.card-image {
+  height: 200px; position: relative; overflow: hidden;
+}
+
+/* Realistic CT Scan Visuals */
+.card-image-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transition: transform 600ms ease;
+}
+.service-card:hover .card-image-inner {
+  transform: scale(1.08);
+}
+
+/* Different CT scan simulations for each service */
+.ct-visual {
+  width: 100%; height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Erstmuster - Blue industrial */
+.ct-visual-1 {
+  background: linear-gradient(135deg, #0a2540 0%, #1a3a54 50%, #0d2137 100%);
+}
+.ct-visual-1::before {
+  content: ''; position: absolute; inset: 0;
+  background: 
+    radial-gradient(circle at 30% 50%, rgba(0,102,204,0.3) 0%, transparent 50%),
+    repeating-linear-gradient(90deg, transparent 0px, transparent 3px, rgba(255,255,255,0.03) 3px, rgba(255,255,255,0.03) 4px);
+}
+
+/* Schadensanalyse - Violet warning */
+.ct-visual-2 {
+  background: linear-gradient(135deg, #1a0d30 0%, #2d1b4e 50%, #1a0d30 100%);
+}
+.ct-visual-2::before {
+  content: ''; position: absolute; inset: 0;
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(124,92,181,0.4) 0%, transparent 40%),
+    repeating-linear-gradient(0deg, transparent 0px, transparent 20px, rgba(255,77,0,0.05) 20px, rgba(255,77,0,0.05) 21px);
+}
+
+/* Reverse Engineering - Teal/technical */
+.ct-visual-3 {
+  background: linear-gradient(135deg, #0d2a1a 0%, #1a4030 50%, #0d1f15 100%);
+}
+.ct-visual-3::before {
+  content: ''; position: absolute; inset: 0;
+  background: 
+    linear-gradient(45deg, transparent 48%, rgba(61,216,224,0.1) 49%, rgba(61,216,224,0.1) 51%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, rgba(61,216,224,0.1) 49%, rgba(61,216,224,0.1) 51%, transparent 52%);
+  background-size: 30px 30px;
+}
+
+/* Inline-CT - Dark blue industrial */
+.ct-visual-4 {
+  background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+}
+.ct-visual-4::before {
+  content: ''; position: absolute; inset: 0;
+  background: 
+    radial-gradient(ellipse at 50% 100%, rgba(0,102,204,0.2) 0%, transparent 60%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 10px);
+}
+
+/* 100% Prüfung - Clean/quality focused */
+.ct-visual-5 {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+}
+.ct-visual-5::before {
+  content: ''; position: absolute; inset: 0;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(240,112,32,0.1) 0%, transparent 50%),
+    repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 10deg, rgba(0,0,0,0.02) 10deg, rgba(0,0,0,0.02) 11deg);
+}
+
+/* KI-Automatisierung - Futuristic purple */
+.ct-visual-6 {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+}
+.ct-visual-6::before {
+  content: ''; position: absolute; inset: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(163,113,247,0.3) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(61,216,224,0.2) 0%, transparent 40%),
+    repeating-linear-gradient(0deg, transparent 0px, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 41px);
+}
+
+/* CT crosshair overlay */
+.ct-crosshair {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px; height: 80px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+}
+.ct-crosshair::before,
+.ct-crosshair::after {
+  content: ''; position: absolute; background: rgba(255,255,255,0.2);
+}
+.ct-crosshair::before { top: 50%; left: 10%; right: 10%; height: 1px; transform: translateY(-50%); }
+.ct-crosshair::after { left: 50%; top: 10%; bottom: 10%; width: 1px; transform: translateX(-50%); }
+
+/* Scan line animation */
+.scan-line {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(61,216,224,0.5), transparent);
+  animation: scan 3s ease-in-out infinite;
+  opacity: 0.6;
+}
+@keyframes scan {
+  0%, 100% { top: 20%; opacity: 0; }
+  50% { top: 80%; opacity: 1; }
+}
+
+.card-badge {
+  position: absolute; top: 16px; left: 16px;
+  font-family: var(--font-display); font-size: 11px;
+  font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 8px 16px;
+  border-radius: 100px; z-index: 10;
+}
+.card-badge.labor { 
+  background: var(--mv-violet); color: var(--mv-white);
+  box-shadow: 0 4px 12px rgba(124,92,181,0.4);
+}
+.card-badge.serie { 
+  background: var(--mv-blue); color: var(--mv-white);
+  box-shadow: 0 4px 12px rgba(0,102,204,0.4);
+}
+
+.card-body { padding: 28px; }
+.card-title {
+  font-family: var(--font-display);
+  font-size: 22px; line-height: 1.2;
+  margin-bottom: 10px; color: var(--mv-navy);
+  font-weight: 600;
+}
+.card-desc {
+  font-size: 14px; color: var(--mv-gray-500);
+  line-height: 1.6; margin-bottom: 20px;
+}
+.card-meta {
+  display: flex; align-items: center; gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--mv-gray-100);
+}
+.card-arrow {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--mv-gray-100);
+  display: grid; place-items: center;
+  margin-left: auto;
+  transition: all var(--transition);
+  color: var(--mv-navy);
+}
+.service-card:hover .card-arrow {
+  background: var(--mv-accent);
+  color: white;
+  transform: translateX(4px);
+}
+
+/* ─── Branchen Mega Panel ─── */
+.branchen-mega {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 64px;
+}
+
+.branchen-sidebar {
+  display: flex; flex-direction: column;
+}
+.branchen-title {
+  font-family: var(--font-display);
+  font-size: 42px; color: var(--mv-navy);
+  margin-bottom: 16px; line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.branchen-title em {
+  color: var(--mv-accent); font-style: normal;
+}
+.branchen-desc {
+  font-size: 16px; color: var(--mv-gray-500);
+  line-height: 1.7; margin-bottom: 32px;
+}
+.branchen-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--mv-accent); font-family: var(--font-display);
+  font-size: 15px; font-weight: 600;
+  text-decoration: none;
+  transition: gap var(--transition);
+  margin-top: auto;
+}
+.branchen-cta:hover { gap: 16px; }
+
+.branchen-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.branchen-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px; border-radius: var(--radius-md);
+  background: var(--mv-gray-50);
+  border: 1px solid transparent;
+  font-size: 15px; font-weight: 500; color: var(--mv-gray-700);
+  cursor: pointer; transition: all var(--transition);
+  text-decoration: none;
+}
+.branchen-item:hover {
+  background: var(--mv-white);
+  border-color: var(--mv-accent);
+  transform: translateX(8px);
+  box-shadow: var(--shadow-md);
+  color: var(--mv-navy);
+}
+.branchen-icon {
+  width: 48px; height: 48px; border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--mv-navy), var(--mv-blue));
+  display: grid; place-items: center;
+  font-size: 22px; flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ─── Hero Demo ─── */
+.hero {
+  max-width: 1400px; margin: 0 auto; padding: 100px 48px 80px;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--mv-gray-100);
+  color: var(--mv-accent);
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 10px 20px; border-radius: 100px; margin-bottom: 32px;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: 64px; line-height: 1.05; color: var(--mv-navy);
+  max-width: 800px; margin: 0 auto 24px;
+  font-weight: 700; letter-spacing: -0.03em;
+}
+.hero h1 em { 
+  font-style: normal; 
+  color: var(--mv-accent);
+  position: relative;
+}
+.hero h1 em::after {
+  content: ''; position: absolute; bottom: 4px; left: 0; right: 0;
+  height: 8px; background: rgba(240,112,32,0.2); z-index: -1;
+}
+.hero p {
+  font-size: 20px; color: var(--mv-gray-500); line-height: 1.7;
+  max-width: 600px; margin: 0 auto;
+}
+
+/* ─── Info Box ─── */
+.info-box {
+  max-width: 1400px; margin: 0 auto 80px; padding: 0 48px;
+}
+.info-box-inner {
+  background: linear-gradient(135deg, var(--mv-navy), var(--mv-navy-light));
+  border-radius: var(--radius-xl); padding: 48px;
+  display: flex; gap: 32px; align-items: flex-start;
+  color: var(--mv-white);
+  box-shadow: var(--shadow-xl);
+}
+.info-box-inner h3 { 
+  font-family: var(--font-display);
+  font-size: 24px; font-weight: 600; margin-bottom: 12px; 
+}
+.info-box-inner p { 
+  font-size: 16px; color: var(--mv-gray-300); 
+  line-height: 1.7; max-width: 600px;
+}
+.info-icon {
+  width: 64px; height: 64px; border-radius: var(--radius-lg);
+  background: rgba(240,112,32,0.2); color: var(--mv-accent);
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-size: 28px;
+  font-weight: 700; flex-shrink: 0;
+}
+
+/* ─── Dummy content ─── */
+.dummy-content {
+  max-width: 1400px; margin: 0 auto; padding: 48px;
+  min-height: 60vh;
+}
+.dummy-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+}
+.dummy-card {
+  height: 320px; border-radius: var(--radius-lg);
+  background: var(--mv-white); border: 1px solid var(--mv-gray-200);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .mega-grid { grid-template-columns: repeat(2, 1fr); }
+  .branchen-mega { grid-template-columns: 1fr; }
+  .branchen-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero h1 { font-size: 48px; }
+}
+@media (max-width: 768px) {
+  .mega-grid { grid-template-columns: 1fr; }
+  .branchen-grid { grid-template-columns: 1fr; }
+  .header-inner { padding: 0 24px; }
+  .mega-inner { padding: 24px; }
+  .hero { padding: 60px 24px; }
+  .hero h1 { font-size: 36px; }
+}
+</style>
+</head>
+<body>
+
+<div class="concept-label">Konzept A — <span>Flache Navigation</span></div>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-links">
+      <a href="#">📞 +49 (0)2473 9275-0</a>
+      <a href="#">✉️ info@microvista.de</a>
+      <a href="#">Karriere</a>
+      <a href="#">Zertifizierungen</a>
+    </div>
+    <div class="lang-switch">
+      <a href="#" class="active">DE</a>
+      <a href="#">EN</a>
+      <a href="#">FR</a>
+      <a href="#">ES</a>
+      <a href="#">IT</a>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="header" id="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark"></div>
+      <span class="logo-text">Microvista</span>
+    </a>
+
+    <nav class="main-nav">
+      <a class="nav-item active" data-menu="leistungen">
+        Leistungen
+        <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="nav-item" data-menu="branchen">
+        Branchen
+        <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="nav-item" href="#">Software</a>
+      <a class="nav-item" href="#">Magazin</a>
+      <a class="nav-item" href="#">Wiki</a>
+      <a class="nav-item" href="#">Über uns</a>
+    </nav>
+
+    <button class="header-cta">Kontakt aufnehmen</button>
+  </div>
+
+  <!-- Mega: Leistungen -->
+  <div class="mega-panel" id="mega-leistungen">
+    <div class="mega-inner">
+      <div class="mega-grid">
+        <!-- Labor Cards -->
+        <a href="#" class="service-card">
+          <div class="card-image">
+            <div class="card-image-inner">
+              <div class="ct-visual ct-visual-1">
+                <div class="ct-crosshair"></div>
+                <div class="scan-line"></div>
+              </div>
+            </div>
+            <span class="card-badge labor">Labor</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Erstmusterprüfung</div>
+            <div class="card-desc">Vollständige CT-Analyse Ihrer Prototypen mit detailliertem Prüfbericht nach VDA/AIAG.</div>
+            <div class="card-meta">
+              <span style="font-size: 13px; color: var(--mv-gray-400);">3D-Visualisierung</span>
+              <div class="card-arrow">→</div>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="service-card">
+          <div class="card-image">
+            <div class="card-image-inner">
+              <div class="ct-visual ct-visual-2">
+                <div class="ct-crosshair"></div>
+                <div class="scan-line" style="animation-delay: 0.5s;"></div>
+              </div>
+            </div>
+            <span class="card-badge labor">Labor</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Schadensanalyse</div>
+            <div class="card-desc">Zerstörungsfreie Fehleranalyse bei Reklamationen und Ausfällen — schnell und präzise.</div>
+            <div class="card-meta">
+              <span style="font-size: 13px; color: var(--mv-gray-400);">Express-Service</span>
+              <div class="card-arrow">→</div>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="service-card">
+          <div class="card-image">
+            <div class="card-image-inner">
+              <div class="ct-visual ct-visual-3">
+                <div class="ct-crosshair"></div>
+                <div class="scan-line" style="animation-delay: 1s;"></div>
+              </div>
+            </div>
+            <span class="card-badge labor">Labor</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Reverse Engineering</div>
+            <div class="card-desc">3D-Digitalisierung und Rekonstruktion vorhandener Bauteile ohne CAD-Daten.</div>
+            <div class="card-meta">
+              <span style="font-size: 13px; color: var(--mv-gray-400);">CAD-Export</span>
+              <div class="card-arrow">→</div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Serie Cards -->
+        <a href="#" class="service-card">
+          <div class="card-image">
+            <div class="card-image-inner">
+              <div class="ct-visual ct-visual-4">
+                <div class="ct-crosshair"></div>
+                <div class="scan-line" style="animation-delay: 1.5s;"></div>
+              </div>
+            </div>
+            <span class="card-badge serie">Serie</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Inline-CT</div>
+            <div class="card-desc">CT-Prüfung direkt in Ihrer Produktionslinie — Taktzeit-optimiert und vollautomatisch.</div>
+            <div class="card-meta">
+              <span style="font-size: 13px; color: var(--mv-gray-400);">100% Integration</span>
+              <div class="card-arrow">→</div>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="service-card">
+          <div class="card-image">
+            <div class="card-image-inner">
+              <div class="ct-visual ct-visual-5">
+                <div class="ct-crosshair" style="border-color: rgba(0,0,0,0.2);"></div>
+                <div class="scan-line" style="animation-delay: 2s;"></div>
+              </div>
+            </div>
+            <span class="card-badge serie">Serie</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">100% Prüfung</div>
+            <div class="card-desc">Lückenlose Qualitätskontrolle jedes einzelnen Bauteils in der Serienproduktion.</div>
+            <div class="card-meta">
+              <span style="font-size: 13px; color: var(--mv-gray-400);">Zero-Defect</span>
+              <div class="card-arrow">→</div>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="service-card">
+          <div class="card-image">
+            <div class="card-image-inner">
+              <div class="ct-visual ct-visual-6">
+                <div class="ct-crosshair"></div>
+                <div class="scan-line" style="animation-delay: 2.5s;"></div>
+              </div>
+            </div>
+            <span class="card-badge serie">Serie</span>
+          </div>
+          <div class="card-body">
+            <div class="card-title">KI-Automatisierung</div>
+            <div class="card-desc">Machine Learning gestützte Auswertung für schnellere Ergebnisse und weniger manuelle Arbeit.</div>
+            <div class="card-meta">
+              <span style="font-size: 13px; color: var(--mv-gray-400);">Auto-Detection</span>
+              <div class="card-arrow">→</div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mega: Branchen -->
+  <div class="mega-panel" id="mega-branchen">
+    <div class="mega-inner">
+      <div class="branchen-mega">
+        <div class="branchen-sidebar">
+          <div class="branchen-title">Branchen &<br><em>Prüfaufgaben</em></div>
+          <p class="branchen-desc">Industrielle CT-Prüfung für über 14 Branchen. Von Automotive bis Medizintechnik — wir kennen die spezifischen Anforderungen Ihrer Industrie.</p>
+          <a href="#" class="branchen-cta">Alle Branchen ansehen →</a>
+        </div>
+        <div class="branchen-grid">
+          <a href="#" class="branchen-item"><span class="branchen-icon">🚗</span> Automotive</a>
+          <a href="#" class="branchen-item"><span class="branchen-icon">✈️</span> Aerospace</a>
+          <a href="#" class="branchen-item"><span class="branchen-icon">⚕️</span> Medizintechnik</a>
+          <a href="#" class="branchen-item"><span class="branchen-icon">⚡</span> Elektromobilität</a>
+          <a href="#" class="branchen-item"><span class="branchen-icon">🔧</span> Maschinenbau</a>
+          <a href="#" class="branchen-item"><span class="branchen-icon">🏭</span> Gießereitechnik</a>
+          <a href="#" class="branchen-item"><span class="branchen-icon">🖨️</span> Additive Fertigung</a>
+          <a href="#" class="branchen-item"><span class="branchen-icon">💊</span> Pharma</a>
+          <a href="#" class="branchen-item"><span class="branchen-icon">🔬</span> Forschung</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="mega-overlay" id="mega-overlay"></div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span>★</span> Konzept A — Flache Navigation
+  </div>
+  <h1>Alle Leistungen auf <em>einer Ebene</em></h1>
+  <p>Keine Welten-Trennung mehr. Labor und Serie sind gleichwertige Menüpunkte unter "Leistungen". Farbige Badges kennzeichnen den Bereich visuell.</p>
+</section>
+
+<!-- Info -->
+<div class="info-box">
+  <div class="info-box-inner">
+    <div class="info-icon">A</div>
+    <div>
+      <h3>Konzept A — Microvista Edition</h3>
+      <p>Hover über "Leistungen" öffnet ein 6-Karten-Grid mit allen Services. Violette Badges = Labor, blaue Badges = Serie. Jede Karte hat ein realistisches CT-Scan-Visual mit animiertem Scan-Line-Effekt. Kein Weltenwechsel, kein Context-Bar.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Dummy content -->
+<div class="dummy-content">
+  <div class="dummy-grid">
+    <div class="dummy-card"></div>
+    <div class="dummy-card"></div>
+    <div class="dummy-card"></div>
+  </div>
+</div>
+
+<script>
+const navItems = document.querySelectorAll('.nav-item[data-menu]');
+const overlay = document.getElementById('mega-overlay');
+const header = document.getElementById('header');
+let activeMenu = null;
+let closeTimeout = null;
+
+function openMenu(menuId) {
+  clearTimeout(closeTimeout);
+  if (activeMenu && activeMenu !== menuId) closeMenu(activeMenu, true);
+  const panel = document.getElementById('mega-' + menuId);
+  if (!panel) return;
+  panel.classList.add('visible');
+  overlay.classList.add('visible');
+  document.querySelector(`[data-menu="${menuId}"]`).classList.add('active');
+  activeMenu = menuId;
+}
+
+function closeMenu(menuId, immediate) {
+  const panel = document.getElementById('mega-' + (menuId || activeMenu));
+  if (!panel) return;
+  const doClose = () => {
+    panel.classList.remove('visible');
+    overlay.classList.remove('visible');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    activeMenu = null;
+  };
+  if (immediate) doClose();
+  else { closeTimeout = setTimeout(doClose, 200); }
+}
+
+navItems.forEach(item => {
+  item.addEventListener('mouseenter', () => openMenu(item.dataset.menu));
+});
+
+document.querySelectorAll('.mega-panel').forEach(panel => {
+  panel.addEventListener('mouseenter', () => clearTimeout(closeTimeout));
+  panel.addEventListener('mouseleave', () => closeMenu());
+});
+
+header.addEventListener('mouseleave', () => closeMenu());
+overlay.addEventListener('click', () => closeMenu(null, true));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+PAGE: N/A
+URL: https://www.microvista.de/industrielle-computertomographie/prufaufgaben/porositatsanalyse/
+================================================================================
+
+=== UEBERSCHRIFTEN ===
+[H1] POROSITÄTSANALYSE MIT INDUSTRIELLER CT
+[H2] Poren, Lunker & Einschlüsse identifizieren
+[H2] Serienprüfung
+[H2] Einzelteilprüfung
+[H2] Preisübersicht für eine schnelle & praxisgerechte Porositätsanalyse
+[H3] Schnelle Inspektion von Fehlerschwerpunkten
+[H3] Ablauf einer Serienprüfung
+[H3] Ausführliche Bemusterung weniger Bauteile
+[H3] Beispiel: Ausführliche Bemusterung weniger Bauteile
+[H3] Ablauf einer Bemusterung
+
+=== BILDER ===
+  ALT: Porositätsanalyse an einer Dichtlippe mit unterschiedlichen Qualitätszonen
+  SRC: https://www.microvista.de/wp-content/plugins/wp-fastest-cache-premium/pro/images/blank.gif
+
+  ALT: Abrollung eines Prüfbereichs mit einer Pore
+  SRC: https://www.microvista.de/wp-content/plugins/wp-fastest-cache-premium/pro/images/blank.gif
+
+  ALT: Mobiles CT - Microvista ScanExpress
+  SRC: https://www.microvista.de/wp-content/plugins/wp-fastest-cache-premium/pro/images/blank.gif
+
+  ALT: Porositätsanalyse: Poren in hoher Auflösung
+  SRC: https://www.microvista.de/wp-content/plugins/wp-fastest-cache-premium/pro/images/blank.gif
+
+  ALT: Porositätsanalyse anhand des Schnittbilds eines Bauteils
+  SRC: https://www.microvista.de/wp-content/plugins/wp-fastest-cache-premium/pro/images/blank.gif
+
+  ALT: Porositätsanalyse: Normenkonforme Auswahl eines Prüfbereiches
+  SRC: https://www.microvista.de/wp-content/plugins/wp-fastest-cache-premium/pro/images/blank.gif
+
+
+=== FLIESSTEXT ===
+Nehmen Poren, Lunker & Einschlüsse überhand, können Bauteile die notwendigen Anforderungen nicht erfüllen. Diese Defekte stark zu minimieren, ist besonders beim Start einer neuen Produktion schwierig. Konventioneller Druckguss beispielsweise kann bekanntlich kaum porositätsfrei hergestellt werden. Aus diesem Grund ist eine Porositätsanalyse in der Regel notwendig, um Prozesse zu optimieren & Qualitätskontrolle zu betreiben.
+
+Microvista unterstützt Sie hierbei, indem es kleine & große Stückzahlen in einem schnellen & automatisierten CT-Scan-Verfahren auf wesentliche Ungänzen prüft. Alternativ können auch hochaufgelöste & normenkonforme CT-Scans mit einer Detailanalyse von unseren Experten Ihre Bemusterung unterstützen. Eine hohe Prozesssicherheit & individuelle Auswertungen erhalten Sie jederzeit.
+
+In der Entwicklungsphase eines neuen Bauteils oder beim Auftreten neuer Fehlerschwerpunkte möchte man schnell wissen, woran man ist. Das spart Geld & Nerven. Die Digitalisierung von Leichtmetall- oder Kunststoffbauteilen mit einem einhüllenden Zylinder von d= 500mm & einer kumulierten Materialbelegung von ca. 200 mm kann in wenigen Sekunden erfolgen.Die hohe Scangeschwindigkeit ermöglicht günstige Inspektionskosten (hier zur Preisliste) & schafft eine wirtschaftliche Alternative zur Verschrottung.
+
+In einem automatischen Prozess werden Dichtlippen untersucht. Die farblich gekennzeichneten Prüfzonen erlauben jeweils unterschiedliche Porengrößen.
+
+Bereits kurz nach dem Entladen des CT steht fest, ob das geprüfte Bauteil zur IO oder NIO Kategorie gehört. Damit kann im gleichen Arbeitsschritt auch die passende Sortierung erfolgen.
+
+Sie wollen Ihre komplette Qualitätskontrolle auslagern? Bei größeren Stückzahlen beschleunigt Microvista Abläufe durch Automatisierung.
+
+Sie haben ein eigenes CT?! Dann laden Sie Ihre Scans in unsere Cloud & lassen diese automatisch auswerten. Damit sparen Sie enorm Zeit, da eine manuelle Auswertung nicht benötigt wird.
+
+Sie brauchen eine CT-Prüfung nur temporär & möchten Ihre Bauteile für eine Prüfung nicht versenden?  Dann mieten Sie ein CT-System nur so lange wie Sie es benötigen! Mit Microvista’s einzigartiger mobiler CT-Lösung ersparen Sie sich hohe Investmentkosten & lange Wartezeiten.
+
+Eine Bemusterung nach den verschiedenen Normen der Automobilhersteller und Verbände verlangt einen hoch aufgelösten Scandatensatz. Die Ausführung erfolgt prozesssicher, normenkonform und in einer praxistauglichen Darstellungsform. Verlässliche Aussagen mit konkreten Angabe verbleibender Unsicherheiten sind dafür selbstverständlich.
+
+Eine Bemusterung nach den verschiedenen Normen der Automobilhersteller und Verbände verlangt einen hochaufgelösten Scandatensatz. Die Ausführung erfolgt prozesssicher, normenkonform und in einer praxistauglichen Darstellungsform. Verlässliche Aussagen zum Scan mit konkreten Angabe der verbleibenden Unsicherheiten sind für Microvista selbstverständlich.
+
+Eine hohe Auflösung ermöglicht detaillierte  Aussagen zur konkreten Ausprägung der Lunker- bzw. Porengeometrie.
+
+Neben der Unterstützung durch branchenübliche Tools arbeitet Microvista auch mit Mitteln aus dem eigenen Haus, um normenkonforme Prüfberichte zu erstellen.
+
+Im Standardprozess werden alle Aufträge spätestens innerhalb von 14 Tagen bearbeitet.
+
+Soweit die Bauteile keine Seriennummer haben, werden sie während des Teileeingangs mit einer internen Nummer registriert. Auf diese Nummer beziehen sich dann sowohl die Scandaten als auch die in anschließenden Bearbeitungsschritten erstellten Analysen & Reports. Damit ist eine 100% Nachvollziehbarkeit aller Arbeitsschritte gegeben.
+
+Verlässliche Analyseergebnisse entstehen also auch mit der besten Ausrüstung nicht von allein. Neben der Expertise der bearbeitenden Mitarbeiter sind etablierte Prozesse zur Unsicherheitsermittlung erforderlich.
+
+Eine schnelle CT-Analyse ist bei Microvista zu einem hervorragenden Preis-/ Leistungsverhältnis möglich. Bei Stückzahlen von mehr als 1.000 erstellen wir gern ein individuelles Angebot.
+
+
+=== LISTEN ===
+Liste (elementor-icon-list-items):
+  - Aufdecken von Fehlerschwerpunkten
+  - Prüfung von gesperrten Losen wegen eines Verdachtes auf Abweichung in einem Qualitätsmerkmal (Poren, Lunker etc.)
+  - Prophylaktische Vermeidung der Veredelung von potentiellem Ausschuss z.B. bei Poren in Bearbeitungsflächen
+
+Liste (elementor-icon-list-items):
+  - Erstbemusterung bzw. Requalifizierung von Bauteilen auf Basis einschlägiger Normen
+  - Detailanalyse von Fehlerschwerpunkten
+  - Lunker- bzw. Porenanalysen an Eisen- und Stahlguss
+
+Liste (elementor-icon-list-items):
+  - Manuell erstellter 3D-Porenbericht pro Bauteil 130 €
+  - Bei größeren Stückzahlen (> 200) kann aus unserer umfangreichen Modulbibliothek kurzfristig eine Automatik erstellt werden, mit der die Auswertekosten für die Porositätsanalyse auf ein Bruchteil der Scankosten reduziert werden können!
+
+Liste (elementor-icon-list-items):
+  - max. Hüllkreis: d= 500 mm
+  - max. kumulierte Wandstärke: 200 mm
+  - Material: Kunststoff oder Leichtmetall, Eiseninserts möglich
+
+Liste ():
+  - Optionen verwalten
+  - Dienste verwalten
+  - Verwalten von {vendor_count}-Lieferanten
+  - Lese mehr über diese Zwecke
+
+Liste ():
+  - {title}
+  - {title}
+  - {title}
+
+
+=== FAQ / TOGGLES ===
+(keine FAQs gefunden)
+
+=== CTAs / BUTTONS ===
+  [Express-Inspektionbuchen] -> https://www.microvista.de/kontakt/
+  [Express-Inspektionbuchen] -> 
+  [Express-Inspektionbuchen] -> 
+  [Gratis-Beratungsichern] -> https://www.microvista.de/kontakt/
+  [Gratis-Beratungsichern] -> 
+  [Gratis-Beratungsichern] -> 
+  [Preisliste] -> #Preisliste
+  [Preisliste] -> 
+  [Preisliste] -> 
+  [Mehr erfahren] -> https://www.microvista.de/industrielle-computertomographie/dienstleistungen/ct-labor/
+  [Mehr erfahren] -> 
+  [Mehr erfahren] -> 
+  [Mehr erfahren] -> https://www.microvista.de/industrielle-computertomographie/dienstleistungen/ct-datenauswertung/
+  [Mehr erfahren] -> 
+  [Mehr erfahren] -> 
+  [Mehr erfahren] -> https://www.mobile-ct.eu
+  [Mehr erfahren] -> 
+  [Mehr erfahren] -> 
+  [Gratis Beratungsgesprächbuchen] -> https://www.microvista.de/kontakt/
+  [Gratis Beratungsgesprächbuchen] -> 
+  [Gratis Beratungsgesprächbuchen] -> 

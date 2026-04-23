@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konzept E — Command Palette Navigation (Search-First)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   KONZEPT E — COMMAND PALETTE NAVIGATION
+   Search-First Interface mit Spotlight-ähnlicher Interaktion
+   Ästhetik: Developer-Tools, IDE, Keyboard-First
+   ═══════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --mv-bg: #0d1117;
+  --mv-surface: #161b22;
+  --mv-elevated: #21262d;
+  --mv-border: #30363d;
+  --mv-border-hover: #8b949e;
+  --mv-text: #f0f6fc;
+  --mv-text-secondary: #8b949e;
+  --mv-text-muted: #6e7681;
+  --mv-accent: #ff7b29;
+  --mv-accent-dim: rgba(255,123,41,0.15);
+  --mv-blue: #58a6ff;
+  --mv-green: #3fb950;
+  --mv-purple: #a371f7;
+  --mv-yellow: #d29922;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --radius: 8px;
+  --transition: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--mv-text);
+  background: var(--mv-bg);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ─── Concept Label ─── */
+.concept-label {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: var(--mv-elevated); color: var(--mv-text);
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.05em;
+  padding: 10px 16px; border-radius: var(--radius);
+  border: 1px solid var(--mv-border);
+}
+.concept-label span { color: var(--mv-accent); }
+
+/* ─── Header ─── */
+.header {
+  background: var(--mv-surface);
+  border-bottom: 1px solid var(--mv-border);
+  position: sticky; top: 0; z-index: 1000;
+}
+.header-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 32px;
+  display: flex; align-items: center; height: 64px;
+  justify-content: space-between;
+}
+
+/* Logo */
+.logo {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; color: var(--mv-text);
+}
+.logo-mark {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--mv-accent), #ff9f56);
+  border-radius: 6px;
+  display: grid; place-items: center;
+  font-family: var(--font-mono); font-weight: 600;
+  font-size: 14px; color: var(--mv-bg);
+}
+.logo-text {
+  font-family: var(--font-sans); font-weight: 700;
+  font-size: 18px; letter-spacing: -0.02em;
+}
+
+/* Command Bar — The Star */
+.command-bar {
+  flex: 1; max-width: 600px; margin: 0 32px;
+  position: relative;
+}
+.command-trigger {
+  width: 100%;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px;
+  background: var(--mv-elevated);
+  border: 1px solid var(--mv-border);
+  border-radius: var(--radius);
+  color: var(--mv-text-secondary);
+  font-family: var(--font-sans); font-size: 14px;
+  cursor: pointer; transition: all var(--transition);
+}
+.command-trigger:hover {
+  border-color: var(--mv-border-hover);
+  background: var(--mv-bg);
+}
+.command-trigger svg {
+  width: 16px; height: 16px; opacity: 0.5;
+}
+.command-trigger kbd {
+  margin-left: auto;
+  display: flex; gap: 4px;
+}
+.command-trigger kbd span {
+  font-family: var(--font-mono); font-size: 11px;
+  padding: 3px 8px; border-radius: 4px;
+  background: var(--mv-surface);
+  border: 1px solid var(--mv-border);
+  color: var(--mv-text-muted);
+}
+
+/* Nav Links (Minimal) */
+.main-nav { display: flex; align-items: center; gap: 4px; }
+.nav-item {
+  padding: 8px 14px; border-radius: var(--radius);
+  font-size: 13px; font-weight: 500;
+  color: var(--mv-text-secondary);
+  text-decoration: none;
+  transition: all var(--transition);
+}
+.nav-item:hover { 
+  color: var(--mv-text); 
+  background: var(--mv-elevated);
+}
+.nav-item.active {
+  color: var(--mv-accent);
+  background: var(--mv-accent-dim);
+}
+
+/* Header Right */
+.header-right { display: flex; align-items: center; gap: 16px; }
+.lang-btn {
+  color: var(--mv-text-muted); font-size: 12px;
+  font-weight: 600; letter-spacing: 0.05em;
+  text-transform: uppercase; cursor: pointer;
+  padding: 6px 10px; border-radius: var(--radius);
+  border: 1px solid var(--mv-border); background: transparent;
+  transition: all var(--transition);
+}
+.lang-btn:hover { border-color: var(--mv-border-hover); color: var(--mv-text); }
+
+.header-cta {
+  background: var(--mv-accent); color: var(--mv-bg);
+  border: none; padding: 10px 18px; border-radius: var(--radius);
+  font-family: var(--font-sans); font-size: 13px;
+  font-weight: 700; cursor: pointer;
+  transition: all var(--transition);
+}
+.header-cta:hover { filter: brightness(1.1); }
+
+/* ═══════════════════════════════════════════════════════════════
+   COMMAND PALETTE OVERLAY
+   ═══════════════════════════════════════════════════════════════ */
+.palette-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  opacity: 0; visibility: hidden;
+  transition: all 200ms ease; z-index: 2000;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 120px;
+}
+.palette-overlay.visible { opacity: 1; visibility: visible; }
+
+.palette-container {
+  width: 100%; max-width: 720px;
+  background: var(--mv-surface);
+  border: 1px solid var(--mv-border);
+  border-radius: 12px;
+  box-shadow: 
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 20px 60px rgba(0,0,0,0.5);
+  overflow: hidden;
+  transform: scale(0.95) translateY(-10px);
+  transition: all 200ms ease;
+}
+.palette-overlay.visible .palette-container {
+  transform: scale(1) translateY(0);
+}
+
+/* Search Input */
+.palette-search {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--mv-border);
+}
+.palette-search svg {
+  width: 20px; height: 20px;
+  color: var(--mv-text-muted);
+}
+.palette-search input {
+  flex: 1;
+  background: transparent; border: none;
+  color: var(--mv-text);
+  font-family: var(--font-sans); font-size: 18px;
+  outline: none;
+}
+.palette-search input::placeholder {
+  color: var(--mv-text-muted);
+}
+.palette-search .shortcut-hint {
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--mv-text-muted);
+  padding: 4px 10px;
+  background: var(--mv-elevated);
+  border-radius: 4px;
+}
+
+/* Palette Content */
+.palette-content {
+  max-height: 480px;
+  overflow-y: auto;
+}
+.palette-content::-webkit-scrollbar {
+  width: 8px;
+}
+.palette-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.palette-content::-webkit-scrollbar-thumb {
+  background: var(--mv-border);
+  border-radius: 4px;
+}
+
+/* Section Headers */
+.palette-section {
+  padding: 12px 24px;
+  font-family: var(--font-mono); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mv-text-muted);
+  background: var(--mv-bg);
+  border-bottom: 1px solid var(--mv-border);
+}
+
+/* Command Items */
+.palette-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 24px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--mv-border);
+  transition: all var(--transition);
+  text-decoration: none;
+}
+.palette-item:last-child { border-bottom: none; }
+.palette-item:hover,
+.palette-item.selected {
+  background: var(--mv-accent-dim);
+}
+.palette-item.selected {
+  border-left: 3px solid var(--mv-accent);
+  padding-left: 21px;
+}
+
+.item-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: grid; place-items: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.item-icon.labor { background: rgba(163,113,247,0.15); }
+.item-icon.serie { background: rgba(88,166,255,0.15); }
+.item-icon.branche { background: rgba(63,185,80,0.15); }
+.item-icon.wissen { background: rgba(210,153,34,0.15); }
+
+.item-content { flex: 1; min-width: 0; }
+.item-title {
+  font-size: 14px; font-weight: 600;
+  color: var(--mv-text);
+  margin-bottom: 2px;
+  display: flex; align-items: center; gap: 8px;
+}
+.item-desc {
+  font-size: 12px; color: var(--mv-text-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.item-badge {
+  font-family: var(--font-mono); font-size: 10px;
+  font-weight: 600; letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 8px; border-radius: 4px;
+}
+.item-badge.labor { background: rgba(163,113,247,0.2); color: var(--mv-purple); }
+.item-badge.serie { background: rgba(88,166,255,0.2); color: var(--mv-blue); }
+
+.item-shortcut {
+  display: flex; gap: 4px;
+}
+.item-shortcut kbd {
+  font-family: var(--font-mono); font-size: 11px;
+  padding: 4px 8px; border-radius: 4px;
+  background: var(--mv-elevated);
+  border: 1px solid var(--mv-border);
+  color: var(--mv-text-secondary);
+}
+
+/* Quick Actions Row */
+.palette-quick-actions {
+  display: flex; gap: 8px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--mv-border);
+  background: var(--mv-bg);
+}
+.quick-action {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: var(--radius);
+  background: var(--mv-elevated);
+  border: 1px solid var(--mv-border);
+  color: var(--mv-text-secondary);
+  font-size: 12px; font-weight: 500;
+  cursor: pointer; transition: all var(--transition);
+}
+.quick-action:hover {
+  border-color: var(--mv-border-hover);
+  color: var(--mv-text);
+}
+
+/* Filter Pills */
+.palette-filters {
+  display: flex; gap: 8px;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--mv-border);
+}
+.filter-pill {
+  padding: 6px 14px; border-radius: 100px;
+  background: transparent;
+  border: 1px solid var(--mv-border);
+  color: var(--mv-text-muted);
+  font-size: 12px; font-weight: 500;
+  cursor: pointer; transition: all var(--transition);
+}
+.filter-pill:hover { border-color: var(--mv-border-hover); }
+.filter-pill.active {
+  background: var(--mv-accent);
+  border-color: var(--mv-accent);
+  color: var(--mv-bg);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MEGA MENU (Alternative to Command Palette)
+   ═══════════════════════════════════════════════════════════════ */
+.mega-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  opacity: 0; visibility: hidden;
+  transition: all 200ms ease; z-index: 998;
+}
+.mega-overlay.visible { opacity: 1; visibility: visible; }
+
+.mega-panel {
+  position: absolute; top: 64px; left: 0; right: 0;
+  background: var(--mv-surface);
+  border-bottom: 1px solid var(--mv-border);
+  opacity: 0; visibility: hidden;
+  transform: translateY(-10px);
+  transition: all var(--transition);
+  z-index: 999;
+}
+.mega-panel.visible {
+  opacity: 1; visibility: visible; transform: translateY(0);
+}
+
+.mega-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px 1fr 240px;
+  min-height: 400px;
+}
+
+/* Category Nav */
+.mega-categories {
+  background: var(--mv-bg);
+  border-right: 1px solid var(--mv-border);
+  padding: 24px 0;
+}
+.category-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 24px;
+  color: var(--mv-text-secondary);
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all var(--transition);
+  border-left: 3px solid transparent;
+}
+.category-item:hover,
+.category-item.active {
+  background: var(--mv-surface);
+  color: var(--mv-text);
+  border-left-color: var(--mv-accent);
+}
+.category-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: grid; place-items: center;
+  font-size: 14px;
+}
+
+/* Mega Content */
+.mega-content {
+  padding: 32px;
+}
+.content-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.content-card {
+  background: var(--mv-elevated);
+  border: 1px solid var(--mv-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer; transition: all var(--transition);
+}
+.content-card:hover {
+  border-color: var(--mv-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
+.content-card-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+}
+.content-card-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.content-card-dot.labor { background: var(--mv-purple); }
+.content-card-dot.serie { background: var(--mv-blue); }
+.content-card-title {
+  font-size: 14px; font-weight: 600;
+  color: var(--mv-text);
+}
+.content-card-desc {
+  font-size: 12px; color: var(--mv-text-muted);
+  line-height: 1.5;
+}
+
+/* Mega Sidebar */
+.mega-sidebar {
+  background: var(--mv-bg);
+  border-left: 1px solid var(--mv-border);
+  padding: 32px 24px;
+}
+.sidebar-title {
+  font-family: var(--font-mono); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mv-text-muted);
+  margin-bottom: 20px;
+}
+.featured-item {
+  background: var(--mv-elevated);
+  border: 1px solid var(--mv-border);
+  border-radius: var(--radius);
+  padding: 20px; margin-bottom: 16px;
+  cursor: pointer; transition: all var(--transition);
+}
+.featured-item:hover {
+  border-color: var(--mv-accent);
+}
+.featured-tag {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 10px;
+  font-weight: 600; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 4px;
+  background: var(--mv-accent-dim);
+  color: var(--mv-accent);
+  margin-bottom: 12px;
+}
+.featured-title {
+  font-size: 14px; font-weight: 600;
+  color: var(--mv-text); margin-bottom: 8px;
+}
+.featured-desc {
+  font-size: 12px; color: var(--mv-text-muted);
+  line-height: 1.5;
+}
+
+/* ─── Hero Demo ─── */
+.hero {
+  max-width: 800px; margin: 0 auto; padding: 100px 32px 60px;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--mv-elevated);
+  color: var(--mv-accent);
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.05em;
+  padding: 10px 18px; border-radius: 100px;
+  border: 1px solid var(--mv-border);
+  margin-bottom: 32px;
+}
+.hero h1 {
+  font-family: var(--font-sans);
+  font-size: 48px; line-height: 1.1;
+  color: var(--mv-text); margin-bottom: 24px;
+  font-weight: 800; letter-spacing: -0.03em;
+}
+.hero h1 em {
+  font-style: normal; color: var(--mv-accent);
+}
+.hero p {
+  font-size: 17px; color: var(--mv-text-secondary);
+  line-height: 1.7; max-width: 560px; margin: 0 auto 40px;
+}
+
+.demo-trigger {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 16px 28px; border-radius: var(--radius);
+  background: var(--mv-elevated);
+  border: 1px solid var(--mv-border);
+  color: var(--mv-text);
+  font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: all var(--transition);
+}
+.demo-trigger:hover {
+  border-color: var(--mv-accent);
+  background: var(--mv-accent-dim);
+}
+.demo-trigger kbd {
+  display: flex; gap: 4px;
+}
+.demo-trigger kbd span {
+  font-family: var(--font-mono); font-size: 11px;
+  padding: 4px 8px; border-radius: 4px;
+  background: var(--mv-surface);
+  border: 1px solid var(--mv-border);
+  color: var(--mv-text-muted);
+}
+
+/* ─── Info Box ─── */
+.info-box {
+  max-width: 800px; margin: 40px auto; padding: 0 32px;
+}
+.info-box-inner {
+  background: var(--mv-surface);
+  border: 1px solid var(--mv-border);
+  border-radius: var(--radius); padding: 28px 32px;
+  display: flex; gap: 20px; align-items: flex-start;
+}
+.info-box-inner h3 {
+  font-size: 16px; font-weight: 700;
+  color: var(--mv-text); margin-bottom: 8px;
+}
+.info-box-inner p {
+  font-size: 13px; color: var(--mv-text-secondary);
+  line-height: 1.7;
+}
+.info-icon {
+  width: 44px; height: 44px; border-radius: var(--radius);
+  background: var(--mv-accent-dim);
+  color: var(--mv-accent);
+  display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: 18px;
+  font-weight: 600; flex-shrink: 0;
+}
+
+/* ─── Dummy content ─── */
+.dummy-content {
+  max-width: 800px; margin: 0 auto; padding: 40px 32px;
+  min-height: 60vh;
+}
+.dummy-card {
+  height: 200px; border-radius: var(--radius);
+  background: var(--mv-surface);
+  border: 1px solid var(--mv-border);
+  margin-bottom: 16px;
+}
+</style>
+</head>
+<body>
+
+<div class="concept-label">Konzept E — <span>Cmd+K Navigation</span></div>
+
+<!-- Header -->
+<header class="header" id="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">M</div>
+      <span class="logo-text">Microvista</span>
+    </a>
+
+    <!-- Command Bar -->
+    <div class="command-bar" id="command-trigger">
+      <div class="command-trigger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <span>Suchen oder Befehl eingeben...</span>
+        <kbd><span>⌘</span><span>K</span></kbd>
+      </div>
+    </div>
+
+    <nav class="main-nav">
+      <a href="#" class="nav-item active">Leistungen</a>
+      <a href="#" class="nav-item">Branchen</a>
+      <a href="#" class="nav-item">Wissen</a>
+    </nav>
+
+    <div class="header-right">
+      <button class="lang-btn">DE</button>
+      <button class="header-cta">Kontakt</button>
+    </div>
+  </div>
+</header>
+
+<!-- Command Palette Overlay -->
+<div class="palette-overlay" id="palette-overlay">
+  <div class="palette-container">
+    <!-- Search -->
+    <div class="palette-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input type="text" placeholder="Suchen oder Befehl eingeben..." id="palette-input" autofocus>
+      <span class="shortcut-hint">ESC zum Schließen</span>
+    </div>
+
+    <!-- Filters -->
+    <div class="palette-filters">
+      <button class="filter-pill active">Alle</button>
+      <button class="filter-pill">Labor</button>
+      <button class="filter-pill">Serie</button>
+      <button class="filter-pill">Branchen</button>
+      <button class="filter-pill">Wissen</button>
+    </div>
+
+    <!-- Results -->
+    <div class="palette-content">
+      <div class="palette-section">Leistungen — Labor</div>
+      
+      <a href="#" class="palette-item selected">
+        <div class="item-icon labor">🔍</div>
+        <div class="item-content">
+          <div class="item-title">
+            Erstmusterprüfung
+            <span class="item-badge labor">Labor</span>
+          </div>
+          <div class="item-desc">Vollständige CT-Analyse Ihrer Prototypen mit Prüfbericht</div>
+        </div>
+        <div class="item-shortcut"><kbd>↵</kbd></div>
+      </a>
+
+      <a href="#" class="palette-item">
+        <div class="item-icon labor">⚠️</div>
+        <div class="item-content">
+          <div class="item-title">
+            Schadensanalyse
+            <span class="item-badge labor">Labor</span>
+          </div>
+          <div class="item-desc">Zerstörungsfreie Fehleranalyse bei Reklamationen</div>
+        </div>
+      </a>
+
+      <a href="#" class="palette-item">
+        <div class="item-icon labor">📐</div>
+        <div class="item-content">
+          <div class="item-title">
+            Reverse Engineering
+            <span class="item-badge labor">Labor</span>
+          </div>
+          <div class="item-desc">3D-Digitalisierung ohne CAD-Daten</div>
+        </div>
+      </a>
+
+      <div class="palette-section">Leistungen — Serie</div>
+
+      <a href="#" class="palette-item">
+        <div class="item-icon serie">🏭</div>
+        <div class="item-content">
+          <div class="item-title">
+            Inline-CT
+            <span class="item-badge serie">Serie</span>
+          </div>
+          <div class="item-desc">CT-Prüfung direkt in der Produktionslinie</div>
+        </div>
+      </a>
+
+      <a href="#" class="palette-item">
+        <div class="item-icon serie">✓</div>
+        <div class="item-content">
+          <div class="item-title">
+            100% Prüfung
+            <span class="item-badge serie">Serie</span>
+          </div>
+          <div class="item-desc">Lückenlose Qualitätskontrolle jedes Bauteils</div>
+        </div>
+      </a>
+
+      <a href="#" class="palette-item">
+        <div class="item-icon serie">🤖</div>
+        <div class="item-content">
+          <div class="item-title">
+            KI-Automatisierung
+            <span class="item-badge serie">Serie</span>
+          </div>
+          <div class="item-desc">ML-gestützte Auswertung für schnellere Ergebnisse</div>
+        </div>
+      </a>
+
+      <div class="palette-section">Schnellaktionen</div>
+
+      <a href="#" class="palette-item">
+        <div class="item-icon branche">📤</div>
+        <div class="item-content">
+          <div class="item-title">Bauteil einsenden</div>
+          <div class="item-desc">Formular zum Einsenden von Prüfteilen</div>
+        </div>
+        <div class="item-shortcut"><kbd>⌘</kbd><kbd>E</kbd></div>
+      </a>
+
+      <a href="#" class="palette-item">
+        <div class="item-icon wissen">📞</div>
+        <div class="item-content">
+          <div class="item-title">Anruf anfragen</div>
+          <div class="item-desc">Wir rufen Sie zurück</div>
+        </div>
+        <div class="item-shortcut"><kbd>⌘</kbd><kbd>P</kbd></div>
+      </a>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="palette-quick-actions">
+      <button class="quick-action">
+        <span>📄</span> Berichte
+      </button>
+      <button class="quick-action">
+        <span>⏱️</span> Express
+      </button>
+      <button class="quick-action">
+        <span>💬</span> Chat
+      </button>
+      <button class="quick-action">
+        <span>📊</span> Demo
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span>⌘</span> Konzept E — Command Palette
+  </div>
+  <h1>Navigation per <em>Tastatur</em></h1>
+  <p>Drücken Sie ⌘K (oder klicken Sie die Suchleiste) — ein Spotlight-ähnliches Interface öffnet sich. Suchen, filtern, navigieren. Alles ohne Maus.</p>
+  
+  <button class="demo-trigger" id="demo-trigger">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/>
+      <path d="M21 21l-4.35-4.35"/>
+    </svg>
+    Command Palette öffnen
+    <kbd><span>⌘</span><span>K</span></kbd>
+  </button>
+</section>
+
+<!-- Info -->
+<div class="info-box">
+  <div class="info-box-inner">
+    <div class="info-icon">E</div>
+    <div>
+      <h3>Konzept E — So funktioniert es</h3>
+      <p>Die Navigation wird durch eine persistente Command Bar im Header ausgelöst. ⌘K (oder Klick) öffnet die Command Palette — ein modales Overlay mit Suchfeld, Filter-Pills für Bereiche (Labor/Serie/Branchen/Wissen), und einer scrollbaren Liste aller Seiten mit Tastatur-Shortcuts. Jeder Eintrag hat Icon, Titel, Beschreibung und Bereich-Badge. Die Palette ist vollständig Tastatur-navigierbar (Pfeiltasten, Enter, ESC). Unter den Ergebnissen: Quick Actions für häufige Aufgaben.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Dummy content -->
+<div class="dummy-content">
+  <div class="dummy-card"></div>
+  <div class="dummy-card"></div>
+</div>
+
+<script>
+const paletteOverlay = document.getElementById('palette-overlay');
+const paletteInput = document.getElementById('palette-input');
+const commandTrigger = document.getElementById('command-trigger');
+const demoTrigger = document.getElementById('demo-trigger');
+
+function openPalette() {
+  paletteOverlay.classList.add('visible');
+  paletteInput.focus();
+  document.body.style.overflow = 'hidden';
+}
+
+function closePalette() {
+  paletteOverlay.classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+commandTrigger.addEventListener('click', openPalette);
+demoTrigger.addEventListener('click', openPalette);
+
+paletteOverlay.addEventListener('click', (e) => {
+  if (e.target === paletteOverlay) closePalette();
+});
+
+document.addEventListener('keydown', (e) => {
+  // ⌘K or Ctrl+K to open
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    openPalette();
+  }
+  // ESC to close
+  if (e.key === 'Escape') {
+    closePalette();
+  }
+});
+
+// Filter pills
+const filterPills = document.querySelectorAll('.filter-pill');
+filterPills.forEach(pill => {
+  pill.addEventListener('click', () => {
+    filterPills.forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+  });
+});
+
+// Palette items selection
+const paletteItems = document.querySelectorAll('.palette-item');
+let selectedIndex = 0;
+
+function updateSelection() {
+  paletteItems.forEach((item, index) => {
+    item.classList.toggle('selected', index === selectedIndex);
+  });
+  paletteItems[selectedIndex]?.scrollIntoView({ block: 'nearest' });
+}
+
+paletteOverlay.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    selectedIndex = (selectedIndex + 1) % paletteItems.length;
+    updateSelection();
+  }
+  if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    selectedIndex = (selectedIndex - 1 + paletteItems.length) % paletteItems.length;
+    updateSelection();
+  }
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    paletteItems[selectedIndex]?.click();
+  }
+});
+
+paletteItems.forEach((item, index) => {
+  item.addEventListener('mouseenter', () => {
+    selectedIndex = index;
+    updateSelection();
+  });
+});
+</script>
+
+</body>
+</html>
