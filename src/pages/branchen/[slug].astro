@@ -5,6 +5,7 @@ import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import { localePath, type Locale } from '../../i18n/translations';
 import { serviceSchema, breadcrumbSchema } from '../../components/seo/schemas';
+import { getPruefaufgabenForBranche } from '../../lib/cross-links';
 
 const { slug } = Astro.params;
 const branchen = await getCollection('branchen');
@@ -19,6 +20,13 @@ if (!branche) {
 const data = branche.data;
 const accentColor = '#32285b';
 const related = branchen.filter(b => b.id !== slug).slice(0, 3);
+
+// Cross-Links zu relevanten Prüfaufgaben
+const pruefaufgaben = await getCollection('pruefaufgaben');
+const relatedPruefaufgabenSlugs = getPruefaufgabenForBranche(slug ?? '');
+const relatedPruefaufgaben = relatedPruefaufgabenSlugs
+  .map(s => pruefaufgaben.find(p => p.data.slug === s))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
 // Schema.org: Service + Breadcrumb
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://microvista.de';
@@ -225,7 +233,28 @@ const pageSchemas = [
       </div>
     </section>
 
-    <!-- Related -->
+    <!-- Passende Prüfaufgaben -->
+    {relatedPruefaufgaben.length > 0 && (
+      <section class="section">
+        <div class="container">
+          <div class="section-header centered">
+            <span class="eyebrow">Prüfaufgaben</span>
+            <h2 class="section-title">Passende Prüfaufgaben für {data.name}</h2>
+          </div>
+          <div class="pruefaufgaben-grid">
+            {relatedPruefaufgaben.map((p) => (
+              <a href={lp(`/pruefaufgaben/${p.data.slug}`)} class="pruefaufgabe-card">
+                <h3>{p.data.name}</h3>
+                <p>{p.data.description}</p>
+                <span class="link-arrow">Prüfaufgabe öffnen →</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Related Branchen -->
     <section class="section">
       <div class="container">
         <div class="section-header centered">
@@ -768,6 +797,55 @@ const pageSchemas = [
   }
 
   .service-card:hover .link-arrow {
+    color: #ee7711;
+  }
+
+  /* Passende Prüfaufgaben */
+  .pruefaufgaben-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .pruefaufgabe-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+  }
+  .pruefaufgabe-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(50, 40, 91, 0.08);
+  }
+  .pruefaufgabe-card h3 {
+    font-family: 'Antonio', sans-serif;
+    font-size: 1.125rem;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0;
+  }
+  .pruefaufgabe-card p {
+    color: #4b5563;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .pruefaufgabe-card .link-arrow {
+    margin-top: auto;
+    font-family: 'Antonio', sans-serif;
+    font-size: 0.8125rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     color: #ee7711;
   }
 

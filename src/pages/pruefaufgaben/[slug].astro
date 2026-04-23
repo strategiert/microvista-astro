@@ -3,6 +3,7 @@ import PruefaufgabenLayout from '../../layouts/PruefaufgabenLayout.astro';
 import { getCollection } from 'astro:content';
 import { faqSchema, serviceSchema } from '../../components/seo/schemas';
 import { localePath, type Locale } from '../../i18n/translations';
+import { getBranchenForPruefaufgabe } from '../../lib/cross-links';
 
 const { slug } = Astro.params;
 const pruefaufgaben = await getCollection('pruefaufgaben');
@@ -11,6 +12,22 @@ if (!entry) return Astro.redirect('/pruefaufgaben/');
 const task = entry.data;
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
+
+// Cross-Links zu relevanten Branchen
+const branchen = await getCollection('branchen');
+const relatedBranchenSlugs = getBranchenForPruefaufgabe(slug ?? '');
+const relatedBranchen = relatedBranchenSlugs
+  .map(s => branchen.find(b => b.id === s))
+  .filter((b): b is NonNullable<typeof b> => Boolean(b));
+
+const relatedLabels: Record<Locale, { heading: string; linkLabel: string }> = {
+  de: { heading: `Branchen, die ${task.name} einsetzen`, linkLabel: 'Branche öffnen' },
+  en: { heading: `Industries that use ${task.name}`, linkLabel: 'Open industry' },
+  fr: { heading: `Secteurs utilisant ${task.name}`, linkLabel: 'Ouvrir le secteur' },
+  es: { heading: `Sectores que utilizan ${task.name}`, linkLabel: 'Abrir sector' },
+  it: { heading: `Settori che utilizzano ${task.name}`, linkLabel: 'Apri settore' },
+};
+const rl = relatedLabels[locale] ?? relatedLabels.en;
 
 const t = {
   de: {
@@ -101,6 +118,24 @@ schemas.push(serviceSchema({
       ))}
     </section>
   )}
+
+  {relatedBranchen.length > 0 && (
+    <section class="slug-section">
+      <h2>{rl.heading}</h2>
+      <div class="related-branchen-grid">
+        {relatedBranchen.map((b) => (
+          <a href={lp(`/branchen/${b.id}`)} class="related-branche-card">
+            <img src={`/images/branchen/${b.id}.jpg`} alt={b.data.name} loading="lazy" />
+            <div class="related-branche-body">
+              <h3>{b.data.name}</h3>
+              <p>{b.data.description}</p>
+              <span class="related-branche-cta">{rl.linkLabel} →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
 </PruefaufgabenLayout>
 
 <style>
@@ -139,5 +174,64 @@ schemas.push(serviceSchema({
     line-height: 1.8;
     color: #374151;
     border-top: 1px solid #e5e7eb;
+  }
+
+  .related-branchen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: var(--space-4);
+  }
+  .related-branche-card {
+    display: block;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+  }
+  .related-branche-card:hover {
+    border-color: #32285b;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(50, 40, 91, 0.08);
+  }
+  .related-branche-card img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+  }
+  .related-branche-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .related-branche-body h3 {
+    font-family: 'Antonio', sans-serif;
+    font-size: 1.125rem;
+    text-transform: uppercase;
+    color: #32285b;
+    margin: 0;
+  }
+  .related-branche-body p {
+    color: #4b5563;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .related-branche-cta {
+    margin-top: 4px;
+    font-family: 'Antonio', sans-serif;
+    font-size: 0.8125rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #ee7711;
   }
 </style>
