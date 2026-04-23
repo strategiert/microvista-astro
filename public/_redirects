@@ -1,18 +1,29 @@
-# Microvista WordPress → Astro Redirects
-# Format: /old-path /new-path 301
-# WICHTIG: KEINE /en/* oder /fr/* Regeln hier — werden in middleware.ts behandelt!
-# (CF Pages würde sonst /en/* und /fr/* aus dem Worker ausschließen → 404)
+# Microvista Legacy → Astro Redirects
+# Konvention (Stand 2026-04-23):
+#   - trailingSlash: 'never' (Astro-Config). Kanonische URLs sind OHNE trailing slash.
+#   - Astro/CF normalisiert /x/ → /x automatisch, ABER nur wenn /x eine echte Route ist.
+#   - Für Legacy-URLs, die KEINE neue Route haben, muss der _redirects-Eintrag
+#     beide Varianten (mit + ohne slash) abdecken — CF Pages _redirects-Matches
+#     sind exakt und machen KEINE Auto-Normalisierung.
+#   - KEINE /en/* oder /fr/* Regeln hier — werden in src/middleware.ts behandelt!
+#     (CF Pages würde sonst /en/* und /fr/* aus dem Worker ausschließen → 404)
 
+# ─────────────────────────────────────────────────────────────────
 # Blog-Posts DE: /beitraege/[slug] → /magazin/[slug]
-# Spezifische Ausnahmen (Slug-Umbenennung) vor dem Wildcard:
+# ─────────────────────────────────────────────────────────────────
+# Spezifische Slug-Umbenennungen (vor dem Wildcard matchen):
 /beitraege/markttrends-industrielle-computertomografie-2026 /magazin/markttrends-2026 301
 /beitraege/markttrends-industrielle-computertomografie-2026/ /magazin/markttrends-2026 301
 /beitraege/zerstoerungsfreie-pruefverfahren /magazin 301
 /beitraege/zerstoerungsfreie-pruefverfahren/ /magazin 301
+# Wildcard (matcht mit und ohne trailing slash):
 /beitraege/* /magazin/:splat 301
+/beitraege /magazin 301
 /beitraege/ /magazin 301
 
-# Presse → Magazin (spezifisch) bzw. Newsroom (Catch-All, nur DE)
+# ─────────────────────────────────────────────────────────────────
+# Presse → Magazin (spezifische Posts) bzw. Newsroom (Catch-All)
+# ─────────────────────────────────────────────────────────────────
 /presse/mobiles-ct-system-direkt-vor-ort /magazin/mobiles-ct-system-direkt-vor-ort 301
 /presse/mobiles-ct-system-direkt-vor-ort/ /magazin/mobiles-ct-system-direkt-vor-ort 301
 /presse/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort /magazin/zerstoerungsfreie-bauteilpruefung-mit-mobilem-industriellem-ct-direkt-vor-ort 301
@@ -22,57 +33,102 @@
 /presse/qualitaetskontrolle-die-zur-produktion-rollt-flexibel-mietbares-ct-system /magazin/qualitaetskontrolle-die-zur-produktion-rollt-flexibel-mietbares-ct-system 301
 /presse/qualitaetskontrolle-die-zur-produktion-rollt-flexibel-mietbares-ct-system/ /magazin/qualitaetskontrolle-die-zur-produktion-rollt-flexibel-mietbares-ct-system 301
 /presse/* /newsroom 301
+/presse /newsroom 301
+/presse/ /newsroom 301
 
-# Prüfaufgaben: alte verschachtelte URLs → flache Struktur
+# ─────────────────────────────────────────────────────────────────
+# Prüfaufgaben: verschachtelt → flach + DE-Umlaut-Normalisierung
+# ─────────────────────────────────────────────────────────────────
+/industrielle-computertomographie/prufaufgaben /pruefaufgaben 301
 /industrielle-computertomographie/prufaufgaben/ /pruefaufgaben 301
+/industrielle-computertomographie/prufaufgaben/porositatsanalyse /pruefaufgaben/porositaetsanalyse 301
 /industrielle-computertomographie/prufaufgaben/porositatsanalyse/ /pruefaufgaben/porositaetsanalyse 301
+/industrielle-computertomographie/prufaufgaben/messung-wandstaerken /pruefaufgaben/wanddickenmessung 301
 /industrielle-computertomographie/prufaufgaben/messung-wandstaerken/ /pruefaufgaben/wanddickenmessung 301
+/industrielle-computertomographie/prufaufgaben/cad-soll-ist-vergleich /pruefaufgaben/cad-soll-ist-vergleich 301
 /industrielle-computertomographie/prufaufgaben/cad-soll-ist-vergleich/ /pruefaufgaben/cad-soll-ist-vergleich 301
+/industrielle-computertomographie/prufaufgaben/reverse-engineering /pruefaufgaben/reverse-engineering 301
 /industrielle-computertomographie/prufaufgaben/reverse-engineering/ /pruefaufgaben/reverse-engineering 301
+/industrielle-computertomographie/prufaufgaben/grat-kernreste-spaene /pruefaufgaben/grat-kernreste-spaene 301
 /industrielle-computertomographie/prufaufgaben/grat-kernreste-spaene/ /pruefaufgaben/grat-kernreste-spaene 301
+/industrielle-computertomographie/prufaufgaben/qualitatssicherung-bei-hairpin-statoren /pruefaufgaben/hairpin-stator-pruefung 301
 /industrielle-computertomographie/prufaufgaben/qualitatssicherung-bei-hairpin-statoren/ /pruefaufgaben/hairpin-stator-pruefung 301
+/industrielle-computertomographie/prufaufgaben/montage-fugekontrolle /pruefaufgaben/montage-fuegekontrolle 301
 /industrielle-computertomographie/prufaufgaben/montage-fugekontrolle/ /pruefaufgaben/montage-fuegekontrolle 301
+/industrielle-computertomographie/prufaufgaben/erstmusterpruefbericht /pruefaufgaben/erstmusterpruefbericht 301
 /industrielle-computertomographie/prufaufgaben/erstmusterpruefbericht/ /pruefaufgaben/erstmusterpruefbericht 301
+/industrielle-computertomographie/prufaufgaben/laminographie /pruefaufgaben/laminographie 301
 /industrielle-computertomographie/prufaufgaben/laminographie/ /pruefaufgaben/laminographie 301
+/industrielle-computertomographie/prufaufgaben/schweissnahtpruefung /pruefaufgaben/schweissnahtpruefung 301
 /industrielle-computertomographie/prufaufgaben/schweissnahtpruefung/ /pruefaufgaben/schweissnahtpruefung 301
+/industrielle-computertomographie/prufaufgaben/form-und-lagetoleranzen /pruefaufgaben/form-und-lagetoleranzen 301
 /industrielle-computertomographie/prufaufgaben/form-und-lagetoleranzen/ /pruefaufgaben/form-und-lagetoleranzen 301
+/industrielle-computertomographie/prufaufgaben/3d-vermessung /pruefaufgaben/3d-vermessung 301
 /industrielle-computertomographie/prufaufgaben/3d-vermessung/ /pruefaufgaben/3d-vermessung 301
 
-# Dienstleistungen: alte verschachtelte URLs → flache Struktur
+# ─────────────────────────────────────────────────────────────────
+# Dienstleistungen: verschachtelt → flach
+# ─────────────────────────────────────────────────────────────────
+/industrielle-computertomographie/dienstleistungen /dienstleistungen 301
 /industrielle-computertomographie/dienstleistungen/ /dienstleistungen 301
+/industrielle-computertomographie/dienstleistungen/ct-labor /dienstleistungen/ct-labor 301
 /industrielle-computertomographie/dienstleistungen/ct-labor/ /dienstleistungen/ct-labor 301
+/industrielle-computertomographie/dienstleistungen/ct-datenauswertung /dienstleistungen/ct-datenauswertung 301
 /industrielle-computertomographie/dienstleistungen/ct-datenauswertung/ /dienstleistungen/ct-datenauswertung 301
+/industrielle-computertomographie/dienstleistungen/scanexpress-mobiles-industrielles-ct /dienstleistungen/scanexpress 301
 /industrielle-computertomographie/dienstleistungen/scanexpress-mobiles-industrielles-ct/ /dienstleistungen/scanexpress 301
 
+# ─────────────────────────────────────────────────────────────────
 # FAQ
+# ─────────────────────────────────────────────────────────────────
+/industrielle-computertomographie/faq /faq 301
 /industrielle-computertomographie/faq/ /faq 301
 
-# Branchen: alte URLs → neue Struktur
+# ─────────────────────────────────────────────────────────────────
+# Branchen: alte Top-Level-URLs → /branchen/*
+# ─────────────────────────────────────────────────────────────────
+/zerstoerungsfreie-pruefung-automobilindustrie /branchen/automotive 301
 /zerstoerungsfreie-pruefung-automobilindustrie/ /branchen/automotive 301
+/zerstoerungsfreie-pruefung-leichtmetallguss /branchen/leichtmetallguss 301
 /zerstoerungsfreie-pruefung-leichtmetallguss/ /branchen/leichtmetallguss 301
+/zerstorungsfreie-prufung-von-eisenguss /branchen/eisenguss 301
 /zerstorungsfreie-prufung-von-eisenguss/ /branchen/eisenguss 301
+/zerstoerungsfreie-pruefung-batteriesystemen /branchen/e-mobilitaet 301
 /zerstoerungsfreie-pruefung-batteriesystemen/ /branchen/e-mobilitaet 301
+/pruefung-additiv-gefertigter-bauteile /branchen/additive-fertigung 301
 /pruefung-additiv-gefertigter-bauteile/ /branchen/additive-fertigung 301
+/qualitaetssicherung-additive-fertigung /branchen/additive-fertigung 301
+/qualitaetssicherung-additive-fertigung/ /branchen/additive-fertigung 301
+/qualitatsmanagement-medizinprodukte /branchen/medizintechnik 301
+/qualitatsmanagement-medizinprodukte/ /branchen/medizintechnik 301
+/zfp-archaeologie /branchen/archaeologie 301
 /zfp-archaeologie/ /branchen/archaeologie 301
+/zerstoerungsfreie-werkstoffpruefung /branchen/werkstoffpruefung 301
 /zerstoerungsfreie-werkstoffpruefung/ /branchen/werkstoffpruefung 301
 
-# Sonstige Seiten DE
-# HINWEIS: Keine self-referencing trailing-slash Redirects (/x/ → /x) hier!
-# Astros trailingSlash: 'never' erledigt das automatisch.
-# Self-Redirects in _redirects → CF fügt Ziel zur exclude-Liste hinzu → Worker bypassed → 404!
+# ─────────────────────────────────────────────────────────────────
+# Rechtliche Seiten DE (Altnamen)
+# ─────────────────────────────────────────────────────────────────
+/datenschutzerklaerung /datenschutz 301
 /datenschutzerklaerung/ /datenschutz 301
+/cookie-richtlinie-eu /datenschutz 301
 /cookie-richtlinie-eu/ /datenschutz 301
+
+# ─────────────────────────────────────────────────────────────────
+# Sonstige Legacy-Seiten DE
+# ─────────────────────────────────────────────────────────────────
+/umweltallianz-sachen-anhalt /zertifizierungen 301
 /umweltallianz-sachen-anhalt/ /zertifizierungen 301
-/end-of-line-test/ /serie 301
+/3d-messtechnik-dienstleister /pruefaufgaben/3d-vermessung 301
+/3d-messtechnik-dienstleister/ /pruefaufgaben/3d-vermessung 301
+/express-inspektion-buchen /express-ct-inspektion 301
+/express-inspektion-buchen/ /express-ct-inspektion 301
+/test / 301
 /test/ / 301
 
-# Lücken aus docs/sitemap-abgleich.md (WP-Legacy-Seiten ohne Ersatz)
-/3d-messtechnik-dienstleister/ /pruefaufgaben/3d-vermessung 301
-/express-inspektion-buchen/ /express-ct-inspektion 301
-/qualitaetssicherung-additive-fertigung/ /branchen/additive-fertigung 301
-/qualitatsmanagement-medizinprodukte/ /branchen/medizintechnik 301
-
-# Fehlende Seiten → Redirects
+# ─────────────────────────────────────────────────────────────────
+# Fehlende Seiten (interne Verlinkungen, nicht aus Legacy)
+# ─────────────────────────────────────────────────────────────────
 /labor/kontakt /kontakt 301
 /serie/kontakt /kontakt 301
 /support /kontakt 301

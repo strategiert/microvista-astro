@@ -28,21 +28,36 @@
 
 ## Handlungsempfehlung zu den 31 FEHLT-URLs
 
-### A) `industrial-ct-software.com` (24 URLs) — EIGENE Domain
+### A) `industrial-ct-software.com` (24 URLs) — Domain konsolidieren auf microvista.de
 
-Diese Domain ist ein separates Produkt (InspectVista / CT-Auswertungs-Cloud), nicht Teil der microvista.de-Migration. Auf microvista.de existiert bereits `/software` als Landing. Falls die Software-Domain zurückgebaut werden soll, eigenes `_redirects` auf jener Domain nötig (nicht hier).
+**Entscheidung:** Domain wird zurückgebaut, alles läuft künftig unter microvista.de.
 
-### B) microvista.de-Lücken (7 URLs) — konkreter Fix-Plan
+**Umsetzung (commit 2026-04-23):**
+- `src/middleware.ts` hat jetzt einen Host-Check: Requests auf `industrial-ct-software.com` oder `www.industrial-ct-software.com` werden per 301 auf microvista.de umgeleitet.
+- Mapping für alle 24 bekannten Legacy-URLs (Impressum/AGB/Datenschutz in 4 Sprachen, Produkt-Landings in 3 Sprachen).
+- Catch-all für unbekannte Pfade: → `https://microvista.de/software`
 
-| Alte URL | Vorschlag | Priorität |
-|---|---|---|
-| `/3d-messtechnik-dienstleister/` | 301 → `/pruefaufgaben/3d-vermessung` | hoch |
-| `/express-inspektion-buchen/` | 301 → `/express-ct-inspektion` | hoch (Conversion-Landing!) |
-| `/qualitaetssicherung-additive-fertigung/` | 301 → `/branchen/additive-fertigung` | hoch |
-| `/qualitatsmanagement-medizinprodukte/` | 301 → `/branchen/medizintechnik` | hoch |
-| `/en/end-of-line-testing-using-industrial-ct/` | 301 → `/en/end-of-line-test` (Worker) | hoch |
-| `/fr/services-en-metrologie-3d/` | 301 → `/fr/pruefaufgaben/3d-vermessung` (Worker) | mittel |
-| `/fr/test-de-fin-de-ligne-par-ct-...` | 301 → `/fr/end-of-line-test` (Worker) | mittel |
+**Klaus muss noch manuell:**
+1. DNS `industrial-ct-software.com` auf Cloudflare umstellen (falls nicht schon).
+2. Domain als Custom Domain ins CF-Pages-Projekt `microvista-astro` einbinden (Cloudflare Dashboard → Pages → microvista-astro → Custom domains).
+3. Sobald die Domain gebunden ist, macht der Worker die 301-Redirects automatisch.
+
+### B) microvista.de-Lücken (7 URLs) — behoben
+
+Alle 7 Redirects sind in commit 486b01d (DE via `_redirects`, EN/FR via Worker-Middleware) live gegangen.
+
+## Trailing-Slash-Strategie (ab 2026-04-23)
+
+**Festlegung:** Kanonische URL **ohne trailing slash**, konsistent zu `trailingSlash: 'never'` in `astro.config.mjs`.
+
+**Mechanik:**
+- Astro + Cloudflare machen automatisch 308-Redirect `/x/` → `/x` für jede echte Route.
+- `public/_redirects`-Einträge matchen **exakt** (keine Auto-Normalisierung). Deshalb steht jeder konkrete Legacy-Eintrag jetzt in beiden Varianten (`/legacy` + `/legacy/`).
+- Wildcards wie `/beitraege/* /magazin/:splat 301` matchen beide Varianten automatisch.
+
+**Korrigiert:**
+- Fehlerhafter Eintrag `/end-of-line-test/ /serie 301` entfernt. Die Seite `/end-of-line-test` existiert und ist kein Legacy-Redirect. Astros 308 normalisiert jetzt korrekt.
+- `/test /` ohne Status-Code gefixt (war harmlos wegen fehlendem Match, jetzt `/test / 301`).
 
 
 ## FEHLT (31)

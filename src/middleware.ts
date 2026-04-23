@@ -98,10 +98,61 @@ function getFrRedirect(basePath: string): string | null {
   return EXACT[normalized] ?? null;
 }
 
+// Legacy industrial-ct-software.com → microvista.de
+// Diese Domain wird zurückgebaut. Custom Domain muss im microvista-astro-CF-Pages-Projekt
+// gebunden sein, damit der Worker die Requests sieht.
+function getCtSoftwareRedirect(pathname: string): string | null {
+  const normalized = pathname.replace(/\/$/, '') || '/';
+  const MAP: Record<string, string> = {
+    '/': 'https://microvista.de/software',
+    // Produkt-Seiten
+    '/de/ct-software': 'https://microvista.de/software',
+    '/fr/ct-software-fr': 'https://microvista.de/fr/software',
+    '/it/valutazione-automatizzata': 'https://microvista.de/it/software',
+    // Impressum
+    '/imprint': 'https://microvista.de/en/impressum',
+    '/de/impressum': 'https://microvista.de/impressum',
+    '/fr/impression': 'https://microvista.de/fr/impressum',
+    '/it/impronta': 'https://microvista.de/it/impressum',
+    // AGB
+    '/gtc': 'https://microvista.de/en/agb',
+    '/de/agb': 'https://microvista.de/agb',
+    '/fr/conditions-generales-de-vente': 'https://microvista.de/fr/agb',
+    '/it/condizioni-generali-di-contratto': 'https://microvista.de/it/agb',
+    // Datenschutz
+    '/privacy-statement-eu': 'https://microvista.de/en/datenschutz',
+    '/privacy-statement-uk': 'https://microvista.de/en/datenschutz',
+    '/de/datenschutzerklaerung-eu': 'https://microvista.de/datenschutz',
+    '/fr/declaration-de-confidentialite-ue': 'https://microvista.de/fr/datenschutz',
+    '/it/dichiarazione-sulla-privacy-ue': 'https://microvista.de/it/datenschutz',
+    // Cookies → Datenschutz
+    '/cookie-policy-eu-2': 'https://microvista.de/en/datenschutz',
+    '/cookie-policy-uk': 'https://microvista.de/en/datenschutz',
+    '/de/cookie-richtlinie-eu': 'https://microvista.de/datenschutz',
+    '/fr/directive-sur-les-cookies-ue': 'https://microvista.de/fr/datenschutz',
+    '/it/direttiva-sui-cookie-ue': 'https://microvista.de/it/datenschutz',
+    // Disclaimer → Datenschutz
+    '/disclaimer-2': 'https://microvista.de/en/datenschutz',
+    '/de/haftungsausschluss': 'https://microvista.de/datenschutz',
+    '/fr/clause-de-non-responsabilite': 'https://microvista.de/fr/datenschutz',
+    '/it/dichiarazione-di-non-responsabilita': 'https://microvista.de/it/datenschutz',
+  };
+  if (MAP[normalized]) return MAP[normalized];
+  // Catch-all: alle anderen Pfade (inkl. /2024/11/28/hallo-welt, /category/allgemein)
+  return 'https://microvista.de/software';
+}
+
 export const onRequest = defineMiddleware(async (context, next) => {
   // After rewrite, middleware re-runs — don't overwrite the locale
   if (context.locals.locale) {
     return next();
+  }
+
+  // Legacy-Domain industrial-ct-software.com → microvista.de (permanent)
+  const host = context.url.hostname.toLowerCase();
+  if (host === 'industrial-ct-software.com' || host === 'www.industrial-ct-software.com') {
+    const target = getCtSoftwareRedirect(context.url.pathname);
+    if (target) return context.redirect(target, 301);
   }
 
   const { pathname } = context.url;
