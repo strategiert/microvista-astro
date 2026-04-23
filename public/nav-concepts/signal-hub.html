@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signal Hub Navigation | Microvista</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Navigation concept for Microvista: search-first command palette combined with a problem-oriented mega menu.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@400;500;600;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      --mv-violet: #32285b;
+      --mv-violet-dark: #241b46;
+      --mv-blue: #8ebfd6;
+      --mv-blue-soft: #edf6fa;
+      --mv-orange: #ee7711;
+      --mv-orange-soft: #fff0e1;
+      --mv-cyan: #00a0d2;
+      --mv-cyan-soft: #e8f8fd;
+      --mv-white: #ffffff;
+      --mv-gray-50: #f9fafb;
+      --mv-gray-100: #f3f4f6;
+      --mv-gray-200: #e5e7eb;
+      --mv-gray-400: #9ca3af;
+      --mv-gray-500: #6b7280;
+      --mv-gray-700: #374151;
+      --mv-gray-900: #111827;
+      --shadow-sm: 0 8px 24px rgba(50, 40, 91, 0.08);
+      --shadow-md: 0 18px 48px rgba(50, 40, 91, 0.12);
+      --shadow-lg: 0 28px 80px rgba(24, 18, 49, 0.22);
+      --radius-sm: 14px;
+      --radius-md: 22px;
+      --radius-lg: 30px;
+      --max-width: 1380px;
+      margin: 0;
+      min-height: 100vh;
+      font-family: "PT Sans", sans-serif;
+      color: var(--mv-violet);
+      background:
+        radial-gradient(circle at 10% 14%, rgba(142, 191, 214, 0.45), transparent 22%),
+        radial-gradient(circle at 84% 10%, rgba(238, 119, 17, 0.15), transparent 20%),
+        radial-gradient(circle at 82% 78%, rgba(0, 160, 210, 0.14), transparent 24%),
+        linear-gradient(180deg, #f6fbfd 0%, #ffffff 48%, #f8fafc 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(50, 40, 91, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(50, 40, 91, 0.03) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.85), transparent 85%);
+      pointer-events: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(calc(100% - 36px), var(--max-width));
+      margin: 0 auto;
+    }
+
+    .concept-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(50, 40, 91, 0.08);
+      box-shadow: var(--shadow-sm);
+      color: var(--mv-gray-700);
+      font-size: 0.92rem;
+    }
+
+    .concept-tag strong {
+      color: var(--mv-violet);
+    }
+
+    .header {
+      position: sticky;
+      top: 12px;
+      z-index: 30;
+      margin-top: 18px;
+    }
+
+    .header-shell {
+      position: relative;
+      padding: 16px 18px;
+      border-radius: 26px;
+      border: 1px solid rgba(50, 40, 91, 0.08);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .header-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand img {
+      height: 34px;
+      width: auto;
+    }
+
+    .brand-copy {
+      display: grid;
+      gap: 3px;
+    }
+
+    .brand-copy strong {
+      font-family: "Antonio", sans-serif;
+      letter-spacing: 0.02em;
+      font-size: 1.3rem;
+      line-height: 1;
+    }
+
+    .brand-copy span {
+      color: var(--mv-gray-500);
+      font-size: 0.82rem;
+    }
+
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-trigger {
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--mv-gray-700);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 180ms ease;
+    }
+
+    .nav-trigger:hover,
+    .nav-trigger.active {
+      background: var(--mv-blue-soft);
+      color: var(--mv-violet);
+      border-color: rgba(142, 191, 214, 0.7);
+    }
+
+    .command-trigger {
+      flex: 1;
+      min-width: 280px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(142, 191, 214, 0.9);
+      background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%);
+      cursor: pointer;
+      transition: box-shadow 180ms ease, transform 180ms ease, border-color 180ms ease;
+      text-align: left;
+      box-shadow: 0 0 0 rgba(0, 160, 210, 0);
+    }
+
+    .command-trigger:hover {
+      transform: translateY(-1px);
+      border-color: rgba(0, 160, 210, 0.8);
+      box-shadow: 0 12px 28px rgba(142, 191, 214, 0.24);
+    }
+
+    .command-icon {
+      flex: 0 0 34px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--mv-cyan) 0%, var(--mv-blue) 100%);
+      color: var(--mv-white);
+      font-weight: 700;
+    }
+
+    .command-copy {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .command-copy strong {
+      color: var(--mv-violet);
+      font-size: 0.98rem;
+    }
+
+    .command-copy span {
+      color: var(--mv-gray-500);
+      font-size: 0.84rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .command-kbd {
+      margin-left: auto;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--mv-violet);
+      color: var(--mv-white);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lang-pill {
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(50, 40, 91, 0.08);
+      background: #ffffff;
+      color: var(--mv-gray-700);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .cta-pill {
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--mv-orange) 0%, #ff9a3d 100%);
+      color: var(--mv-white);
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 14px 26px rgba(238, 119, 17, 0.24);
+    }
+
+    .mega-panel {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: calc(100% + 12px);
+      padding: 26px;
+      border-radius: 28px;
+      border: 1px solid rgba(50, 40, 91, 0.08);
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+    }
+
+    .mega-panel.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .panel-kicker {
+      color: var(--mv-cyan);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-family: "Antonio", sans-serif;
+      font-size: clamp(2rem, 3vw, 3.2rem);
+      line-height: 0.98;
+      letter-spacing: 0.01em;
+    }
+
+    .panel-head p {
+      margin: 12px 0 0;
+      max-width: 700px;
+      color: var(--mv-gray-700);
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    .panel-note {
+      color: var(--mv-gray-500);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr;
+      gap: 18px;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .problem-tile {
+      padding: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(50, 40, 91, 0.08);
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      box-shadow: var(--shadow-sm);
+      text-align: left;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .problem-tile:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(0, 160, 210, 0.35);
+    }
+
+    .problem-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .problem-id {
+      color: var(--mv-gray-500);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .problem-badge,
+    .tag,
+    .result-badge,
+    .preview-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tone-labor {
+      background: rgba(50, 40, 91, 0.1);
+      color: var(--mv-violet);
+    }
+
+    .tone-serie {
+      background: rgba(0, 160, 210, 0.12);
+      color: var(--mv-cyan);
+    }
+
+    .tone-express {
+      background: rgba(238, 119, 17, 0.12);
+      color: var(--mv-orange);
+    }
+
+    .tone-wissen {
+      background: rgba(142, 191, 214, 0.18);
+      color: #41647f;
+    }
+
+    .problem-tile h3 {
+      margin: 0 0 8px;
+      font-family: "Antonio", sans-serif;
+      font-size: 1.5rem;
+      line-height: 1.05;
+      letter-spacing: 0.01em;
+    }
+
+    .problem-tile p {
+      margin: 0 0 14px;
+      color: var(--mv-gray-700);
+      line-height: 1.5;
+      font-size: 0.96rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      background: var(--mv-blue-soft);
+      color: var(--mv-violet);
+    }
+
+    .panel-side {
+      display: grid;
+      gap: 14px;
+    }
+
+    .side-card {
+      padding: 18px;
+      border-radius: 24px;
+      background: linear-gradient(160deg, var(--mv-violet) 0%, var(--mv-violet-dark) 100%);
+      color: var(--mv-white);
+      box-shadow: var(--shadow-md);
+    }
+
+    .side-card h3 {
+      margin: 0 0 12px;
+      font-family: "Antonio", sans-serif;
+      font-size: 1.6rem;
+      line-height: 1;
+      letter-spacing: 0.01em;
+    }
+
+    .side-card p {
+      margin: 0 0 10px;
+      color: rgba(255, 255, 255, 0.82);
+      line-height: 1.5;
+    }
+
+    .step-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .step-item {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .step-item:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .step-index {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.14);
+      color: var(--mv-blue);
+      font-weight: 700;
+    }
+
+    .step-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.96rem;
+    }
+
+    .step-item span {
+      display: block;
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .mini-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .mini-links a,
+    .mini-links button {
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--mv-white);
+      cursor: pointer;
+    }
+
+    .hero {
+      padding: 76px 0 24px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .hero-card,
+    .info-card,
+    .flow-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(50, 40, 91, 0.08);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero-card {
+      padding: 34px;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--mv-cyan);
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+
+    .hero-kicker::before {
+      content: "";
+      width: 28px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--mv-orange) 0%, var(--mv-cyan) 100%);
+    }
+
+    .hero-card h1 {
+      margin: 0 0 16px;
+      font-family: "Antonio", sans-serif;
+      font-size: clamp(3rem, 6vw, 5.8rem);
+      line-height: 0.92;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-card h1 span {
+      color: var(--mv-orange);
+    }
+
+    .hero-card p {
+      margin: 0 0 20px;
+      max-width: 670px;
+      color: var(--mv-gray-700);
+      font-size: 1.05rem;
+      line-height: 1.64;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .hero-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .hero-button.primary {
+      background: linear-gradient(135deg, var(--mv-orange) 0%, #ff9a3d 100%);
+      color: var(--mv-white);
+      box-shadow: 0 16px 28px rgba(238, 119, 17, 0.24);
+    }
+
+    .hero-button.secondary {
+      background: var(--mv-white);
+      color: var(--mv-violet);
+      border-color: rgba(50, 40, 91, 0.12);
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 18px;
+    }
+
+    .info-card {
+      padding: 22px;
+    }
+
+    .info-card h2 {
+      margin: 0 0 12px;
+      font-family: "Antonio", sans-serif;
+      font-size: 2.1rem;
+      line-height: 1;
+      letter-spacing: 0.01em;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--mv-gray-700);
+      line-height: 1.56;
+    }
+
+    .status-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(50, 40, 91, 0.08);
+    }
+
+    .status-row:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .status-row strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 0.96rem;
+    }
+
+    .status-row span {
+      display: block;
+      color: var(--mv-gray-500);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .mini-command {
+      padding: 16px;
+      border-radius: 24px;
+      background: linear-gradient(160deg, var(--mv-cyan-soft) 0%, #ffffff 100%);
+      border: 1px solid rgba(0, 160, 210, 0.12);
+    }
+
+    .mini-command h3 {
+      margin: 0 0 10px;
+      font-family: "Antonio", sans-serif;
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+
+    .mini-command .sample-input {
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--mv-violet);
+      border: 1px solid rgba(0, 160, 210, 0.12);
+    }
+
+    .sample-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .sample-pills span {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--mv-white);
+      color: var(--mv-gray-700);
+      font-size: 0.78rem;
+      border: 1px solid rgba(50, 40, 91, 0.08);
+    }
+
+    .section {
+      padding: 18px 0 82px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 22px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-family: "Antonio", sans-serif;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 0.96;
+      letter-spacing: 0.01em;
+    }
+
+    .section-head p {
+      margin: 0;
+      max-width: 620px;
+      color: var(--mv-gray-700);
+      line-height: 1.6;
+    }
+
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .challenge-card {
+      display: grid;
+      gap: 16px;
+      padding: 22px;
+      border-radius: 26px;
+      border: 1px solid rgba(50, 40, 91, 0.08);
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .challenge-card h3 {
+      margin: 0;
+      font-family: "Antonio", sans-serif;
+      font-size: 1.65rem;
+      line-height: 1;
+      letter-spacing: 0.01em;
+    }
+
+    .challenge-card p {
+      margin: 0;
+      color: var(--mv-gray-700);
+      line-height: 1.56;
+    }
+
+    .challenge-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .challenge-button {
+      justify-self: start;
+      padding: 11px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(50, 40, 91, 0.12);
+      background: var(--mv-white);
+      color: var(--mv-violet);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .flow-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .flow-card {
+      padding: 20px;
+    }
+
+    .flow-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-family: "Antonio", sans-serif;
+      font-size: 1.55rem;
+      line-height: 1;
+      letter-spacing: 0.01em;
+    }
+
+    .flow-card p {
+      margin: 0;
+      color: var(--mv-gray-700);
+      line-height: 1.55;
+    }
+
+    .footer-callout {
+      padding: 0 0 70px;
+    }
+
+    .footer-box {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 24px 26px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(50, 40, 91, 0.98) 0%, rgba(36, 27, 70, 0.98) 100%);
+      color: var(--mv-white);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .footer-box h2 {
+      margin: 0 0 10px;
+      font-family: "Antonio", sans-serif;
+      font-size: 2.2rem;
+      line-height: 1;
+      letter-spacing: 0.01em;
+    }
+
+    .footer-box p {
+      margin: 0;
+      max-width: 900px;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.58;
+    }
+
+    .footer-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--mv-orange) 0%, #ff9a3d 100%);
+      color: var(--mv-white);
+      font-weight: 700;
+      box-shadow: 0 14px 24px rgba(238, 119, 17, 0.24);
+    }
+
+    .palette-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 70px 20px 20px;
+      background: rgba(50, 40, 91, 0.74);
+      backdrop-filter: blur(16px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 180ms ease, visibility 180ms ease;
+      z-index: 50;
+    }
+
+    .palette-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .palette {
+      width: min(1180px, calc(100% - 12px));
+      border-radius: 32px;
+      border: 1px solid rgba(50, 40, 91, 0.1);
+      background: #ffffff;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      transform: translateY(-10px) scale(0.985);
+      transition: transform 180ms ease;
+    }
+
+    .palette-overlay.visible .palette {
+      transform: translateY(0) scale(1);
+    }
+
+    .palette-top {
+      padding: 20px;
+      border-bottom: 1px solid rgba(50, 40, 91, 0.08);
+    }
+
+    .palette-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(142, 191, 214, 0.9);
+      background: linear-gradient(180deg, #ffffff 0%, #f7fbfd 100%);
+    }
+
+    .palette-leading {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--mv-orange) 0%, var(--mv-cyan) 100%);
+      color: var(--mv-white);
+      font-weight: 700;
+    }
+
+    .palette-input {
+      flex: 1;
+      min-width: 0;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--mv-violet);
+      font-size: 1.16rem;
+    }
+
+    .palette-input::placeholder {
+      color: var(--mv-gray-500);
+    }
+
+    .palette-esc {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--mv-violet);
+      color: var(--mv-white);
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .palette-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 12px;
+    }
+
+    .filter-pill {
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(50, 40, 91, 0.08);
+      background: #ffffff;
+      color: var(--mv-gray-700);
+      cursor: pointer;
+      transition: all 180ms ease;
+    }
+
+    .filter-pill.active,
+    .filter-pill:hover {
+      background: var(--mv-blue-soft);
+      border-color: rgba(142, 191, 214, 0.7);
+      color: var(--mv-violet);
+    }
+
+    .palette-body {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      min-height: 540px;
+    }
+
+    .palette-results {
+      max-height: 540px;
+      overflow-y: auto;
+      border-right: 1px solid rgba(50, 40, 91, 0.08);
+    }
+
+    .result-group {
+      padding: 14px 18px 0;
+    }
+
+    .result-group-title {
+      color: var(--mv-gray-500);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .result-list {
+      display: grid;
+      gap: 10px;
+      padding-bottom: 12px;
+    }
+
+    .result-item {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border-radius: 22px;
+      border: 1px solid transparent;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+      transition: all 180ms ease;
+    }
+
+    .result-item:hover,
+    .result-item.selected {
+      border-color: rgba(142, 191, 214, 0.72);
+      background: var(--mv-blue-soft);
+    }
+
+    .result-glyph {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(50, 40, 91, 0.06);
+      color: var(--mv-violet);
+      font-weight: 700;
+    }
+
+    .result-copy strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--mv-violet);
+      font-size: 0.98rem;
+    }
+
+    .result-copy span {
+      display: block;
+      color: var(--mv-gray-700);
+      line-height: 1.45;
+      font-size: 0.86rem;
+    }
+
+    .palette-preview {
+      padding: 22px;
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      background: linear-gradient(160deg, rgba(50, 40, 91, 1) 0%, rgba(36, 27, 70, 1) 100%);
+      color: var(--mv-white);
+    }
+
+    .preview-card {
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .preview-kicker {
+      color: var(--mv-blue);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .preview-card h3 {
+      margin: 0 0 10px;
+      font-family: "Antonio", sans-serif;
+      font-size: 2rem;
+      line-height: 1;
+      letter-spacing: 0.01em;
+    }
+
+    .preview-card p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.82);
+      line-height: 1.55;
+    }
+
+    .preview-route {
+      display: grid;
+      gap: 10px;
+    }
+
+    .preview-stat {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .preview-stat:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    .preview-stat strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.94rem;
+    }
+
+    .preview-stat span {
+      display: block;
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 0.86rem;
+      line-height: 1.42;
+    }
+
+    .preview-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 14px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--mv-orange) 0%, #ff9a3d 100%);
+      color: var(--mv-white);
+      font-weight: 700;
+      margin-top: 12px;
+      box-shadow: 0 14px 24px rgba(238, 119, 17, 0.24);
+    }
+
+    .empty-state {
+      padding: 26px 18px 18px;
+      color: var(--mv-gray-700);
+    }
+
+    .empty-state h3 {
+      margin: 0 0 8px;
+      font-family: "Antonio", sans-serif;
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+
+    .empty-state p {
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1180px) {
+      .header-row,
+      .hero-grid,
+      .challenge-grid,
+      .flow-grid,
+      .panel-grid,
+      .palette-body,
+      .footer-box {
+        grid-template-columns: 1fr;
+      }
+
+      .header-center {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+
+      .palette-results {
+        border-right: none;
+        border-bottom: 1px solid rgba(50, 40, 91, 0.08);
+        max-height: 360px;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .shell {
+        width: min(calc(100% - 24px), var(--max-width));
+      }
+
+      .header-shell,
+      .hero-card,
+      .info-card,
+      .challenge-card,
+      .flow-card,
+      .footer-box,
+      .palette,
+      .mega-panel {
+        border-radius: 22px;
+      }
+
+      .problem-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 56px;
+      }
+
+      .mega-panel {
+        left: 8px;
+        right: 8px;
+        padding: 18px;
+      }
+
+      .palette-overlay {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="concept-tag">
+      <strong>Live concept</strong>
+      <span>Signal Hub mischt Command Palette und problemorientiertes Mega Menu in der Microvista-Farbwelt.</span>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="shell header-shell" id="header-shell">
+      <div class="header-row">
+        <a href="/" class="brand" aria-label="Microvista">
+          <img src="/images/logos/2013-08-microvista_Logo_RGB-7.png" alt="Microvista">
+          <span class="brand-copy">
+            <strong>Signal Hub</strong>
+            <span>Navigation concept for Microvista</span>
+          </span>
+        </a>
+
+        <div class="header-center">
+          <nav class="nav" aria-label="Prototype navigation">
+            <button class="nav-trigger" type="button" data-panel="problems">Leistungen</button>
+            <button class="nav-trigger" type="button" data-panel="industries">Branchen</button>
+            <button class="nav-trigger" type="button" data-panel="knowledge">Wissen</button>
+          </nav>
+
+          <button class="command-trigger" id="command-trigger" type="button">
+            <span class="command-icon">/</span>
+            <span class="command-copy">
+              <strong>Problem, Verfahren oder Branche suchen</strong>
+              <span>Suche fuer schnelle Nutzer, Problemkarten fuer Erstbesucher.</span>
+            </span>
+            <span class="command-kbd">Ctrl K</span>
+          </button>
+        </div>
+
+        <div class="header-actions">
+          <span class="lang-pill">DE</span>
+          <a class="cta-pill" href="/kontakt">Beratung</a>
+        </div>
+      </div>
+
+      <div class="mega-panel" id="panel-problems">
+        <div class="panel-head">
+          <div>
+            <div class="panel-kicker">Problem-first layer</div>
+            <h2>Start mit der Herausforderung. Nicht mit der Menuestruktur.</h2>
+            <p>Die Karten uebernehmen die Staerke aus der problemorientierten Variante. Jeder Einstieg kann die Command Palette direkt mit einer passenden Anfrage oeffnen und spaeter auf echte Seiten im System verweisen.</p>
+          </div>
+          <div class="panel-note">Discover first, then accelerate</div>
+        </div>
+
+        <div class="panel-grid">
+          <div class="problem-grid">
+            <button class="problem-tile" type="button" data-query="erstmusterpruefung freigabe" data-filter="problem">
+              <div class="problem-top">
+                <span class="problem-id">Signal 01</span>
+                <span class="problem-badge tone-labor">Labor</span>
+              </div>
+              <h3>Neues Bauteil freigeben?</h3>
+              <p>Vom ersten Scan bis zum Erstmusterpruefbericht. Der Nutzer denkt in Freigabe, nicht in Menuekategorien.</p>
+              <div class="tag-row">
+                <span class="tag">Erstmusterpruefung</span>
+                <span class="tag">CAD Soll-Ist</span>
+                <span class="tag">Reverse Engineering</span>
+              </div>
+            </button>
+
+            <button class="problem-tile" type="button" data-query="inline ct serienqualitaet" data-filter="problem">
+              <div class="problem-top">
+                <span class="problem-id">Signal 02</span>
+                <span class="problem-badge tone-serie">Serie</span>
+              </div>
+              <h3>Serienqualitaet absichern?</h3>
+              <p>Bei grossen Stueckzahlen muss der Weg zu Inline-CT, 100-Prozent-Pruefung und KI-Auswertung sofort sichtbar sein.</p>
+              <div class="tag-row">
+                <span class="tag">Inline-CT</span>
+                <span class="tag">100% Pruefung</span>
+                <span class="tag">KI-Auswertung</span>
+              </div>
+            </button>
+
+            <button class="problem-tile" type="button" data-query="schadensanalyse reklamation" data-filter="problem">
+              <div class="problem-top">
+                <span class="problem-id">Signal 03</span>
+                <span class="problem-badge tone-express">Express</span>
+              </div>
+              <h3>Reklamation oder Chargensperre?</h3>
+              <p>Akute Probleme brauchen keinen Menueunterricht. Sie brauchen Ursachenanalyse, Tempo und einen klaren Kontaktpfad.</p>
+              <div class="tag-row">
+                <span class="tag">Schadensanalyse</span>
+                <span class="tag">Defektanalyse</span>
+                <span class="tag">Express CT</span>
+              </div>
+            </button>
+
+            <button class="problem-tile" type="button" data-query="cad soll ist geometrie" data-filter="problem">
+              <div class="problem-top">
+                <span class="problem-id">Signal 04</span>
+                <span class="problem-badge tone-wissen">Messung</span>
+              </div>
+              <h3>Geometrie, Soll-Ist oder Wanddicke?</h3>
+              <p>Technische Nutzer koennen direkt bei der Messaufgabe starten und dann von Begriffen in Seiten und Wissen verzweigen.</p>
+              <div class="tag-row">
+                <span class="tag">Wanddickenmessung</span>
+                <span class="tag">CAD Soll-Ist</span>
+                <span class="tag">Wiki</span>
+              </div>
+            </button>
+          </div>
+
+          <div class="panel-side">
+            <div class="side-card">
+              <h3>Warum dieser Mix funktioniert</h3>
+              <div class="step-list">
+                <div class="step-item">
+                  <span class="step-index">1</span>
+                  <div>
+                    <strong>Karten fuer Orientierung</strong>
+                    <span>Besucher ohne CT-Fachsprache finden ihren Einstieg ueber die eigentliche Herausforderung.</span>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-index">2</span>
+                  <div>
+                    <strong>Suche fuer Geschwindigkeit</strong>
+                    <span>Erfahrene Nutzer springen direkt zu Hairpin, Inline-CT, Porositaet oder CAD Soll-Ist.</span>
+                  </div>
+                </div>
+                <div class="step-item">
+                  <span class="step-index">3</span>
+                  <div>
+                    <strong>Ein Datenmodell fuer beide Modi</strong>
+                    <span>Problemkarten, Treffer und Preview nutzen dieselbe Logik statt doppelt gepflegt zu werden.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="side-card">
+              <h3>Direktstart</h3>
+              <p>Diese Buttons simulieren haeufige Einstiege in die Palette.</p>
+              <div class="mini-links">
+                <button type="button" data-query="automotive hairpin" data-filter="branche">Automotive</button>
+                <button type="button" data-query="porositatsanalyse" data-filter="leistung">Porositaet</button>
+                <a href="/express-ct-inspektion">Express</a>
+                <a href="/kontakt">Kontakt</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mega-panel" id="panel-industries">
+        <div class="panel-head">
+          <div>
+            <div class="panel-kicker">Industry layer</div>
+            <h2>Branchen bleiben sichtbar, aber nicht isoliert.</h2>
+            <p>Statt einer losgeloesten Branchenliste werden Branchen im Hybrid zu Suchsignalen. So koennen sie mit Problemen, Verfahren und Wissen zusammenarbeiten.</p>
+          </div>
+          <div class="panel-note">Context instead of silo</div>
+        </div>
+
+        <div class="panel-grid">
+          <div class="problem-grid">
+            <button class="problem-tile" type="button" data-query="automotive hairpin" data-filter="branche">
+              <div class="problem-top">
+                <span class="problem-id">Branche A</span>
+                <span class="problem-badge tone-serie">Serie</span>
+              </div>
+              <h3>Automotive</h3>
+              <p>Hairpin-Statoren, Leichtmetallguss und Serienqualitaet sind haeufige Themen mit hoher Suchintention.</p>
+              <div class="tag-row">
+                <span class="tag">Hairpin</span>
+                <span class="tag">Leichtmetallguss</span>
+              </div>
+            </button>
+
+            <button class="problem-tile" type="button" data-query="e mobilitaet batterie modul" data-filter="branche">
+              <div class="problem-top">
+                <span class="problem-id">Branche B</span>
+                <span class="problem-badge tone-serie">Serie</span>
+              </div>
+              <h3>E-Mobilitaet</h3>
+              <p>Module, Schweissungen und E-Motor-Komponenten brauchen einen klaren Pfad zwischen Branche und Pruefaufgabe.</p>
+              <div class="tag-row">
+                <span class="tag">Batteriemodule</span>
+                <span class="tag">Schweissung</span>
+              </div>
+            </button>
+
+            <button class="problem-tile" type="button" data-query="medizintechnik freigabe" data-filter="branche">
+              <div class="problem-top">
+                <span class="problem-id">Branche C</span>
+                <span class="problem-badge tone-labor">Labor</span>
+              </div>
+              <h3>Medizintechnik</h3>
+              <p>In regulierten Umfeldern wird die Navigation oft durch Dokumentation, Freigabe und Nachweis getrieben.</p>
+              <div class="tag-row">
+                <span class="tag">Dokumentation</span>
+                <span class="tag">Freigabe</span>
+              </div>
+            </button>
+
+            <button class="problem-tile" type="button" data-query="additive fertigung porositat" data-filter="branche">
+              <div class="problem-top">
+                <span class="problem-id">Branche D</span>
+                <span class="problem-badge tone-wissen">Hybrid</span>
+              </div>
+              <h3>Additive Fertigung</h3>
+              <p>Der ideale Testfall fuer den Mix aus Problem, Verfahren und Wissensressourcen.</p>
+              <div class="tag-row">
+                <span class="tag">Porositaet</span>
+                <span class="tag">Innenstruktur</span>
+              </div>
+            </button>
+          </div>
+
+          <div class="panel-side">
+            <div class="side-card">
+              <h3>Branche plus Problem</h3>
+              <p>Der Mehrwert entsteht, wenn ein Branchenklick nicht auf einer Insel endet, sondern sofort die relevantesten Probleme und Leistungen vorsortiert.</p>
+            </div>
+            <div class="side-card">
+              <h3>Beispiel</h3>
+              <p>Ein Klick auf Automotive kann Hairpin-Statoren, Serienqualitaet und Defektanalyse in der Palette nach oben schieben.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mega-panel" id="panel-knowledge">
+        <div class="panel-head">
+          <div>
+            <div class="panel-kicker">Knowledge layer</div>
+            <h2>Wissen wird Teil der Navigation statt nur Anhang.</h2>
+            <p>Wiki, Magazin und Case Studies sollen im Hybrid nicht nebenher laufen. Sie muessen Suchintention und Entscheidung aktiv staerken.</p>
+          </div>
+          <div class="panel-note">Learn while moving</div>
+        </div>
+
+        <div class="panel-grid">
+          <div class="problem-grid">
+            <button class="problem-tile" type="button" data-query="wiki porositat" data-filter="wissen">
+              <div class="problem-top">
+                <span class="problem-id">Wissen A</span>
+                <span class="problem-badge tone-wissen">Wiki</span>
+              </div>
+              <h3>Begriffe schnell erklaeren</h3>
+              <p>Fachwoerter wie Porositaet, CAD Soll-Ist oder APQP koennen den Conversion-Weg beschleunigen, wenn sie an der richtigen Stelle auftauchen.</p>
+              <div class="tag-row">
+                <span class="tag">Wiki</span>
+                <span class="tag">Definition</span>
+              </div>
+            </button>
+
+            <button class="problem-tile" type="button" data-query="magazin hairpin stator" data-filter="wissen">
+              <div class="problem-top">
+                <span class="problem-id">Wissen B</span>
+                <span class="problem-badge tone-wissen">Magazin</span>
+              </div>
+              <h3>Case Studies als Vertrauenstreiber</h3>
+              <p>Praxisartikel zeigen, welche Pruefrouten bei realen Bauteilen funktionieren und geben dem Nutzer Sicherheit vor der Kontaktaufnahme.</p>
+              <div class="tag-row">
+                <span class="tag">Case Study</span>
+                <span class="tag">Hairpin</span>
+              </div>
+            </button>
+          </div>
+
+          <div class="panel-side">
+            <div class="side-card">
+              <h3>Wissen im Ergebnisstack</h3>
+              <p>Die Palette darf zu einer Anfrage wie "Reklamation Hairpin" gleichzeitig Service, Branche und passenden Artikel ausgeben.</p>
+            </div>
+            <div class="side-card">
+              <h3>Warum das hilft</h3>
+              <p>Gerade bei industrieller CT ist Verstaendnis oft der Ausloeser fuer die eigentliche Conversion.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell hero-grid">
+        <article class="hero-card">
+          <div class="hero-kicker">Navigation concept G</div>
+          <h1>Suche zuerst. <span>Denke in Problemen.</span></h1>
+          <p>Diese Version bringt den hybriden Ansatz in die echte Microvista-Farbwelt. Antonio und PT Sans, violette Grundflaechen, blaue Informationsflaechen und orange CTAs machen den Prototyp klar als Microvista erkennbar, ohne den Search-first Charakter zu verlieren.</p>
+          <div class="hero-actions">
+            <button class="hero-button primary" id="hero-open-palette" type="button">Palette oeffnen</button>
+            <button class="hero-button secondary" id="hero-open-panel" type="button">Problem-Panel zeigen</button>
+          </div>
+        </article>
+
+        <div class="hero-side">
+          <article class="info-card">
+            <h2>Designrichtung</h2>
+            <p>Weniger Neon-Tooling, mehr Microvista: heller Grund, violette Navigation, strukturierte Karten und klarere Produkt-Signale.</p>
+            <div class="status-grid">
+              <div class="status-row">
+                <div>
+                  <strong>Heading-System</strong>
+                  <span>Antonio fuer starke, markige Ueberschriften</span>
+                </div>
+                <span class="problem-badge tone-labor">Brand</span>
+              </div>
+              <div class="status-row">
+                <div>
+                  <strong>Body-System</strong>
+                  <span>PT Sans fuer klarere Lesbarkeit im UI</span>
+                </div>
+                <span class="problem-badge tone-wissen">UI</span>
+              </div>
+              <div class="status-row">
+                <div>
+                  <strong>Farblogik</strong>
+                  <span>Violett als Basis, Blau/Cyan fuer Ordnung, Orange fuer Aktion</span>
+                </div>
+                <span class="problem-badge tone-express">Signal</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="info-card mini-command">
+            <h3>Sample query</h3>
+            <div class="sample-input">/ automotive hairpin reklamation</div>
+            <div class="sample-pills">
+              <span>Problem</span>
+              <span>Branche</span>
+              <span>Leistung</span>
+              <span>Wissen</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <h2>Vier Signals, die den Nutzer in die richtige Richtung schieben</h2>
+          <p>Die vier Karten bleiben sichtbar, weil sie fuer unbekannte Nutzer der beste Einstieg sind. Gleichzeitig koennen sie den schnellen Suchmodus direkt vorbelegen und damit deutlich mehr leisten als ein klassisches Mega Menu.</p>
+        </div>
+
+        <div class="challenge-grid">
+          <article class="challenge-card">
+            <span class="problem-badge tone-labor">Labor</span>
+            <h3>Bauteil freigeben</h3>
+            <p>Von Erstmuster bis zum CAD Soll-Ist Vergleich. Dieser Einstieg ist ideal fuer Entwicklungs- und Qualitaetsteams.</p>
+            <div class="challenge-meta">
+              <span class="tag">Erstmuster</span>
+              <span class="tag">Freigabe</span>
+            </div>
+            <button class="challenge-button" type="button" data-query="erstmusterpruefung freigabe" data-filter="problem">In Palette oeffnen</button>
+          </article>
+
+          <article class="challenge-card">
+            <span class="problem-badge tone-serie">Serie</span>
+            <h3>Serienfehler verhindern</h3>
+            <p>Fuer Nutzer, die direkt an Linie, Taktzeit und reproduzierbarer Auswertung denken.</p>
+            <div class="challenge-meta">
+              <span class="tag">Inline-CT</span>
+              <span class="tag">KI</span>
+            </div>
+            <button class="challenge-button" type="button" data-query="inline ct serienqualitaet" data-filter="problem">In Palette oeffnen</button>
+          </article>
+
+          <article class="challenge-card">
+            <span class="problem-badge tone-express">Express</span>
+            <h3>Ursache finden</h3>
+            <p>Akute Reklamationen oder gesperrte Chargen brauchen einen beschleunigten Navigationspfad.</p>
+            <div class="challenge-meta">
+              <span class="tag">Schadensanalyse</span>
+              <span class="tag">Reklamation</span>
+            </div>
+            <button class="challenge-button" type="button" data-query="schadensanalyse reklamation" data-filter="problem">In Palette oeffnen</button>
+          </article>
+
+          <article class="challenge-card">
+            <span class="problem-badge tone-wissen">Messung</span>
+            <h3>Geometrie verstehen</h3>
+            <p>Ideal fuer technische Nutzer mit Begriffen wie Wanddicke, CAD Soll-Ist oder Reverse Engineering.</p>
+            <div class="challenge-meta">
+              <span class="tag">Wanddicke</span>
+              <span class="tag">Soll-Ist</span>
+            </div>
+            <button class="challenge-button" type="button" data-query="cad soll ist geometrie" data-filter="problem">In Palette oeffnen</button>
+          </article>
+        </div>
+
+        <div class="flow-grid">
+          <article class="flow-card">
+            <strong>1. Entdecken</strong>
+            <p>Das Mega Menu bleibt kundenlogisch und erzaehlt nicht zuerst die interne Seitenarchitektur.</p>
+          </article>
+          <article class="flow-card">
+            <strong>2. Praezisieren</strong>
+            <p>Die Command Palette uebernimmt ab dem Moment, in dem ein Suchbegriff, eine Branche oder ein Verfahren klar wird.</p>
+          </article>
+          <article class="flow-card">
+            <strong>3. Handeln</strong>
+            <p>Die Preview zeigt nicht nur den Treffer, sondern auch den empfohlenen naechsten Schritt und die echte Zielseite.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer-callout">
+      <div class="shell">
+        <div class="footer-box">
+          <div>
+            <h2>Live route</h2>
+            <p>Diese Datei liegt absichtlich unter <code>/nav-concepts/</code> als statische Live-Demo. So wird sie deployed, ohne in die normale Astro-Routenstruktur oder Sitemap einzugreifen.</p>
+          </div>
+          <a class="footer-link" href="/kontakt">Kontakt aufrufen</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="palette-overlay" id="palette-overlay" aria-hidden="true">
+    <div class="palette" role="dialog" aria-modal="true" aria-label="Signal Hub palette">
+      <div class="palette-top">
+        <div class="palette-input-wrap">
+          <span class="palette-leading">/</span>
+          <input id="palette-input" class="palette-input" type="text" placeholder="Problem, Verfahren, Branche oder Ressource suchen" autocomplete="off">
+          <span class="palette-esc">Esc</span>
+        </div>
+
+        <div class="palette-filters">
+          <button class="filter-pill active" type="button" data-filter="all">Alle</button>
+          <button class="filter-pill" type="button" data-filter="problem">Probleme</button>
+          <button class="filter-pill" type="button" data-filter="leistung">Leistungen</button>
+          <button class="filter-pill" type="button" data-filter="branche">Branchen</button>
+          <button class="filter-pill" type="button" data-filter="wissen">Wissen</button>
+          <button class="filter-pill" type="button" data-filter="aktion">Aktionen</button>
+        </div>
+      </div>
+
+      <div class="palette-body">
+        <div class="palette-results" id="palette-results"></div>
+
+        <aside class="palette-preview">
+          <div class="preview-card">
+            <div class="preview-kicker" id="preview-kicker">Signal preview</div>
+            <h3 id="preview-title">Treffer waehlen</h3>
+            <p id="preview-desc">Links einen Treffer waehlen oder direkt suchen. Die rechte Seite zeigt, warum der Treffer in diesem Hybrid wichtig ist.</p>
+            <a id="preview-link" class="preview-link" href="/kontakt">Seite oeffnen</a>
+          </div>
+
+          <div class="preview-card">
+            <div class="preview-kicker">Empfohlene Route</div>
+            <div class="preview-route" id="preview-route">
+              <div class="preview-stat">
+                <div>
+                  <strong>Modus</strong>
+                  <span>Problemkarte oder Suchtreffer</span>
+                </div>
+                <span class="preview-pill tone-wissen">Hybrid</span>
+              </div>
+              <div class="preview-stat">
+                <div>
+                  <strong>Naechster Schritt</strong>
+                  <span>Kontext aufbauen, dann beraten oder in die passende Seite springen.</span>
+                </div>
+                <span class="preview-pill tone-express">Signal</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const items = [
+      {
+        id: "p1",
+        title: "Neues Bauteil freigeben",
+        desc: "Fuehrt zu Erstmusterpruefung, Messbericht und CAD Soll-Ist Vergleich.",
+        category: "problem",
+        badge: "Labor",
+        tone: "tone-labor",
+        glyph: "P1",
+        href: "/labor/erstmusterpruefung",
+        keywords: ["freigabe", "erstmuster", "bericht", "cad", "soll ist", "bauteil"],
+        reason: "Ideal fuer Nutzer, die in Freigabe und Nachweis denken statt in Menuestrukturen.",
+        route: "Problemkarte -> Erstmusterpruefung -> Kontakt",
+        next: "Passende Labor-Leistung und CTA priorisieren",
+        mode: "Problemorientiert"
+      },
+      {
+        id: "p2",
+        title: "Serienqualitaet absichern",
+        desc: "Oeffnet den Pfad zu Inline-CT, 100-Prozent-Pruefung und KI-Automatisierung.",
+        category: "problem",
+        badge: "Serie",
+        tone: "tone-serie",
+        glyph: "P2",
+        href: "/serie/inline-ct",
+        keywords: ["serie", "inline", "qualitaet", "ki", "100 prozent", "linie"],
+        reason: "Business-Fragen werden direkt in den richtigen Serienpfad uebersetzt.",
+        route: "Problemkarte -> Inline-CT -> Demo oder Kontakt",
+        next: "Technische Serienroute mit Performance-Botschaft zeigen",
+        mode: "Problemorientiert"
+      },
+      {
+        id: "p3",
+        title: "Reklamation oder Chargensperre",
+        desc: "Leitet Defektanalyse, Schadensanalyse und Expresskontakt ein.",
+        category: "problem",
+        badge: "Express",
+        tone: "tone-express",
+        glyph: "P3",
+        href: "/labor/schadensanalyse",
+        keywords: ["reklamation", "charge", "schaden", "ursache", "ausfall", "defekt"],
+        reason: "Akute Situationen brauchen Tempo und Klarheit, nicht noch mehr Navigationshuerden.",
+        route: "Problemkarte -> Schadensanalyse -> Express CT",
+        next: "Dringlichkeit und Kontaktmoeglichkeit nach vorne ziehen",
+        mode: "Problemorientiert"
+      },
+      {
+        id: "p4",
+        title: "Geometrie, Soll-Ist oder Wanddicke",
+        desc: "Verbindet CAD Soll-Ist, Wanddickenmessung und weiterfuehrendes Wissen.",
+        category: "problem",
+        badge: "Messung",
+        tone: "tone-wissen",
+        glyph: "P4",
+        href: "/pruefaufgaben/cad-soll-ist-vergleich",
+        keywords: ["cad", "wanddicke", "soll ist", "geometrie", "messung", "vergleich"],
+        reason: "Technische Nutzer koennen direkt im Fachproblem starten und muessen nicht ueber Kategorien gehen.",
+        route: "Problemkarte -> Pruefaufgabe -> Wiki oder Kontakt",
+        next: "Messdetails mit Fachwissen und CTA verzahnen",
+        mode: "Problemorientiert"
+      },
+      {
+        id: "l1",
+        title: "Erstmusterpruefung",
+        desc: "Normgerechte Freigabe, Dokumentation und schnelle Rueckmeldung fuer neue Bauteile.",
+        category: "leistung",
+        badge: "Labor",
+        tone: "tone-labor",
+        glyph: "L1",
+        href: "/labor/erstmusterpruefung",
+        keywords: ["erstmuster", "bericht", "freigabe", "labor"],
+        reason: "Klassischer Leistungstreffer, der sowohl ueber Suche als auch ueber Problemkarten stark wird.",
+        route: "Leistung -> Kontakt",
+        next: "Direkter CTA fuer Erstmuster-Anfrage",
+        mode: "Search-first"
+      },
+      {
+        id: "l2",
+        title: "Inline-CT",
+        desc: "CT in oder nah an der Linie fuer schnelle Rueckkopplung und stabile Prozesse.",
+        category: "leistung",
+        badge: "Serie",
+        tone: "tone-serie",
+        glyph: "L2",
+        href: "/serie/inline-ct",
+        keywords: ["inline", "linie", "serie", "prozess", "inspektion"],
+        reason: "Perfekt fuer Nutzer mit klarer Serien- oder Produktionssprache.",
+        route: "Leistung -> Demo oder Kontakt",
+        next: "Seriennutzen und Prozesssicherheit zeigen",
+        mode: "Search-first"
+      },
+      {
+        id: "l3",
+        title: "Schadensanalyse",
+        desc: "Wurzelursachenanalyse fuer Reklamationen, Defekte und Ausfaelle.",
+        category: "leistung",
+        badge: "Express",
+        tone: "tone-express",
+        glyph: "L3",
+        href: "/labor/schadensanalyse",
+        keywords: ["schadensanalyse", "ursache", "reklamation", "defekt", "ausfall"],
+        reason: "In diesem Hybrid muss Schadensanalyse als akuter Loeser sichtbar und schnell erreichbar sein.",
+        route: "Leistung -> Express CT -> Kontakt",
+        next: "Tempo und Eskalationspfad hervorheben",
+        mode: "Hybrid"
+      },
+      {
+        id: "l4",
+        title: "CAD Soll-Ist Vergleich",
+        desc: "Geometrieabweichungen identifizieren und dokumentieren.",
+        category: "leistung",
+        badge: "Messung",
+        tone: "tone-wissen",
+        glyph: "L4",
+        href: "/pruefaufgaben/cad-soll-ist-vergleich",
+        keywords: ["cad", "soll ist", "vergleich", "messung", "geometrie"],
+        reason: "Technische Nutzer suchen oft direkt nach diesem Begriff, waehrend andere ueber Problem P4 hineinkommen.",
+        route: "Leistung -> Pruefaufgabe -> Kontakt",
+        next: "Messroute mit technischem Nutzen verknuepfen",
+        mode: "Hybrid"
+      },
+      {
+        id: "b1",
+        title: "Automotive",
+        desc: "Hairpin-Statoren, Leichtmetallguss und Serienqualitaet im Fokus.",
+        category: "branche",
+        badge: "Branche",
+        tone: "tone-serie",
+        glyph: "B1",
+        href: "/branchen/automotive",
+        keywords: ["automotive", "hairpin", "stator", "guss", "serie"],
+        reason: "Branchen muessen als Signal fuer typische Probleme und Leistungen arbeiten.",
+        route: "Branche -> Problemstack -> Leistung",
+        next: "Hairpin und Serienqualitaet priorisieren",
+        mode: "Search-first"
+      },
+      {
+        id: "b2",
+        title: "E-Mobilitaet",
+        desc: "Batteriemodule, Schweissungen und elektrische Antriebskomponenten.",
+        category: "branche",
+        badge: "Branche",
+        tone: "tone-serie",
+        glyph: "B2",
+        href: "/branchen/e-mobilitaet",
+        keywords: ["e mobilitaet", "batterie", "schweissung", "antrieb"],
+        reason: "Branchensuche und Fachsprache greifen hier besonders stark ineinander.",
+        route: "Branche -> relevante Probleme -> CTA",
+        next: "Batterie und Schweissnaht-Kontext zeigen",
+        mode: "Search-first"
+      },
+      {
+        id: "b3",
+        title: "Medizintechnik",
+        desc: "Freigabe, Dokumentation und Qualitaetsnachweis in regulierten Umgebungen.",
+        category: "branche",
+        badge: "Branche",
+        tone: "tone-labor",
+        glyph: "B3",
+        href: "/branchen/medizintechnik",
+        keywords: ["medizintechnik", "freigabe", "dokumentation", "nachweis"],
+        reason: "Zeigt, dass Branchenpfade nicht nur auf Produktion, sondern auch auf Nachweislogik reagieren koennen.",
+        route: "Branche -> Freigabepfad -> Kontakt",
+        next: "Regulatorischen Nutzen sichtbarer machen",
+        mode: "Search-first"
+      },
+      {
+        id: "w1",
+        title: "Wiki: CAD Soll-Ist Vergleich",
+        desc: "Begriffliche und methodische Einordnung fuer Messaufgaben und Geometrievergleich.",
+        category: "wissen",
+        badge: "Wiki",
+        tone: "tone-wissen",
+        glyph: "W1",
+        href: "/wiki/cad-soll-ist-vergleich",
+        keywords: ["wiki", "cad", "soll ist", "begriff", "definition"],
+        reason: "Wissen hilft, Unsicherheit vor der Conversion abzubauen.",
+        route: "Wissen -> Begriff -> Pruefaufgabe",
+        next: "Technische Begriffe in konkrete Leistungen uebersetzen",
+        mode: "Knowledge assist"
+      },
+      {
+        id: "w2",
+        title: "Magazin: Hairpin-Statoren",
+        desc: "Praxisnahe Inhalte zu E-Mobilitaet, Schweissungen und Defektbildern.",
+        category: "wissen",
+        badge: "Magazin",
+        tone: "tone-wissen",
+        glyph: "W2",
+        href: "/magazin",
+        keywords: ["magazin", "hairpin", "stator", "case study", "wissen"],
+        reason: "Praxisbelege geben gerade bei komplexer CT-Navigation Vertrauen und Kontext.",
+        route: "Wissen -> Case Study -> Kontakt",
+        next: "Praxisbeispiel als Vertrauensanker nutzen",
+        mode: "Knowledge assist"
+      },
+      {
+        id: "a1",
+        title: "Kontakt",
+        desc: "Direkter Weg in die allgemeine Beratung.",
+        category: "aktion",
+        badge: "Aktion",
+        tone: "tone-express",
+        glyph: "A1",
+        href: "/kontakt",
+        keywords: ["kontakt", "beratung", "anfrage", "call", "rueckruf"],
+        reason: "Wenn die Intention klar ist, soll die Navigation den Weg nicht mehr verlaengern.",
+        route: "Aktion -> Kontaktformular",
+        next: "Sofort in den Dialog springen",
+        mode: "Search-first"
+      },
+      {
+        id: "a2",
+        title: "Express CT Inspektion",
+        desc: "Beschleunigter Einstieg fuer dringende Faelle.",
+        category: "aktion",
+        badge: "Aktion",
+        tone: "tone-express",
+        glyph: "A2",
+        href: "/express-ct-inspektion",
+        keywords: ["express", "dringend", "ct", "inspektion", "sofort"],
+        reason: "Wichtig fuer Nutzer, die schon mit hoher Dringlichkeit auf die Seite kommen.",
+        route: "Aktion -> Express CT -> Kontakt",
+        next: "Dringlichkeit sofort bedienen",
+        mode: "Search-first"
+      },
+      {
+        id: "a3",
+        title: "Fragebogen",
+        desc: "Strukturierter Einstieg fuer qualifizierte Anfragen.",
+        category: "aktion",
+        badge: "Aktion",
+        tone: "tone-labor",
+        glyph: "A3",
+        href: "/fragebogen",
+        keywords: ["fragebogen", "briefing", "qualifizierung", "anfrage"],
+        reason: "Hilft besonders, wenn der Nutzer schon weiss, dass sein Fall genauer aufgenommen werden soll.",
+        route: "Aktion -> Fragebogen -> Beratung",
+        next: "Mehr Qualitaet vor dem Erstgespraech",
+        mode: "Search-first"
+      }
+    ];
+
+    const groupLabels = {
+      problem: "Probleme",
+      leistung: "Leistungen",
+      branche: "Branchen",
+      wissen: "Wissen",
+      aktion: "Aktionen"
+    };
+
+    const paletteOverlay = document.getElementById("palette-overlay");
+    const paletteInput = document.getElementById("palette-input");
+    const paletteResults = document.getElementById("palette-results");
+    const previewKicker = document.getElementById("preview-kicker");
+    const previewTitle = document.getElementById("preview-title");
+    const previewDesc = document.getElementById("preview-desc");
+    const previewRoute = document.getElementById("preview-route");
+    const previewLink = document.getElementById("preview-link");
+    const filterButtons = Array.from(document.querySelectorAll(".filter-pill"));
+    const commandTrigger = document.getElementById("command-trigger");
+    const heroOpenPalette = document.getElementById("hero-open-palette");
+    const heroOpenPanel = document.getElementById("hero-open-panel");
+    const headerShell = document.getElementById("header-shell");
+    const navTriggers = Array.from(document.querySelectorAll(".nav-trigger"));
+    const panels = {
+      problems: document.getElementById("panel-problems"),
+      industries: document.getElementById("panel-industries"),
+      knowledge: document.getElementById("panel-knowledge")
+    };
+
+    let activeFilter = "all";
+    let filteredItems = items.slice();
+    let selectedIndex = 0;
+    let activePanel = null;
+    let closeTimer = null;
+
+    function updatePreview(item) {
+      if (!item) {
+        previewKicker.textContent = "Signal preview";
+        previewTitle.textContent = "Treffer waehlen";
+        previewDesc.textContent = "Links einen Treffer waehlen oder direkt suchen. Die rechte Seite zeigt, warum der Treffer in diesem Hybrid wichtig ist.";
+        previewLink.href = "/kontakt";
+        previewLink.textContent = "Seite oeffnen";
+        previewRoute.innerHTML = `
+          <div class="preview-stat">
+            <div>
+              <strong>Modus</strong>
+              <span>Problemkarte oder Suchtreffer</span>
+            </div>
+            <span class="preview-pill tone-wissen">Hybrid</span>
+          </div>
+          <div class="preview-stat">
+            <div>
+              <strong>Naechster Schritt</strong>
+              <span>Kontext aufbauen, dann beraten oder in die passende Seite springen.</span>
+            </div>
+            <span class="preview-pill tone-express">Signal</span>
+          </div>
+        `;
+        return;
+      }
+
+      previewKicker.textContent = `${groupLabels[item.category]} - ${item.mode}`;
+      previewTitle.textContent = item.title;
+      previewDesc.textContent = item.reason;
+      previewLink.href = item.href;
+      previewLink.textContent = `Zu ${item.title}`;
+      previewRoute.innerHTML = `
+        <div class="preview-stat">
+          <div>
+            <strong>Route</strong>
+            <span>${item.route}</span>
+          </div>
+          <span class="preview-pill ${item.tone}">${item.badge}</span>
+        </div>
+        <div class="preview-stat">
+          <div>
+            <strong>Naechster Schritt</strong>
+            <span>${item.next}</span>
+          </div>
+          <span class="preview-pill ${item.tone}">${item.mode}</span>
+        </div>
+        <div class="preview-stat">
+          <div>
+            <strong>Zielseite</strong>
+            <span>${item.href}</span>
+          </div>
+          <span class="preview-pill tone-wissen">Live</span>
+        </div>
+      `;
+    }
+
+    function renderResults() {
+      const query = paletteInput.value.trim().toLowerCase();
+
+      filteredItems = items.filter((item) => {
+        const filterMatch = activeFilter === "all" || item.category === activeFilter;
+        const textBlob = [item.title, item.desc, item.badge, ...item.keywords].join(" ").toLowerCase();
+        const queryMatch = query === "" || textBlob.includes(query);
+        return filterMatch && queryMatch;
+      });
+
+      if (!filteredItems.length) {
+        paletteResults.innerHTML = `
+          <div class="empty-state">
+            <h3>Keine Treffer fuer diese Suche</h3>
+            <p>Versuche einen Problembegriff wie "Reklamation", ein Verfahren wie "Inline-CT" oder eine Branche wie "Automotive".</p>
+          </div>
+        `;
+        updatePreview(null);
+        return;
+      }
+
+      const grouped = filteredItems.reduce((acc, item) => {
+        if (!acc[item.category]) acc[item.category] = [];
+        acc[item.category].push(item);
+        return acc;
+      }, {});
+
+      paletteResults.innerHTML = Object.keys(groupLabels)
+        .filter((key) => grouped[key] && grouped[key].length)
+        .map((key) => `
+          <section class="result-group">
+            <div class="result-group-title">${groupLabels[key]}</div>
+            <div class="result-list">
+              ${grouped[key].map((item) => `
+                <button class="result-item" type="button" data-id="${item.id}">
+                  <span class="result-glyph">${item.glyph}</span>
+                  <span class="result-copy">
+                    <strong>${item.title}</strong>
+                    <span>${item.desc}</span>
+                  </span>
+                  <span class="result-badge ${item.tone}">${item.badge}</span>
+                </button>
+              `).join("")}
+            </div>
+          </section>
+        `).join("");
+
+      selectedIndex = 0;
+      bindResultInteractions();
+      highlightSelection();
+    }
+
+    function bindResultInteractions() {
+      const resultButtons = Array.from(document.querySelectorAll(".result-item"));
+      resultButtons.forEach((button, index) => {
+        button.addEventListener("mouseenter", () => {
+          selectedIndex = index;
+          highlightSelection();
+        });
+        button.addEventListener("click", () => {
+          const item = filteredItems.find((entry) => entry.id === button.dataset.id);
+          if (!item) return;
+          updatePreview(item);
+          previewLink.focus();
+        });
+      });
+    }
+
+    function highlightSelection() {
+      const resultButtons = Array.from(document.querySelectorAll(".result-item"));
+      resultButtons.forEach((button, index) => {
+        button.classList.toggle("selected", index === selectedIndex);
+      });
+      updatePreview(filteredItems[selectedIndex]);
+      resultButtons[selectedIndex] && resultButtons[selectedIndex].scrollIntoView({ block: "nearest" });
+    }
+
+    function openPalette(query = "", filter = activeFilter) {
+      closeAllPanels();
+      activeFilter = filter;
+      filterButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.filter === activeFilter);
+      });
+      paletteOverlay.classList.add("visible");
+      paletteOverlay.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      paletteInput.value = query;
+      renderResults();
+      requestAnimationFrame(() => paletteInput.focus());
+    }
+
+    function closePalette() {
+      paletteOverlay.classList.remove("visible");
+      paletteOverlay.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    function closeAllPanels() {
+      activePanel = null;
+      Object.values(panels).forEach((panel) => panel.classList.remove("open"));
+      navTriggers.forEach((trigger) => trigger.classList.remove("active"));
+    }
+
+    function openPanel(name) {
+      if (!panels[name]) return;
+      activePanel = name;
+      Object.entries(panels).forEach(([key, panel]) => {
+        panel.classList.toggle("open", key === name);
+      });
+      navTriggers.forEach((trigger) => {
+        trigger.classList.toggle("active", trigger.dataset.panel === name);
+      });
+    }
+
+    commandTrigger.addEventListener("click", () => openPalette());
+    heroOpenPalette.addEventListener("click", () => openPalette());
+    heroOpenPanel.addEventListener("click", () => openPanel("problems"));
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        filterButtons.forEach((pill) => pill.classList.remove("active"));
+        button.classList.add("active");
+        renderResults();
+      });
+    });
+
+    paletteInput.addEventListener("input", renderResults);
+
+    document.addEventListener("keydown", (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        if (paletteOverlay.classList.contains("visible")) {
+          closePalette();
+        } else {
+          openPalette();
+        }
+      }
+
+      if (event.key === "Escape") {
+        closePalette();
+        closeAllPanels();
+      }
+
+      if (!paletteOverlay.classList.contains("visible")) return;
+
+      if (event.key === "ArrowDown" && filteredItems.length) {
+        event.preventDefault();
+        selectedIndex = (selectedIndex + 1) % filteredItems.length;
+        highlightSelection();
+      }
+
+      if (event.key === "ArrowUp" && filteredItems.length) {
+        event.preventDefault();
+        selectedIndex = (selectedIndex - 1 + filteredItems.length) % filteredItems.length;
+        highlightSelection();
+      }
+
+      if (event.key === "Enter" && filteredItems.length) {
+        event.preventDefault();
+        const item = filteredItems[selectedIndex];
+        updatePreview(item);
+      }
+    });
+
+    paletteOverlay.addEventListener("click", (event) => {
+      if (event.target === paletteOverlay) closePalette();
+    });
+
+    navTriggers.forEach((trigger) => {
+      trigger.addEventListener("mouseenter", () => {
+        if (window.matchMedia("(pointer: fine)").matches) {
+          clearTimeout(closeTimer);
+          openPanel(trigger.dataset.panel);
+        }
+      });
+
+      trigger.addEventListener("click", () => {
+        if (activePanel === trigger.dataset.panel) {
+          closeAllPanels();
+        } else {
+          openPanel(trigger.dataset.panel);
+        }
+      });
+    });
+
+    headerShell.addEventListener("mouseleave", () => {
+      if (!window.matchMedia("(pointer: fine)").matches) return;
+      closeTimer = setTimeout(closeAllPanels, 120);
+    });
+
+    headerShell.addEventListener("mouseenter", () => {
+      clearTimeout(closeTimer);
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest(".header-shell")) {
+        closeAllPanels();
+      }
+    });
+
+    document.querySelectorAll("[data-query]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const query = button.dataset.query || "";
+        const filter = button.dataset.filter || "all";
+        openPalette(query, filter);
+      });
+    });
+
+    renderResults();
+    updatePreview(items[0]);
+    openPanel("problems");
+  </script>
+</body>
+</html>
