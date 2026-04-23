@@ -53,6 +53,22 @@ function getDynamicSitemapUrls() {
     }
   } catch { /* Verzeichnis existiert nicht */ }
 
+  // Wiki-Einträge: src/content/wiki/{de,en}/*.mdx
+  const wikiBase = join(root, 'src', 'content', 'wiki');
+  for (const lang of ['de', 'en']) {
+    try {
+      const files = readdirSync(join(wikiBase, lang));
+      for (const file of files) {
+        if (!file.endsWith('.mdx')) continue;
+        const slug = file.replace(/\.mdx$/, '');
+        urls.push(lang === 'de'
+          ? `${siteUrl}/wiki/${slug}`
+          : `${siteUrl}/${lang}/wiki/${slug}`
+        );
+      }
+    } catch { /* Verzeichnis existiert nicht */ }
+  }
+
   return urls;
 }
 

@@ -3,22 +3,23 @@
  * Wiki Artikel - Detailseite Redesign
  * Modernes Glossar-Layout mit Sidebar-Navigation
  */
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import { localePath, type Locale } from '../../i18n/translations';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import WikiSidebar from '../../components/sections/WikiSidebar.astro';
 import SchemaOrg from '../../components/seo/SchemaOrg.astro';
-
-const { slug } = Astro.params;
-const entries = await getCollection('wiki');
-const entry = entries.find(e => e.slug === slug || e.id === slug);
-if (!entry) return Astro.redirect('/wiki');
-const { Content } = await render(entry);
+import { findLocalizedWikiEntry } from '../../lib/wiki';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect(lp('/wiki'));
+const entry = await findLocalizedWikiEntry(slug, locale);
+if (!entry) return Astro.redirect(lp('/wiki'));
+const { Content } = await render(entry);
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://microvista.de';
 
 const ui = {

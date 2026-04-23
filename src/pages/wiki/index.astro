@@ -9,22 +9,14 @@ import Footer from '../../components/layout/Footer.astro';
 import WikiHero from '../../components/sections/WikiHero.astro';
 import WikiCategoryGrid from '../../components/sections/WikiCategoryGrid.astro';
 import WikiEntryCard from '../../components/sections/WikiEntryCard.astro';
-import { getCollection } from 'astro:content';
 import { localePath, type Locale } from '../../i18n/translations';
+import { getLocalizedWiki } from '../../lib/wiki';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
-const contentLocale = locale === 'de' ? 'de' : 'en';
 
-// Alle Wiki-Einträge laden
-const allEntries = await getCollection('wiki');
-
-const localizedEntries = allEntries.filter((entry) => {
-  if (contentLocale === 'de') {
-    return !entry.id.startsWith('en/');
-  }
-  return entry.id.startsWith('en/');
-});
+// Wiki-Einträge mit Sprach-Fallback (FR/ES/IT → EN → DE)
+const localizedEntries = await getLocalizedWiki(locale);
 
 // Nach Alphabet sortieren
 const entries = localizedEntries.sort((a, b) =>
