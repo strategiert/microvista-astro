@@ -100,30 +100,9 @@ const pruefaufgaben = defineCollection({
   })
 });
 
-// Materialien Collection
-const materialien = defineCollection({
-  type: 'data',
-  schema: z.object({
-    name: z.string(),
-    slug: z.string(),
-    description: z.string(),
-    category: z.enum(['metalle', 'kunststoffe', 'verbundwerkstoffe', 'keramik', 'andere']),
-    ctSuitability: z.enum(['sehr-gut', 'gut', 'mittel', 'schwierig']),
-    density: z.string().optional(),
-    typicalDefects: z.array(z.string()),
-    applications: z.array(z.string()),
-    relatedBranchen: z.array(z.string()),
-    seo: z.object({
-      title: z.string(),
-      description: z.string()
-    })
-  })
-});
-
 export const collections = {
   magazin,
   wiki,
   branchen,
-  pruefaufgaben,
-  materialien
+  pruefaufgaben
 };

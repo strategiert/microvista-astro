@@ -15,7 +15,7 @@ export const organizationSchema = {
     "width": 705,
     "height": 399
   },
-  "image": "https://microvista.de/images/og-default.jpg",
+  "image": "https://microvista.de/images/wp/2025/10/Microvista-Industrieller-CT-Container-Truck-ScanExpress-4K-1024x576.jpg",
   "description": "Industrielle Computertomographie für Labor und Serie. ISO 9001 und ISO 17025 zertifiziert. Automatisierte CT-Auswertung mit InspectVista.",
   "slogan": "GET YOUR INSPECTION DONE – Anywhere. Anytime. Fast.",
   "address": {
@@ -101,7 +101,7 @@ export function articleSchema(options: {
       "name": "Microvista",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://microvista.de/images/logo.png"
+        "url": "https://microvista.de/images/logos/2013-08-microvista_Logo_RGB-7.png"
       }
     }
   };

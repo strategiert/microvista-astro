@@ -87,7 +87,7 @@ KI-Systeme bieten eine standardisierte und reproduzierbare Auswertung von CT-Dat
 KI-Systeme können große Mengen an CT-Daten effizient verwalten und analysieren. Dies ermöglicht eine tiefgehende Analyse von Trends und Mustern, die zur kontinuierlichen Verbesserung der Produktionsprozesse beitragen können. Unternehmen können dadurch präventive Maßnahmen ergreifen, um Produktionsfehler zu vermeiden.
 
 **5\. Integration in bestehende Systeme:**  
-Die Nutzung von KI in den eigenen bestehenden CT-Systemen ist in der Regel unkompliziert möglich, indem die [Scan-Daten in die Microvista Cloud zur automatisierten Datenauswertung](_wp_link_placeholder) übertragen werden. Dies ermöglicht Unternehmen, von den Vorteilen der KI-Technologie zu profitieren, ohne ihre gesamte Ausrüstung ersetzen zu müssen.
+Die Nutzung von KI in den eigenen bestehenden CT-Systemen ist in der Regel unkompliziert möglich, indem die [Scan-Daten in die Microvista Cloud zur automatisierten Datenauswertung](/dienstleistungen/ct-datenauswertung) übertragen werden. Dies ermöglicht Unternehmen, von den Vorteilen der KI-Technologie zu profitieren, ohne ihre gesamte Ausrüstung ersetzen zu müssen.
 
 [Gratis-Beratung  
 sichern](/kontakt/)

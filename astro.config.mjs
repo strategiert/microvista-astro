@@ -110,12 +110,16 @@ export default defineConfig({
   },
   vite: {
     ssr: {
-      external: ['node:buffer', 'node:path', 'node:fs', 'node:os']
+      external: [
+        'node:buffer',
+        'node:path',
+        'node:fs',
+        'node:os',
+        'util',
+        'crypto',
+        'async_hooks',
+        'stream'
+      ]
     },
-    resolve: {
-      alias: {
-        'react-dom/server': 'react-dom/server.node'
-      }
-    }
   }
 });

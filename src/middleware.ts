@@ -79,7 +79,8 @@ function getEnRedirect(basePath: string): string | null {
     '/measuring-geometric-tolerances-gdt-methods-and-procedures': '/en/pruefaufgaben/form-und-lagetoleranzen',
     '/end-of-line-testing-using-industrial-ct': '/en/end-of-line-test',
   };
-  return EXACT[normalized] ?? null;
+  const target = EXACT[normalized] ?? null;
+  return target === `/en${normalized}` ? null : target;
 }
 
 // Legacy FR redirects (alte WordPress-URLs → neue Astro-URLs)
