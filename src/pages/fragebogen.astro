@@ -3,41 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumbs from '../components/layout/Breadcrumbs.astro';
-import { loadStaticPage } from '../lib/load-static-page';
-import { type Locale } from '../i18n/translations';
+import { localePath, type Locale } from '../i18n/translations';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
-const content = await loadStaticPage('fragebogen', locale);
+const lp = (path: string) => localePath(path, locale);
 
 const labels = {
-  de: {
-    title: 'Fragebogen',
-    description: 'Fragebogen zur Auswahl geeigneter Prüfverfahren bei Microvista.',
-    breadcrumb: 'Fragebogen'
-  },
-  en: {
-    title: 'Questionnaire',
-    description: 'Questionnaire to identify suitable inspection methods at Microvista.',
-    breadcrumb: 'Questionnaire'
-  },
-  fr: {
-    title: 'Questionnaire',
-    description: 'Questionnaire pour identifier les méthodes de contrôle adaptées chez Microvista.',
-    breadcrumb: 'Questionnaire'
-  },
-  es: {
-    title: 'Cuestionario',
-    description: 'Cuestionario para identificar métodos de inspección adecuados en Microvista.',
-    breadcrumb: 'Cuestionario'
-  },
-  it: {
-    title: 'Questionario',
-    description: 'Questionario per identificare metodi di ispezione adatti in Microvista.',
-    breadcrumb: 'Questionario'
-  }
-}[locale] || {
-  title: 'Fragebogen',
-  description: 'Fragebogen zur Auswahl geeigneter Prüfverfahren bei Microvista.',
+  title: 'CT-Fragebogen',
+  description: 'Lead-Qualifizierung zur Auswahl geeigneter CT-Dienstleistungen bei Microvista.',
   breadcrumb: 'Fragebogen'
 };
 ---
@@ -45,24 +18,584 @@ const labels = {
 <BaseLayout title={labels.title} description={labels.description}>
   <Header slot="header" />
 
-  <div class="static-page">
-    <div class="container">
-      <Breadcrumbs items={[{ label: labels.breadcrumb }]} />
-      <article class="static-content">
-        {content ? <div set:html={content} /> : <p>Inhalt folgt in Kürze.</p>}
-      </article>
-    </div>
-  </div>
+  <main class="questionnaire-page">
+    <section class="questionnaire-hero">
+      <div class="container">
+        <Breadcrumbs items={[{ label: labels.breadcrumb }]} />
+        <span class="eyebrow">Prüfbedarf einordnen</span>
+        <h1>Finden Sie den passenden CT-Weg</h1>
+        <p>Vier kurze Fragen reichen für eine erste Empfehlung: CT-Labor, CT-Datenauswertung, ScanExpress oder Express-Inspektion.</p>
+      </div>
+    </section>
+
+    <section class="questionnaire-section">
+      <div class="container questionnaire-grid">
+        <form class="wizard" id="ct-wizard">
+          <div class="progress" aria-label="Fortschritt">
+            <span class="progress-bar" id="progress-bar"></span>
+          </div>
+
+          <fieldset class="step active" data-step="0">
+            <legend>Was ist Ihr wichtigstes Prüfziel?</legend>
+            <label><input type="radio" name="goal" value="akut" /> Akuter Qualitätsvorfall oder gesperrte Charge</label>
+            <label><input type="radio" name="goal" value="defektanalyse" /> Defektanalyse: Poren, Risse, Lunker, Späne</label>
+            <label><input type="radio" name="goal" value="messung" /> Maßprüfung, Wandstärken oder CAD-Soll-Ist</label>
+            <label><input type="radio" name="goal" value="serie" /> Serienprüfung oder wiederkehrender Prüfprozess</label>
+          </fieldset>
+
+          <fieldset class="step" data-step="1">
+            <legend>Welche Art Bauteil liegt vor?</legend>
+            <label><input type="radio" name="material" value="metall" /> Metall, Guss oder additiv gefertigt</label>
+            <label><input type="radio" name="material" value="kunststoff" /> Kunststoff, Faserverbund oder Leichtbau</label>
+            <label><input type="radio" name="material" value="elektronik" /> Elektronik, Batterie oder Hairpin-Komponente</label>
+            <label><input type="radio" name="size" value="gross" /> Großes oder schwer transportierbares Bauteil</label>
+          </fieldset>
+
+          <fieldset class="step" data-step="2">
+            <legend>Wie viel und wie dringend?</legend>
+            <label><input type="radio" name="quantity" value="sample" /> Einzelteil, Prototyp oder Erstmuster</label>
+            <label><input type="radio" name="quantity" value="batch" /> Kleine bis mittlere Charge</label>
+            <label><input type="radio" name="quantity" value="series" /> Serie oder 100%-Prüfung</label>
+            <label><input type="radio" name="urgency" value="urgent" /> Entscheidung wird in den nächsten Tagen gebraucht</label>
+          </fieldset>
+
+          <fieldset class="step" data-step="3">
+            <legend>Was ist bereits vorhanden?</legend>
+            <label><input type="radio" name="availability" value="own-data" /> CT-Daten liegen bereits vor</label>
+            <label><input type="radio" name="availability" value="ship-part" /> Bauteile können ins Labor geschickt werden</label>
+            <label><input type="radio" name="availability" value="onsite" /> Prüfung soll bei Ihnen vor Ort stattfinden</label>
+            <label><input type="radio" name="availability" value="unclear" /> Noch unklar, ich brauche Beratung</label>
+          </fieldset>
+
+          <div class="wizard-actions">
+            <button type="button" class="btn ghost" id="prev-step" disabled>Zurück</button>
+            <button type="button" class="btn primary" id="next-step">Weiter</button>
+          </div>
+        </form>
+
+        <aside class="result-panel" id="result-panel" aria-live="polite">
+          <span class="eyebrow dark">Empfehlung</span>
+          <h2 id="result-title">Ihre Empfehlung erscheint hier</h2>
+          <p id="result-copy">Beantworten Sie die vier Schritte. Danach zeigen wir, welcher Microvista-Service am besten zu Ihrem Prüfbedarf passt.</p>
+          <ul id="result-reasons"></ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="lead-section" id="lead-section" hidden>
+      <div class="container lead-grid">
+        <div>
+          <span class="eyebrow dark">Anfrage senden</span>
+          <h2>Empfehlung mit Microvista abgleichen</h2>
+          <p>Die Antworten werden automatisch in die Nachricht übernommen. Ergänzen Sie nur noch Ihre Kontaktdaten und, falls nötig, ein paar Details zum Bauteil.</p>
+        </div>
+        <form class="lead-form" id="lead-form">
+          <div class="form-row">
+            <label>Name *<input type="text" name="name" required autocomplete="name" /></label>
+            <label>E-Mail *<input type="email" name="email" required autocomplete="email" /></label>
+          </div>
+          <div class="form-row">
+            <label>Unternehmen<input type="text" name="company" autocomplete="organization" /></label>
+            <label>Telefon<input type="tel" name="phone" autocomplete="tel" /></label>
+          </div>
+          <label>Ergänzende Nachricht<textarea name="message" rows="5" placeholder="Material, Bauteilgröße, Stückzahl, Frist oder besondere Prüfmerkmale"></textarea></label>
+          <label class="privacy"><input type="checkbox" name="privacy" required /> Ich stimme der Verarbeitung meiner Daten gemäß der <a href={lp('/datenschutz')} target="_blank">Datenschutzerklärung</a> zu.</label>
+          <input type="text" name="website" tabindex="-1" autocomplete="off" class="honeypot" />
+          <button type="submit" class="btn primary">Anfrage senden</button>
+          <p class="form-message" id="form-message" role="alert"></p>
+        </form>
+      </div>
+    </section>
+  </main>
 
   <Footer slot="footer" />
 </BaseLayout>
 
 <style>
-  .static-page { padding-bottom: var(--space-16); }
-  .static-content { max-width: 900px; margin: 0 auto; padding: var(--space-8) 0; }
-  .static-content :global(h1) { font-size: var(--text-4xl); margin-bottom: var(--space-8); }
-  .static-content :global(h2) { margin-top: var(--space-8); margin-bottom: var(--space-4); }
-  .static-content :global(h3) { margin-top: var(--space-6); margin-bottom: var(--space-3); }
-  .static-content :global(p) { line-height: 1.8; margin-bottom: var(--space-4); }
-  .static-content :global(img) { max-width: 100%; height: auto; border-radius: var(--radius-xl); }
+  .questionnaire-page {
+    background: #fff;
+  }
+
+  .questionnaire-hero {
+    background: linear-gradient(135deg, #171335 0%, #32285b 72%, #44336e 100%);
+    color: #fff;
+    padding: var(--space-16) 0 var(--space-12);
+  }
+
+  .questionnaire-hero :global(.breadcrumbs),
+  .questionnaire-hero :global(.breadcrumbs a),
+  .questionnaire-hero :global(.breadcrumbs span) {
+    color: rgba(255,255,255,0.72);
+  }
+
+  .eyebrow {
+    display: block;
+    color: var(--mv-orange);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-3);
+  }
+
+  .eyebrow.dark {
+    color: var(--mv-orange);
+  }
+
+  .questionnaire-hero h1 {
+    max-width: 860px;
+    color: #fff;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    text-transform: uppercase;
+    margin-bottom: var(--space-5);
+  }
+
+  .questionnaire-hero p {
+    max-width: 760px;
+    color: rgba(255,255,255,0.78);
+    font-size: var(--text-xl);
+    line-height: 1.65;
+  }
+
+  .questionnaire-section,
+  .lead-section {
+    padding: var(--space-16) 0;
+  }
+
+  .questionnaire-grid,
+  .lead-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.78fr);
+    gap: var(--space-10);
+    align-items: start;
+  }
+
+  .wizard,
+  .result-panel,
+  .lead-form {
+    border: 1px solid var(--mv-gray-200);
+    border-radius: var(--radius-md);
+    background: #fff;
+    box-shadow: 0 18px 55px rgba(50,40,91,0.08);
+  }
+
+  .wizard {
+    padding: var(--space-8);
+  }
+
+  .progress {
+    width: 100%;
+    height: 8px;
+    background: var(--mv-gray-100);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--space-8);
+  }
+
+  .progress-bar {
+    display: block;
+    width: 25%;
+    height: 100%;
+    background: var(--mv-orange);
+    transition: width var(--transition-base);
+  }
+
+  .step {
+    display: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  .step.active {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  legend {
+    color: var(--mv-violet);
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: var(--space-6);
+  }
+
+  .step label {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border: 1px solid var(--mv-gray-200);
+    border-radius: var(--radius-md);
+    color: var(--mv-gray-700);
+    cursor: pointer;
+  }
+
+  .step label:has(input:checked) {
+    border-color: var(--mv-orange);
+    background: #fff7ed;
+    color: var(--mv-violet);
+    font-weight: 700;
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    accent-color: var(--mv-orange);
+    margin-top: 0.25rem;
+  }
+
+  .wizard-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 var(--space-6);
+    border: 0;
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .btn.primary {
+    background: var(--mv-orange);
+    color: #fff;
+  }
+
+  .btn.ghost {
+    background: var(--mv-gray-100);
+    color: var(--mv-violet);
+  }
+
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  .result-panel {
+    position: sticky;
+    top: 96px;
+    padding: var(--space-8);
+    background: #171335;
+    color: #fff;
+  }
+
+  .result-panel h2 {
+    color: #fff;
+    font-size: var(--text-3xl);
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+  }
+
+  .result-panel p {
+    color: rgba(255,255,255,0.76);
+    line-height: 1.65;
+  }
+
+  .result-panel ul {
+    display: grid;
+    gap: var(--space-2);
+    margin: var(--space-5) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .result-panel li {
+    padding-left: var(--space-5);
+    position: relative;
+    color: rgba(255,255,255,0.78);
+  }
+
+  .result-panel li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--mv-orange);
+  }
+
+  .lead-section {
+    background: #f6f7fb;
+  }
+
+  .lead-grid h2 {
+    color: var(--mv-violet);
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-transform: uppercase;
+    margin-bottom: var(--space-4);
+  }
+
+  .lead-grid p {
+    color: var(--mv-gray-600);
+    font-size: var(--text-lg);
+    line-height: 1.7;
+  }
+
+  .lead-form {
+    display: grid;
+    gap: var(--space-5);
+    padding: var(--space-8);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  .lead-form label {
+    display: grid;
+    gap: var(--space-2);
+    color: var(--mv-violet);
+    font-weight: 700;
+  }
+
+  .lead-form input:not([type="checkbox"]),
+  .lead-form textarea {
+    width: 100%;
+    border: 1px solid var(--mv-gray-200);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    color: var(--mv-gray-800);
+  }
+
+  .lead-form input:focus,
+  .lead-form textarea:focus {
+    outline: 3px solid rgba(238,119,17,0.16);
+    border-color: var(--mv-orange);
+  }
+
+  .privacy {
+    display: flex !important;
+    align-items: flex-start;
+    font-weight: 400 !important;
+    color: var(--mv-gray-700) !important;
+  }
+
+  .privacy a {
+    color: var(--mv-orange);
+    text-decoration: underline;
+  }
+
+  .honeypot {
+    display: none;
+  }
+
+  .form-message {
+    min-height: 1.5rem;
+    color: var(--mv-violet);
+    font-weight: 700;
+  }
+
+  .form-message.error {
+    color: #b91c1c;
+  }
+
+  .form-message.success {
+    color: #047857;
+  }
+
+  @media (max-width: 920px) {
+    .questionnaire-grid,
+    .lead-grid,
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .result-panel {
+      position: static;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .wizard,
+    .result-panel,
+    .lead-form {
+      padding: var(--space-5);
+    }
+
+    .wizard-actions {
+      flex-direction: column-reverse;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
 </style>
+
+<script>
+  const wizard = document.getElementById('ct-wizard') as HTMLFormElement;
+  const steps = Array.from(document.querySelectorAll<HTMLElement>('.step'));
+  const prevButton = document.getElementById('prev-step') as HTMLButtonElement;
+  const nextButton = document.getElementById('next-step') as HTMLButtonElement;
+  const progressBar = document.getElementById('progress-bar') as HTMLElement;
+  const resultPanel = document.getElementById('result-panel') as HTMLElement;
+  const resultTitle = document.getElementById('result-title') as HTMLElement;
+  const resultCopy = document.getElementById('result-copy') as HTMLElement;
+  const resultReasons = document.getElementById('result-reasons') as HTMLUListElement;
+  const leadSection = document.getElementById('lead-section') as HTMLElement;
+  const leadForm = document.getElementById('lead-form') as HTMLFormElement;
+  const formMessage = document.getElementById('form-message') as HTMLElement;
+
+  let currentStep = 0;
+  let recommendation = '';
+  let recommendationCopy = '';
+
+  const resultData = {
+    labor: {
+      title: 'Empfehlung: CT-Labor',
+      copy: 'Die stationäre Laborprüfung ist der passende Startpunkt: Bauteile einschicken, CT-Scan durchführen, Auswertung und Report erhalten.',
+      reasons: ['geeignet für Einzelteile, Erstmuster und kleine Chargen', 'kein eigenes CT und keine Schulung nötig', 'schneller Einstieg mit klarer Ergebnisdokumentation']
+    },
+    daten: {
+      title: 'Empfehlung: CT-Datenauswertung',
+      copy: 'Ihre CT-Daten sind bereits vorhanden. Microvista kann die Auswertung, Befundung und Report-Erstellung über den Cloud-Prozess übernehmen.',
+      reasons: ['ideal bei vorhandenen rekonstruierten CT-Daten', 'entlastet interne Auswertekapazitäten', 'geeignet für wiederkehrende Auswerteprozesse']
+    },
+    scanexpress: {
+      title: 'Empfehlung: SCANEXPRESS',
+      copy: 'Der Prüfbedarf spricht für mobiles CT vor Ort: kurze Entscheidungszeit, schwer transportierbare Bauteile oder Serienkontext.',
+      reasons: ['reduziert Logistik und Versandzeit', 'stark bei akuten Qualitätsvorfällen und Serienanläufen', 'mietbar statt Investition in eigene CT-Infrastruktur']
+    },
+    express: {
+      title: 'Empfehlung: Express-Inspektion',
+      copy: 'Sie brauchen kurzfristig belastbare Fakten. Microvista sollte den Fall priorisiert einordnen und den schnellsten CT-Weg abstimmen.',
+      reasons: ['geeignet bei blockierten Chargen und Reklamationen', 'Fokus auf schnelle Entscheidungsgrundlage', 'kann je nach Bauteil im Labor oder vor Ort starten']
+    }
+  };
+
+  function setStep(step: number) {
+    currentStep = step;
+    steps.forEach((el, index) => el.classList.toggle('active', index === currentStep));
+    prevButton.disabled = currentStep === 0;
+    nextButton.textContent = currentStep === steps.length - 1 ? 'Empfehlung anzeigen' : 'Weiter';
+    progressBar.style.width = `${((currentStep + 1) / steps.length) * 100}%`;
+  }
+
+  function currentStepAnswered() {
+    const active = steps[currentStep];
+    const checked = active.querySelector('input:checked');
+    return Boolean(checked);
+  }
+
+  function getValue(name: string) {
+    return (wizard.querySelector(`input[name="${name}"]:checked`) as HTMLInputElement | null)?.value || '';
+  }
+
+  function calculateRecommendation() {
+    const goal = getValue('goal');
+    const size = getValue('size');
+    const quantity = getValue('quantity');
+    const urgency = getValue('urgency');
+    const availability = getValue('availability');
+
+    if (availability === 'own-data') return 'daten';
+    if (goal === 'akut' && urgency === 'urgent') return 'express';
+    if (availability === 'onsite' || size === 'gross' || quantity === 'series' || goal === 'serie') return 'scanexpress';
+    if (urgency === 'urgent') return 'express';
+    return 'labor';
+  }
+
+  function renderResult() {
+    recommendation = calculateRecommendation();
+    const result = resultData[recommendation as keyof typeof resultData];
+    recommendationCopy = result.copy;
+    resultTitle.textContent = result.title;
+    resultCopy.textContent = result.copy;
+    resultReasons.innerHTML = result.reasons.map((reason) => `<li>${reason}</li>`).join('');
+    resultPanel.classList.add('has-result');
+    leadSection.hidden = false;
+    leadSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  prevButton?.addEventListener('click', () => {
+    if (currentStep > 0) setStep(currentStep - 1);
+  });
+
+  nextButton?.addEventListener('click', () => {
+    if (!currentStepAnswered()) return;
+    if (currentStep < steps.length - 1) {
+      setStep(currentStep + 1);
+    } else {
+      renderResult();
+    }
+  });
+
+  leadForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    formMessage.textContent = '';
+    formMessage.className = 'form-message';
+
+    const formData = new FormData(leadForm);
+    if (formData.get('website')) return;
+
+    const answers = {
+      goal: getValue('goal'),
+      material: getValue('material'),
+      size: getValue('size'),
+      quantity: getValue('quantity'),
+      urgency: getValue('urgency'),
+      availability: getValue('availability')
+    };
+
+    const freeMessage = String(formData.get('message') || '').trim();
+    const message = [
+      `Empfehlung: ${resultTitle.textContent}`,
+      recommendationCopy,
+      '',
+      'Antworten:',
+      `Prüfziel: ${answers.goal || '-'}`,
+      `Material/Bauteil: ${answers.material || answers.size || '-'}`,
+      `Stückzahl: ${answers.quantity || '-'}`,
+      `Dringlichkeit: ${answers.urgency || '-'}`,
+      `Vorhanden: ${answers.availability || '-'}`,
+      '',
+      'Zusatz:',
+      freeMessage || '-'
+    ].join('\n');
+
+    const payload = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      company: formData.get('company'),
+      phone: formData.get('phone'),
+      subject: `CT-Fragebogen: ${resultTitle.textContent || 'Empfehlung'}`,
+      message,
+      privacy: formData.get('privacy'),
+      website: formData.get('website')
+    };
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) throw new Error('submit failed');
+      formMessage.textContent = 'Vielen Dank. Die Anfrage wurde gesendet.';
+      formMessage.classList.add('success');
+      leadForm.reset();
+    } catch {
+      formMessage.textContent = 'Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder kontaktieren Sie Microvista direkt.';
+      formMessage.classList.add('error');
+    }
+  });
+
+  setStep(0);
+</script>

@@ -20,6 +20,7 @@ if (!branche) {
 const data = branche.data;
 const accentColor = '#32285b';
 const related = branchen.filter(b => b.id !== slug).slice(0, 3);
+const heroImage = data.heroImage || `/images/branchen/${slug}.jpg`;
 
 // Cross-Links zu relevanten Prüfaufgaben
 const pruefaufgaben = await getCollection('pruefaufgaben');
@@ -36,7 +37,7 @@ const pageSchemas = [
     name: data.name,
     description: data.description,
     url: brancheUrl,
-    image: `${siteUrl}/images/branchen/${slug}.jpg`,
+    image: `${siteUrl}${heroImage}`,
     serviceType: 'Industrielle Computertomographie',
   }),
   breadcrumbSchema([
@@ -58,7 +59,7 @@ const pageSchemas = [
     <!-- Hero -->
     <section class="hero">
       <div class="hero-bg">
-        <img src={`/images/branchen/${slug}.jpg`} alt={`Industrielle CT-Prüfung für ${data.name}`} loading="eager" fetchpriority="high" />
+        <img src={heroImage} alt={`Industrielle CT-Prüfung für ${data.name}`} loading="eager" fetchpriority="high" />
         <div class="hero-overlay"></div>
       </div>
       <div class="container">
@@ -264,7 +265,7 @@ const pageSchemas = [
         <div class="related-grid">
           {related.map((r) => (
             <a href={lp(`/branchen/${r.id}`)} class="related-card">
-              <img src={`/images/branchen/${r.id}.jpg`} alt={r.data.name} />
+              <img src={r.data.heroImage || `/images/branchen/${r.id}.jpg`} alt={r.data.name} />
               <div class="related-overlay"></div>
               <span class="related-name">{r.data.name}</span>
             </a>

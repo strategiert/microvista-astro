@@ -1,7 +1,7 @@
 name: "Additive Fertigung"
 slug: "additive-fertigung"
 description: "CT-Prüfung für additiv gefertigte Bauteile – Defekte finden, bevor sie Kosten verursachen. Microvista prüft Ihre gedruckten Bauteile zerstörungsfrei: Porosität, Stützstrukturreste, innere Risse und CAD-Abweichungen – vollautomatisch mit KI-gestützter Auswertung."
-heroImage: "/images/wp/2022/08/Pruefung-additiv-gefertigter-Bauteile-Aluminium-Radtraeger.webp"
+heroImage: "/images/branchen/additive-fertigung-ct-hero.webp"
 challenges:
   - title: "Innere Defekte (Poren, Delamination, Risse) sind mit konventioneller Sichtprüfung nicht erkennbar"
     description: "Additiv gefertigte Bauteile weisen schichtbedingte innere Defekte auf, die an der Oberfläche vollständig unsichtbar bleiben. Poren, Bindefehler zwischen Schichten und Risse entstehen bereits beim Druckprozess und sind mit Sichtprüfung oder tastender Koordinatenmesstechnik nicht auffindbar. Ein unentdeckter Riss in einem Titanluftfahrtbauteil kann zum Totalversagen führen – mit katastrophalen Konsequenzen für Sicherheit und Haftung."

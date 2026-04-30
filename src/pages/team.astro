@@ -2,78 +2,473 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import { loadStaticPage } from '../lib/load-static-page';
 import { localePath, type Locale } from '../i18n/translations';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
-const content = await loadStaticPage('team', locale);
 
-let articleContent = content || '';
-if (content) {
-  const h2Index = content.indexOf('<h2');
-  if (h2Index > -1) articleContent = content.substring(h2Index);
-}
+const people = [
+  {
+    name: 'Dr. Robin Höhne',
+    role: 'CEO',
+    image: '/images/wp/2024/08/Dr.-Robin-Hoehne-Microvista-GmbH-Team.webp',
+    focus: 'Strategie, Kundenprojekte und mobile CT-Technologie'
+  },
+  {
+    name: 'Jonas Wengerodt',
+    role: 'Sales Manager',
+    image: '/images/wp/2024/08/Jonas-Wengerodt-Microvista-GmbH-Team.webp',
+    focus: 'Erstberatung, Angebot und Projektklärung'
+  },
+  {
+    name: 'Dustin Klein',
+    role: 'CT Technician',
+    image: '/images/wp/2024/08/Dustin-Klein-Microvista-GmbH-Team.webp',
+    focus: 'Scanplanung, Bedienung und technische Umsetzung'
+  },
+  {
+    name: 'Yevhen Petrenko',
+    role: 'CT Technician',
+    image: '/images/wp/2024/08/Yvhen-Petrenko-Microvista-GmbH-Team.webp',
+    focus: 'CT-Prüfung, Datenerfassung und Prozesssicherheit'
+  },
+  {
+    name: 'Erik Wünsche',
+    role: 'Application Engineer',
+    image: '/images/wp/2024/08/Erik-Wuensche-Microvista-GmbH-Team.webp',
+    focus: 'Anwendungen, Auswertung und kundenspezifische Prüfprozesse'
+  }
+];
 
 const t = {
-  de: { title: 'Unser Team | Microvista', description: 'Lernen Sie das Microvista-Team kennen — CT-Experten, Ingenieure und Qualitätsspezialisten.', h1: 'Unser Team', lead: 'CT-Experten, Ingenieure und Qualitätsspezialisten — seit über 15 Jahren Ihr Partner für industrielle Computertomographie.', cta: 'Kontakt aufnehmen' },
-  en: { title: 'Our Team | Microvista', description: 'Meet the Microvista team — CT experts, engineers and quality specialists.', h1: 'Our Team', lead: 'CT experts, engineers and quality specialists — your partner for industrial computed tomography for over 15 years.', cta: 'Get in Touch' },
-  fr: { title: 'Notre équipe | Microvista', description: 'Rencontrez l\u2019équipe Microvista.', h1: 'Notre équipe', lead: 'Experts CT, ingénieurs et spécialistes qualité — votre partenaire depuis plus de 15 ans.', cta: 'Nous contacter' },
-  es: { title: 'Nuestro equipo | Microvista', description: 'Conozca al equipo de Microvista.', h1: 'Nuestro equipo', lead: 'Expertos en CT, ingenieros y especialistas en calidad — su socio desde hace más de 15 años.', cta: 'Contactar' },
-  it: { title: 'Il nostro team | Microvista', description: 'Scopri il team Microvista.', h1: 'Il nostro team', lead: 'Esperti CT, ingegneri e specialisti qualità — il vostro partner da oltre 15 anni.', cta: 'Contattaci' },
-}[locale] || { title: 'Our Team | Microvista', description: 'Meet the Microvista team.', h1: 'Our Team', lead: 'CT experts and quality specialists.', cta: 'Get in Touch' };
+  de: {
+    title: 'Unser Team',
+    description: 'Lernen Sie das Microvista-Team kennen - CT-Experten, Ingenieure und Qualitätsspezialisten.',
+    eyebrow: 'Microvista Team',
+    h1: 'Menschen, die CT-Ergebnisse belastbar machen',
+    lead: 'Von der ersten Prüfidee bis zum Report: Unser Team verbindet industrielle CT-Erfahrung, Automatisierung und pragmatische Projektbegleitung.',
+    contact: 'Kontakt aufnehmen',
+    express: 'Express-Inspektion buchen',
+    contacts: 'Ansprechpartner & Prozessbegleiter',
+    focus: 'Schwerpunkt',
+    leadership: 'Geschäftsführung',
+    leadershipTitle: 'Prof. Dr. Lutz Hagner',
+    leadershipRole: 'Geschäftsführer Microvista GmbH',
+    leadershipText: 'Prof. Dr. Lutz Hagner begleitet Microvista seit der Gründung. Sein Fokus liegt auf zerstörungsfreier Prüfung mit industrieller Computertomographie, höherer Ortsauflösung, schnelleren Prüfprozessen und mobilen Systemen wie dem ScanExpress.',
+    motto: '... nicht ohne Liebe!',
+    family: 'We love Technology Familie',
+    familyText: 'Microvista ist Teil der NetCo-Familie. Mehr als 50 Mitarbeitende an den Standorten Blankenburg (Harz) und Magdeburg schaffen ein technisches Umfeld, in dem komplexe Produkte und Lösungen entstehen.',
+    ctaTitle: 'Direkt mit dem passenden Ansprechpartner sprechen?',
+    ctaText: 'Beschreiben Sie kurz Bauteil, Material und Prüfziel. Wir ordnen intern den richtigen Kontakt und den passenden CT-Weg zu.'
+  },
+  en: {
+    title: 'Our Team',
+    description: 'Meet the Microvista team - CT experts, engineers and quality specialists.',
+    eyebrow: 'Microvista Team',
+    h1: 'People who make CT results reliable',
+    lead: 'From inspection idea to report: our team combines industrial CT experience, automation and practical project guidance.',
+    contact: 'Get in touch',
+    express: 'Book express inspection',
+    contacts: 'Contacts & process guides',
+    focus: 'Focus',
+    leadership: 'Management',
+    leadershipTitle: 'Prof. Dr. Lutz Hagner',
+    leadershipRole: 'Managing Director Microvista GmbH',
+    leadershipText: 'Prof. Dr. Lutz Hagner has supported Microvista since its foundation. His focus is non-destructive testing with industrial CT, higher resolution, faster inspection processes and mobile systems such as ScanExpress.',
+    motto: '... not without love!',
+    family: 'We love Technology Family',
+    familyText: 'Microvista is part of the NetCo family. More than 50 employees in Blankenburg (Harz) and Magdeburg create a technical environment for complex products and solutions.',
+    ctaTitle: 'Talk to the right contact directly?',
+    ctaText: 'Briefly describe component, material and inspection goal. We will route you to the right contact and CT path.'
+  }
+}[locale as 'de' | 'en'] || {
+  title: 'Our Team',
+  description: 'Meet the Microvista team.',
+  eyebrow: 'Microvista Team',
+  h1: 'People who make CT results reliable',
+  lead: 'CT experts, engineers and quality specialists.',
+  contact: 'Get in touch',
+  express: 'Book express inspection',
+  contacts: 'Contacts & process guides',
+  focus: 'Focus',
+  leadership: 'Management',
+  leadershipTitle: 'Prof. Dr. Lutz Hagner',
+  leadershipRole: 'Managing Director Microvista GmbH',
+  leadershipText: 'Prof. Dr. Lutz Hagner has supported Microvista since its foundation.',
+  motto: '... not without love!',
+  family: 'We love Technology Family',
+  familyText: 'Microvista is part of the NetCo family.',
+  ctaTitle: 'Talk to the right contact directly?',
+  ctaText: 'Briefly describe component, material and inspection goal.'
+};
 ---
 
 <BaseLayout title={t.title} description={t.description}>
   <Header slot="header" />
 
-  <section class="page-hero">
-    <div class="container">
-      <h1>{t.h1}</h1>
-      <p class="page-lead">{t.lead}</p>
-    </div>
-  </section>
-
-  <section class="page-article">
-    <div class="container">
-      <div class="page-body" set:html={articleContent} />
-    </div>
-  </section>
-
-  <section class="page-cta">
-    <div class="container">
-      <div class="page-cta-box">
-        <h2>{t.cta}</h2>
-        <a href={lp('/kontakt')} class="btn btn-primary btn-lg">{t.cta}</a>
+  <main class="team-page">
+    <section class="team-hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">{t.eyebrow}</span>
+          <h1>{t.h1}</h1>
+          <p>{t.lead}</p>
+          <div class="hero-actions">
+            <a href={lp('/kontakt')} class="btn primary">{t.contact}</a>
+            <a href={lp('/express-ct-inspektion')} class="btn secondary">{t.express}</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="/images/wp/2024/08/2023_08-FO-Mitarbeiter_alle.webp" alt="Microvista und NetCo Team" loading="eager" />
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="section contacts-section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow dark">{t.contacts}</span>
+          <h2>CT-Projekte brauchen klare Verantwortliche</h2>
+        </div>
+        <div class="people-grid">
+          {people.map((person) => (
+            <article class="person-card">
+              <img src={person.image} alt={`${person.name} - ${person.role}`} loading="lazy" />
+              <div class="person-content">
+                <span>{person.role}</span>
+                <h3>{person.name}</h3>
+                <p><strong>{t.focus}:</strong> {person.focus}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section leadership-section">
+      <div class="container leadership-grid">
+        <div class="leadership-copy">
+          <span class="eyebrow dark">{t.leadership}</span>
+          <h2>{t.leadershipTitle}</h2>
+          <p class="role">{t.leadershipRole}</p>
+          <p>{t.leadershipText}</p>
+          <blockquote>{t.motto}</blockquote>
+        </div>
+        <img src="/images/wp/2024/08/Prof.-Dr.-Lutz-Hagner-Geschaeftsfphrer-Microvista.webp" alt="Prof. Dr. Lutz Hagner - Geschäftsführer Microvista" loading="lazy" />
+      </div>
+    </section>
+
+    <section class="family-section">
+      <div class="container family-grid">
+        <div>
+          <span class="eyebrow">{t.family}</span>
+          <h2>Technologiekompetenz aus der NetCo-Familie</h2>
+          <p>{t.familyText}</p>
+        </div>
+        <div class="family-facts">
+          <div><strong>50+</strong><span>Mitarbeitende</span></div>
+          <div><strong>2</strong><span>Standorte</span></div>
+          <div><strong>15+</strong><span>Jahre CT-Erfahrung</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="team-cta">
+      <div class="container cta-inner">
+        <div>
+          <h2>{t.ctaTitle}</h2>
+          <p>{t.ctaText}</p>
+        </div>
+        <a href={lp('/kontakt')} class="btn primary">{t.contact}</a>
+      </div>
+    </section>
+  </main>
 
   <Footer slot="footer" />
 </BaseLayout>
 
 <style>
-  .page-hero { background: linear-gradient(145deg, #32285b 0%, #1c1535 100%); color: white; padding: var(--space-20) 0 var(--space-16); }
-  .page-hero h1 { font-family: var(--font-heading); font-size: var(--text-5xl); color: white; margin-bottom: var(--space-5); line-height: 1.1; text-transform: uppercase; }
-  @media (max-width: 768px) { .page-hero h1 { font-size: var(--text-4xl); } }
-  .page-lead { font-size: var(--text-xl); color: rgba(255,255,255,0.72); max-width: 680px; line-height: 1.7; }
+  .team-page {
+    background: #fff;
+  }
 
-  .page-article { padding: var(--space-16) 0 var(--space-20); background: white; }
-  .page-body { max-width: 1000px; margin: 0 auto; }
-  .page-body :global(h2) { font-size: var(--text-3xl); font-family: var(--font-heading); color: #32285b; margin-top: var(--space-16); margin-bottom: var(--space-5); padding-left: var(--space-4); border-left: 4px solid #ee7711; line-height: 1.25; }
-  .page-body :global(h2:first-child) { margin-top: 0; }
-  .page-body :global(h3) { font-size: var(--text-2xl); font-family: var(--font-heading); color: #32285b; margin-top: var(--space-10); margin-bottom: var(--space-4); }
-  .page-body :global(p) { font-size: var(--text-base); line-height: 1.85; margin-bottom: var(--space-5); color: #374151; }
-  .page-body :global(strong) { font-weight: 700; color: #32285b; }
-  .page-body :global(img) { max-width: 100%; height: auto; border-radius: var(--radius-xl); margin: var(--space-4) 0; box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
-  .page-body :global(a) { color: #ee7711; text-decoration: underline; text-decoration-color: rgba(238,119,17,0.35); text-underline-offset: 3px; }
-  .page-body :global(a:hover) { color: #c85e00; }
-  .page-body :global(ul), .page-body :global(ol) { padding-left: var(--space-6); margin-bottom: var(--space-5); }
-  .page-body :global(li) { line-height: 1.75; margin-bottom: var(--space-2); color: #374151; }
-  .page-body :global(ul > li::marker) { color: #ee7711; }
+  .team-hero {
+    background: linear-gradient(135deg, #171335 0%, #32285b 62%, #4a397c 100%);
+    color: #fff;
+    padding: var(--space-20) 0 var(--space-16);
+    overflow: hidden;
+  }
 
-  .page-cta { padding: var(--space-20) 0; background: #f5f3ff; }
-  .page-cta-box { max-width: 560px; margin: 0 auto; text-align: center; background: white; padding: var(--space-12) var(--space-10); border-radius: var(--radius-2xl); box-shadow: 0 8px 40px rgba(50,40,91,0.12); }
-  .page-cta-box h2 { color: #32285b; font-family: var(--font-heading); font-size: var(--text-3xl); margin-bottom: var(--space-6); }
-  .btn-lg { padding: var(--space-4) var(--space-10); font-size: var(--text-lg); }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(380px, 1.05fr);
+    gap: var(--space-12);
+    align-items: center;
+  }
+
+  .eyebrow {
+    display: block;
+    color: var(--mv-orange);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-3);
+  }
+
+  .eyebrow.dark {
+    color: var(--mv-orange);
+  }
+
+  .team-hero h1 {
+    color: #fff;
+    font-size: clamp(3rem, 7vw, 5.8rem);
+    text-transform: uppercase;
+    margin-bottom: var(--space-5);
+  }
+
+  .team-hero p {
+    max-width: 680px;
+    color: rgba(255,255,255,0.78);
+    font-size: var(--text-xl);
+    line-height: 1.65;
+  }
+
+  .hero-actions,
+  .cta-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+
+  .hero-image {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.16);
+    box-shadow: 0 30px 90px rgba(0,0,0,0.35);
+  }
+
+  .hero-image img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 var(--space-6);
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .btn.primary {
+    background: var(--mv-orange);
+    color: #fff;
+  }
+
+  .btn.secondary {
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+  }
+
+  .section {
+    padding: var(--space-20) 0;
+  }
+
+  .section-heading {
+    max-width: 760px;
+    margin-bottom: var(--space-10);
+  }
+
+  .section-heading h2,
+  .leadership-copy h2,
+  .family-section h2,
+  .team-cta h2 {
+    color: var(--mv-violet);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    text-transform: uppercase;
+  }
+
+  .people-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .person-card {
+    background: #fff;
+    border: 1px solid var(--mv-gray-200);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .person-card img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    background: var(--mv-gray-100);
+  }
+
+  .person-content {
+    padding: var(--space-5);
+  }
+
+  .person-content span {
+    color: var(--mv-orange);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .person-content h3 {
+    color: var(--mv-violet);
+    font-size: var(--text-xl);
+    margin: var(--space-2) 0 var(--space-3);
+  }
+
+  .person-content p {
+    color: var(--mv-gray-600);
+    line-height: 1.55;
+    font-size: var(--text-sm);
+  }
+
+  .leadership-section {
+    background: #f6f7fb;
+  }
+
+  .leadership-grid,
+  .family-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.72fr);
+    gap: var(--space-12);
+    align-items: center;
+  }
+
+  .leadership-copy .role {
+    color: var(--mv-orange);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: var(--space-3) 0 var(--space-5);
+  }
+
+  .leadership-copy p {
+    color: var(--mv-gray-700);
+    font-size: var(--text-lg);
+    line-height: 1.75;
+  }
+
+  .leadership-copy blockquote {
+    margin-top: var(--space-8);
+    color: var(--mv-violet);
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    font-weight: 700;
+  }
+
+  .leadership-grid > img {
+    width: 100%;
+    border-radius: var(--radius-md);
+    box-shadow: 0 20px 55px rgba(50,40,91,0.18);
+  }
+
+  .family-section {
+    background: #171335;
+    color: #fff;
+    padding: var(--space-20) 0;
+  }
+
+  .family-section h2 {
+    color: #fff;
+    margin-bottom: var(--space-5);
+  }
+
+  .family-section p {
+    color: rgba(255,255,255,0.76);
+    font-size: var(--text-lg);
+    line-height: 1.75;
+  }
+
+  .family-facts {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .family-facts div {
+    padding: var(--space-6);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.06);
+  }
+
+  .family-facts strong {
+    display: block;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: var(--text-4xl);
+    line-height: 1;
+  }
+
+  .family-facts span {
+    color: rgba(255,255,255,0.62);
+  }
+
+  .team-cta {
+    padding: var(--space-16) 0;
+    background: #fff;
+  }
+
+  .cta-inner {
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0;
+  }
+
+  .team-cta p {
+    max-width: 720px;
+    color: var(--mv-gray-600);
+    font-size: var(--text-lg);
+    line-height: 1.65;
+    margin-top: var(--space-3);
+  }
+
+  @media (max-width: 1100px) {
+    .people-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid,
+    .leadership-grid,
+    .family-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .people-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-actions,
+    .cta-inner {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
 </style>

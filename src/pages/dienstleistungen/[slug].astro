@@ -6,10 +6,28 @@ import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import { loadStaticPage } from '../../lib/load-static-page';
 import { localePath, type Locale } from '../../i18n/translations';
 
+type ServiceKey = 'ct-labor' | 'ct-datenauswertung' | 'scanexpress';
+
+interface ServiceConfig {
+  name: Record<string, string>;
+  eyebrow: string;
+  seoDesc: Record<string, string>;
+  file: string;
+  heroImage: string;
+  lead: string;
+  intro: string;
+  stats: Array<{ value: string; label: string }>;
+  benefits: Array<{ title: string; text: string }>;
+  process: Array<{ title: string; text: string }>;
+  fit: string[];
+  primaryCta: string;
+  secondaryCta: string;
+}
+
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
 
-const services: Record<string, { name: Record<string, string>; seoDesc: Record<string, string>; file: string }> = {
+const services: Record<ServiceKey, ServiceConfig> = {
   'ct-labor': {
     name: {
       de: 'CT-Labor',
@@ -18,14 +36,36 @@ const services: Record<string, { name: Record<string, string>; seoDesc: Record<s
       es: 'Laboratorio CT',
       it: 'Laboratorio CT'
     },
+    eyebrow: 'Stationäre CT-Prüfung',
     seoDesc: {
-      de: 'CT-Labor der Microvista GmbH — akkreditiert nach ISO 17025. Hochauflösende industrielle CT-Scans.',
-      en: 'CT Laboratory of Microvista GmbH — accredited to ISO 17025. High-resolution industrial CT scans.',
-      fr: 'Laboratoire CT de Microvista GmbH — accrédité ISO 17025. Scans CT industriels haute résolution.',
-      es: 'Laboratorio CT de Microvista GmbH — acreditado según ISO 17025. Escaneos CT industriales de alta resolución.',
-      it: 'Laboratorio CT di Microvista GmbH — accreditato ISO 17025. Scansioni CT industriali ad alta risoluzione.'
+      de: 'CT-Labor der Microvista GmbH - akkreditiert nach ISO 17025. Hochauflösende industrielle CT-Scans.',
+      en: 'CT Laboratory of Microvista GmbH - accredited to ISO 17025. High-resolution industrial CT scans.',
+      fr: 'Laboratoire CT de Microvista GmbH - accrédité ISO 17025. Scans CT industriels haute résolution.',
+      es: 'Laboratorio CT de Microvista GmbH - acreditado según ISO 17025. Escaneos CT industriales de alta resolución.',
+      it: 'Laboratorio CT di Microvista GmbH - accreditato ISO 17025. Scansioni CT industriali ad alta risoluzione.'
     },
     file: 'dienstleistung-ct-labor.md',
+    heroImage: '/images/wp/2025/10/CT-Techniker-am-industriellen-CT-Dustin-Klein-scaled-e1761285791426-1024x683.jpg',
+    lead: 'Hochauflösende industrielle CT-Prüfung für Bauteile, Erstmuster und gesperrte Chargen.',
+    intro: 'Sie schicken das Bauteil, Microvista plant Scan, Auswertung und Report. Das Labor ist die robuste Option, wenn Sie keine eigene CT-Infrastruktur aufbauen wollen oder kurzfristig belastbare Aussagen benötigen.',
+    stats: [
+      { value: 'ISO', label: 'qualitätsgesicherte Prüfprozesse' },
+      { value: '<3 Tage', label: 'typische Durchlaufzeit für Standardaufgaben' },
+      { value: '24h*', label: 'Scan nach Absprache möglich' }
+    ],
+    benefits: [
+      { title: 'Keine Investition', text: 'Kein eigenes CT, keine Wartung, keine Schulungszyklen.' },
+      { title: 'Schnelle Einordnung', text: 'Bauteilzustand, Defekte und Messaufgaben werden mit CT-Daten belastbar bewertet.' },
+      { title: 'Prüfbericht statt Rohdaten', text: 'Sie erhalten nachvollziehbare Ergebnisse für QS, Entwicklung oder Lieferantenkommunikation.' }
+    ],
+    process: [
+      { title: 'Anforderung klären', text: 'Bauteil, Material, Prüfziel und Toleranzen werden eingeordnet.' },
+      { title: 'Scan durchführen', text: 'Das Bauteil wird mit passender Auflösung und Messstrategie geprüft.' },
+      { title: 'Auswertung sichern', text: 'Die Daten werden geprüft, bewertet und als Report bereitgestellt.' }
+    ],
+    fit: ['Einzelteile und Erstmuster', 'gesperrte Chargen', 'Prototypenentwicklung', 'Schadens- und Ursachenanalyse'],
+    primaryCta: 'Laborprüfung anfragen',
+    secondaryCta: 'Fragebogen starten'
   },
   'ct-datenauswertung': {
     name: {
@@ -35,123 +75,680 @@ const services: Record<string, { name: Record<string, string>; seoDesc: Record<s
       es: 'Análisis de datos CT',
       it: 'Analisi dati CT'
     },
+    eyebrow: 'Cloud-Auswertung',
     seoDesc: {
-      de: 'CT-Datenauswertung bei Microvista — Porositätsanalyse, CAD-Vergleich, Wanddickenmessung und mehr.',
-      en: 'CT data analysis at Microvista — porosity analysis, CAD comparison, wall thickness measurement and more.',
-      fr: 'Analyse de données CT chez Microvista — porosité, comparaison CAO, mesure d’épaisseur et plus.',
+      de: 'CT-Datenauswertung bei Microvista - Porositätsanalyse, CAD-Vergleich, Wanddickenmessung und mehr.',
+      en: 'CT data analysis at Microvista - porosity analysis, CAD comparison, wall thickness measurement and more.',
+      fr: 'Analyse de données CT chez Microvista - porosité, comparaison CAO, mesure d’épaisseur et plus.',
       es: 'Análisis de datos CT en Microvista: porosidad, comparación CAD, medición de espesor y más.',
-      it: 'Analisi dati CT in Microvista — porosità, confronto CAD, misura spessori e altro.'
+      it: 'Analisi dati CT in Microvista - porosità, confronto CAD, misura spessori e altro.'
     },
     file: 'dienstleistung-ct-datenauswertung.md',
+    heroImage: '/images/software/Auswertung-CT-einer-Pumpe.webp',
+    lead: 'Sie scannen, Microvista wertet aus - reproduzierbar, automatisiert und reportfähig.',
+    intro: 'Wenn CT-Daten vorhanden sind, aber Auswertungskapazität, Spezialsoftware oder Automatisierung fehlen, übernimmt Microvista die Befundung und Ergebnisaufbereitung über einen sicheren Cloud-Prozess.',
+    stats: [
+      { value: 'Q-Gate', label: 'fachliche Ergebnisprüfung' },
+      { value: 'Cloud', label: 'verschlüsselter Datenaustausch' },
+      { value: 'Serie', label: 'auch für wiederkehrende Auswertung geeignet' }
+    ],
+    benefits: [
+      { title: 'Kapazität freimachen', text: 'Ihre Teams verlieren weniger Zeit in manueller Datensichtung.' },
+      { title: 'Spezialanalysen nutzen', text: 'Poren, Wandstärken, CAD-Soll-Ist und Montagezustände werden gezielt ausgewertet.' },
+      { title: 'Automatisierbar skalieren', text: 'Wiederkehrende Prüfmerkmale können als belastbare Auswerteprozesse abgebildet werden.' }
+    ],
+    process: [
+      { title: 'Daten bereitstellen', text: 'Rekonstruierte CT-Daten und Prüfanforderungen werden sicher übertragen.' },
+      { title: 'Auswertepfad wählen', text: 'Die Analyse wird auf Defekte, Geometrie, Montage oder Serienmerkmale ausgerichtet.' },
+      { title: 'Report erhalten', text: 'Ergebnisse und Prüfbericht werden strukturiert zurückgeliefert.' }
+    ],
+    fit: ['eigenes CT vorhanden', 'knappe Auswertekapazität', 'Serienscans', 'standardisierte Befundung'],
+    primaryCta: 'Auswertung anfragen',
+    secondaryCta: 'Datenbedarf klären'
   },
-  'scanexpress': {
+  scanexpress: {
     name: {
-      de: 'SCANEXPRESS — Mobiles industrielles CT',
-      en: 'SCANEXPRESS — Mobile Industrial CT',
-      fr: 'SCANEXPRESS — CT industriel mobile',
-      es: 'SCANEXPRESS — CT industrial móvil',
-      it: 'SCANEXPRESS — CT industriale mobile'
+      de: 'SCANEXPRESS - Mobiles industrielles CT',
+      en: 'SCANEXPRESS - Mobile Industrial CT',
+      fr: 'SCANEXPRESS - CT industriel mobile',
+      es: 'SCANEXPRESS - CT industrial móvil',
+      it: 'SCANEXPRESS - CT industriale mobile'
     },
+    eyebrow: 'Mobiles CT vor Ort',
     seoDesc: {
-      de: 'SCANEXPRESS — mobiles industrielles CT von Microvista. CT-Prüfung direkt vor Ort, flexibel mietbar.',
-      en: 'SCANEXPRESS — mobile industrial CT by Microvista. CT inspection on-site, flexibly rentable.',
-      fr: 'SCANEXPRESS — CT industriel mobile de Microvista. Contrôle CT sur site, location flexible.',
-      es: 'SCANEXPRESS — CT industrial móvil de Microvista. Inspección CT in situ con alquiler flexible.',
-      it: 'SCANEXPRESS — CT industriale mobile di Microvista. Ispezione CT in loco, noleggio flessibile.'
+      de: 'SCANEXPRESS - mobiles industrielles CT von Microvista. CT-Prüfung direkt vor Ort, flexibel mietbar.',
+      en: 'SCANEXPRESS - mobile industrial CT by Microvista. CT inspection on-site, flexibly rentable.',
+      fr: 'SCANEXPRESS - CT industriel mobile de Microvista. Contrôle CT sur site, location flexible.',
+      es: 'SCANEXPRESS - CT industrial móvil de Microvista. Inspección CT in situ con alquiler flexible.',
+      it: 'SCANEXPRESS - CT industriale mobile di Microvista. Ispezione CT in loco, noleggio flessibile.'
     },
     file: 'dienstleistung-scanexpress.md',
-  },
+    heroImage: '/images/wp/2026/01/Industrielles-mobiles-CT-ScanExpress.webp',
+    lead: 'Wenn Zeit und Logistik kritisch sind, kommt die industrielle CT-Prüfung direkt in Ihre Produktion.',
+    intro: 'SCANEXPRESS ist die mobile CT-Lösung für akute Qualitätsvorfälle, Serienanläufe und temporäre Prüfbedarfe. Sie mieten Ergebnisse, Prozesssicherheit und CT-Kompetenz genau für das Zeitfenster, in dem sie gebraucht werden.',
+    stats: [
+      { value: '48h*', label: 'bis zum möglichen Vor-Ort-Einsatz' },
+      { value: 'OPEX', label: 'Miete statt Investition' },
+      { value: '100%', label: 'Option für Serien- und Stichprobenprüfung' }
+    ],
+    benefits: [
+      { title: 'Keine Versandzeit', text: 'Bauteile bleiben dort, wo Entscheidungen getroffen werden müssen.' },
+      { title: 'Krisenfest reagieren', text: 'Gesperrte Chargen, Reklamationen und Prozessunsicherheit werden schneller greifbar.' },
+      { title: 'Flexibel mieten', text: 'Full-Service oder begleitete CT-Miete je nach Ressourcen und Prüfziel.' }
+    ],
+    process: [
+      { title: 'Einsatzfenster klären', text: 'Akuter Vorfall oder geplanter Engpass werden in Setup und Mietdauer übersetzt.' },
+      { title: 'CT vor Ort starten', text: 'Microvista stellt System, Inbetriebnahme und auf Wunsch Bedienung bereit.' },
+      { title: 'Entscheiden mit Daten', text: 'Automatisierte Auswertung liefert Entscheidungsgrundlagen für QS und Produktion.' }
+    ],
+    fit: ['akute Qualitätsvorfälle', 'Serienanlauf', 'blockierte Chargen', 'temporärer CT-Bedarf ohne CAPEX'],
+    primaryCta: 'Soforthilfe anfragen',
+    secondaryCta: 'Inspektionsbedarf planen'
+  }
 };
 
 const { slug } = Astro.params;
-const service = services[slug!];
-if (!service) return Astro.redirect('/dienstleistungen/');
+const service = services[slug as ServiceKey];
+if (!service) return Astro.redirect(lp('/dienstleistungen'));
 
 const name = service.name[locale] || service.name.en || service.name.de;
 const seoDesc = service.seoDesc[locale] || service.seoDesc.en || service.seoDesc.de;
 const content = await loadStaticPage(service.file);
+const h2Index = content.indexOf('<h2');
+const detailContent = h2Index >= 0 ? content.substring(h2Index) : content;
+
+const relatedServices = Object.entries(services)
+  .filter(([key]) => key !== slug)
+  .map(([key, value]) => ({
+    slug: key,
+    name: value.name[locale] || value.name.en || value.name.de,
+    lead: value.lead
+  }));
 
 const ui = {
   de: {
     services: 'Dienstleistungen',
-    interested: 'Interessiert?',
-    contactText: 'Kontaktieren Sie uns für eine unverbindliche Beratung.',
+    fitTitle: 'Wann diese Leistung passt',
+    processTitle: 'Ablauf',
+    benefitTitle: 'Ihr Nutzen',
+    detailsTitle: 'Fachdetails',
+    relatedTitle: 'Weitere CT-Services',
+    contactText: 'Beschreiben Sie kurz Bauteil, Material, Stückzahl und Prüfziel. Wir ordnen den passenden CT-Weg ein.',
     contactBtn: 'Jetzt anfragen'
   },
   en: {
     services: 'Services',
-    interested: 'Interested?',
-    contactText: 'Contact us for a non-binding consultation.',
+    fitTitle: 'When this service fits',
+    processTitle: 'Process',
+    benefitTitle: 'Benefits',
+    detailsTitle: 'Details',
+    relatedTitle: 'More CT services',
+    contactText: 'Briefly describe component, material, quantity and inspection goal. We will recommend the right CT path.',
     contactBtn: 'Get in touch'
-  },
-  fr: {
-    services: 'Services',
-    interested: 'Intéressé ?',
-    contactText: 'Contactez-nous pour un conseil sans engagement.',
-    contactBtn: 'Nous contacter'
-  },
-  es: {
-    services: 'Servicios',
-    interested: '¿Interesado?',
-    contactText: 'Contáctenos para una consulta sin compromiso.',
-    contactBtn: 'Contactar'
-  },
-  it: {
-    services: 'Servizi',
-    interested: 'Interessato?',
-    contactText: 'Contattaci per una consulenza senza impegno.',
-    contactBtn: 'Contattaci'
   }
-}[locale] || {
+}[locale as 'de' | 'en'] || {
   services: 'Services',
-  interested: 'Interested?',
-  contactText: 'Contact us for a non-binding consultation.',
+  fitTitle: 'When this service fits',
+  processTitle: 'Process',
+  benefitTitle: 'Benefits',
+  detailsTitle: 'Details',
+  relatedTitle: 'More CT services',
+  contactText: 'Briefly describe component, material, quantity and inspection goal. We will recommend the right CT path.',
   contactBtn: 'Get in touch'
 };
 ---
 
-<BaseLayout title={name} description={seoDesc}>
+<BaseLayout title={name} description={seoDesc} ogImage={service.heroImage}>
   <Header slot="header" />
 
-  <div class="service-page">
-    <div class="container">
-      <Breadcrumbs items={[
-        { label: ui.services, href: lp('/dienstleistungen') },
-        { label: name }
-      ]} />
+  <main class="service-page">
+    <section class="service-hero">
+      <div class="hero-media">
+        <img src={service.heroImage} alt={name} loading="eager" fetchpriority="high" />
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="container hero-inner">
+        <Breadcrumbs items={[
+          { label: ui.services, href: lp('/dienstleistungen') },
+          { label: name }
+        ]} />
+        <span class="eyebrow">{service.eyebrow}</span>
+        <h1>{name}</h1>
+        <p class="hero-lead">{service.lead}</p>
+        <div class="hero-actions">
+          <a href={lp('/kontakt')} class="btn primary">{service.primaryCta}</a>
+          <a href={lp('/fragebogen')} class="btn secondary">{service.secondaryCta}</a>
+        </div>
+      </div>
+    </section>
 
-      <article class="service-content" set:html={content} />
+    <section class="intro-strip">
+      <div class="container intro-grid">
+        <p>{service.intro}</p>
+        <div class="stats-row">
+          {service.stats.map((stat) => (
+            <div class="stat-item">
+              <strong>{stat.value}</strong>
+              <span>{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
 
-      <section class="cta-section">
-        <h2>{ui.interested}</h2>
-        <p>{ui.contactText}</p>
-        <a href={lp('/kontakt')} class="btn btn-primary">
-          {ui.contactBtn}
-        </a>
+    <section class="section">
+      <div class="container content-grid">
+        <div class="section-copy">
+          <span class="eyebrow dark">{ui.benefitTitle}</span>
+          <h2>Vom CT-Bedarf zur belastbaren Entscheidung</h2>
+        </div>
+        <div class="benefit-grid">
+          {service.benefits.map((benefit) => (
+            <article class="benefit-card">
+              <h3>{benefit.title}</h3>
+              <p>{benefit.text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-muted">
+      <div class="container split-grid">
+        <div>
+          <span class="eyebrow dark">{ui.processTitle}</span>
+          <h2>Prüfprozess ohne Reibungsverlust</h2>
+          <ul class="fit-list" aria-label={ui.fitTitle}>
+            {service.fit.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+        <div class="process-list">
+          {service.process.map((step, index) => (
+            <article class="process-step">
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {detailContent && (
+      <section class="section details-section">
+        <div class="container">
+          <div class="details-shell">
+            <aside>
+              <span class="eyebrow dark">{ui.detailsTitle}</span>
+              <h2>Importierter Inhalt, neu gesetzt</h2>
+            </aside>
+            <article class="service-content" set:html={detailContent} />
+          </div>
+        </div>
       </section>
-    </div>
-  </div>
+    )}
+
+    <section class="section section-muted">
+      <div class="container">
+        <div class="section-header centered">
+          <span class="eyebrow dark">{ui.relatedTitle}</span>
+          <h2>Der passende Weg hängt vom Prüfkontext ab</h2>
+        </div>
+        <div class="related-grid">
+          {relatedServices.map((related) => (
+            <a href={lp(`/dienstleistungen/${related.slug}`)} class="related-card">
+              <h3>{related.name}</h3>
+              <p>{related.lead}</p>
+              <span>Mehr erfahren</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band" id="Kontaktformular">
+      <div class="container cta-inner">
+        <div>
+          <h2>{service.primaryCta}</h2>
+          <p>{ui.contactText}</p>
+        </div>
+        <a href={lp('/kontakt')} class="btn primary">{ui.contactBtn}</a>
+      </div>
+    </section>
+  </main>
 
   <Footer slot="footer" />
 </BaseLayout>
 
 <style>
-  .service-page { padding-bottom: var(--space-16); }
-  .service-content { max-width: 800px; margin: 0 auto; padding: var(--space-8) 0; line-height: 1.8; }
-  .service-content :global(h1) { font-size: var(--text-4xl); margin-bottom: var(--space-8); }
-  .service-content :global(h2) { margin-top: var(--space-8); margin-bottom: var(--space-4); }
-  .service-content :global(h3) { margin-top: var(--space-6); margin-bottom: var(--space-3); }
-  .service-content :global(p) { margin-bottom: var(--space-4); }
-  .service-content :global(img) { max-width: 100%; height: auto; border-radius: var(--radius-lg); margin: var(--space-4) 0; }
-  .service-content :global(ul), .service-content :global(ol) { padding-left: var(--space-6); margin-bottom: var(--space-4); }
-  .service-content :global(li) { margin-bottom: var(--space-2); }
-  .cta-section {
-    text-align: center;
-    background: var(--surface, #f8fafc);
-    border-radius: var(--radius-xl);
-    padding: var(--space-12);
-    margin-top: var(--space-16);
+  .service-page {
+    background: #fff;
   }
-  .cta-section h2 { margin-bottom: var(--space-3); }
-  .cta-section p { color: var(--text-muted); margin-bottom: var(--space-6); }
+
+  .service-hero {
+    position: relative;
+    min-height: 78vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  .hero-media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(20, 17, 48, 0.96) 0%, rgba(35, 29, 72, 0.78) 44%, rgba(35, 29, 72, 0.22) 100%),
+      linear-gradient(0deg, rgba(20, 17, 48, 0.95) 0%, rgba(20, 17, 48, 0.18) 55%);
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-20);
+  }
+
+  .service-hero :global(.breadcrumbs),
+  .service-hero :global(.breadcrumbs a),
+  .service-hero :global(.breadcrumbs span) {
+    color: rgba(255,255,255,0.72);
+  }
+
+  .eyebrow {
+    display: block;
+    margin-bottom: var(--space-3);
+    color: var(--mv-orange);
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .eyebrow.dark {
+    color: var(--mv-orange);
+  }
+
+  .service-hero h1 {
+    max-width: 760px;
+    color: #fff;
+    font-size: clamp(2.75rem, 7vw, 5.5rem);
+    text-transform: uppercase;
+    margin-bottom: var(--space-5);
+  }
+
+  .hero-lead {
+    max-width: 720px;
+    color: rgba(255,255,255,0.84);
+    font-size: clamp(1.125rem, 2.2vw, 1.45rem);
+    line-height: 1.55;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-8);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 var(--space-6);
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: transform var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn.primary {
+    background: var(--mv-orange);
+    color: #fff;
+  }
+
+  .btn.secondary {
+    background: rgba(255,255,255,0.14);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.32);
+  }
+
+  .intro-strip {
+    background: #171335;
+    color: #fff;
+    padding: var(--space-8) 0;
+  }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .intro-grid > p {
+    max-width: 760px;
+    color: rgba(255,255,255,0.78);
+    font-size: var(--text-lg);
+    line-height: 1.7;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+
+  .stat-item {
+    padding: var(--space-4);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.06);
+  }
+
+  .stat-item strong {
+    display: block;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: var(--text-2xl);
+    line-height: 1;
+    margin-bottom: var(--space-2);
+  }
+
+  .stat-item span {
+    color: rgba(255,255,255,0.66);
+    font-size: var(--text-sm);
+    line-height: 1.35;
+  }
+
+  .section {
+    padding: var(--space-20) 0;
+  }
+
+  .section-muted {
+    background: #f6f7fb;
+  }
+
+  .content-grid,
+  .split-grid {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.72fr) minmax(0, 1.28fr);
+    gap: var(--space-12);
+  }
+
+  .section-copy h2,
+  .split-grid h2,
+  .section-header h2,
+  .details-shell h2,
+  .cta-band h2 {
+    color: var(--mv-violet);
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-transform: uppercase;
+  }
+
+  .benefit-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  .benefit-card,
+  .related-card {
+    border: 1px solid var(--mv-gray-200);
+    border-radius: var(--radius-md);
+    background: #fff;
+    padding: var(--space-6);
+  }
+
+  .benefit-card h3,
+  .process-step h3,
+  .related-card h3 {
+    color: var(--mv-violet);
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+  }
+
+  .benefit-card p,
+  .process-step p,
+  .related-card p {
+    color: var(--mv-gray-600);
+    line-height: 1.65;
+  }
+
+  .fit-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    padding: 0;
+    margin: var(--space-8) 0 0;
+  }
+
+  .fit-list li {
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid #ded9ef;
+    border-radius: var(--radius-full);
+    background: #fff;
+    color: var(--mv-violet);
+    font-weight: 700;
+    font-size: var(--text-sm);
+  }
+
+  .process-list {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .process-step {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: var(--space-5);
+    padding: var(--space-6);
+    background: #fff;
+    border: 1px solid var(--mv-gray-200);
+    border-radius: var(--radius-md);
+  }
+
+  .process-step > span {
+    color: var(--mv-orange);
+    font-family: var(--font-heading);
+    font-size: var(--text-4xl);
+    line-height: 1;
+  }
+
+  .details-shell {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: var(--space-10);
+    align-items: start;
+  }
+
+  .details-shell aside {
+    position: sticky;
+    top: 100px;
+  }
+
+  .service-content {
+    max-width: 900px;
+    color: var(--mv-gray-700);
+    line-height: 1.8;
+  }
+
+  .service-content :global(h2) {
+    margin-top: var(--space-10);
+    margin-bottom: var(--space-4);
+    color: var(--mv-violet);
+    font-size: var(--text-3xl);
+    text-transform: uppercase;
+  }
+
+  .service-content :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .service-content :global(h3) {
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+    color: var(--mv-violet);
+    font-size: var(--text-2xl);
+  }
+
+  .service-content :global(h4) {
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-2);
+    color: var(--mv-gray-800);
+    font-size: var(--text-xl);
+  }
+
+  .service-content :global(p) {
+    margin-bottom: var(--space-4);
+  }
+
+  .service-content :global(ul),
+  .service-content :global(ol) {
+    margin-bottom: var(--space-5);
+    padding-left: var(--space-6);
+  }
+
+  .service-content :global(li) {
+    margin-bottom: var(--space-2);
+  }
+
+  .service-content :global(img) {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    margin: var(--space-6) 0;
+    border: 1px solid var(--mv-gray-200);
+  }
+
+  .service-content :global(a) {
+    color: var(--mv-orange);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .section-header.centered {
+    max-width: 760px;
+    margin: 0 auto var(--space-8);
+    text-align: center;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .related-card {
+    color: inherit;
+    text-decoration: none;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .related-card:hover {
+    border-color: var(--mv-orange);
+    box-shadow: 0 14px 32px rgba(50,40,91,0.10);
+    transform: translateY(-3px);
+  }
+
+  .related-card span {
+    display: inline-block;
+    margin-top: var(--space-5);
+    color: var(--mv-orange);
+    font-weight: 700;
+  }
+
+  .cta-band {
+    background: linear-gradient(135deg, #171335 0%, #32285b 100%);
+    color: #fff;
+    padding: var(--space-14, 3.5rem) 0;
+  }
+
+  .cta-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+  }
+
+  .cta-band h2 {
+    color: #fff;
+    margin-bottom: var(--space-3);
+  }
+
+  .cta-band p {
+    max-width: 720px;
+    color: rgba(255,255,255,0.72);
+    font-size: var(--text-lg);
+  }
+
+  @media (max-width: 980px) {
+    .intro-grid,
+    .content-grid,
+    .split-grid,
+    .details-shell {
+      grid-template-columns: 1fr;
+    }
+
+    .benefit-grid,
+    .related-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .details-shell aside {
+      position: static;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .service-hero {
+      min-height: 74vh;
+    }
+
+    .hero-inner {
+      padding-bottom: var(--space-12);
+    }
+
+    .hero-actions,
+    .cta-inner {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .btn {
+      width: 100%;
+      text-align: center;
+    }
+
+    .stats-row {
+      grid-template-columns: 1fr;
+    }
+
+    .process-step {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>

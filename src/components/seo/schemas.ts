@@ -58,7 +58,8 @@ export const organizationSchema = {
     }
   ],
   "sameAs": [
-    "https://www.linkedin.com/company/microvista"
+    "https://www.linkedin.com/company/microvista-gmbh",
+    "https://www.instagram.com/netco_microvista/"
   ]
 };
 

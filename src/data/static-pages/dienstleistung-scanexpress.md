@@ -250,7 +250,7 @@ Bedarfsorientierte Nutzungszeit bedeutet für Sie kein CAPEX, sondern nur OPEX. 
 
 ### Kontaktformular
 
-Ihre Angaben verwenden wir ausschließlich zur Bearbeitung Ihrer Anfrage (Art. 6 Abs. 1 lit. b DSGVO). Mehr dazu in unserer [Datenschutzerklärung](/datenschutzerklaerung/).
+Ihre Angaben verwenden wir ausschließlich zur Bearbeitung Ihrer Anfrage (Art. 6 Abs. 1 lit. b DSGVO). Mehr dazu in unserer [Datenschutzerklärung](/datenschutz/).
 
 ### Microsoft Teams Meeting
 

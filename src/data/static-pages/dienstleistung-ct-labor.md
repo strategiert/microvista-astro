@@ -10,7 +10,7 @@ sichern](/kontakt/)
 
 ## Wann auf das CT-Labor von Microvista setzen?
 
-Einfach Bauteile zuschicken: Die Experten von Microvista scannen & werten aus. Die externe Qualitätskontrolle mit CT ist die ideale Option, falls Sie Einzelteile prüfen oder einmalig eine Charge freigeben wollen. Die automatisierte Prüfung einer Serie ist ebenfalls möglich.  Jedoch fällt der Zeitaufwand für den Versand der Bauteile hierbei stärker ins Gewicht. Aus diesem Grund bietet Microvista die Möglichkeit ein [mobiles CT](https://www.mobile-ct.eu/) zu mieten. Dieses verschafft Ihnen volle Flexibilität, spart hohe Investmentkosten & Wartezeiten bei der Anschaffung eines eigenen CT.  Falls Sie bereits ein CT besitzen & Ihren Auswerteprozess mit Automatisierung enorm verschnellern wollen, ist dies über die [Microvista Cloud](/industrielle-computertomographie/dienstleistungen/ct-datenauswertung/) möglich.
+Einfach Bauteile zuschicken: Die Experten von Microvista scannen & werten aus. Die externe Qualitätskontrolle mit CT ist die ideale Option, falls Sie Einzelteile prüfen oder einmalig eine Charge freigeben wollen. Die automatisierte Prüfung einer Serie ist ebenfalls möglich.  Jedoch fällt der Zeitaufwand für den Versand der Bauteile hierbei stärker ins Gewicht. Aus diesem Grund bietet Microvista mit dem [ScanExpress](/dienstleistungen/scanexpress) ein mobiles CT zur Miete. Dieses verschafft Ihnen volle Flexibilität, spart hohe Investmentkosten & Wartezeiten bei der Anschaffung eines eigenen CT.  Falls Sie bereits ein CT besitzen & Ihren Auswerteprozess mit Automatisierung enorm verschnellern wollen, ist dies über die [Microvista Cloud](/dienstleistungen/ct-datenauswertung) möglich.
 
 ### Vorteile durch das CT-Labor:
 

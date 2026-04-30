@@ -10,7 +10,7 @@ import WikiHero from '../../components/sections/WikiHero.astro';
 import WikiCategoryGrid from '../../components/sections/WikiCategoryGrid.astro';
 import WikiEntryCard from '../../components/sections/WikiEntryCard.astro';
 import { localePath, type Locale } from '../../i18n/translations';
-import { getLocalizedWiki } from '../../lib/wiki';
+import { getLocalizedWiki, getSlugBase } from '../../lib/wiki';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
@@ -245,7 +245,7 @@ const stats = [
                       definition={entry.data.definition}
                       category={entry.data.category}
                       categoryLabel={t.categoryLabels[entry.data.category as keyof typeof t.categoryLabels] || entry.data.category}
-                      slug={entry.slug}
+                      slug={getSlugBase(entry.id)}
                       locale={locale}
                       synonyms={entry.data.synonyms}
                     />

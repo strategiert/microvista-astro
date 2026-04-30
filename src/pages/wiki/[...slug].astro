@@ -9,8 +9,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import WikiSidebar from '../../components/sections/WikiSidebar.astro';
-import SchemaOrg from '../../components/seo/SchemaOrg.astro';
-import { findLocalizedWikiEntry } from '../../lib/wiki';
+import { findLocalizedWikiEntry, getLocalizedWiki, getSlugBase } from '../../lib/wiki';
 
 const locale = (Astro.locals.locale || 'de') as Locale;
 const lp = (path: string) => localePath(path, locale);
@@ -20,9 +19,9 @@ if (!slug) return Astro.redirect(lp('/wiki'));
 const entry = await findLocalizedWikiEntry(slug, locale);
 if (!entry) return Astro.redirect(lp('/wiki'));
 const { Content } = await render(entry);
-const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://microvista.de';
+const currentSlug = getSlugBase(entry.id);
 
-const ui = {
+const uiByLocale = {
   de: {
     wiki: 'Lexikon',
     definition: 'Definition',
@@ -68,7 +67,9 @@ const ui = {
     back: 'Torna al glossario',
     tags: 'Tag'
   }
-}[locale] || ui.en;
+};
+
+const ui = uiByLocale[locale as keyof typeof uiByLocale] || uiByLocale.en;
 
 const categoryLabels: Record<string, string> = {
   'grundlagen': { de: 'CT-Grundlagen', en: 'CT Basics', fr: 'Bases CT', es: 'Fundamentos CT', it: 'Fondamenti CT' }[locale] || 'CT Basics',
@@ -107,11 +108,11 @@ const definitionSchema = {
 };
 
 // Sidebar entries
+const entries = await getLocalizedWiki(locale);
 const sidebarEntries = entries
-  .filter(e => !e.id.startsWith('en/') === !entry.id.startsWith('en/'))
   .sort((a, b) => a.data.term.localeCompare(b.data.term, locale))
   .map(e => ({
-    slug: e.slug,
+    slug: getSlugBase(e.id),
     term: e.data.term,
     category: e.data.category
   }));
@@ -128,7 +129,7 @@ const sidebarEntries = entries
     <!-- Sidebar Navigation -->
     <WikiSidebar
       entries={sidebarEntries}
-      currentSlug={entry.slug}
+      currentSlug={currentSlug}
       categories={categoryLabels}
       locale={locale}
       title={ui.wiki}
@@ -191,7 +192,7 @@ const sidebarEntries = entries
                 const relatedColor = categoryColors[relatedEntry.data.category] || categoryColors['allgemein'];
                 return (
                   <a 
-                    href={lp(`/wiki/${relatedEntry.slug}`)} 
+                    href={lp(`/wiki/${getSlugBase(relatedEntry.id)}`)}
                     class="related-card"
                     style={`--rel-color: ${relatedColor.text}; --rel-bg: ${relatedColor.bg};`}
                   >
