@@ -2,19 +2,10 @@
  * Utility to load static page content from markdown files in src/data/static-pages/
  */
 
-import { createMarkdownProcessor } from '@astrojs/markdown-remark';
+import { marked } from 'marked';
 import { defaultLocale, type Locale } from '../i18n/translations';
 
 const pages = import.meta.glob('../data/static-pages/*.md', { query: '?raw', import: 'default' });
-let markdownProcessorPromise: ReturnType<typeof createMarkdownProcessor> | undefined;
-
-async function getMarkdownProcessor() {
-  if (!markdownProcessorPromise) {
-    // syntaxHighlight: false verhindert WASM-Laden (shiki) in CF Workers
-    markdownProcessorPromise = createMarkdownProcessor({ syntaxHighlight: false });
-  }
-  return markdownProcessorPromise;
-}
 
 function toUnique<T>(values: T[]): T[] {
   return Array.from(new Set(values));
@@ -81,7 +72,5 @@ export async function loadStaticPage(slugOrFilename: string, locale: Locale = de
     return '';
   }
 
-  const processor = await getMarkdownProcessor();
-  const rendered = await processor.render(raw);
-  return rendered.code;
+  return marked.parse(raw, { async: false });
 }

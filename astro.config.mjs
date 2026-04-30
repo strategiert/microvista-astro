@@ -98,7 +98,7 @@ export default defineConfig({
         }
       }
     }),
-    keystatic(),
+    ...(process.env.ENABLE_KEYSTATIC === 'true' || process.env.NODE_ENV !== 'production' ? [keystatic()] : []),
     react()
   ],
 
