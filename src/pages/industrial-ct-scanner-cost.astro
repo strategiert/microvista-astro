@@ -1,0 +1,497 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import ScanExpressCalculator from '../components/calculators/ScanExpressCalculator';
+import { localePath, type Locale } from '../i18n/translations';
+
+const locale = (Astro.locals.locale || 'de') as Locale;
+const lp = (path: string) => localePath(path, locale);
+
+const title = 'Industrial CT Scanner: Kaufen oder Mieten? — Wirtschaftlichkeitsrechner';
+const description = 'Berechnen Sie das Sparpotenzial des mobilen ScanExpress: Welche Stückzahlen, Pipeline-Tiefe und Marge machen industrielle CT-Stichprobenprüfung wirtschaftlich? Live-Rechner mit Break-even.';
+---
+
+<BaseLayout title={title} description={description}>
+  <Header slot="header" theme="light" />
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="kicker">Wirtschaftlichkeitsrechner</div>
+      <h1>Industrial CT Scanner: <span>Kaufen oder Mieten?</span></h1>
+      <p class="lead">
+        Integrieren Sie industrielle Computertomographie in Ihre End-of-Line-Prüfung. Erkennen Sie verborgene Defekte
+        in Echtzeit — vollautomatisch, KI-gestützt und wirtschaftlich bei jeder Stückzahl.
+      </p>
+      <div class="hero-ctas">
+        <a href="#rechner" class="btn btn-primary">Sparpotenzial berechnen</a>
+        <a href={lp('/kontakt')} class="btn btn-outline">Gratis-Beratung sichern</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="intro">
+    <div class="container narrow">
+      <h2>Was kostet ein Industrial CT Scanner wirklich?</h2>
+      <p class="lead-muted">
+        Die Anschaffungskosten sind nur die Spitze des Eisbergs. Bei einem fest installierten CT-System kommen
+        Raumausstattung, Personal, Wartungsverträge und Stillstandskosten dazu — schnell sechsstellig pro Jahr.
+        Der mobile <strong>ScanExpress</strong> dreht das Modell um: kein Investment, kein eigenes Personal,
+        nur Wochenmiete + Bedienung. Die kritische Frage: <em>Lohnt sich der Einsatz für Ihren Fall?</em>
+      </p>
+      <p class="lead-muted">
+        Der Rechner unten quantifiziert den Sparvorteil pro Störereignis und zeigt das Break-even —
+        ab welcher Anzahl Störereignisse der ScanExpress-Einsatz wirtschaftlich ist.
+      </p>
+    </div>
+  </section>
+
+  <!-- CALCULATOR -->
+  <section id="rechner" class="calc-wrap">
+    <div id="se-rechner">
+      <ScanExpressCalculator client:visible />
+    </div>
+  </section>
+
+  <!-- USE CASES -->
+  <section class="usecases">
+    <div class="container">
+      <h2>Wann lohnt sich Mieten statt Kaufen?</h2>
+      <div class="usecase-grid">
+        <div class="uc">
+          <span class="uc-num">01</span>
+          <h3>Serienanlauf</h3>
+          <p>Neue Anlage, neue Prozesse. CT-Stichproben in den ersten 8–16 Wochen verhindern teure Lerngeld-Chargen.</p>
+        </div>
+        <div class="uc">
+          <span class="uc-num">02</span>
+          <h3>Prozessdrift</h3>
+          <p>Werkzeugverschleiß, Temperaturschwankungen, Materialalterung. Frühe Erkennung verhindert Pipeline-Schäden.</p>
+        </div>
+        <div class="uc">
+          <span class="uc-num">03</span>
+          <h3>Materialwechsel</h3>
+          <p>Neue Charge, neue Legierung, neuer Lieferant. Validieren Sie Bauteilqualität bevor das Band läuft.</p>
+        </div>
+        <div class="uc">
+          <span class="uc-num">04</span>
+          <h3>Werkzeugverschleiß</h3>
+          <p>Standzeit-Optimierung mit CT-Daten — kein blindes Wechseln nach Stundenzahl, sondern bei tatsächlicher Drift.</p>
+        </div>
+        <div class="uc">
+          <span class="uc-num">05</span>
+          <h3>Sonderlagen</h3>
+          <p>Reklamationswelle, Audit, Kundenforderung. Schnelle Datenlage statt teurer Notlösung.</p>
+        </div>
+        <div class="uc">
+          <span class="uc-num">06</span>
+          <h3>Vor Investitionsentscheidung</h3>
+          <p>CT-Bedarf evaluieren bevor Sie ein eigenes System kaufen. Daten statt Bauchgefühl.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCANEXPRESS PRODUCT -->
+  <section class="product">
+    <div class="container narrow">
+      <div class="kicker accent">ScanExpress</div>
+      <h2>Ihr mobiler Industrial CT Scanner</h2>
+      <p>
+        Der ScanExpress ist ein vollausgestattetes industrielles CT-System im Container — direkt vor Ihrer Halle, mit
+        zertifizierter Bedienung und Cloud-Auswertung. Mietbar pro Woche. Kein Bauteiltransport, kein Investment,
+        keine Personal-Schulungen.
+      </p>
+      <ul class="features">
+        <li>Hüllkreis bis 798 mm, Länge bis 1802 mm</li>
+        <li>KI-gestützte Auswertung (InspectVista) — IO/NIO automatisch</li>
+        <li>24-h-Express verfügbar nach Absprache</li>
+        <li>ISO 9001 zertifiziert, TISAX 27001 in Zertifizierung</li>
+        <li>Zertifizierte Microvista-Bediener vor Ort</li>
+      </ul>
+      <div class="hero-ctas">
+        <a href={lp('/serie')} class="btn btn-primary">ScanExpress entdecken</a>
+        <a href={lp('/kontakt')} class="btn btn-outline">Verfügbarkeit anfragen</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta">
+    <div class="container narrow">
+      <h2>Konkrete Zahlen für Ihren Fall?</h2>
+      <p>Senden Sie uns Ihre Werte aus dem Rechner — wir validieren das Szenario und schicken eine belastbare Wirtschaftlichkeitsrechnung in 24 h zurück.</p>
+      <a href={lp('/kontakt')} class="btn btn-primary btn-lg">Jetzt Gratis-Beratung sichern</a>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .container.narrow { max-width: 760px; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #32285b 0%, #1c1535 100%);
+    color: #fff;
+    padding: var(--space-20) 0 var(--space-16);
+  }
+  .hero .kicker {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mv-orange);
+    margin-bottom: var(--space-4);
+  }
+  .hero h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
+    line-height: 1.1;
+    margin: 0 0 var(--space-5);
+    color: #fff;
+  }
+  .hero h1 span { color: var(--mv-blue); display: block; }
+  .hero .lead {
+    font-size: var(--text-lg);
+    color: rgba(255,255,255,0.78);
+    line-height: 1.65;
+    max-width: 720px;
+    margin: 0 0 var(--space-8);
+  }
+  .hero-ctas {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-top: var(--space-6);
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--radius-md);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: var(--text-base);
+    text-decoration: none;
+    transition: all 180ms ease;
+    border: 2px solid transparent;
+  }
+  .btn-primary {
+    background: var(--mv-orange);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(238,119,17,.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(238,119,17,.45); }
+  .btn-outline {
+    background: transparent;
+    color: #fff;
+    border-color: rgba(255,255,255,0.5);
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+  .btn-lg { padding: var(--space-4) var(--space-10); font-size: var(--text-lg); }
+
+  /* INTRO */
+  .intro {
+    background: #fff;
+    padding: var(--space-16) 0;
+  }
+  .intro h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    color: #32285b;
+    margin: 0 0 var(--space-5);
+    border-left: 4px solid var(--mv-orange);
+    padding-left: var(--space-4);
+  }
+  .lead-muted {
+    font-size: var(--text-base);
+    line-height: 1.75;
+    color: #374151;
+    margin: 0 0 var(--space-4);
+  }
+  .lead-muted strong { color: #32285b; }
+
+  /* CALC WRAP */
+  .calc-wrap {
+    background: #f0f1f5;
+    padding: var(--space-8) 0;
+  }
+
+  /* USE CASES */
+  .usecases {
+    padding: var(--space-16) 0;
+    background: #fff;
+  }
+  .usecases h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    color: #32285b;
+    margin: 0 0 var(--space-10);
+    text-align: center;
+  }
+  .usecase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-5);
+  }
+  .uc {
+    padding: var(--space-6);
+    background: #f7f8fb;
+    border-left: 3px solid var(--mv-orange);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+  .uc:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(50,40,91,.08); }
+  .uc-num {
+    font-family: var(--font-heading);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--mv-orange);
+    letter-spacing: 0.06em;
+  }
+  .uc h3 {
+    font-family: var(--font-heading);
+    font-size: var(--text-lg);
+    color: #32285b;
+    margin: var(--space-2) 0 var(--space-2);
+  }
+  .uc p {
+    font-size: var(--text-sm);
+    color: #5f6378;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* PRODUCT */
+  .product {
+    padding: var(--space-16) 0;
+    background: linear-gradient(180deg, #f0f1f5 0%, #fff 100%);
+  }
+  .product .kicker {
+    font-family: var(--font-heading);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mv-orange);
+    margin-bottom: var(--space-3);
+  }
+  .product h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    color: #32285b;
+    margin: 0 0 var(--space-5);
+  }
+  .product p {
+    font-size: var(--text-base);
+    line-height: 1.75;
+    color: #374151;
+    margin: 0 0 var(--space-6);
+  }
+  .features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-8);
+    display: grid;
+    gap: var(--space-2);
+  }
+  .features li {
+    padding: var(--space-2) 0 var(--space-2) var(--space-7);
+    position: relative;
+    color: #374151;
+    font-size: var(--text-base);
+  }
+  .features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--mv-orange);
+    font-weight: 700;
+    font-size: var(--text-lg);
+  }
+  .product .btn-outline {
+    color: #32285b;
+    border-color: rgba(50,40,91,0.3);
+  }
+  .product .btn-outline:hover {
+    background: rgba(50,40,91,0.05);
+    border-color: #32285b;
+  }
+
+  /* FINAL CTA */
+  .final-cta {
+    background: linear-gradient(135deg, #32285b 0%, #1c1535 100%);
+    color: #fff;
+    padding: var(--space-20) 0;
+    text-align: center;
+  }
+  .final-cta h2 {
+    font-family: var(--font-heading);
+    font-size: var(--text-3xl);
+    color: #fff;
+    margin: 0 0 var(--space-4);
+  }
+  .final-cta p {
+    color: rgba(255,255,255,0.78);
+    font-size: var(--text-lg);
+    line-height: 1.6;
+    margin: 0 0 var(--space-8);
+  }
+
+  /* Calculator-Container globale Styles (aus Original) */
+  :global(#se-rechner *),
+  :global(#se-rechner *::before),
+  :global(#se-rechner *::after) { box-sizing: border-box; }
+
+  :global(#se-rechner) {
+    font-family: 'PT Sans', system-ui, sans-serif;
+    background: #f0f1f5;
+    color: #32285B;
+  }
+
+  :global(#se-rechner .range-input) {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    margin: 0;
+    padding: 0;
+  }
+  :global(#se-rechner .range-input::-webkit-slider-thumb) {
+    -webkit-appearance: none;
+    width: 10px; height: 10px;
+    border-radius: 0;
+    background: #EE7711;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(238,119,17,.35);
+  }
+  :global(#se-rechner .range-input::-moz-range-thumb) {
+    width: 10px; height: 10px;
+    border-radius: 0;
+    background: #EE7711;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 1px 4px rgba(238,119,17,.35);
+  }
+
+  :global(#se-rechner .num-input) {
+    width: 78px;
+    text-align: right;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'Antonio', sans-serif;
+    color: #EE7711;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #EE7711;
+    padding: 2px 0;
+    outline: none;
+    border-radius: 0;
+    transition: border-color .2s;
+  }
+  :global(#se-rechner .num-input:focus) { border-color: #32285B; color: #32285B; }
+  :global(#se-rechner .num-input::-webkit-inner-spin-button) { opacity: 0; width: 0; }
+
+  :global(#se-rechner .input-row) { margin-bottom: 24px; }
+
+  :global(#se-rechner .input-label) {
+    font-size: 14px;
+    font-weight: 700;
+    color: #32285B;
+    text-transform: uppercase;
+    font-family: 'Antonio', sans-serif;
+    letter-spacing: .8px;
+  }
+
+  :global(#se-rechner .section-card) {
+    background: #fff;
+    margin-bottom: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(50,40,91,.06), 0 4px 16px rgba(50,40,91,.04);
+    animation: seCardIn .5s cubic-bezier(.22,1,.36,1) both;
+  }
+  @keyframes seCardIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  :global(#se-rechner .section-header) {
+    padding: 16px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    user-select: none;
+    transition: background .15s;
+  }
+  :global(#se-rechner .section-header:hover) { background: rgba(238,119,17,.03); }
+
+  :global(#se-rechner .step-num) {
+    font-family: 'Antonio', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #EE7711, #f59542);
+    width: 30px; height: 30px; min-width: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-right: 6px;
+    box-shadow: 0 2px 8px rgba(238,119,17,.3);
+  }
+
+  :global(#se-rechner .section-title) {
+    font-family: 'Antonio', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #32285B;
+  }
+
+  :global(#se-rechner .info-box) {
+    font-size: 14px;
+    color: #6b6f82;
+    margin-bottom: 18px;
+    line-height: 1.55;
+    background: #f7f8fb;
+    padding: 12px 16px;
+    border-left: 3px solid #EE7711;
+  }
+
+  :global(#se-rechner .model-btn) {
+    padding: 9px 24px;
+    cursor: pointer;
+    font-family: 'Antonio', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    border-radius: 0;
+    transition: all .2s;
+    border: 2px solid transparent;
+  }
+  :global(#se-rechner .model-btn:hover) { transform: translateY(-1px); }
+
+  :global(#se-rechner table),
+  :global(#se-rechner thead),
+  :global(#se-rechner tbody),
+  :global(#se-rechner tr),
+  :global(#se-rechner th),
+  :global(#se-rechner td) {
+    border: none !important;
+    border-collapse: collapse !important;
+    background: transparent !important;
+  }
+  :global(#se-rechner table tr) { border-bottom: 1px solid #ecedf2 !important; }
+  :global(#se-rechner table thead tr) { border-bottom: 2px solid #32285B !important; }
+  :global(#se-rechner table tr:last-child) { border-bottom: none !important; }
+</style>
