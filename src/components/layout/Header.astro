@@ -1002,35 +1002,36 @@ const getLangUrl = (targetLocale: Locale) => languageSwitchPath(currentPath, tar
     padding: 8px;
   }
 
-  .search-hint {
+  /* JS-injected — :global() weil innerHTML keinen scoped Hash bekommt */
+  :global(.search-hint) {
     padding: 18px 16px;
-    color: var(--mv-gray-500, #6b7280);
+    color: #6b7280;
     font-size: 0.92rem;
     text-align: center;
   }
 
-  .search-hit {
+  :global(.search-hit) {
     display: block;
     padding: 12px 14px;
     border-radius: 10px;
     text-decoration: none;
-    color: var(--mv-violet);
+    color: #32285b;
     transition: background 120ms ease;
   }
 
-  .search-hit:hover,
-  .search-hit.active {
-    background: var(--mv-blue-soft, #edf6fa);
+  :global(.search-hit:hover),
+  :global(.search-hit.active) {
+    background: #edf6fa;
   }
 
-  .search-hit-row {
+  :global(.search-hit-row) {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-bottom: 4px;
   }
 
-  .search-hit-kind {
+  :global(.search-hit-kind) {
     flex: 0 0 auto;
     padding: 3px 8px;
     border-radius: 999px;
@@ -1042,27 +1043,33 @@ const getLangUrl = (targetLocale: Locale) => languageSwitchPath(currentPath, tar
     color: #00a0d2;
   }
 
-  .search-hit-kind[data-kind="service"] { background: rgba(50, 40, 91, 0.1); color: var(--mv-violet); }
-  .search-hit-kind[data-kind="branche"] { background: rgba(238, 119, 17, 0.12); color: var(--mv-orange, #ee7711); }
-  .search-hit-kind[data-kind="wiki"] { background: rgba(142, 191, 214, 0.22); color: #41647f; }
-  .search-hit-kind[data-kind="magazin"] { background: rgba(0, 160, 210, 0.12); color: #00a0d2; }
-  .search-hit-kind[data-kind="page"] { background: rgba(107, 114, 128, 0.15); color: var(--mv-gray-700, #374151); }
+  :global(.search-hit-kind[data-kind="service"]) { background: rgba(50, 40, 91, 0.1); color: #32285b; }
+  :global(.search-hit-kind[data-kind="branche"]) { background: rgba(238, 119, 17, 0.12); color: #ee7711; }
+  :global(.search-hit-kind[data-kind="wiki"]) { background: rgba(142, 191, 214, 0.22); color: #41647f; }
+  :global(.search-hit-kind[data-kind="magazin"]) { background: rgba(0, 160, 210, 0.12); color: #00a0d2; }
+  :global(.search-hit-kind[data-kind="page"]) { background: rgba(107, 114, 128, 0.15); color: #374151; }
 
-  .search-hit-title {
+  :global(.search-hit-title) {
     font-weight: 600;
     font-size: 0.96rem;
+    color: #32285b;
+    line-height: 1.3;
+    flex: 1;
+    min-width: 0;
   }
 
-  .search-hit-desc {
+  :global(.search-hit-desc) {
     font-size: 0.82rem;
-    color: var(--mv-gray-500, #6b7280);
+    color: #6b7280;
     line-height: 1.4;
+    margin-top: 2px;
+    margin-left: 0;
   }
 
-  .search-empty {
+  :global(.search-empty) {
     padding: 24px 16px;
     text-align: center;
-    color: var(--mv-gray-500, #6b7280);
+    color: #6b7280;
     font-size: 0.9rem;
   }
 
